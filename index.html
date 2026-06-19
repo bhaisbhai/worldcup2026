@@ -195,6 +195,18 @@ body{
 /* ── BROADCAST BADGE ────────────────────────── */
 .mc-tv{font-size:10px;color:var(--t2);letter-spacing:.3px}
 
+/* ── HIGHLIGHTS BUTTON ───────────────────────── */
+.mc-hl{
+  display:inline-flex;align-items:center;gap:5px;margin-top:11px;
+  padding:5px 11px;border-radius:7px;font-size:11px;font-weight:600;
+  background:rgba(255,0,0,.1);border:1px solid rgba(255,60,60,.25);
+  color:#ff6b6b;text-decoration:none;letter-spacing:.2px;
+  transition:background .18s,border-color .18s,color .18s;
+  pointer-events:all;
+}
+.mc-hl:hover{background:rgba(255,0,0,.18);border-color:rgba(255,60,60,.5);color:#ff8080}
+.mc-hl svg{width:12px;height:12px;flex-shrink:0}
+
 /* ── GROUPS ─────────────────────────────────── */
 .g-hd{font-size:21px;font-weight:700;letter-spacing:-.4px;margin-bottom:5px}
 .g-sub{font-size:13px;color:var(--t2);margin-bottom:24px}
@@ -627,6 +639,18 @@ function parseEvent(ev){
 }
 
 // ═══════════════════════════════════════════════════
+//  HIGHLIGHTS LINK
+// ═══════════════════════════════════════════════════
+// BBC Football titles highlights: "FIFA World Cup 2026: {Home} {h}-{a} {Away} Highlights - BBC"
+// We link to their channel search which finds it directly once it's posted (~2hrs after FT).
+function highlightsUrl(ev){
+  const q = encodeURIComponent(`FIFA World Cup 2026 ${ev.home.name} ${ev.away.name} highlights`);
+  return `https://www.youtube.com/@bbcfootball/search?query=${q}`;
+}
+
+const YT_ICON = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>`;
+
+// ═══════════════════════════════════════════════════
 //  BUILD MATCH CARD
 // ═══════════════════════════════════════════════════
 function buildCard(ev){
@@ -669,6 +693,10 @@ function buildCard(ev){
   const venueFull = [ev.venue, ev.city].filter(Boolean).join(' · ');
   foot_r = `<div class="mc-venue" title="${venueFull}">${venueFull || '—'}</div>`;
 
+  const hlHtml = isFt
+    ? `<a class="mc-hl" href="${highlightsUrl(ev)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${YT_ICON} Highlights on BBC</a>`
+    : '';
+
   card.innerHTML = `
     <div class="mc-top">
       ${badge}
@@ -686,6 +714,7 @@ function buildCard(ev){
       </div>
     </div>
     <div class="mc-foot">${foot_l}${foot_r}</div>
+    ${hlHtml}
   `;
   return card;
 }
@@ -779,6 +808,21 @@ function patchCard(card, ev){
       footL.dataset.cdid=ev.id; footL.dataset.ts=ev.date.getTime();
       delete footL.dataset.clockid;
     }
+  }
+
+  // Add highlights link when match finishes (if not already there)
+  let hl = card.querySelector('.mc-hl');
+  if(isFt && !hl){
+    hl = document.createElement('a');
+    hl.className = 'mc-hl';
+    hl.href = highlightsUrl(ev);
+    hl.target = '_blank';
+    hl.rel = 'noopener';
+    hl.onclick = e => e.stopPropagation();
+    hl.innerHTML = YT_ICON + ' Highlights on BBC';
+    card.append(hl);
+  } else if(!isFt && hl){
+    hl.remove();
   }
 }
 
