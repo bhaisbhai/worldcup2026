@@ -639,13 +639,43 @@ function parseEvent(ev){
 }
 
 // ═══════════════════════════════════════════════════
-//  HIGHLIGHTS LINK
+//  HIGHLIGHTS — YouTube API
 // ═══════════════════════════════════════════════════
-// BBC Football titles highlights: "FIFA World Cup 2026: {Home} {h}-{a} {Away} Highlights - BBC"
-// We link to their channel search which finds it directly once it's posted (~2hrs after FT).
-function highlightsUrl(ev){
-  const q = encodeURIComponent(`FIFA World Cup 2026 ${ev.home.name} ${ev.away.name} highlights`);
+// BBC Football title format (confirmed via API):
+//   "{Home} v {Away} 🏳️🏳️ | 2026 FIFA World Cup | Group X"
+const YT_KEY        = 'AIzaSyBvUlbLkg1RAdPyFmuADmOS_0a2277PUkA';
+const BBC_CHANNEL   = 'UCli0KmmXMDjcgqvsheHfv-Q';
+const YT_SEARCH_URL = 'https://www.googleapis.com/youtube/v3/search';
+
+// Cache: eventId → videoId (string) | null (searched, not found yet) | undefined (not searched)
+const hlCache = {};
+
+function highlightFallbackUrl(ev){
+  const q = encodeURIComponent(`${ev.home.name} v ${ev.away.name} 2026 FIFA World Cup`);
   return `https://www.youtube.com/@bbcfootball/search?query=${q}`;
+}
+
+async function fetchHighlight(ev, linkEl){
+  if(hlCache[ev.id] !== undefined){
+    if(hlCache[ev.id]) linkEl.href = `https://www.youtube.com/watch?v=${hlCache[ev.id]}`;
+    return;
+  }
+  hlCache[ev.id] = null; // mark as in-flight
+  try {
+    const q = encodeURIComponent(`${ev.home.name} v ${ev.away.name} 2026 FIFA World Cup`);
+    const url = `${YT_SEARCH_URL}?part=snippet&channelId=${BBC_CHANNEL}&q=${q}&type=video&order=date&maxResults=5&key=${YT_KEY}`;
+    const r = await fetch(url, { signal: AbortSignal.timeout(6000) });
+    const data = await r.json();
+    const item = (data.items||[]).find(i =>
+      i.snippet.title.toLowerCase().includes(ev.home.name.toLowerCase().split(' ')[0]) &&
+      i.snippet.title.toLowerCase().includes(ev.away.name.toLowerCase().split(' ')[0])
+    ) || data.items?.[0];
+    if(item){
+      hlCache[ev.id] = item.id.videoId;
+      linkEl.href = `https://www.youtube.com/watch?v=${item.id.videoId}`;
+      linkEl.title = item.snippet.title;
+    }
+  } catch(e){ /* keep fallback url */ }
 }
 
 const YT_ICON = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>`;
@@ -694,7 +724,7 @@ function buildCard(ev){
   foot_r = `<div class="mc-venue" title="${venueFull}">${venueFull || '—'}</div>`;
 
   const hlHtml = isFt
-    ? `<a class="mc-hl" href="${highlightsUrl(ev)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${YT_ICON} Highlights on BBC</a>`
+    ? `<a class="mc-hl" href="${highlightFallbackUrl(ev)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" data-hlid="${ev.id}">${YT_ICON} Highlights on BBC</a>`
     : '';
 
   card.innerHTML = `
@@ -716,6 +746,10 @@ function buildCard(ev){
     <div class="mc-foot">${foot_l}${foot_r}</div>
     ${hlHtml}
   `;
+  if(isFt){
+    const linkEl = card.querySelector('.mc-hl');
+    if(linkEl) fetchHighlight(ev, linkEl);
+  }
   return card;
 }
 
@@ -815,12 +849,16 @@ function patchCard(card, ev){
   if(isFt && !hl){
     hl = document.createElement('a');
     hl.className = 'mc-hl';
-    hl.href = highlightsUrl(ev);
+    hl.href = highlightFallbackUrl(ev);
     hl.target = '_blank';
     hl.rel = 'noopener';
+    hl.dataset.hlid = ev.id;
     hl.onclick = e => e.stopPropagation();
     hl.innerHTML = YT_ICON + ' Highlights on BBC';
     card.append(hl);
+    fetchHighlight(ev, hl);
+  } else if(isFt && hl){
+    fetchHighlight(ev, hl); // upgrade to direct link if cache now has it
   } else if(!isFt && hl){
     hl.remove();
   }
