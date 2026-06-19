@@ -724,7 +724,30 @@ const KO_RIGHT = [
 //  STATE
 // ═══════════════════════════════════════════════════
 const ESPN_URL      = 'https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard';
-const ESPN_STANDINGS= 'https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/standings';
+const ESPN_STANDINGS= 'https://site.api.espn.com/apis/v2/sports/soccer/fifa.world/standings';
+
+// UK broadcast schedule — sorted abbreviation pair → channel
+const UK_TV = {
+  'MEX|RSA':'ITV1',
+  'CZE|KOR':'ITV1','BIH|CAN':'BBC One',
+  'PAR|USA':'BBC One','QAT|SUI':'ITV1','BRA|MAR':'BBC One',
+  'HAI|SCO':'BBC One','AUS|TUR':'ITV1','CUW|GER':'ITV1','JPN|NED':'ITV1',
+  'CIV|ECU':'BBC One','SWE|TUN':'ITV1','CPV|ESP':'ITV1','BEL|EGY':'BBC One','KSA|URU':'ITV1',
+  'IRN|NZL':'BBC One','FRA|SEN':'BBC One','IRQ|NOR':'BBC One',
+  'ALG|ARG':'ITV1','AUT|JOR':'BBC One','COD|POR':'BBC One','CRO|ENG':'ITV1',
+  'GHA|PAN':'ITV1','COL|UZB':'BBC One','CZE|RSA':'BBC One','BIH|SUI':'ITV1','CAN|QAT':'ITV1',
+  'KOR|MEX':'BBC One','AUS|USA':'BBC One','MAR|SCO':'ITV1',
+  'BRA|HAI':'ITV1','PAR|TUR':'ITV1','NED|SWE':'BBC One','CIV|GER':'ITV1',
+  'CUW|ECU':'BBC One','JPN|TUN':'BBC One','ESP|KSA':'BBC One','BEL|IRN':'ITV1','CPV|URU':'BBC One',
+  'EGY|NZL':'ITV1','ARG|AUT':'BBC One','FRA|IRQ':'BBC One',
+  'NOR|SEN':'ITV1','ALG|JOR':'ITV1','POR|UZB':'ITV1','ENG|GHA':'BBC One',
+  'CRO|PAN':'BBC One','COD|COL':'ITV1','CAN|SUI':'ITV1','BIH|QAT':'ITV4','BRA|SCO':'BBC One','HAI|MAR':'BBC Two',
+  'CZE|MEX':'BBC One','KOR|RSA':'BBC Two','ECU|GER':'BBC One','CIV|CUW':'BBC Two',
+  'JPN|SWE':'BBC Two','NED|TUN':'BBC One','AUS|PAR':'ITV4','TUR|USA':'ITV1','FRA|NOR':'ITV1','IRQ|SEN':'ITV4',
+  'CPV|KSA':'ITV4','ESP|URU':'ITV1','EGY|IRN':'BBC Two','BEL|NZL':'BBC One','ENG|PAN':'ITV1','CRO|GHA':'ITV4',
+  'COL|POR':'BBC One','COD|UZB':'BBC Two','ALG|AUT':'BBC Two','ARG|JOR':'BBC One',
+};
+function getUKChannel(a1, a2){ return UK_TV[[a1,a2].sort().join('|')] || 'BBC/ITV'; }
 const ESPN_SUMMARY  = 'https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/summary';
 let liveClocks = {};
 let refreshIn = 30;
@@ -995,7 +1018,7 @@ function buildCard(ev){
   card.innerHTML = `
     <div class="mc-top">
       ${badge}
-      <div class="mc-grp">${ev.group}<br><span class="mc-tv-uk">BBC · ITV</span></div>
+      <div class="mc-grp">${ev.group}<br><span class="mc-tv-uk">${getUKChannel(ev.home.abbr,ev.away.abbr)}</span></div>
     </div>
     <div class="mc-teams">
       <div class="tcol">
@@ -1736,10 +1759,9 @@ function mcPreOverview(ev,data){
 
   // Venue + broadcast
   const venue=data?.gameInfo?.venue;
-  const bcast=(data?.broadcasts||[]).flatMap(b=>b.names||[]).join(', ');
   html+=`<div class="mc-info-grid">`;
   if(venue) html+=`<div class="mc-ibox"><div class="mc-ibox-lbl">📍 Venue</div><div class="mc-ibox-val">${venue.fullName||venue.shortName||'—'}</div><div class="mc-ibox-sub">${venue.address?.city||''}</div></div>`;
-  html+=`<div class="mc-ibox"><div class="mc-ibox-lbl">📺 On TV</div><div class="mc-ibox-val" style="color:#60b8ff">🇬🇧 BBC · ITV</div></div>`;
+  html+=`<div class="mc-ibox"><div class="mc-ibox-lbl">📺 On TV</div><div class="mc-ibox-val" style="color:#60b8ff">🇬🇧 ${getUKChannel(ev.home.abbr,ev.away.abbr)}</div></div>`;
   html+=`</div>`;
   return html;
 }
@@ -2147,43 +2169,32 @@ async function fetchGroupStandings(){
     if(!r.ok) return;
     const data = await r.json();
 
-    // ESPN can return standings in data.standings.entries or via data.children (league children)
-    let entries = [];
-    if(data.standings?.entries?.length){
-      entries = data.standings.entries;
-    } else if(data.children?.length){
-      data.children.forEach(child => {
-        if(child.standings?.entries) entries = entries.concat(child.standings.entries);
-      });
-    }
-    if(!entries.length) return;
-
+    // ESPN v2 standings: data.children[] is one child per group
     const groupMap = {};
-    entries.forEach(entry => {
-      const noteText = entry.note?.text || entry.standingSummary || '';
-      const m = noteText.match(/Group\s+([A-La-l])/i);
+    (data.children||[]).forEach(child => {
+      const m = (child.name||'').match(/Group\s+([A-La-l])/i);
       if(!m) return;
       const gId = m[1].toUpperCase();
-      if(!groupMap[gId]) groupMap[gId] = [];
-      const stats = entry.stats || [];
-      const abbr  = entry.team?.abbreviation || '';
-      const name  = entry.team?.displayName   || entry.team?.name || '';
-      const gf    = getStat(stats,'pointsFor');
-      const ga    = getStat(stats,'pointsAgainst');
-      // ESPN marks clinched teams in the note field with text like "Clinched"
-      const clinched = /clinch|qualified|advance/i.test(entry.clincher?.text || '') ||
-                       /clinch|qualified|advance/i.test(entry.note?.shortText || '');
-      groupMap[gId].push({
-        n: name, abbr,
-        f:   FLAGS[abbr] || '🏳️',
-        p:   getStat(stats,'gamesPlayed'),
-        w:   getStat(stats,'wins'),
-        d:   getStat(stats,'ties'),
-        l:   getStat(stats,'losses'),
-        gf, ga,
-        gd:  gf - ga,
-        pts: getStat(stats,'points'),
-        clinched,
+      groupMap[gId] = [];
+      (child.standings?.entries||[]).forEach(entry => {
+        const stats = entry.stats || [];
+        const abbr  = entry.team?.abbreviation || '';
+        const name  = entry.team?.displayName   || entry.team?.name || '';
+        const gf    = getStat(stats,'pointsFor');
+        const ga    = getStat(stats,'pointsAgainst');
+        const clinched = /advance|qualified/i.test(entry.note?.description || '');
+        groupMap[gId].push({
+          n: name, abbr,
+          f:   FLAGS[abbr] || '🏳️',
+          p:   getStat(stats,'gamesPlayed'),
+          w:   getStat(stats,'wins'),
+          d:   getStat(stats,'ties'),
+          l:   getStat(stats,'losses'),
+          gf, ga,
+          gd:  gf - ga,
+          pts: getStat(stats,'points'),
+          clinched,
+        });
       });
     });
 
@@ -2195,6 +2206,7 @@ async function fetchGroupStandings(){
       }
     });
     renderGroups();
+    document.querySelectorAll('.gcard').forEach((c,i)=>setTimeout(()=>c.classList.add('vis'),i*30));
     updateKnockoutQualifiers();
   } catch(e){ /* keep static data */ }
 }
