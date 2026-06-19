@@ -484,6 +484,30 @@ body{
 /* highlights tab */
 .mc-hl-tab .mc-thumb{max-width:520px;margin:0 auto;display:block}
 
+/* ── PLAYER DETAIL ───────────────────────── */
+.mc-lu-p.clickable{cursor:pointer;border-radius:5px;transition:background .12s}
+.mc-lu-p.clickable:hover{background:rgba(255,255,255,.05)}
+.mc-lu-arrow{font-size:13px;color:var(--t3);margin-left:auto;flex-shrink:0;transition:color .12s}
+.mc-lu-p.clickable:hover .mc-lu-arrow{color:var(--accent)}
+.pl-back{background:none;border:none;color:var(--t2);cursor:pointer;font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:0 0 14px;display:flex;align-items:center;gap:5px;font-family:inherit;transition:color .12s}
+.pl-back:hover{color:var(--accent)}
+.pl-hero{display:flex;align-items:center;gap:14px;padding-bottom:16px;border-bottom:1px solid var(--border);margin-bottom:4px}
+.pl-photo{width:58px;height:58px;border-radius:50%;overflow:hidden;background:var(--card);flex-shrink:0;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:26px}
+.pl-photo img{width:100%;height:100%;object-fit:cover;object-position:top center}
+.pl-meta{flex:1;min-width:0}
+.pl-pname{font-size:17px;font-weight:700;line-height:1.2}
+.pl-psub{font-size:11px;color:var(--t2);margin-top:3px}
+.pl-pnum{font-family:var(--mono);font-size:30px;font-weight:700;color:var(--accent);flex-shrink:0}
+.pl-sec{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--t2);margin:16px 0 8px}
+.pl-sgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:4px}
+.pl-sbox{background:var(--card);border-radius:8px;padding:10px;text-align:center}
+.pl-sval{font-family:var(--mono);font-size:20px;font-weight:700}
+.pl-slbl{font-size:9px;color:var(--t2);text-transform:uppercase;letter-spacing:.8px;margin-top:2px}
+.pl-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:4px}
+.pl-info-row{background:var(--card);border-radius:8px;padding:8px 10px}
+.pl-info-k{color:var(--t2);font-size:9px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
+.pl-info-v{font-size:12px;font-weight:600}
+
 @media(max-width:600px){
   .modal-bg{padding:0;align-items:flex-end}
   .modal{border-radius:16px 16px 0 0;max-height:90vh}
@@ -779,9 +803,14 @@ function parseEvent(ev){
 const YT_KEY          = 'AIzaSyBvUlbLkg1RAdPyFmuADmOS_0a2277PUkA';
 const BBC_UPLOADS     = 'UUli0KmmXMDjcgqvsheHfv-Q'; // uploads playlist (UC→UU)
 const YT_PLAYLIST_URL = 'https://www.googleapis.com/youtube/v3/playlistItems';
+const YT_SEARCH_URL   = 'https://www.googleapis.com/youtube/v3/search'; // player highlights only
 
 // Cache: eventId → {videoId, title} | null (not found) | undefined (not fetched yet)
 const hlCache = {};
+// Player caches
+const playerCache   = {}; // athleteId → {prof, news}
+const playerHlCache = {}; // athleteId → {videoId, title} | null | undefined
+const _plLookup     = {}; // athleteId → {entry, teamInfo} — populated by mcLineups()
 
 // One shared promise for the BBC catalog; fetched once per session, 2 pages = up to 100 videos
 let _bbcCatalogPromise = null;
@@ -1801,38 +1830,215 @@ function mcLineups(ev,data){
   const rosters=data?.rosters||[];
   if(!rosters.length) return`<div class="mc-lu-na">Lineups not yet confirmed</div>`;
   const POS={GK:0,G:0,CB:1,LB:1,RB:1,LWB:1,RWB:1,D:1,CM:2,DM:2,AM:2,LM:2,RM:2,M:2,LW:3,RW:3,CF:3,ST:3,F:3};
-  const pRow=e=>{
+  const pRow=(e,ti)=>{
     const a=e.athlete||{};
-    return`<div class="mc-lu-p">
-      <span class="mc-lu-num">${a.jersey||''}</span>
+    const id=a.id||'';
+    if(id) _plLookup[id]={entry:e,teamInfo:ti};
+    return`<div class="mc-lu-p${id?' clickable':''}" ${id?`onclick="openPlayerDetail('${id}')" role="button" tabindex="0"`:''}>
+      <span class="mc-lu-num">${e.jersey||a.jersey||''}</span>
       <span class="mc-lu-pos">${e.position?.abbreviation||''}</span>
       <span class="mc-lu-name">${a.displayName||a.fullName||'—'}</span>
       ${e.captain?'<span class="mc-lu-cap">©</span>':''}
+      ${id?'<span class="mc-lu-arrow">›</span>':''}
     </div>`;
   };
-  const side=r=>{
+  const side=(r,ti)=>{
     if(!r) return`<div class="mc-lu-na">No data</div>`;
-    const starters=(r.entries||[]).filter(e=>e.starter);
-    const bench=(r.entries||[]).filter(e=>!e.starter);
+    const starters=(r.roster||r.entries||[]).filter(e=>e.starter);
+    const bench=(r.roster||r.entries||[]).filter(e=>!e.starter);
     const grp={GK:[],DEF:[],MID:[],FWD:[]};
     starters.forEach(e=>{
       const p=POS[e.position?.abbreviation]??POS[e.position?.abbreviation?.charAt(0)]??2;
       [grp.GK,grp.DEF,grp.MID,grp.FWD][p]?.push(e);
     });
     let h='';
-    if(grp.GK.length)  h+=`<div class="mc-lu-sec">GK</div>${grp.GK.map(pRow).join('')}`;
-    if(grp.DEF.length) h+=`<div class="mc-lu-sec">Defence</div>${grp.DEF.map(pRow).join('')}`;
-    if(grp.MID.length) h+=`<div class="mc-lu-sec">Midfield</div>${grp.MID.map(pRow).join('')}`;
-    if(grp.FWD.length) h+=`<div class="mc-lu-sec">Attack</div>${grp.FWD.map(pRow).join('')}`;
-    if(bench.length)   h+=`<div class="mc-lu-sec">Bench</div>${bench.map(pRow).join('')}`;
+    if(grp.GK.length)  h+=`<div class="mc-lu-sec">GK</div>${grp.GK.map(e=>pRow(e,ti)).join('')}`;
+    if(grp.DEF.length) h+=`<div class="mc-lu-sec">Defence</div>${grp.DEF.map(e=>pRow(e,ti)).join('')}`;
+    if(grp.MID.length) h+=`<div class="mc-lu-sec">Midfield</div>${grp.MID.map(e=>pRow(e,ti)).join('')}`;
+    if(grp.FWD.length) h+=`<div class="mc-lu-sec">Attack</div>${grp.FWD.map(e=>pRow(e,ti)).join('')}`;
+    if(bench.length)   h+=`<div class="mc-lu-sec">Bench</div>${bench.map(e=>pRow(e,ti)).join('')}`;
     return h||`<div class="mc-lu-na">No lineup data</div>`;
   };
   const hR=rosters.find(r=>r.homeAway==='home')||rosters[0];
   const aR=rosters.find(r=>r.homeAway==='away')||rosters[1];
+  const hTi={name:ev.home.name,abbr:ev.home.abbr};
+  const aTi={name:ev.away.name,abbr:ev.away.abbr};
   return`<div class="mc-lu-cols">
-    <div><div class="mc-lu-hd"><span class="mc-lu-flag">${flag(ev.home.abbr)}</span>${ev.home.name}</div>${side(hR)}</div>
-    <div><div class="mc-lu-hd"><span class="mc-lu-flag">${flag(ev.away.abbr)}</span>${ev.away.name}</div>${side(aR)}</div>
+    <div><div class="mc-lu-hd"><span class="mc-lu-flag">${flag(ev.home.abbr)}</span>${ev.home.name}</div>${side(hR,hTi)}</div>
+    <div><div class="mc-lu-hd"><span class="mc-lu-flag">${flag(ev.away.abbr)}</span>${ev.away.name}</div>${side(aR,aTi)}</div>
   </div>`;
+}
+
+/* ── PLAYER DETAIL ──────────────────────────── */
+// Stats live on rosters[].roster[].stats[] — not on boxscore.players
+const PLAYER_STAT_WANT={
+  totalGoals:'Goals', goalAssists:'Assists', totalShots:'Shots', shotsOnTarget:'On Target',
+  goalsConceded:'Conceded', shotsFaced:'Shots Faced',
+  yellowCards:'Yellow', redCards:'Red', foulsCommitted:'Fouls', offsides:'Offsides',
+};
+function extractMatchStats(athleteId, data){
+  for(const team of data?.rosters||[]){
+    const p=(team.roster||[]).find(e=>String(e.athlete?.id)===String(athleteId));
+    if(!p) continue;
+    return (p.stats||[])
+      .filter(s=>PLAYER_STAT_WANT[s.name]&&s.value>0)
+      .map(s=>({lbl:PLAYER_STAT_WANT[s.name],val:s.displayValue||String(s.value)}));
+  }
+  return[];
+}
+
+function openPlayerDetail(athleteId){
+  const {entry,teamInfo}=_plLookup[athleteId]||{};
+  if(!entry) return;
+  const {ev,data}=mcState||{};
+  const a=entry.athlete||{};
+  const playerName=a.displayName||a.fullName||'—';
+  const jersey=entry.jersey||a.jersey||'';
+  const pos=entry.position?.displayName||entry.position?.abbreviation||'';
+
+  if(mcCdInt){clearInterval(mcCdInt);mcCdInt=null;}
+  document.querySelectorAll('.mc-tab-btn').forEach(b=>b.classList.remove('active'));
+
+  const matchStats=ev&&data?extractMatchStats(athleteId,data):[];
+  const statHtml=matchStats.length?`
+    <div class="pl-sec">This Match</div>
+    <div class="pl-sgrid">${matchStats.map(s=>`<div class="pl-sbox"><div class="pl-sval">${s.val}</div><div class="pl-slbl">${s.lbl}</div></div>`).join('')}</div>`:'';
+
+  const body=document.getElementById('mcBody');
+  if(!body) return;
+  body.innerHTML=`
+    <button class="pl-back" onclick="switchMCTab('lineups')">‹ Back to Lineups</button>
+    <div class="pl-hero">
+      <div class="pl-photo" id="plPhoto">${flag(teamInfo.abbr)}</div>
+      <div class="pl-meta">
+        <div class="pl-pname">${playerName}</div>
+        <div class="pl-psub">${[pos,teamInfo.name].filter(Boolean).join(' · ')}</div>
+      </div>
+      ${jersey?`<div class="pl-pnum">#${jersey}</div>`:''}
+    </div>
+    ${statHtml}
+    <div id="plProfile"><div class="lineup-loading">Loading profile…</div></div>
+    <div id="plHighlights"></div>
+    <div id="plNews"></div>`;
+
+  fetchAndRenderPlayer(athleteId, playerName, teamInfo, ev);
+}
+
+async function fetchAndRenderPlayer(athleteId, playerName, teamInfo, ev){
+  if(!playerCache[athleteId]){
+    try{
+      const[profR,newsR]=await Promise.all([
+        fetch(`https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/athletes/${athleteId}`,{signal:AbortSignal.timeout(8000)}).catch(()=>null),
+        fetch(`https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/athletes/${athleteId}/news`,{signal:AbortSignal.timeout(8000)}).catch(()=>null),
+      ]);
+      const prof=profR?.ok?await profR.json():{};
+      const news=newsR?.ok?await newsR.json():{};
+      playerCache[athleteId]={prof,news};
+    }catch(e){playerCache[athleteId]={prof:{},news:{}};}
+  }
+  const{prof,news}=playerCache[athleteId];
+  const ath=prof?.athlete||{};
+
+  // Update photo with ESPN headshot if available
+  const hs=ath.headshot?.href;
+  if(hs){
+    const photoEl=document.getElementById('plPhoto');
+    if(photoEl) photoEl.innerHTML=`<img src="${hs}" alt="${playerName}" loading="lazy" onerror="this.parentElement.textContent='${flag(teamInfo.abbr)}'">`;
+  }
+
+  // Bio + tournament stats
+  const profileEl=document.getElementById('plProfile');
+  if(profileEl) profileEl.innerHTML=renderPlayerProfile(ath);
+
+  // News
+  const newsEl=document.getElementById('plNews');
+  if(newsEl) newsEl.innerHTML=renderPlayerNews(news?.articles||[]);
+
+  // Player highlight (async, fills #plHighlights when ready)
+  fetchPlayerHighlight(athleteId, playerName, ev);
+}
+
+function renderPlayerProfile(ath){
+  const bio=[];
+  if(ath.age)            bio.push({k:'Age',v:String(ath.age)});
+  if(ath.displayHeight)  bio.push({k:'Height',v:ath.displayHeight});
+  if(ath.displayWeight)  bio.push({k:'Weight',v:ath.displayWeight});
+  const nat=ath.flag?.alt||ath.citizenship;
+  if(nat)                bio.push({k:'Nationality',v:nat});
+  const club=ath.team?.displayName||ath.team?.name;
+  if(club)               bio.push({k:'Club',v:club});
+  if(ath.dateOfBirth){
+    const d=new Date(ath.dateOfBirth);
+    bio.push({k:'Born',v:d.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})});
+  }
+
+  const allStats=(ath.statistics||[]).flatMap(s=>s.splits?.categories||[]).flatMap(c=>c.stats||[]);
+  const gv=name=>{const s=allStats.find(x=>x.name===name);return s?.displayValue??s?.value??null;};
+  const KEYS=[['appearances','Apps'],['goals','Goals'],['assists','Assists'],['minutesPlayed','Minutes'],
+    ['shots','Shots'],['shotsOnTarget','On Target'],['saves','Saves'],['cleanSheets','Clean Sheets'],
+    ['yellowCards','Yellow'],['redCards','Red']];
+  const tournStats=KEYS.map(([k,l])=>{const v=gv(k);return v!=null&&v!=='0'?{lbl:l,val:v}:null;}).filter(Boolean);
+
+  let h='';
+  if(bio.length){
+    h+=`<div class="pl-sec">Profile</div><div class="pl-info-grid">${bio.map(b=>`<div class="pl-info-row"><div class="pl-info-k">${b.k}</div><div class="pl-info-v">${b.v}</div></div>`).join('')}</div>`;
+  }
+  if(tournStats.length){
+    h+=`<div class="pl-sec">Tournament Stats</div><div class="pl-sgrid">${tournStats.map(s=>`<div class="pl-sbox"><div class="pl-sval">${s.val}</div><div class="pl-slbl">${s.lbl}</div></div>`).join('')}</div>`;
+  }
+  return h;
+}
+
+function renderPlayerNews(articles){
+  if(!articles.length) return'';
+  const items=articles.slice(0,5).map(a=>{
+    const url=a.links?.web?.href||'#';
+    const img=a.images?.[0]?.url||'';
+    const dt=a.lastModified||a.published||'';
+    return`<a class="mc-news-item" href="${url}" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+      ${img?`<img class="mc-news-img" src="${img}" alt="" loading="lazy">`:'<div class="mc-news-img"></div>'}
+      <div class="mc-news-cnt">
+        <div class="mc-news-ttl">${a.headline||'—'}</div>
+        <div class="mc-news-meta">ESPN${dt?' · '+timeAgo(dt):''}</div>
+      </div></a>`;
+  }).join('');
+  return`<div class="pl-sec">News</div>${items}`;
+}
+
+async function fetchPlayerHighlight(athleteId, playerName, ev){
+  if(playerHlCache[athleteId]!==undefined){
+    _renderPlayerHighlight(athleteId);
+    return;
+  }
+  playerHlCache[athleteId]=null;
+  try{
+    const nameParts=playerName.toLowerCase().split(/\s+/);
+    const lastName=nameParts[nameParts.length-1];
+    const q=encodeURIComponent(`${playerName} FIFA World Cup 2026`);
+    const r=await fetch(`${YT_SEARCH_URL}?part=snippet&q=${q}&type=video&order=relevance&maxResults=10&key=${YT_KEY}`,{signal:AbortSignal.timeout(8000)});
+    const d=await r.json();
+    const scored=(d.items||[]).map(i=>{
+      const t=i.snippet.title.toLowerCase();
+      let s=0;
+      if(t.includes(playerName.toLowerCase())) s+=3;
+      else if(lastName.length>=4&&t.includes(lastName)) s+=2;
+      if(t.includes('world cup')||t.includes('2026')) s+=1;
+      if(t.includes('goal')||t.includes('highlight')||t.includes('skill')) s+=1;
+      return{i,s};
+    }).filter(x=>x.s>=3).sort((a,b)=>b.s-a.s);
+    const hit=scored[0]?.i;
+    if(hit) playerHlCache[athleteId]={videoId:hit.id.videoId,title:hit.snippet.title};
+  }catch(e){}
+  _renderPlayerHighlight(athleteId);
+}
+
+function _renderPlayerHighlight(athleteId){
+  const el=document.getElementById('plHighlights');
+  if(!el) return;
+  const hl=playerHlCache[athleteId];
+  if(hl?.videoId){
+    el.innerHTML=`<div class="pl-sec">Highlights</div><div class="mc-hl-tab">${buildThumb(hl.videoId,hl.title).outerHTML}</div>`;
+  }
 }
 
 /* ── HIGHLIGHTS TAB ─────────────────────────── */
