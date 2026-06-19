@@ -259,6 +259,87 @@ body{
 .trophy-l{font-size:9px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--gold);text-align:center}
 .trophy-t{font-size:10px;color:var(--t2);font-style:italic;text-align:center}
 
+/* ── DAY NAV ────────────────────────────────── */
+.day-nav{display:flex;align-items:center;gap:10px;margin-bottom:20px;flex-wrap:wrap}
+.dnav-btn{
+  background:none;border:1px solid var(--border);color:var(--t2);
+  font-family:var(--font);font-size:18px;line-height:1;padding:4px 12px;
+  border-radius:8px;cursor:pointer;transition:border-color .18s,color .18s;
+}
+.dnav-btn:hover{border-color:#333;color:var(--text)}
+.dnav-btn:disabled{opacity:.25;cursor:default;pointer-events:none}
+.dnav-date{font-size:15px;font-weight:600;flex:1}
+.dnav-sub{font-size:11px;color:var(--t2);margin-top:1px}
+.dnav-today{
+  font-size:11px;font-weight:700;letter-spacing:.6px;padding:4px 11px;
+  background:rgba(0,255,135,.08);border:1px solid rgba(0,255,135,.2);
+  color:var(--accent);border-radius:100px;cursor:pointer;transition:background .18s;
+  display:none;
+}
+.dnav-today.show{display:inline-block}
+.dnav-today:hover{background:rgba(0,255,135,.15)}
+.mc{cursor:pointer}
+.mc.vis:hover{transform:translateY(-2px);border-color:#272727;box-shadow:0 10px 32px rgba(0,0,0,.45)}
+
+/* ── LINEUP MODAL ───────────────────────────── */
+.modal-bg{
+  position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.72);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  display:flex;align-items:center;justify-content:center;padding:20px;
+  opacity:0;pointer-events:none;transition:opacity .2s;
+}
+.modal-bg.open{opacity:1;pointer-events:all}
+.modal{
+  background:#111;border:1px solid #222;border-radius:16px;
+  width:100%;max-width:680px;max-height:88vh;overflow:hidden;
+  display:flex;flex-direction:column;
+  transform:translateY(18px);transition:transform .22s;
+}
+.modal-bg.open .modal{transform:translateY(0)}
+.modal-hd{
+  padding:17px 20px;border-bottom:1px solid var(--border);
+  display:flex;align-items:flex-start;justify-content:space-between;flex-shrink:0;gap:12px;
+}
+.modal-match{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:700}
+.modal-score{font-family:var(--mono);font-size:13px;color:var(--t2);font-weight:400}
+.modal-sub{font-size:11px;color:var(--t2);margin-top:3px}
+.modal-close{
+  background:none;border:none;color:var(--t2);font-size:22px;cursor:pointer;
+  padding:2px 7px;border-radius:6px;flex-shrink:0;line-height:1;
+  transition:color .15s,background .15s;
+}
+.modal-close:hover{color:var(--text);background:rgba(255,255,255,.07)}
+.modal-body{overflow-y:auto;padding:18px 20px;flex:1}
+.lineup-cols{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.lineup-team-hd{
+  display:flex;align-items:center;gap:7px;font-size:13px;font-weight:700;
+  padding-bottom:10px;border-bottom:1px solid var(--border);margin-bottom:8px;
+}
+.lineup-flag{font-size:18px}
+.lineup-sec{
+  font-size:9px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;
+  color:var(--t3);margin:10px 0 5px;
+}
+.lineup-player{
+  display:flex;align-items:center;gap:6px;padding:5px 0;
+  border-bottom:1px solid rgba(255,255,255,.03);font-size:12px;
+}
+.lineup-player:last-child{border-bottom:none}
+.lineup-num{font-family:var(--mono);font-size:10px;color:var(--t3);width:16px;text-align:right;flex-shrink:0}
+.lineup-pos{
+  font-size:9px;color:var(--t2);padding:1px 4px;
+  background:rgba(255,255,255,.05);border-radius:3px;flex-shrink:0;
+}
+.lineup-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lineup-cap{font-size:10px;color:var(--gold);flex-shrink:0}
+.lineup-loading{text-align:center;padding:30px 0;color:var(--t2);font-size:13px}
+.lineup-na{text-align:center;padding:24px 0;color:var(--t2);font-size:13px}
+@media(max-width:560px){
+  .lineup-cols{grid-template-columns:1fr}
+  .modal-bg{padding:0;align-items:flex-end}
+  .modal{border-radius:16px 16px 0 0;max-height:82vh}
+}
+
 /* ── RESPONSIVE ─────────────────────────────── */
 @media(max-width:768px){
   .hdr-in{height:58px}.wordmark{font-size:15px}.clock{display:none}
@@ -319,6 +400,20 @@ body{
   <section id="tab-knockout" class="tab"></section>
 
 </main>
+
+<!-- LINEUP MODAL -->
+<div class="modal-bg" id="modalBg" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="modal-hd">
+      <div>
+        <div class="modal-match" id="modalTitle">—</div>
+        <div class="modal-sub" id="modalSub">—</div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
 
 <script>
 // ═══════════════════════════════════════════════════
@@ -454,9 +549,14 @@ const KO_RIGHT = [
 // ═══════════════════════════════════════════════════
 const ESPN_URL      = 'https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard';
 const ESPN_STANDINGS= 'https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/standings';
-let liveClocks = {};    // eventId → { minute, fetchedAt }
+const ESPN_SUMMARY  = 'https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/summary';
+let liveClocks = {};
 let refreshIn = 30;
 let lastEvents = [];
+let browseDate = null;   // null = today; Date object when browsing
+
+function toDateStr(d){ return d.toISOString().slice(0,10).replace(/-/g,''); }
+function todayStr(){ return toDateStr(new Date()); }
 
 // ═══════════════════════════════════════════════════
 //  HELPERS
@@ -591,27 +691,156 @@ function buildCard(ev){
 }
 
 // ═══════════════════════════════════════════════════
+//  DAY NAV HELPERS
+// ═══════════════════════════════════════════════════
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const DAYS   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const WC_START = new Date('2026-06-11');
+const WC_END   = new Date('2026-07-19');
+
+function fmtDate(d){
+  return `${DAYS[d.getDay()]}, ${MONTHS[d.getMonth()]} ${d.getDate()}`;
+}
+function shiftDate(d, delta){
+  const n = new Date(d); n.setDate(n.getDate()+delta); return n;
+}
+function isToday(d){
+  const t = new Date();
+  return d.getFullYear()===t.getFullYear() && d.getMonth()===t.getMonth() && d.getDate()===t.getDate();
+}
+
+function renderDayNav(d){
+  let nav = $('day-nav');
+  if(!nav){
+    nav = el('div','day-nav'); nav.id='day-nav';
+    $('today-content').prepend(nav);
+  }
+  const prev = shiftDate(d,-1);
+  const next = shiftDate(d, 1);
+  const isTod = isToday(d);
+  nav.innerHTML = `
+    <button class="dnav-btn" id="navPrev" title="${fmtDate(prev)}">‹</button>
+    <div>
+      <div class="dnav-date">${fmtDate(d)}</div>
+      <div class="dnav-sub">${d.getFullYear()} · FIFA World Cup</div>
+    </div>
+    <button class="dnav-btn" id="navNext" title="${fmtDate(next)}"
+      ${next > WC_END ? 'disabled' : ''}>›</button>
+    <button class="dnav-today${isTod?'':' show'}" id="navToday">Back to Today</button>`;
+  $('navPrev').onclick = () => goToDate(shiftDate(d,-1));
+  $('navNext').onclick = () => goToDate(shiftDate(d, 1));
+  const bt = $('navToday'); if(bt) bt.onclick = () => goToDate(null);
+}
+
+function goToDate(d){
+  browseDate = d;
+  refreshIn = 30;
+  showSkeleton(true);   // keep nav, clear cards
+  fetchMatches();
+}
+
+// ═══════════════════════════════════════════════════
+//  PATCH CARD IN-PLACE (no-flash refresh)
+// ═══════════════════════════════════════════════════
+function patchCard(card, ev){
+  const isLive = ev.state==='in';
+  const isFt   = ev.state==='post';
+
+  card.className = `mc${isLive?' live':isFt?' ft':''} vis`;
+
+  const badge = card.querySelector('.mc-badge');
+  if(badge){
+    badge.className = `mc-badge ${isLive?'live':isFt?'ft':'up'}`;
+    badge.textContent = isLive?'● Live':isFt?'FT':'Upcoming';
+  }
+
+  if(ev.state !== 'pre'){
+    const scs = card.querySelectorAll('.sc:not(.vs)');
+    if(scs[0]) scs[0].textContent = ev.home.score;
+    if(scs[1]) scs[1].textContent = ev.away.score;
+  }
+
+  const tnames = card.querySelectorAll('.tname');
+  if(tnames[0]) tnames[0].classList.toggle('winner', ev.home.winner);
+  if(tnames[1]) tnames[1].classList.toggle('winner', ev.away.winner);
+
+  const footL = card.querySelector('.mc-min,.mc-ft-time,.mc-cd');
+  if(footL){
+    if(isLive){
+      footL.className = ev.isHT ? 'mc-min ht' : 'mc-min';
+      delete footL.dataset.cdid;
+      if(ev.isHT){ delete footL.dataset.clockid; footL.textContent='HT'; }
+      else { footL.dataset.clockid=ev.id; footL.textContent=ev.displayClock; }
+    } else if(isFt){
+      footL.className='mc-ft-time'; delete footL.dataset.clockid; delete footL.dataset.cdid;
+      footL.textContent='Full Time';
+    } else {
+      footL.className='mc-cd';
+      footL.dataset.cdid=ev.id; footL.dataset.ts=ev.date.getTime();
+      delete footL.dataset.clockid;
+    }
+  }
+}
+
+// ═══════════════════════════════════════════════════
 //  RENDER TODAY
 // ═══════════════════════════════════════════════════
-function renderToday(events, dayDate){
+function renderToday(events, dayDate, patch){
   const wrap = $('today-content');
-  wrap.innerHTML = '';
-
   const live     = events.filter(e=>e.state==='in');
   const finished = events.filter(e=>e.state==='post');
   const upcoming = events.filter(e=>e.state==='pre');
 
-  // live pill
   $('livePill').classList.toggle('hidden', live.length===0);
 
-  // Day bar
-  const now = new Date();
-  const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
-  const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-  const dateStr = dayDate
-    ? `${dayDate}`
-    : `${days[now.getDay()]}, ${months[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()}`;
+  // Resolve the display date
+  const dispDate = browseDate || (dayDate ? new Date(dayDate+'T12:00:00') : new Date());
 
+  // --- patch mode: update existing cards without wiping the DOM ---
+  if(patch){
+    renderDayNav(dispDate);
+    // update stat counters
+    const svs = wrap.querySelectorAll('.dstat .sv');
+    if(svs[0]) svs[0].textContent = live.length;
+    if(svs[1]) svs[1].textContent = finished.length;
+    if(svs[2]) svs[2].textContent = upcoming.length;
+
+    const existingIds = new Set([...wrap.querySelectorAll('.mc[data-ev-id]')].map(c=>c.dataset.evId));
+    const newIds      = new Set(events.map(e=>e.id));
+
+    // patch or add
+    events.forEach(ev => {
+      const card = wrap.querySelector(`.mc[data-ev-id="${ev.id}"]`);
+      if(card){ patchCard(card, ev); }
+      else {
+        // new event appeared — full re-render is simpler; just rebuild
+        patch = false;
+      }
+    });
+    // remove disappeared events
+    existingIds.forEach(id => {
+      if(!newIds.has(id)){
+        const c = wrap.querySelector(`.mc[data-ev-id="${id}"]`); if(c) c.remove();
+      }
+    });
+
+    if(patch){
+      live.forEach(ev => {
+        if(!ev.isHT) liveClocks[ev.id] = { minute:parseMinute(ev.displayClock), fetchedAt:Date.now() };
+      });
+      return;
+    }
+  }
+
+  // --- full render ---
+  // preserve nav if it exists
+  const navEl = $('day-nav');
+  wrap.innerHTML = '';
+  if(navEl) wrap.append(navEl);
+
+  renderDayNav(dispDate);
+
+  const dateStr = fmtDate(dispDate) + `, ${dispDate.getFullYear()}`;
   const bar = el('div','day-bar');
   bar.innerHTML = `
     <div>
@@ -626,18 +855,20 @@ function renderToday(events, dayDate){
   wrap.append(bar);
 
   if(events.length===0){
-    wrap.append(el('div','empty','No matches scheduled today · Check back soon'));
+    wrap.append(el('div','empty','No matches scheduled · Use the arrows to browse other days'));
     return;
   }
 
   function section(badge_html, list){
-    if(list.length===0) return;
-    const hd = el('div','sec-hd'); hd.innerHTML=badge_html+`<span class="sc-count">${list.length} match${list.length>1?'es':''}</span>`;
+    if(!list.length) return;
+    const hd = el('div','sec-hd');
+    hd.innerHTML = badge_html+`<span class="sc-count">${list.length} match${list.length>1?'es':''}</span>`;
     wrap.append(hd);
     const g = el('div','mgrid');
     list.forEach((ev,i) => {
       const c = buildCard(ev);
       c.dataset.delay = i*50;
+      c.onclick = () => openLineup(ev);
       g.append(c);
     });
     wrap.append(g);
@@ -647,11 +878,8 @@ function renderToday(events, dayDate){
   section(`<div class="sbadge ft">✓ Finished</div>`, finished);
   section(`<div class="sbadge up">🕐 Upcoming</div>`, upcoming);
 
-  // Update live clocks state
   live.forEach(ev => {
-    if(!ev.isHT){
-      liveClocks[ev.id] = { minute: parseMinute(ev.displayClock), fetchedAt: Date.now() };
-    }
+    if(!ev.isHT) liveClocks[ev.id] = { minute:parseMinute(ev.displayClock), fetchedAt:Date.now() };
   });
 
   setTimeout(observeCards, 30);
@@ -666,10 +894,12 @@ function setRefreshLabel(txt, accent=false){
   lbl.classList.toggle('fetching', accent);
 }
 
-function showSkeleton(){
+function showSkeleton(keepNav=false){
   const wrap = $('today-content');
-  wrap.innerHTML = '<div class="skel-grid">';
-  const g = wrap.querySelector('.skel-grid') || wrap;
+  const navEl = keepNav ? $('day-nav') : null;
+  wrap.innerHTML = '';
+  if(navEl) wrap.append(navEl);
+  const g = el('div','skel-grid');
   for(let i=0;i<3;i++){
     const s = el('div','skel');
     s.innerHTML = `<div class="skel-line" style="width:40%;height:10px"></div>
@@ -677,33 +907,25 @@ function showSkeleton(){
       <div class="skel-line" style="width:55%;height:10px;margin-top:16px"></div>`;
     g.append(s);
   }
+  wrap.append(g);
 }
 
 async function fetchMatches(){
   setRefreshLabel('↻ Refreshing…', true);
+  const isPatch = lastEvents.length > 0 && !document.querySelector('.skel-grid');
+  const dateParam = browseDate ? '?dates='+toDateStr(browseDate) : '';
   try {
-    const r = await fetch(ESPN_URL, { signal: AbortSignal.timeout(8000) });
+    const r = await fetch(ESPN_URL+dateParam, { signal: AbortSignal.timeout(8000) });
     if(!r.ok) throw new Error(`${r.status}`);
     const data = await r.json();
     const raw = data.events || [];
     const events = raw.map(parseEvent);
     lastEvents = events;
-
-    // Try to get the day label from data.day.date
-    let dayLabel = '';
-    if(data.day?.date){
-      const d = new Date(data.day.date+'T12:00:00');
-      const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
-      const wdays=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-      dayLabel = `${wdays[d.getDay()]}, ${months[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
-    }
-    renderToday(events, dayLabel);
+    const dayLabel = data.day?.date || '';
+    renderToday(events, dayLabel, isPatch);
     hideErr();
   } catch(e){
-    if(lastEvents.length === 0){
-      showErr();
-    }
-    // If we have cached data, keep showing it silently
+    if(lastEvents.length === 0) showErr();
   }
   setRefreshLabel('Auto-refresh in 30s', false);
   refreshIn = 30;
@@ -895,6 +1117,78 @@ function tick(){
     fetchMatches();
   } else {
     setRefreshLabel(`Auto-refresh in ${refreshIn}s`, false);
+  }
+}
+
+// ═══════════════════════════════════════════════════
+//  LINEUP MODAL
+// ═══════════════════════════════════════════════════
+function openLineup(ev){
+  const isLive = ev.state==='in';
+  const isFt   = ev.state==='post';
+  const scoreStr = (isLive||isFt) ? `${ev.home.score} – ${ev.away.score}` : 'vs';
+  $('modalTitle').innerHTML =
+    `<span>${flag(ev.home.abbr)} ${ev.home.name}</span>
+     <span class="modal-score">${scoreStr}</span>
+     <span>${ev.away.name} ${flag(ev.away.abbr)}</span>`;
+  $('modalSub').textContent = [ev.group, ev.venue, ev.city].filter(Boolean).join(' · ');
+  $('modalBody').innerHTML = '<div class="lineup-loading">Loading lineups…</div>';
+  $('modalBg').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  fetchLineup(ev);
+}
+
+function closeModal(){
+  $('modalBg').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
+
+async function fetchLineup(ev){
+  try {
+    const r = await fetch(`${ESPN_SUMMARY}?event=${ev.id}`, { signal: AbortSignal.timeout(8000) });
+    if(!r.ok) throw new Error(r.status);
+    const data = await r.json();
+    const rosters = data.rosters || [];
+    if(!rosters.length){ $('modalBody').innerHTML='<div class="lineup-na">Lineups not yet available</div>'; return; }
+
+    const sides = rosters.slice(0,2).map(roster => {
+      const starters = (roster.entries||[]).filter(e=>e.starter);
+      const bench    = (roster.entries||[]).filter(e=>!e.starter);
+      const abbr     = roster.team?.abbreviation || '';
+      return { name: roster.team?.displayName||'', abbr, starters, bench };
+    });
+
+    function playerRow(entry){
+      const a   = entry.athlete || {};
+      const num = a.jersey || '';
+      const pos = entry.position?.abbreviation || a.position?.abbreviation || '';
+      const cap = entry.captain ? '<span class="lineup-cap">©</span>' : '';
+      return `<div class="lineup-player">
+        <span class="lineup-num">${num}</span>
+        <span class="lineup-pos">${pos}</span>
+        <span class="lineup-name">${a.displayName||a.fullName||'—'}</span>${cap}
+      </div>`;
+    }
+
+    function teamCol(side){
+      const startersHtml = side.starters.map(playerRow).join('');
+      const benchHtml    = side.bench.map(playerRow).join('');
+      return `<div>
+        <div class="lineup-team-hd">
+          <span class="lineup-flag">${flag(side.abbr)}</span>
+          <span>${side.name}</span>
+        </div>
+        ${startersHtml ? `<div class="lineup-sec">Starting XI</div>${startersHtml}` : ''}
+        ${benchHtml    ? `<div class="lineup-sec">Bench</div>${benchHtml}` : ''}
+        ${!startersHtml&&!benchHtml ? '<div class="lineup-na">No lineup data</div>' : ''}
+      </div>`;
+    }
+
+    $('modalBody').innerHTML = `<div class="lineup-cols">${sides.map(teamCol).join('')}</div>`;
+  } catch(e){
+    $('modalBody').innerHTML = '<div class="lineup-na">Could not load lineups</div>';
   }
 }
 
