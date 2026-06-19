@@ -773,14 +773,39 @@ function parseEvent(ev){
 // ═══════════════════════════════════════════════════
 //  HIGHLIGHTS — YouTube API
 // ═══════════════════════════════════════════════════
-// BBC Football title format (confirmed via API):
-//   "{Home} v {Away} 🏳️🏳️ | 2026 FIFA World Cup | Group X"
-const YT_KEY        = 'AIzaSyBvUlbLkg1RAdPyFmuADmOS_0a2277PUkA';
-const BBC_CHANNEL   = 'UCli0KmmXMDjcgqvsheHfv-Q';
-const YT_SEARCH_URL = 'https://www.googleapis.com/youtube/v3/search';
+// BBC Football title format: "{Home} v {Away} 🏳️🏳️ | 2026 FIFA World Cup | Group X"
+// We use playlistItems.list (not search.list) to get real-time uploads with no indexing lag.
+// UC→UU converts channel ID to its uploads playlist ID.
+const YT_KEY          = 'AIzaSyBvUlbLkg1RAdPyFmuADmOS_0a2277PUkA';
+const BBC_UPLOADS     = 'UUli0KmmXMDjcgqvsheHfv-Q'; // uploads playlist (UC→UU)
+const YT_PLAYLIST_URL = 'https://www.googleapis.com/youtube/v3/playlistItems';
 
-// Cache: eventId → videoId (string) | null (searched, not found yet) | undefined (not searched)
+// Cache: eventId → {videoId, title} | null (not found) | undefined (not fetched yet)
 const hlCache = {};
+
+// One shared promise for the BBC catalog; fetched once per session, 2 pages = up to 100 videos
+let _bbcCatalogPromise = null;
+function getBBCCatalog(){
+  if(_bbcCatalogPromise) return _bbcCatalogPromise;
+  _bbcCatalogPromise = (async () => {
+    const items = [];
+    let pageToken = '';
+    for(let page = 0; page < 2; page++){
+      const url = `${YT_PLAYLIST_URL}?part=snippet&playlistId=${BBC_UPLOADS}&maxResults=50${pageToken?'&pageToken='+pageToken:''}&key=${YT_KEY}`;
+      const r = await fetch(url, { signal: AbortSignal.timeout(10000) });
+      if(!r.ok) break;
+      const d = await r.json();
+      (d.items || []).forEach(it => items.push({
+        videoId: it.snippet.resourceId?.videoId,
+        title:   it.snippet.title,
+      }));
+      pageToken = d.nextPageToken || '';
+      if(!pageToken) break;
+    }
+    return items.filter(v => v.videoId);
+  })().catch(() => []);
+  return _bbcCatalogPromise;
+}
 
 function highlightFallbackUrl(ev){
   const q = encodeURIComponent(`${ev.home.name} v ${ev.away.name} 2026 FIFA World Cup`);
@@ -866,41 +891,21 @@ function hlScore(title, ev){
 async function fetchHighlight(ev){
   if(hlCache[ev.id] !== undefined) return;
   hlCache[ev.id] = null;
-  const scoreItems = items => items
-    .map(i => ({ i, s: hlScore(i.snippet.title, ev) }))
-    .filter(x => x.s >= 1)
-    .sort((a, b) => b.s - a.s);
   try {
-    // Pass 1: BBC Football channel — preferred source
-    const q1 = encodeURIComponent(`${ev.home.name} v ${ev.away.name} World Cup 2026`);
-    const r1 = await fetch(
-      `${YT_SEARCH_URL}?part=snippet&channelId=${BBC_CHANNEL}&q=${q1}&type=video&order=date&maxResults=10&key=${YT_KEY}`,
-      { signal: AbortSignal.timeout(6000) }
-    );
-    const d1 = await r1.json();
-    const sc1 = scoreItems(d1.items || []);
-    let item = (sc1.find(x => x.s >= 2) || sc1[0])?.i;
-
-    // Pass 2: broader YouTube search when BBC has nothing (e.g. non-UK games)
-    if(!item){
-      const q2 = encodeURIComponent(`${ev.home.name} v ${ev.away.name} highlights 2026 FIFA World Cup`);
-      const r2 = await fetch(
-        `${YT_SEARCH_URL}?part=snippet&q=${q2}&type=video&order=relevance&maxResults=8&key=${YT_KEY}`,
-        { signal: AbortSignal.timeout(6000) }
-      );
-      const d2 = await r2.json();
-      const sc2 = scoreItems(d2.items || []);
-      // Stricter threshold for broader search to avoid unrelated videos
-      item = sc2.find(x => x.s >= 2)?.i;
-    }
-
-    if(item){
-      hlCache[ev.id] = { videoId: item.id.videoId, title: item.snippet.title };
+    // Use BBC's uploads playlist (real-time, no search index lag, 2 quota units for 100 videos)
+    const catalog = await getBBCCatalog();
+    const scored = catalog
+      .map(v => ({ v, s: hlScore(v.title, ev) }))
+      .filter(x => x.s >= 2)
+      .sort((a, b) => b.s - a.s);
+    const hit = scored[0]?.v;
+    if(hit){
+      hlCache[ev.id] = { videoId: hit.videoId, title: hit.title };
       document.querySelectorAll(`.mc-thumb-slot[data-hlid="${ev.id}"]`).forEach(slot => {
-        slot.replaceWith(buildThumb(item.id.videoId, item.snippet.title));
+        slot.replaceWith(buildThumb(hit.videoId, hit.title));
       });
     }
-  } catch(e){ /* no thumbnail shown */ }
+  } catch(e){}
 }
 
 const YT_ICON = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>`;
