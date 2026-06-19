@@ -1950,9 +1950,11 @@ async function fetchAndRenderPlayer(athleteId, playerName, teamInfo, ev){
   const profileEl=document.getElementById('plProfile');
   if(profileEl) profileEl.innerHTML=renderPlayerProfile(ath);
 
-  // News
+  // News — combine athlete endpoint + match news, filter to articles mentioning this player
+  const matchArticles=mcState?.data?.news?.articles||[];
+  const allArticles=[...(news?.articles||[]),...matchArticles];
   const newsEl=document.getElementById('plNews');
-  if(newsEl) newsEl.innerHTML=renderPlayerNews(news?.articles||[]);
+  if(newsEl) newsEl.innerHTML=renderPlayerNews(allArticles, playerName);
 
   // Player highlight (async, fills #plHighlights when ready)
   fetchPlayerHighlight(athleteId, playerName, ev);
@@ -1989,9 +1991,19 @@ function renderPlayerProfile(ath){
   return h;
 }
 
-function renderPlayerNews(articles){
-  if(!articles.length) return'';
-  const items=articles.slice(0,5).map(a=>{
+function renderPlayerNews(articles, playerName){
+  // Only show articles that actually mention this player by name
+  const nameLow=(playerName||'').toLowerCase();
+  const nameParts=nameLow.split(/\s+/).filter(w=>w.length>=4);
+  const relevant=articles.filter(a=>{
+    const hay=((a.headline||'')+' '+(a.description||'')+' '+(a.summary||'')).toLowerCase();
+    return nameParts.some(p=>hay.includes(p));
+  });
+  // Deduplicate by headline
+  const seen=new Set();
+  const unique=relevant.filter(a=>{const k=a.headline||'';if(seen.has(k))return false;seen.add(k);return true;});
+  if(!unique.length) return`<div class="pl-sec">News</div><div class="mc-news-empty">No news found for ${playerName}</div>`;
+  const items=unique.slice(0,5).map(a=>{
     const url=a.links?.web?.href||'#';
     const img=a.images?.[0]?.url||'';
     const dt=a.lastModified||a.published||'';
@@ -2022,10 +2034,11 @@ async function fetchPlayerHighlight(athleteId, playerName, ev){
       let s=0;
       if(t.includes(playerName.toLowerCase())) s+=3;
       else if(lastName.length>=4&&t.includes(lastName)) s+=2;
-      if(t.includes('world cup')||t.includes('2026')) s+=1;
-      if(t.includes('goal')||t.includes('highlight')||t.includes('skill')) s+=1;
+      if(t.includes('world cup')||t.includes('2026')) s+=2;
+      if(t.includes('goal')||t.includes('highlight')||t.includes('skill')||t.includes('save')) s+=1;
       return{i,s};
-    }).filter(x=>x.s>=3).sort((a,b)=>b.s-a.s);
+    // Require score ≥5: player name (3) + WC/2026 (2) — filters pre-tournament/transfer content
+    }).filter(x=>x.s>=5).sort((a,b)=>b.s-a.s);
     const hit=scored[0]?.i;
     if(hit) playerHlCache[athleteId]={videoId:hit.id.videoId,title:hit.snippet.title};
   }catch(e){}
