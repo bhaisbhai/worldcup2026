@@ -695,23 +695,53 @@ function buildThumb(videoId, title){
   return a;
 }
 
-// Score how well a video title matches a highlight for this match.
-// Returns 0 (no match) up to 3 (perfect match).
+// ESPN ↔ BBC name mismatches
+const TEAM_ALIASES = {
+  'czechia':                  ['czech republic', 'czech'],
+  'czech republic':           ['czechia', 'czech'],
+  'korea republic':           ['south korea', 'korea'],
+  'south korea':              ['korea republic', 'korea'],
+  'united states':            ['usa', 'usmnt', 'us'],
+  'usa':                      ['united states', 'usmnt'],
+  'ivory coast':              ["côte d'ivoire", 'cote d\'ivoire', 'ivory'],
+  "côte d'ivoire":            ['ivory coast', 'ivory', 'cote'],
+  'bosnia and herzegovina':   ['bosnia-herzegovina', 'bosnia & herzegovina', 'bosnia'],
+  'bosnia-herzegovina':       ['bosnia and herzegovina', 'bosnia'],
+  'dr congo':                 ['democratic republic of congo', 'congo dr', 'drc'],
+  'democratic republic of congo': ['dr congo', 'drc'],
+  'trinidad & tobago':        ['trinidad and tobago', 'trinidad'],
+  'trinidad and tobago':      ['trinidad & tobago', 'trinidad'],
+};
+
+function teamInTitle(title, name){
+  const t = title.toLowerCase();
+  const n = name.toLowerCase();
+  if(t.includes(n)) return true;
+  const aliases = TEAM_ALIASES[n] || [];
+  if(aliases.some(a => t.includes(a))) return true;
+  // Token fallback: any word 5+ chars from the team name found in title
+  return n.split(/[\s\-]+/).filter(w => w.length >= 5).some(tok => t.includes(tok));
+}
+
+// All aliases for a team, for "v" pattern checking
+function teamTokens(name){
+  const n = name.toLowerCase();
+  const base = [n, ...(TEAM_ALIASES[n] || [])];
+  // Also add first significant word
+  const sig = n.split(/[\s\-]+/).filter(w => w.length >= 4)[0];
+  if(sig && !base.includes(sig)) base.push(sig);
+  return base;
+}
+
 function hlScore(title, ev){
   const t = title.toLowerCase();
-  const h = ev.home.name.toLowerCase();
-  const a = ev.away.name.toLowerCase();
-  const h1 = h.split(' ')[0];   // first word, e.g. "england"
-  const a1 = a.split(' ')[0];   // first word, e.g. "croatia"
-  let score = 0;
-  // Must contain both teams
-  const hasHome = t.includes(h) || t.includes(h1);
-  const hasAway = t.includes(a) || t.includes(a1);
-  if(!hasHome || !hasAway) return 0;
-  score += 1;
-  // Bonus: exact BBC "X v Y" pattern (their highlight title format)
-  if(t.includes(`${h1} v ${a1}`) || t.includes(`${a1} v ${h1}`)) score += 1;
-  // Bonus: contains "world cup" or "2026"
+  if(!teamInTitle(t, ev.home.name) || !teamInTitle(t, ev.away.name)) return 0;
+  let score = 1;
+  // Bonus: BBC "X v Y" pattern using any alias combo
+  const hToks = teamTokens(ev.home.name);
+  const aToks = teamTokens(ev.away.name);
+  const hasV = hToks.some(h => aToks.some(a => t.includes(`${h} v ${a}`) || t.includes(`${a} v ${h}`)));
+  if(hasV) score += 1;
   if(t.includes('world cup') || t.includes('2026')) score += 1;
   return score;
 }
