@@ -314,9 +314,9 @@ body{
 .mc{cursor:pointer}
 .mc.vis:hover{transform:translateY(-2px);border-color:#272727;box-shadow:0 10px 32px rgba(0,0,0,.45)}
 
-/* ── LINEUP MODAL ───────────────────────────── */
+/* ── MISSION CONTROL MODAL ─────────────────────── */
 .modal-bg{
-  position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.72);
+  position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.75);
   backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
   display:flex;align-items:center;justify-content:center;padding:20px;
   opacity:0;pointer-events:none;transition:opacity .2s;
@@ -324,53 +324,173 @@ body{
 .modal-bg.open{opacity:1;pointer-events:all}
 .modal{
   background:#111;border:1px solid #222;border-radius:16px;
-  width:100%;max-width:680px;max-height:88vh;overflow:hidden;
+  width:100%;max-width:840px;max-height:91vh;overflow:hidden;
   display:flex;flex-direction:column;
   transform:translateY(18px);transition:transform .22s;
 }
 .modal-bg.open .modal{transform:translateY(0)}
-.modal-hd{
-  padding:17px 20px;border-bottom:1px solid var(--border);
-  display:flex;align-items:flex-start;justify-content:space-between;flex-shrink:0;gap:12px;
-}
-.modal-match{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:700}
-.modal-score{font-family:var(--mono);font-size:13px;color:var(--t2);font-weight:400}
-.modal-sub{font-size:11px;color:var(--t2);margin-top:3px}
 .modal-close{
   background:none;border:none;color:var(--t2);font-size:22px;cursor:pointer;
   padding:2px 7px;border-radius:6px;flex-shrink:0;line-height:1;
   transition:color .15s,background .15s;
 }
 .modal-close:hover{color:var(--text);background:rgba(255,255,255,.07)}
-.modal-body{overflow-y:auto;padding:18px 20px;flex:1}
-.lineup-cols{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-.lineup-team-hd{
-  display:flex;align-items:center;gap:7px;font-size:13px;font-weight:700;
-  padding-bottom:10px;border-bottom:1px solid var(--border);margin-bottom:8px;
-}
-.lineup-flag{font-size:18px}
-.lineup-sec{
-  font-size:9px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;
-  color:var(--t3);margin:10px 0 5px;
-}
-.lineup-player{
-  display:flex;align-items:center;gap:6px;padding:5px 0;
-  border-bottom:1px solid rgba(255,255,255,.03);font-size:12px;
-}
-.lineup-player:last-child{border-bottom:none}
-.lineup-num{font-family:var(--mono);font-size:10px;color:var(--t3);width:16px;text-align:right;flex-shrink:0}
-.lineup-pos{
-  font-size:9px;color:var(--t2);padding:1px 4px;
-  background:rgba(255,255,255,.05);border-radius:3px;flex-shrink:0;
-}
-.lineup-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.lineup-cap{font-size:10px;color:var(--gold);flex-shrink:0}
 .lineup-loading{text-align:center;padding:30px 0;color:var(--t2);font-size:13px}
-.lineup-na{text-align:center;padding:24px 0;color:var(--t2);font-size:13px}
-@media(max-width:560px){
-  .lineup-cols{grid-template-columns:1fr}
+
+/* mc header */
+.mc-hdr{padding:16px 20px 0;flex-shrink:0;position:relative}
+.mc-close-wrap{position:absolute;top:11px;right:14px}
+.mc-teams-row{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:6px;padding:2px 0 12px}
+.mc-team-col{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0}
+.mc-flag{font-size:30px;line-height:1}
+.mc-tname{font-size:12px;font-weight:700;text-align:center;line-height:1.3;padding:0 3px}
+.mc-score-center{display:flex;flex-direction:column;align-items:center;gap:5px;flex-shrink:0}
+.mc-snums{font-family:var(--mono);font-size:40px;font-weight:700;letter-spacing:-1px;line-height:1;display:flex;align-items:center;gap:9px}
+.mc-snum{min-width:24px;text-align:center}
+.mc-snum.win{color:var(--accent)}.mc-snum.lose{color:var(--t2)}
+.mc-ssep{font-size:26px;color:var(--t3);font-weight:200;line-height:1}
+.mc-vs{font-size:17px;color:var(--t2);font-weight:300}
+.mc-spill{font-size:10px;font-weight:700;padding:3px 11px;border-radius:100px;letter-spacing:.7px;white-space:nowrap}
+.mc-spill.live{background:rgba(255,59,59,.15);color:var(--red);border:1px solid rgba(255,59,59,.3);animation:sPulse 1.4s ease-in-out infinite}
+@keyframes sPulse{0%,100%{opacity:1}50%{opacity:.5}}
+.mc-spill.ft{background:rgba(136,136,136,.1);color:var(--t2);border:1px solid rgba(136,136,136,.2)}
+.mc-spill.pre{background:rgba(255,215,0,.08);color:var(--gold);border:1px solid rgba(255,215,0,.2)}
+.mc-ctx{padding:0 0 12px;font-size:11px;color:var(--t2);display:flex;flex-wrap:wrap;gap:5px;border-bottom:1px solid var(--border)}
+.mc-ctx-dot{color:var(--t3)}
+
+/* tab bar */
+.mc-tab-bar{display:flex;padding:0 20px;overflow-x:auto;flex-shrink:0;scrollbar-width:none;border-bottom:1px solid var(--border)}
+.mc-tab-bar::-webkit-scrollbar{display:none}
+.mc-tab-btn{background:none;border:none;color:var(--t2);font-family:var(--font);font-size:10px;font-weight:700;padding:11px 13px;cursor:pointer;letter-spacing:1px;text-transform:uppercase;position:relative;white-space:nowrap;transition:color .18s}
+.mc-tab-btn::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--accent);transform:scaleX(0);transition:transform .2s;border-radius:2px 2px 0 0}
+.mc-tab-btn.active{color:var(--text)}.mc-tab-btn.active::after{transform:scaleX(1)}
+.mc-tab-btn:hover:not(.active){color:#ccc}
+.mc-body{overflow-y:auto;flex:1;padding:18px 20px}
+
+/* countdown */
+.mc-cd{text-align:center;padding:12px 0 18px;border-bottom:1px solid var(--border);margin-bottom:16px}
+.mc-cd-lbl{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--t2);margin-bottom:6px}
+.mc-cd-time{font-family:var(--mono);font-size:36px;font-weight:700;color:var(--gold);letter-spacing:4px;font-variant-numeric:tabular-nums}
+.mc-cd-sub{font-size:11px;color:var(--t2);margin-top:6px}
+
+/* win probability */
+.mc-prob{margin-bottom:14px}
+.mc-prob-lbl{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--t3);margin-bottom:6px}
+.mc-prob-bar{height:7px;border-radius:4px;overflow:hidden;display:flex;gap:2px;margin-bottom:5px}
+.mc-ph{background:var(--accent);transition:width .7s cubic-bezier(.4,0,.2,1);min-width:0}
+.mc-pd{background:#444;min-width:0;transition:width .7s .1s cubic-bezier(.4,0,.2,1)}
+.mc-pa{background:#ff5555;min-width:0;transition:width .7s .2s cubic-bezier(.4,0,.2,1)}
+.mc-prob-nums{display:flex;justify-content:space-between;font-size:11px;font-family:var(--mono)}
+.mc-phn{color:var(--accent);font-weight:700}.mc-pdn{color:var(--t2);text-align:center}.mc-pan{color:#ff7070;font-weight:700}
+
+/* odds */
+.mc-odds-row{display:flex;gap:6px;margin-bottom:6px}
+.mc-odds-box{flex:1;background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:9px;padding:9px 10px;text-align:center}
+.mc-odds-lbl{font-size:9px;color:var(--t2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px}
+.mc-odds-val{font-family:var(--mono);font-size:14px;font-weight:700}
+.mc-odds-val.pos{color:var(--accent)}.mc-odds-val.neg{color:#ff7070}
+.mc-odds-note{font-size:9px;color:var(--t3);text-align:right;margin-bottom:14px}
+
+/* form guide */
+.mc-form-row{display:flex;gap:12px;margin-bottom:16px}
+.mc-form-side{flex:1;min-width:0}
+.mc-form-lbl{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--t3);margin-bottom:5px}
+.mc-form-team{font-size:11px;font-weight:600;margin-bottom:5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mc-fdots{display:flex;gap:3px}
+.mc-fdot{width:22px;height:22px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;flex-shrink:0}
+.mc-fdot.W{background:rgba(0,255,135,.18);color:var(--accent);border:1px solid rgba(0,255,135,.35)}
+.mc-fdot.D{background:rgba(136,136,136,.12);color:var(--t2);border:1px solid rgba(136,136,136,.3)}
+.mc-fdot.L{background:rgba(255,59,59,.12);color:#ff7070;border:1px solid rgba(255,59,59,.3)}
+
+/* key players */
+.mc-sect-hd{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--t3);margin-bottom:8px}
+.mc-leaders-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:16px}
+.mc-lcard{background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:10px;padding:10px 12px}
+.mc-lcard-flag{font-size:14px;margin-bottom:3px}
+.mc-lcard-name{font-size:12px;font-weight:700;margin-bottom:2px}
+.mc-lcard-cat{font-size:9px;color:var(--t2);text-transform:uppercase;letter-spacing:.6px}
+.mc-lcard-val{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--accent)}
+
+/* info grid */
+.mc-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:16px}
+.mc-ibox{background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:10px;padding:10px 12px}
+.mc-ibox-lbl{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--t3);margin-bottom:4px}
+.mc-ibox-val{font-size:12px;font-weight:600;line-height:1.4}
+.mc-ibox-sub{font-size:10px;color:var(--t2);margin-top:2px}
+
+/* goal timeline */
+.mc-tl{margin-bottom:18px}
+.mc-tl-lbl{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--t3);margin-bottom:10px}
+.mc-tl-track{height:3px;background:rgba(255,255,255,.09);border-radius:2px;position:relative;margin:16px 0 5px}
+.mc-tl-mins{display:flex;justify-content:space-between;font-family:var(--mono);font-size:8px;color:var(--t3)}
+.mc-tl-dot{position:absolute;top:50%;transform:translate(-50%,-50%);width:9px;height:9px;border-radius:50%;cursor:help;transition:transform .15s}
+.mc-tl-dot:hover{transform:translate(-50%,-50%) scale(1.5)}
+.mc-tl-dot.home{background:var(--accent);box-shadow:0 0 8px rgba(0,255,135,.7)}
+.mc-tl-dot.away{background:#ff5555;box-shadow:0 0 7px rgba(255,85,85,.7)}
+
+/* scorers */
+.mc-scorers{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
+.mc-scol-lbl{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--t3);margin-bottom:5px;display:flex;align-items:center;gap:5px}
+.mc-sdot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.mc-sdot.home{background:var(--accent)}.mc-sdot.away{background:#ff5555}
+.mc-srow{display:flex;align-items:center;gap:5px;padding:3px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:11px}
+.mc-srow:last-child{border-bottom:none}
+.mc-smin{font-family:var(--mono);font-size:9px;color:var(--accent);font-weight:700;width:22px;flex-shrink:0}
+.mc-sname{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mc-stype{font-size:8px;color:var(--t2);padding:1px 4px;background:rgba(255,255,255,.05);border-radius:3px;flex-shrink:0}
+.mc-no-goal{font-size:11px;color:var(--t3);font-style:italic;padding:4px 0}
+
+/* quick snap */
+.mc-snap{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:0}
+.mc-snap-box{background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center}
+.mc-snap-val{font-family:var(--mono);font-size:18px;font-weight:700;line-height:1}
+.mc-snap-lbl{font-size:8px;color:var(--t2);text-transform:uppercase;letter-spacing:.8px;margin-top:3px}
+.mc-snap-sides{font-size:9px;color:var(--t3);margin-top:2px}
+
+/* stats */
+.mc-stat-hdr{display:flex;justify-content:space-between;font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.mc-stat-row{margin-bottom:11px}
+.mc-stat-vals{display:flex;justify-content:space-between;align-items:center;font-size:11px;margin-bottom:4px;font-family:var(--mono)}
+.mc-stat-lv{color:var(--accent);font-weight:700}.mc-stat-rv{color:#ff7070;font-weight:700}
+.mc-stat-nm{color:var(--t2);font-size:9px;letter-spacing:.5px;text-transform:uppercase;text-align:center;flex:1}
+.mc-stat-track{height:4px;background:rgba(255,255,255,.07);border-radius:3px;overflow:hidden;display:flex;gap:2px}
+.mc-stat-l{height:100%;background:var(--accent);border-radius:3px 0 0 3px;transition:width .65s cubic-bezier(.4,0,.2,1)}
+.mc-stat-r{height:100%;background:#ff5555;border-radius:0 3px 3px 0;margin-left:auto;transition:width .65s .05s cubic-bezier(.4,0,.2,1)}
+.mc-stat-na{text-align:center;padding:20px 0;color:var(--t2);font-size:13px}
+
+/* lineups */
+.mc-lu-cols{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.mc-lu-hd{display:flex;align-items:center;gap:5px;font-size:12px;font-weight:700;padding-bottom:8px;border-bottom:1px solid var(--border);margin-bottom:6px}
+.mc-lu-flag{font-size:16px}
+.mc-lu-sec{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--t3);margin:8px 0 3px}
+.mc-lu-p{display:flex;align-items:center;gap:5px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.03);font-size:11px}
+.mc-lu-p:last-child{border-bottom:none}
+.mc-lu-num{font-family:var(--mono);font-size:9px;color:var(--t3);width:14px;text-align:right;flex-shrink:0}
+.mc-lu-pos{font-size:8px;color:var(--t2);padding:1px 4px;background:rgba(255,255,255,.05);border-radius:3px;flex-shrink:0;min-width:22px;text-align:center}
+.mc-lu-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mc-lu-cap{font-size:9px;color:var(--gold);flex-shrink:0}
+.mc-lu-na{font-size:12px;color:var(--t2);text-align:center;padding:16px 0}
+
+/* news */
+.mc-news-item{display:flex;gap:10px;padding:11px 0;border-bottom:1px solid var(--border);text-decoration:none;color:inherit;transition:opacity .15s}
+.mc-news-item:last-child{border-bottom:none}
+.mc-news-item:hover{opacity:.8}
+.mc-news-img{width:68px;height:46px;border-radius:6px;object-fit:cover;flex-shrink:0;background:rgba(255,255,255,.06)}
+.mc-news-cnt{flex:1;min-width:0}
+.mc-news-ttl{font-size:12px;font-weight:600;line-height:1.4;margin-bottom:3px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.mc-news-meta{font-size:10px;color:var(--t2)}
+.mc-news-empty{text-align:center;padding:20px 0;color:var(--t2);font-size:13px}
+
+/* highlights tab */
+.mc-hl-tab .mc-thumb{max-width:520px;margin:0 auto;display:block}
+
+@media(max-width:600px){
   .modal-bg{padding:0;align-items:flex-end}
-  .modal{border-radius:16px 16px 0 0;max-height:82vh}
+  .modal{border-radius:16px 16px 0 0;max-height:90vh}
+  .mc-snums{font-size:32px}
+  .mc-flag{font-size:24px}
+  .mc-leaders-grid,.mc-lu-cols,.mc-scorers,.mc-info-grid{grid-template-columns:1fr}
+  .mc-form-row{flex-direction:column}
 }
 
 /* ── RESPONSIVE ─────────────────────────────── */
@@ -434,18 +554,9 @@ body{
 
 </main>
 
-<!-- LINEUP MODAL -->
+<!-- MISSION CONTROL MODAL -->
 <div class="modal-bg" id="modalBg" onclick="if(event.target===this)closeModal()">
-  <div class="modal">
-    <div class="modal-hd">
-      <div>
-        <div class="modal-match" id="modalTitle">—</div>
-        <div class="modal-sub" id="modalSub">—</div>
-      </div>
-      <button class="modal-close" onclick="closeModal()">×</button>
-    </div>
-    <div class="modal-body" id="modalBody"></div>
-  </div>
+  <div class="modal" id="mcModal"></div>
 </div>
 
 <script>
@@ -1046,7 +1157,7 @@ function renderToday(events, dayDate, patch){
     list.forEach((ev,i) => {
       const c = buildCard(ev);
       c.dataset.delay = i*50;
-      c.onclick = () => openLineup(ev);
+      c.onclick = () => openMatchModal(ev);
       g.append(c);
     });
     wrap.append(g);
@@ -1299,75 +1410,440 @@ function tick(){
 }
 
 // ═══════════════════════════════════════════════════
-//  LINEUP MODAL
+//  MISSION CONTROL MODAL
 // ═══════════════════════════════════════════════════
-function openLineup(ev){
-  const isLive = ev.state==='in';
-  const isFt   = ev.state==='post';
-  const scoreStr = (isLive||isFt) ? `${ev.home.score} – ${ev.away.score}` : 'vs';
-  $('modalTitle').innerHTML =
-    `<span>${flag(ev.home.abbr)} ${ev.home.name}</span>
-     <span class="modal-score">${scoreStr}</span>
-     <span>${ev.away.name} ${flag(ev.away.abbr)}</span>`;
-  $('modalSub').textContent = [ev.group, ev.venue, ev.city].filter(Boolean).join(' · ');
-  $('modalBody').innerHTML = '<div class="lineup-loading">Loading lineups…</div>';
-  $('modalBg').classList.add('open');
-  document.body.style.overflow = 'hidden';
-  fetchLineup(ev);
-}
+const mcCache = {};
+let mcState  = null;  // { ev, data }
+let mcCdInt  = null;
 
 function closeModal(){
   $('modalBg').classList.remove('open');
   document.body.style.overflow = '';
+  if(mcCdInt){ clearInterval(mcCdInt); mcCdInt = null; }
 }
-
 document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
 
-async function fetchLineup(ev){
+function mlToProb(ml){
+  ml = parseFloat(ml);
+  if(!ml || isNaN(ml)) return null;
+  return ml < 0 ? (-ml)/(-ml+100) : 100/(ml+100);
+}
+function fmtML(ml){
+  ml = parseFloat(ml);
+  if(!ml || isNaN(ml)) return '—';
+  return ml > 0 ? '+'+Math.round(ml) : String(Math.round(ml));
+}
+function timeAgo(iso){
+  const d = Date.now() - new Date(iso).getTime();
+  const h = Math.floor(d/3600000), m = Math.floor((d%3600000)/60000);
+  if(h>24) return `${Math.floor(h/24)}d ago`;
+  if(h>0)  return `${h}h ago`;
+  return `${m}m ago`;
+}
+
+function openMatchModal(ev){
+  mcState = { ev, data: null };
+  if(mcCdInt){ clearInterval(mcCdInt); mcCdInt = null; }
+  $('mcModal').innerHTML = `
+    <div id="mcHd"></div>
+    <div id="mcTabsBar"></div>
+    <div class="mc-body" id="mcBody"><div class="lineup-loading">Loading…</div></div>`;
+  $('modalBg').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  renderMCHeader(ev);
+  fetchMCSummary(ev.id).then(data => {
+    mcState.data = data;
+    buildMCTabs(ev);
+    switchMCTab('overview');
+  });
+}
+
+async function fetchMCSummary(eventId){
+  if(mcCache[eventId]) return mcCache[eventId];
   try {
-    const r = await fetch(`${ESPN_SUMMARY}?event=${ev.id}`, { signal: AbortSignal.timeout(8000) });
+    const r = await fetch(`${ESPN_SUMMARY}?event=${eventId}`, { signal: AbortSignal.timeout(9000) });
     if(!r.ok) throw new Error(r.status);
-    const data = await r.json();
-    const rosters = data.rosters || [];
-    if(!rosters.length){ $('modalBody').innerHTML='<div class="lineup-na">Lineups not yet available</div>'; return; }
+    const d = await r.json();
+    mcCache[eventId] = d;
+    return d;
+  } catch(e){ return {}; }
+}
 
-    const sides = rosters.slice(0,2).map(roster => {
-      const starters = (roster.entries||[]).filter(e=>e.starter);
-      const bench    = (roster.entries||[]).filter(e=>!e.starter);
-      const abbr     = roster.team?.abbreviation || '';
-      return { name: roster.team?.displayName||'', abbr, starters, bench };
-    });
-
-    function playerRow(entry){
-      const a   = entry.athlete || {};
-      const num = a.jersey || '';
-      const pos = entry.position?.abbreviation || a.position?.abbreviation || '';
-      const cap = entry.captain ? '<span class="lineup-cap">©</span>' : '';
-      return `<div class="lineup-player">
-        <span class="lineup-num">${num}</span>
-        <span class="lineup-pos">${pos}</span>
-        <span class="lineup-name">${a.displayName||a.fullName||'—'}</span>${cap}
+function renderMCHeader(ev){
+  const hd = document.getElementById('mcHd');
+  if(!hd) return;
+  const isPre=ev.state==='pre', isLive=ev.state==='in', isFt=ev.state==='post';
+  const homeWin = !isPre && ev.home.score > ev.away.score;
+  const awayWin = !isPre && ev.away.score > ev.home.score;
+  const pillCls = isLive?'live':isFt?'ft':'pre';
+  const pillTxt = isLive?(ev.isHT?'Half Time':ev.displayClock):isFt?'Full Time':localTime(ev.date);
+  const scoreBlock = isPre
+    ? `<div class="mc-vs">vs</div>`
+    : `<div class="mc-snums">
+        <div class="mc-snum${homeWin?' win':awayWin?' lose':''}">${ev.home.score}</div>
+        <div class="mc-ssep">—</div>
+        <div class="mc-snum${awayWin?' win':homeWin?' lose':''}">${ev.away.score}</div>
       </div>`;
-    }
-
-    function teamCol(side){
-      const startersHtml = side.starters.map(playerRow).join('');
-      const benchHtml    = side.bench.map(playerRow).join('');
-      return `<div>
-        <div class="lineup-team-hd">
-          <span class="lineup-flag">${flag(side.abbr)}</span>
-          <span>${side.name}</span>
+  const ctxParts = [ev.group, ev.venue, ev.city].filter(Boolean);
+  const ctxHtml = ctxParts.map((p,i) => i===0 ? p : `<span class="mc-ctx-dot">·</span>${p}`).join(' ');
+  hd.className='mc-hdr';
+  hd.innerHTML = `
+    <div style="position:relative">
+      <div class="mc-close-wrap"><button class="modal-close" onclick="closeModal()">×</button></div>
+      <div class="mc-teams-row">
+        <div class="mc-team-col">
+          <div class="mc-flag">${flag(ev.home.abbr)}</div>
+          <div class="mc-tname">${ev.home.name}</div>
         </div>
-        ${startersHtml ? `<div class="lineup-sec">Starting XI</div>${startersHtml}` : ''}
-        ${benchHtml    ? `<div class="lineup-sec">Bench</div>${benchHtml}` : ''}
-        ${!startersHtml&&!benchHtml ? '<div class="lineup-na">No lineup data</div>' : ''}
-      </div>`;
-    }
+        <div class="mc-score-center">${scoreBlock}<div class="mc-spill ${pillCls}">${pillTxt}</div></div>
+        <div class="mc-team-col">
+          <div class="mc-flag">${flag(ev.away.abbr)}</div>
+          <div class="mc-tname">${ev.away.name}</div>
+        </div>
+      </div>
+      ${ctxHtml ? `<div class="mc-ctx">${ctxHtml}</div>` : ''}
+    </div>`;
+}
 
-    $('modalBody').innerHTML = `<div class="lineup-cols">${sides.map(teamCol).join('')}</div>`;
-  } catch(e){
-    $('modalBody').innerHTML = '<div class="lineup-na">Could not load lineups</div>';
+function buildMCTabs(ev){
+  const isFt = ev.state==='post';
+  const tabs = [
+    {id:'overview',label:'Overview'},
+    {id:'stats',label:'Stats'},
+    {id:'lineups',label:'Lineups'},
+  ];
+  if(isFt) tabs.push({id:'highlights',label:'Highlights'});
+  tabs.push({id:'news',label:'News'});
+  const bar = document.getElementById('mcTabsBar');
+  if(bar){
+    bar.className='mc-tab-bar';
+    bar.innerHTML = tabs.map((t,i)=>
+      `<button class="mc-tab-btn${i===0?' active':''}" data-tab="${t.id}" onclick="switchMCTab('${t.id}')">${t.label}</button>`
+    ).join('');
   }
+}
+
+function switchMCTab(tabId){
+  const {ev,data} = mcState||{};
+  if(!ev) return;
+  document.querySelectorAll('.mc-tab-btn').forEach(b => b.classList.toggle('active',b.dataset.tab===tabId));
+  if(mcCdInt){ clearInterval(mcCdInt); mcCdInt = null; }
+  const body = document.getElementById('mcBody');
+  if(!body) return;
+
+  if(tabId==='overview'){
+    body.innerHTML = ev.state==='pre' ? mcPreOverview(ev,data) : mcMatchOverview(ev,data);
+    if(ev.state==='pre'){
+      const tick=()=>{
+        const el=document.getElementById('mcCdTime');
+        if(!el) return;
+        const diff=ev.date-Date.now();
+        if(diff<=0){el.textContent='Now!';return;}
+        const h=Math.floor(diff/3600000),m=Math.floor((diff%3600000)/60000),s=Math.floor((diff%60000)/1000);
+        el.textContent=`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+      };
+      tick(); mcCdInt=setInterval(tick,1000);
+    }
+  } else if(tabId==='stats'){
+    body.innerHTML = mcStats(ev,data);
+    requestAnimationFrame(()=>{ document.querySelectorAll('[data-w]').forEach(el=>{ el.style.width=el.dataset.w+'%'; }); });
+  } else if(tabId==='lineups'){
+    body.innerHTML = mcLineups(ev,data);
+  } else if(tabId==='highlights'){
+    mcHighlightsTab(ev,body);
+  } else if(tabId==='news'){
+    body.innerHTML = mcNews(ev,data);
+  }
+}
+
+/* ── PRE-MATCH OVERVIEW ─────────────────────── */
+function mcPreOverview(ev,data){
+  let html='';
+  // Countdown
+  const diff=ev.date-Date.now();
+  const h=Math.max(0,Math.floor(diff/3600000)),m=Math.floor((diff%3600000)/60000),s=Math.floor((diff%60000)/1000);
+  const cdTxt=diff>0?`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`:'Now!';
+  const d=new Date(ev.date);
+  const DAYS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  html+=`<div class="mc-cd">
+    <div class="mc-cd-lbl">Kick off in</div>
+    <div class="mc-cd-time" id="mcCdTime">${cdTxt}</div>
+    <div class="mc-cd-sub">${DAYS[d.getDay()]} ${d.getDate()} ${MONTHS[d.getMonth()]} · ${localTime(ev.date)} local</div>
+  </div>`;
+
+  // Win probability
+  const odds=(data?.odds||[])[0];
+  if(odds){
+    const hp=mlToProb(odds.homeTeamOdds?.moneyLine);
+    const ap=mlToProb(odds.awayTeamOdds?.moneyLine);
+    const rawDraw=typeof odds.drawOdds==='number'?odds.drawOdds:odds.drawOdds?.moneyLine;
+    const dp=mlToProb(rawDraw);
+    if(hp!=null&&ap!=null&&dp!=null){
+      const tot=hp+dp+ap||1;
+      const hPct=Math.round((hp/tot)*100), aPct=Math.round((ap/tot)*100), dPct=100-hPct-aPct;
+      const hN=ev.home.name.split(' ').slice(-1)[0], aN=ev.away.name.split(' ').slice(-1)[0];
+      html+=`<div class="mc-prob">
+        <div class="mc-prob-lbl">Win probability</div>
+        <div class="mc-prob-bar">
+          <div class="mc-ph" style="width:${hPct}%"></div>
+          <div class="mc-pd" style="width:${dPct}%"></div>
+          <div class="mc-pa" style="width:${aPct}%"></div>
+        </div>
+        <div class="mc-prob-nums">
+          <div class="mc-phn">${hPct}% ${hN}</div>
+          <div class="mc-pdn">${dPct}% Draw</div>
+          <div class="mc-pan">${aN} ${aPct}%</div>
+        </div>
+      </div>
+      <div class="mc-odds-row">
+        <div class="mc-odds-box"><div class="mc-odds-lbl">${hN}</div><div class="mc-odds-val ${(odds.homeTeamOdds?.moneyLine||0)<0?'neg':'pos'}">${fmtML(odds.homeTeamOdds?.moneyLine)}</div></div>
+        <div class="mc-odds-box"><div class="mc-odds-lbl">Draw</div><div class="mc-odds-val">${fmtML(rawDraw)}</div></div>
+        <div class="mc-odds-box"><div class="mc-odds-lbl">${aN}</div><div class="mc-odds-val ${(odds.awayTeamOdds?.moneyLine||0)<0?'neg':'pos'}">${fmtML(odds.awayTeamOdds?.moneyLine)}</div></div>
+      </div>
+      <div class="mc-odds-note">O/U ${odds.overUnder||'—'} · Spread: ${odds.details||'—'}</div>`;
+    }
+  }
+
+  // Form guide
+  const l5=data?.lastFiveGames||[];
+  if(l5.length>=2){
+    html+=`<div style="margin-bottom:16px">
+      <div class="mc-sect-hd">Recent form (last 5)</div>
+      <div class="mc-form-row">`;
+    l5.slice(0,2).forEach(team=>{
+      const dots=(team.events||[]).slice(0,5).map(e=>`<div class="mc-fdot ${e.gameResult}" title="${e.gameResult} vs ${e.opponent?.displayName||''}">${e.gameResult}</div>`).join('');
+      html+=`<div class="mc-form-side">
+        <div class="mc-form-team">${team.team?.displayName||''}</div>
+        <div class="mc-fdots">${dots}</div>
+      </div>`;
+    });
+    html+=`</div></div>`;
+  }
+
+  // Key players from leaders
+  const leaders=data?.leaders||[];
+  const cards=[];
+  leaders.slice(0,2).forEach(tl=>{
+    const abbr=tl.team?.abbreviation||'';
+    const goalCat=(tl.leaders||[]).find(c=>c.displayName?.toLowerCase().includes('goal'));
+    const best=(goalCat||tl.leaders?.[0])?.leaders?.[0];
+    if(best) cards.push({abbr,player:best.athlete?.displayName||'—',cat:(goalCat||tl.leaders?.[0])?.displayName||'',val:best.displayValue||''});
+  });
+  if(cards.length){
+    html+=`<div style="margin-bottom:16px">
+      <div class="mc-sect-hd">⭐ Players to watch</div>
+      <div class="mc-leaders-grid">
+        ${cards.map(c=>`<div class="mc-lcard">
+          <div class="mc-lcard-flag">${flag(c.abbr)}</div>
+          <div class="mc-lcard-name">${c.player}</div>
+          <div class="mc-lcard-cat">${c.cat}</div>
+          <div class="mc-lcard-val">${c.val}</div>
+        </div>`).join('')}
+      </div>
+    </div>`;
+  }
+
+  // Venue + broadcast
+  const venue=data?.gameInfo?.venue;
+  const bcast=(data?.broadcasts||[]).flatMap(b=>b.names||[]).join(', ');
+  html+=`<div class="mc-info-grid">`;
+  if(venue) html+=`<div class="mc-ibox"><div class="mc-ibox-lbl">📍 Venue</div><div class="mc-ibox-val">${venue.fullName||venue.shortName||'—'}</div><div class="mc-ibox-sub">${venue.address?.city||''}</div></div>`;
+  if(bcast) html+=`<div class="mc-ibox"><div class="mc-ibox-lbl">📺 On TV</div><div class="mc-ibox-val">${bcast}</div></div>`;
+  html+=`</div>`;
+  return html;
+}
+
+/* ── LIVE / FT OVERVIEW ─────────────────────── */
+function mcMatchOverview(ev,data){
+  let html='';
+  const comp=data?.header?.competitions?.[0];
+  const hComp=comp?.competitors?.find(c=>c.homeAway==='home');
+  const aComp=comp?.competitors?.find(c=>c.homeAway==='away');
+  const homeId=hComp?.id, awayId=aComp?.id;
+
+  // Goal timeline
+  const plays=data?.plays||[];
+  const goals=plays.filter(p=>p.scoringPlay===true||(p.type?.text||'').toLowerCase().includes('goal'));
+  if(goals.length>0){
+    html+=`<div class="mc-tl">
+      <div class="mc-tl-lbl">⚽ Goal timeline</div>
+      <div class="mc-tl-track">
+        ${goals.map(p=>{
+          const min=parseInt(p.clock?.displayValue)||0;
+          const pct=Math.min(97,(min/90)*100);
+          const isHome=p.team?.id===homeId;
+          const scorer=p.participants?.find(pp=>pp.type==='scorer')?.athlete?.displayName||p.text||'';
+          return `<div class="mc-tl-dot ${isHome?'home':'away'}" style="left:${pct}%" title="${min}' ${scorer}"></div>`;
+        }).join('')}
+      </div>
+      <div class="mc-tl-mins"><span>0'</span><span>45'</span><span>90'</span></div>
+    </div>`;
+  }
+
+  // Scorers
+  const hGoals=goals.filter(p=>p.team?.id===homeId);
+  const aGoals=goals.filter(p=>p.team?.id===awayId);
+  const scorerRows=(gs)=> gs.length===0
+    ? '<div class="mc-no-goal">No goals</div>'
+    : gs.map(p=>{
+        const min=parseInt(p.clock?.displayValue)||0;
+        const name=p.participants?.find(pp=>pp.type==='scorer')?.athlete?.displayName||'';
+        const typeTxt=(p.type?.text||'').toLowerCase().includes('pen')?'PEN':(p.type?.text||'').toLowerCase().includes('own')?'OG':'';
+        return `<div class="mc-srow">
+          <div class="mc-smin">${min}'</div>
+          <div class="mc-sname">${name}</div>
+          ${typeTxt?`<div class="mc-stype">${typeTxt}`:''}</div>`;
+      }).join('');
+
+  html+=`<div class="mc-scorers">
+    <div><div class="mc-scol-lbl"><div class="mc-sdot home"></div>${ev.home.name}</div>${scorerRows(hGoals)}</div>
+    <div><div class="mc-scol-lbl"><div class="mc-sdot away"></div>${ev.away.name}</div>${scorerRows(aGoals)}</div>
+  </div>`;
+
+  // Quick stats
+  const bsTeams=data?.boxscore?.teams||[];
+  const hStats=bsTeams.find(t=>t.team?.id===homeId)?.statistics||bsTeams[0]?.statistics||[];
+  const aStats=bsTeams.find(t=>t.team?.id===awayId)?.statistics||bsTeams[1]?.statistics||[];
+  const gs=(stats,...keys)=>{for(const k of keys){const s=stats.find(x=>x.name===k||x.abbreviation===k);if(s) return s.displayValue||String(s.value||'—');}return'—';};
+  const pos_h=gs(hStats,'possessionPct','possession'),pos_a=gs(aStats,'possessionPct','possession');
+  const sho_h=gs(hStats,'totalShots','shots'),sho_a=gs(aStats,'totalShots','shots');
+  const sot_h=gs(hStats,'shotsOnTarget','shotsOnGoal'),sot_a=gs(aStats,'shotsOnTarget','shotsOnGoal');
+  if(pos_h!=='—'||sho_h!=='—'){
+    html+=`<div class="mc-snap">
+      <div class="mc-snap-box"><div class="mc-snap-val">${pos_h}</div><div class="mc-snap-lbl">Possession</div><div class="mc-snap-sides">${pos_h} · ${pos_a}</div></div>
+      <div class="mc-snap-box"><div class="mc-snap-val" style="color:var(--accent)">${sho_h}</div><div class="mc-snap-lbl">Shots</div><div class="mc-snap-sides">${sho_h} · ${sho_a}</div></div>
+      <div class="mc-snap-box"><div class="mc-snap-val" style="color:var(--gold)">${sot_h}</div><div class="mc-snap-lbl">On Target</div><div class="mc-snap-sides">${sot_h} · ${sot_a}</div></div>
+    </div>`;
+  }
+  return html;
+}
+
+/* ── STATS TAB ──────────────────────────────── */
+function mcStats(ev,data){
+  const comp=data?.header?.competitions?.[0];
+  const homeId=comp?.competitors?.find(c=>c.homeAway==='home')?.id;
+  const awayId=comp?.competitors?.find(c=>c.homeAway==='away')?.id;
+  const bsTeams=data?.boxscore?.teams||[];
+  const hStats=bsTeams.find(t=>t.team?.id===homeId)?.statistics||bsTeams[0]?.statistics||[];
+  const aStats=bsTeams.find(t=>t.team?.id===awayId)?.statistics||bsTeams[1]?.statistics||[];
+
+  if(ev.state==='pre'){
+    // Pre-match: show last-5 form comparison
+    const l5=data?.lastFiveGames||[];
+    if(l5.length<2) return`<div class="mc-stat-na">Stats will be available once the match starts</div>`;
+    const rec=(evs)=>evs.reduce((a,e)=>{
+      if(e.gameResult==='W')a.w++;else if(e.gameResult==='D')a.d++;else a.l++;
+      return a;
+    },{w:0,d:0,l:0});
+    const r1=rec(l5[0]?.events||[]),r2=rec(l5[1]?.events||[]);
+    const rows=[{name:'Wins',h:r1.w,a:r2.w},{name:'Draws',h:r1.d,a:r2.d},{name:'Losses',h:r1.l,a:r2.l}];
+    return `<div class="mc-stat-hdr"><span style="color:var(--accent)">${ev.home.name}</span><span>Last 5 games</span><span style="color:#ff7070">${ev.away.name}</span></div>`
+      +rows.map(r=>{const t=(r.h+r.a)||1,hp=Math.round((r.h/t)*100),ap=100-hp;return`<div class="mc-stat-row">
+        <div class="mc-stat-vals"><div class="mc-stat-lv">${r.h}</div><div class="mc-stat-nm">${r.name}</div><div class="mc-stat-rv">${r.a}</div></div>
+        <div class="mc-stat-track"><div class="mc-stat-l" data-w="${hp}" style="width:0"></div><div class="mc-stat-r" data-w="${ap}" style="width:0"></div></div>
+      </div>`;}).join('');
+  }
+
+  const STATS=[
+    {name:'Possession %',keys:['possessionPct','possession']},
+    {name:'Total Shots',keys:['totalShots','shots']},
+    {name:'On Target',keys:['shotsOnTarget','shotsOnGoal']},
+    {name:'Corners',keys:['corners','cornerKicks']},
+    {name:'Fouls',keys:['fouls','totalFouls']},
+    {name:'Yellow Cards',keys:['yellowCards']},
+    {name:'Saves',keys:['saves','goalkeepSaves']},
+    {name:'Offsides',keys:['offsides']},
+    {name:'Pass Acc %',keys:['passingAccuracy','passAccuracy']},
+  ];
+  const gv=(stats,keys)=>{for(const k of keys){const s=stats.find(x=>x.name===k||x.abbreviation===k);if(s)return parseFloat(s.displayValue?.replace('%','')||s.value)||0;}return null;};
+  const rows=STATS.map(s=>{
+    const hv=gv(hStats,s.keys),av=gv(aStats,s.keys);
+    if(hv==null&&av==null) return null;
+    const h=hv||0,a=av||0,tot=(h+a)||1;
+    return{name:s.name,hv:h,av:a,hp:Math.round((h/tot)*100),ap:Math.round((a/tot)*100)};
+  }).filter(Boolean);
+  if(!rows.length) return`<div class="mc-stat-na">Stats not yet available</div>`;
+  return `<div class="mc-stat-hdr"><span style="color:var(--accent)">${ev.home.name}</span><span>Match stats</span><span style="color:#ff7070">${ev.away.name}</span></div>`
+    +rows.map(r=>`<div class="mc-stat-row">
+      <div class="mc-stat-vals"><div class="mc-stat-lv">${r.hv}</div><div class="mc-stat-nm">${r.name}</div><div class="mc-stat-rv">${r.av}</div></div>
+      <div class="mc-stat-track"><div class="mc-stat-l" data-w="${r.hp}" style="width:0"></div><div class="mc-stat-r" data-w="${r.ap}" style="width:0"></div></div>
+    </div>`).join('');
+}
+
+/* ── LINEUPS TAB ────────────────────────────── */
+function mcLineups(ev,data){
+  const rosters=data?.rosters||[];
+  if(!rosters.length) return`<div class="mc-lu-na">Lineups not yet confirmed</div>`;
+  const POS={GK:0,G:0,CB:1,LB:1,RB:1,LWB:1,RWB:1,D:1,CM:2,DM:2,AM:2,LM:2,RM:2,M:2,LW:3,RW:3,CF:3,ST:3,F:3};
+  const pRow=e=>{
+    const a=e.athlete||{};
+    return`<div class="mc-lu-p">
+      <span class="mc-lu-num">${a.jersey||''}</span>
+      <span class="mc-lu-pos">${e.position?.abbreviation||''}</span>
+      <span class="mc-lu-name">${a.displayName||a.fullName||'—'}</span>
+      ${e.captain?'<span class="mc-lu-cap">©</span>':''}
+    </div>`;
+  };
+  const side=r=>{
+    if(!r) return`<div class="mc-lu-na">No data</div>`;
+    const starters=(r.entries||[]).filter(e=>e.starter);
+    const bench=(r.entries||[]).filter(e=>!e.starter);
+    const grp={GK:[],DEF:[],MID:[],FWD:[]};
+    starters.forEach(e=>{
+      const p=POS[e.position?.abbreviation]??POS[e.position?.abbreviation?.charAt(0)]??2;
+      [grp.GK,grp.DEF,grp.MID,grp.FWD][p]?.push(e);
+    });
+    let h='';
+    if(grp.GK.length)  h+=`<div class="mc-lu-sec">GK</div>${grp.GK.map(pRow).join('')}`;
+    if(grp.DEF.length) h+=`<div class="mc-lu-sec">Defence</div>${grp.DEF.map(pRow).join('')}`;
+    if(grp.MID.length) h+=`<div class="mc-lu-sec">Midfield</div>${grp.MID.map(pRow).join('')}`;
+    if(grp.FWD.length) h+=`<div class="mc-lu-sec">Attack</div>${grp.FWD.map(pRow).join('')}`;
+    if(bench.length)   h+=`<div class="mc-lu-sec">Bench</div>${bench.map(pRow).join('')}`;
+    return h||`<div class="mc-lu-na">No lineup data</div>`;
+  };
+  const hR=rosters.find(r=>r.homeAway==='home')||rosters[0];
+  const aR=rosters.find(r=>r.homeAway==='away')||rosters[1];
+  return`<div class="mc-lu-cols">
+    <div><div class="mc-lu-hd"><span class="mc-lu-flag">${flag(ev.home.abbr)}</span>${ev.home.name}</div>${side(hR)}</div>
+    <div><div class="mc-lu-hd"><span class="mc-lu-flag">${flag(ev.away.abbr)}</span>${ev.away.name}</div>${side(aR)}</div>
+  </div>`;
+}
+
+/* ── HIGHLIGHTS TAB ─────────────────────────── */
+function mcHighlightsTab(ev,body){
+  const cached=hlCache[ev.id];
+  if(cached?.videoId){
+    body.innerHTML=`<div class="mc-hl-tab">${buildThumb(cached.videoId,cached.title).outerHTML}</div>`;
+    return;
+  }
+  body.innerHTML=`<div class="lineup-loading">Looking for highlights…</div>`;
+  fetchHighlight(ev).then(()=>{
+    const c=hlCache[ev.id];
+    if(c?.videoId){
+      body.innerHTML=`<div class="mc-hl-tab">${buildThumb(c.videoId,c.title).outerHTML}</div>`;
+    } else {
+      const q=encodeURIComponent(`${ev.home.name} v ${ev.away.name} 2026 FIFA World Cup`);
+      body.innerHTML=`<div class="mc-news-empty">Highlights not yet posted · <a href="https://www.youtube.com/@bbcfootball/search?query=${q}" target="_blank" rel="noopener" style="color:var(--accent)">Search BBC Football ↗</a></div>`;
+    }
+  });
+}
+
+/* ── NEWS TAB ───────────────────────────────── */
+function mcNews(ev,data){
+  const articles=data?.news?.articles||[];
+  if(!articles.length) return`<div class="mc-news-empty">No news articles available</div>`;
+  return articles.slice(0,8).map(a=>{
+    const url=a.links?.web?.href||a.links?.api?.news?.href||'#';
+    const img=a.images?.[0]?.url||'';
+    const dt=a.lastModified||a.published||'';
+    return`<a class="mc-news-item" href="${url}" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+      ${img?`<img class="mc-news-img" src="${img}" alt="" loading="lazy">`:'<div class="mc-news-img"></div>'}
+      <div class="mc-news-cnt">
+        <div class="mc-news-ttl">${a.headline||'—'}</div>
+        <div class="mc-news-meta">ESPN${dt?' · '+timeAgo(dt):''}</div>
+      </div>
+    </a>`;
+  }).join('');
 }
 
 // ═══════════════════════════════════════════════════
