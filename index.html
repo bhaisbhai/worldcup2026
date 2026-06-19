@@ -808,20 +808,26 @@ function buildThumb(videoId, title){
 
 // ESPN ↔ BBC name mismatches
 const TEAM_ALIASES = {
-  'czechia':                  ['czech republic', 'czech'],
-  'czech republic':           ['czechia', 'czech'],
-  'korea republic':           ['south korea', 'korea'],
-  'south korea':              ['korea republic', 'korea'],
-  'united states':            ['usa', 'usmnt', 'us'],
-  'usa':                      ['united states', 'usmnt'],
-  'ivory coast':              ["côte d'ivoire", 'cote d\'ivoire', 'ivory'],
-  "côte d'ivoire":            ['ivory coast', 'ivory', 'cote'],
-  'bosnia and herzegovina':   ['bosnia-herzegovina', 'bosnia & herzegovina', 'bosnia'],
-  'bosnia-herzegovina':       ['bosnia and herzegovina', 'bosnia'],
-  'dr congo':                 ['democratic republic of congo', 'congo dr', 'drc'],
-  'democratic republic of congo': ['dr congo', 'drc'],
-  'trinidad & tobago':        ['trinidad and tobago', 'trinidad'],
-  'trinidad and tobago':      ['trinidad & tobago', 'trinidad'],
+  'czechia':                      ['czech republic', 'czech'],
+  'czech republic':               ['czechia', 'czech'],
+  'korea republic':               ['south korea', 'korea'],
+  'south korea':                  ['korea republic', 'korea'],
+  'united states':                ['usa', 'usmnt', 'us men'],
+  'usa':                          ['united states', 'usmnt'],
+  'ivory coast':                  ["côte d'ivoire", "cote d'ivoire", 'ivory'],
+  "côte d'ivoire":                ['ivory coast', 'ivory', 'cote'],
+  'bosnia and herzegovina':       ['bosnia-herzegovina', 'bosnia & herzegovina', 'bosnia'],
+  'bosnia-herzegovina':           ['bosnia and herzegovina', 'bosnia'],
+  'dr congo':                     ['democratic republic of congo', 'congo dr', 'drc', 'congo'],
+  'congo dr':                     ['dr congo', 'democratic republic of congo', 'congo'],
+  'democratic republic of congo': ['dr congo', 'drc', 'congo'],
+  'trinidad & tobago':            ['trinidad and tobago', 'trinidad'],
+  'trinidad and tobago':          ['trinidad & tobago', 'trinidad'],
+  'new zealand':                  ['all whites'],
+  'saudi arabia':                 ['ksa', 'saudi'],
+  'united arab emirates':         ['uae'],
+  'north korea':                  ['dpr korea', 'korea dpr'],
+  'dpr korea':                    ['north korea', 'korea dpr'],
 };
 
 function teamInTitle(title, name){
@@ -859,22 +865,35 @@ function hlScore(title, ev){
 
 async function fetchHighlight(ev){
   if(hlCache[ev.id] !== undefined) return;
-  hlCache[ev.id] = null; // in-flight
+  hlCache[ev.id] = null;
+  const scoreItems = items => items
+    .map(i => ({ i, s: hlScore(i.snippet.title, ev) }))
+    .filter(x => x.s >= 1)
+    .sort((a, b) => b.s - a.s);
   try {
-    const q = encodeURIComponent(`${ev.home.name} v ${ev.away.name} World Cup 2026`);
-    const url = `${YT_SEARCH_URL}?part=snippet&channelId=${BBC_CHANNEL}&q=${q}`
-      + `&type=video&order=date&maxResults=10&key=${YT_KEY}`;
-    const r = await fetch(url, { signal: AbortSignal.timeout(6000) });
-    const data = await r.json();
-    const items = data.items || [];
+    // Pass 1: BBC Football channel — preferred source
+    const q1 = encodeURIComponent(`${ev.home.name} v ${ev.away.name} World Cup 2026`);
+    const r1 = await fetch(
+      `${YT_SEARCH_URL}?part=snippet&channelId=${BBC_CHANNEL}&q=${q1}&type=video&order=date&maxResults=10&key=${YT_KEY}`,
+      { signal: AbortSignal.timeout(6000) }
+    );
+    const d1 = await r1.json();
+    const sc1 = scoreItems(d1.items || []);
+    let item = (sc1.find(x => x.s >= 2) || sc1[0])?.i;
 
-    const scored = items
-      .map(i => ({ i, s: hlScore(i.snippet.title, ev) }))
-      .filter(x => x.s >= 1)
-      .sort((a, b) => b.s - a.s);
+    // Pass 2: broader YouTube search when BBC has nothing (e.g. non-UK games)
+    if(!item){
+      const q2 = encodeURIComponent(`${ev.home.name} v ${ev.away.name} highlights 2026 FIFA World Cup`);
+      const r2 = await fetch(
+        `${YT_SEARCH_URL}?part=snippet&q=${q2}&type=video&order=relevance&maxResults=8&key=${YT_KEY}`,
+        { signal: AbortSignal.timeout(6000) }
+      );
+      const d2 = await r2.json();
+      const sc2 = scoreItems(d2.items || []);
+      // Stricter threshold for broader search to avoid unrelated videos
+      item = sc2.find(x => x.s >= 2)?.i;
+    }
 
-    // Prefer score≥2 (strong match); only use score-1 if nothing better exists
-    const item = (scored.find(x => x.s >= 2) || scored[0])?.i;
     if(item){
       hlCache[ev.id] = { videoId: item.id.videoId, title: item.snippet.title };
       document.querySelectorAll(`.mc-thumb-slot[data-hlid="${ev.id}"]`).forEach(slot => {
