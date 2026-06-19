@@ -995,7 +995,7 @@ function buildCard(ev){
   card.innerHTML = `
     <div class="mc-top">
       ${badge}
-      <div class="mc-grp">${ev.group}<br><span class="mc-tv">${ev.bcast||''}</span>${ev.bcast?' · ':''}<span class="mc-tv-uk">BBC/ITV</span></div>
+      <div class="mc-grp">${ev.group}<br><span class="mc-tv-uk">BBC · ITV</span></div>
     </div>
     <div class="mc-teams">
       <div class="tcol">
@@ -1739,7 +1739,7 @@ function mcPreOverview(ev,data){
   const bcast=(data?.broadcasts||[]).flatMap(b=>b.names||[]).join(', ');
   html+=`<div class="mc-info-grid">`;
   if(venue) html+=`<div class="mc-ibox"><div class="mc-ibox-lbl">📍 Venue</div><div class="mc-ibox-val">${venue.fullName||venue.shortName||'—'}</div><div class="mc-ibox-sub">${venue.address?.city||''}</div></div>`;
-  html+=`<div class="mc-ibox"><div class="mc-ibox-lbl">📺 On TV</div><div class="mc-ibox-val">${bcast||'FOX · FS1'}<br><span style="color:#60b8ff;font-size:10px">🇬🇧 BBC · ITV</span></div></div>`;
+  html+=`<div class="mc-ibox"><div class="mc-ibox-lbl">📺 On TV</div><div class="mc-ibox-val" style="color:#60b8ff">🇬🇧 BBC · ITV</div></div>`;
   html+=`</div>`;
   return html;
 }
