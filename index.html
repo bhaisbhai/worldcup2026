@@ -695,21 +695,48 @@ function buildThumb(videoId, title){
   return a;
 }
 
+// Score how well a video title matches a highlight for this match.
+// Returns 0 (no match) up to 3 (perfect match).
+function hlScore(title, ev){
+  const t = title.toLowerCase();
+  const h = ev.home.name.toLowerCase();
+  const a = ev.away.name.toLowerCase();
+  const h1 = h.split(' ')[0];   // first word, e.g. "england"
+  const a1 = a.split(' ')[0];   // first word, e.g. "croatia"
+  let score = 0;
+  // Must contain both teams
+  const hasHome = t.includes(h) || t.includes(h1);
+  const hasAway = t.includes(a) || t.includes(a1);
+  if(!hasHome || !hasAway) return 0;
+  score += 1;
+  // Bonus: exact BBC "X v Y" pattern (their highlight title format)
+  if(t.includes(`${h1} v ${a1}`) || t.includes(`${a1} v ${h1}`)) score += 1;
+  // Bonus: contains "world cup" or "2026"
+  if(t.includes('world cup') || t.includes('2026')) score += 1;
+  return score;
+}
+
 async function fetchHighlight(ev){
   if(hlCache[ev.id] !== undefined) return;
   hlCache[ev.id] = null; // in-flight
   try {
-    const q = encodeURIComponent(`${ev.home.name} v ${ev.away.name} 2026 FIFA World Cup`);
-    const url = `${YT_SEARCH_URL}?part=snippet&channelId=${BBC_CHANNEL}&q=${q}&type=video&order=date&maxResults=5&key=${YT_KEY}`;
+    // Minimal query matching BBC's exact title format; duration=medium filters to 4–20 min clips
+    const q = encodeURIComponent(`${ev.home.name} v ${ev.away.name} World Cup 2026`);
+    const url = `${YT_SEARCH_URL}?part=snippet&channelId=${BBC_CHANNEL}&q=${q}`
+      + `&type=video&order=date&videoDuration=medium&maxResults=10&key=${YT_KEY}`;
     const r = await fetch(url, { signal: AbortSignal.timeout(6000) });
     const data = await r.json();
-    const item = (data.items||[]).find(i =>
-      i.snippet.title.toLowerCase().includes(ev.home.name.toLowerCase().split(' ')[0]) &&
-      i.snippet.title.toLowerCase().includes(ev.away.name.toLowerCase().split(' ')[0])
-    ) || data.items?.[0];
+    const items = data.items || [];
+
+    // Score all results; require at least score 2 (both teams + "v" or "world cup")
+    const scored = items
+      .map(i => ({ i, s: hlScore(i.snippet.title, ev) }))
+      .filter(x => x.s >= 2)
+      .sort((a, b) => b.s - a.s);
+
+    const item = scored[0]?.i;
     if(item){
       hlCache[ev.id] = { videoId: item.id.videoId, title: item.snippet.title };
-      // Populate all slots on the page for this match
       document.querySelectorAll(`.mc-thumb-slot[data-hlid="${ev.id}"]`).forEach(slot => {
         slot.replaceWith(buildThumb(item.id.videoId, item.snippet.title));
       });
