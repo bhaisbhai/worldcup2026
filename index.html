@@ -383,13 +383,21 @@ body{
 .mc-prob-nums{display:flex;justify-content:space-between;font-size:11px;font-family:var(--mono)}
 .mc-phn{color:var(--accent);font-weight:700}.mc-pdn{color:var(--t2);text-align:center}.mc-pan{color:#ff7070;font-weight:700}
 
-/* odds */
-.mc-odds-row{display:flex;gap:6px;margin-bottom:6px}
-.mc-odds-box{flex:1;background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:9px;padding:9px 10px;text-align:center}
-.mc-odds-lbl{font-size:9px;color:var(--t2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px}
-.mc-odds-val{font-family:var(--mono);font-size:14px;font-weight:700}
-.mc-odds-val.pos{color:var(--accent)}.mc-odds-val.neg{color:#ff7070}
+/* odds — redesigned */
+.mc-odds-tbl{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin:8px 0 4px}
+.mc-odds-cell{background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:9px;padding:10px 8px;text-align:center}
+.mc-odds-team{font-size:9px;color:var(--t2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:5px}
+.mc-odds-pct{font-family:var(--mono);font-size:16px;font-weight:700;margin-bottom:3px}
+.mc-odds-dec{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--t1)}
+.mc-odds-ml{font-size:9px;color:var(--t3);margin-top:2px}
 .mc-odds-note{font-size:9px;color:var(--t3);text-align:right;margin-bottom:14px}
+/* UK TV badge */
+.mc-tv-uk{color:#60b8ff;font-weight:600}
+/* lineup rating badge */
+.mc-lu-rtg{font-family:var(--mono);font-size:9px;font-weight:700;padding:1px 5px;border-radius:4px;flex-shrink:0;margin-left:2px}
+.mc-lu-rtg.hi{background:rgba(0,255,135,.15);color:var(--accent)}
+.mc-lu-rtg.mid{background:rgba(255,215,0,.12);color:var(--gold)}
+.mc-lu-rtg.lo{background:rgba(255,80,80,.10);color:#ff7070}
 
 /* form guide */
 .mc-form-row{display:flex;gap:12px;margin-bottom:16px}
@@ -987,7 +995,7 @@ function buildCard(ev){
   card.innerHTML = `
     <div class="mc-top">
       ${badge}
-      <div class="mc-grp">${ev.group}${ev.bcast?`<br><span class="mc-tv">${ev.bcast}</span>`:''}</div>
+      <div class="mc-grp">${ev.group}<br><span class="mc-tv">${ev.bcast||''}</span>${ev.bcast?' · ':''}<span class="mc-tv-uk">BBC/ITV</span></div>
     </div>
     <div class="mc-teams">
       <div class="tcol">
@@ -1488,6 +1496,18 @@ function fmtML(ml){
   if(!ml || isNaN(ml)) return '—';
   return ml > 0 ? '+'+Math.round(ml) : String(Math.round(ml));
 }
+function decOdds(ml){ ml=parseFloat(ml); if(!ml||isNaN(ml)) return'—'; return(ml<0?100/(-ml)+1:ml/100+1).toFixed(2); }
+function computeRating(stats){
+  if(!stats?.length) return null;
+  const get=n=>stats.find(s=>s.name===n)?.value||0;
+  let r=6.0;
+  r+=get('totalGoals')*2.0; r+=get('goalAssists')*1.2; r+=get('shotsOnTarget')*0.15;
+  r-=get('yellowCards')*0.5; r-=get('redCards')*2.0;
+  r-=Math.max(0,get('foulsCommitted')-2)*0.08;
+  const faced=get('shotsFaced');
+  if(faced>0){ r+=get('saves')*0.25; if(get('goalsConceded')===0) r+=0.5; }
+  return Math.max(4.0,Math.min(10.0,r)).toFixed(1);
+}
 function timeAgo(iso){
   const d = Date.now() - new Date(iso).getTime();
   const h = Math.floor(d/3600000), m = Math.floor((d%3600000)/60000);
@@ -1638,7 +1658,7 @@ function mcPreOverview(ev,data){
       const hPct=Math.round((hp/tot)*100), aPct=Math.round((ap/tot)*100), dPct=100-hPct-aPct;
       const hN=ev.home.name.split(' ').slice(-1)[0], aN=ev.away.name.split(' ').slice(-1)[0];
       html+=`<div class="mc-prob">
-        <div class="mc-prob-lbl">Win probability</div>
+        <div class="mc-prob-lbl">Win probability (implied from odds)</div>
         <div class="mc-prob-bar">
           <div class="mc-ph" style="width:${hPct}%"></div>
           <div class="mc-pd" style="width:${dPct}%"></div>
@@ -1650,10 +1670,26 @@ function mcPreOverview(ev,data){
           <div class="mc-pan">${aN} ${aPct}%</div>
         </div>
       </div>
-      <div class="mc-odds-row">
-        <div class="mc-odds-box"><div class="mc-odds-lbl">${hN}</div><div class="mc-odds-val ${(odds.homeTeamOdds?.moneyLine||0)<0?'neg':'pos'}">${fmtML(odds.homeTeamOdds?.moneyLine)}</div></div>
-        <div class="mc-odds-box"><div class="mc-odds-lbl">Draw</div><div class="mc-odds-val">${fmtML(rawDraw)}</div></div>
-        <div class="mc-odds-box"><div class="mc-odds-lbl">${aN}</div><div class="mc-odds-val ${(odds.awayTeamOdds?.moneyLine||0)<0?'neg':'pos'}">${fmtML(odds.awayTeamOdds?.moneyLine)}</div></div>
+      <div class="mc-sect-hd" style="margin-bottom:0">Odds <span style="font-weight:400;color:var(--t3);letter-spacing:0;text-transform:none;font-size:9px">DraftKings · decimal / US money line</span></div>
+      <div class="mc-odds-tbl">
+        <div class="mc-odds-cell">
+          <div class="mc-odds-team">${hN}</div>
+          <div class="mc-odds-pct" style="color:var(--accent)">${hPct}%</div>
+          <div class="mc-odds-dec">${decOdds(odds.homeTeamOdds?.moneyLine)}</div>
+          <div class="mc-odds-ml">${fmtML(odds.homeTeamOdds?.moneyLine)}</div>
+        </div>
+        <div class="mc-odds-cell">
+          <div class="mc-odds-team">Draw</div>
+          <div class="mc-odds-pct" style="color:var(--t2)">${dPct}%</div>
+          <div class="mc-odds-dec">${decOdds(rawDraw)}</div>
+          <div class="mc-odds-ml">${fmtML(rawDraw)}</div>
+        </div>
+        <div class="mc-odds-cell">
+          <div class="mc-odds-team">${aN}</div>
+          <div class="mc-odds-pct" style="color:#ff7070">${aPct}%</div>
+          <div class="mc-odds-dec">${decOdds(odds.awayTeamOdds?.moneyLine)}</div>
+          <div class="mc-odds-ml">${fmtML(odds.awayTeamOdds?.moneyLine)}</div>
+        </div>
       </div>
       <div class="mc-odds-note">O/U ${odds.overUnder||'—'} · Spread: ${odds.details||'—'}</div>`;
     }
@@ -1663,7 +1699,7 @@ function mcPreOverview(ev,data){
   const l5=data?.lastFiveGames||[];
   if(l5.length>=2){
     html+=`<div style="margin-bottom:16px">
-      <div class="mc-sect-hd">Recent form (last 5)</div>
+      <div class="mc-sect-hd">Recent form <span style="font-weight:400;color:var(--t3);letter-spacing:0;text-transform:none;font-size:9px">(last 5 intl. results — all competitions)</span></div>
       <div class="mc-form-row">`;
     l5.slice(0,2).forEach(team=>{
       const dots=(team.events||[]).slice(0,5).map(e=>`<div class="mc-fdot ${e.gameResult}" title="${e.gameResult} vs ${e.opponent?.displayName||''}">${e.gameResult}</div>`).join('');
@@ -1703,7 +1739,7 @@ function mcPreOverview(ev,data){
   const bcast=(data?.broadcasts||[]).flatMap(b=>b.names||[]).join(', ');
   html+=`<div class="mc-info-grid">`;
   if(venue) html+=`<div class="mc-ibox"><div class="mc-ibox-lbl">📍 Venue</div><div class="mc-ibox-val">${venue.fullName||venue.shortName||'—'}</div><div class="mc-ibox-sub">${venue.address?.city||''}</div></div>`;
-  if(bcast) html+=`<div class="mc-ibox"><div class="mc-ibox-lbl">📺 On TV</div><div class="mc-ibox-val">${bcast}</div></div>`;
+  html+=`<div class="mc-ibox"><div class="mc-ibox-lbl">📺 On TV</div><div class="mc-ibox-val">${bcast||'FOX · FS1'}<br><span style="color:#60b8ff;font-size:10px">🇬🇧 BBC · ITV</span></div></div>`;
   html+=`</div>`;
   return html;
 }
@@ -1834,10 +1870,16 @@ function mcLineups(ev,data){
     const a=e.athlete||{};
     const id=a.id||'';
     if(id) _plLookup[id]={entry:e,teamInfo:ti};
+    let rtgHtml='';
+    if(ev.state==='post'){
+      const rtg=computeRating(e.stats||[]);
+      if(rtg){const cls=parseFloat(rtg)>=7.5?'hi':parseFloat(rtg)>=6?'mid':'lo';rtgHtml=`<span class="mc-lu-rtg ${cls}">${rtg}</span>`;}
+    }
     return`<div class="mc-lu-p${id?' clickable':''}" ${id?`onclick="openPlayerDetail('${id}')" role="button" tabindex="0"`:''}>
       <span class="mc-lu-num">${e.jersey||a.jersey||''}</span>
       <span class="mc-lu-pos">${e.position?.abbreviation||''}</span>
       <span class="mc-lu-name">${a.displayName||a.fullName||'—'}</span>
+      ${rtgHtml}
       ${e.captain?'<span class="mc-lu-cap">©</span>':''}
       ${id?'<span class="mc-lu-arrow">›</span>':''}
     </div>`;
