@@ -668,24 +668,24 @@ GROUPS_DATA.forEach(g => {
 //  KNOCKOUT (static bracket)
 // ═══════════════════════════════════════════════════
 const KO_LEFT = [
-  [{f:'🇪🇸',n:'Spain'},{n:'TBD'}],
-  [{f:'🇩🇰',n:'Denmark'},{n:'TBD'}],
-  [{f:'🇦🇷',n:'Argentina'},{n:'TBD'}],
-  [{f:'🇩🇪',n:'Germany'},{n:'TBD'}],
-  [{f:'🇧🇷',n:'Brazil'},{n:'TBD'}],
-  [{f:'🏴󠁧󠁢󠁥󠁮󠁧󠁿',n:'England'},{n:'TBD'}],
-  [{f:'🇵🇹',n:'Portugal'},{n:'TBD'}],
-  [{f:'🇫🇷',n:'France'},{n:'TBD'}]
+  [{n:'TBD'},{n:'TBD'}],
+  [{n:'TBD'},{n:'TBD'}],
+  [{n:'TBD'},{n:'TBD'}],
+  [{n:'TBD'},{n:'TBD'}],
+  [{n:'TBD'},{n:'TBD'}],
+  [{n:'TBD'},{n:'TBD'}],
+  [{n:'TBD'},{n:'TBD'}],
+  [{n:'TBD'},{n:'TBD'}]
 ];
 const KO_RIGHT = [
-  [{f:'🇮🇹',n:'Italy'},{n:'TBD'}],
-  [{f:'🇲🇽',n:'Mexico'},{n:'TBD'}],
-  [{f:'🇺🇸',n:'USA'},{n:'TBD'}],
-  [{f:'🇨🇭',n:'Switzerland'},{n:'TBD'}],
-  [{f:'🇯🇵',n:'Japan'},{n:'TBD'}],
-  [{f:'🇳🇴',n:'Norway'},{n:'TBD'}],
-  [{f:'🇧🇪',n:'Belgium'},{n:'TBD'}],
-  [{f:'🇨🇴',n:'Colombia'},{n:'TBD'}]
+  [{n:'TBD'},{n:'TBD'}],
+  [{n:'TBD'},{n:'TBD'}],
+  [{n:'TBD'},{n:'TBD'}],
+  [{n:'TBD'},{n:'TBD'}],
+  [{n:'TBD'},{n:'TBD'}],
+  [{n:'TBD'},{n:'TBD'}],
+  [{n:'TBD'},{n:'TBD'}],
+  [{n:'TBD'},{n:'TBD'}]
 ];
 
 // ═══════════════════════════════════════════════════
@@ -1278,6 +1278,8 @@ function renderGroups(){
       <div class="qualify-line"></div>`;
     grid.append(card);
   });
+  // Update knockout bracket whenever group data refreshes
+  updateKnockoutQualifiers();
 }
 
 // ═══════════════════════════════════════════════════
@@ -1873,8 +1875,8 @@ async function fetchGroupStandings(){
 
     const groupMap = {};
     entries.forEach(entry => {
-      const note = entry.note?.text || entry.standingSummary || '';
-      const m = note.match(/Group\s+([A-La-l])/i);
+      const noteText = entry.note?.text || entry.standingSummary || '';
+      const m = noteText.match(/Group\s+([A-La-l])/i);
       if(!m) return;
       const gId = m[1].toUpperCase();
       if(!groupMap[gId]) groupMap[gId] = [];
@@ -1883,6 +1885,9 @@ async function fetchGroupStandings(){
       const name  = entry.team?.displayName   || entry.team?.name || '';
       const gf    = getStat(stats,'pointsFor');
       const ga    = getStat(stats,'pointsAgainst');
+      // ESPN marks clinched teams in the note field with text like "Clinched"
+      const clinched = /clinch|qualified|advance/i.test(entry.clincher?.text || '') ||
+                       /clinch|qualified|advance/i.test(entry.note?.shortText || '');
       groupMap[gId].push({
         n: name, abbr,
         f:   FLAGS[abbr] || '🏳️',
@@ -1893,6 +1898,7 @@ async function fetchGroupStandings(){
         gf, ga,
         gd:  gf - ga,
         pts: getStat(stats,'points'),
+        clinched,
       });
     });
 
@@ -1904,7 +1910,37 @@ async function fetchGroupStandings(){
       }
     });
     renderGroups();
+    updateKnockoutQualifiers();
   } catch(e){ /* keep static data */ }
+}
+
+function updateKnockoutQualifiers(){
+  // WC2026: 12 groups of 4 teams, round-robin → max_games = n-1 = 3.
+  // Reads from GROUPS_DATA (already processed with correct p/pts values).
+  // A team clinches top-2 when pts > max the 3rd-place team can reach.
+  const qualified = [];
+  GROUPS_DATA.forEach(g => {
+    const teams = (g.teams||[]).slice().sort((a,b) => b.pts-a.pts || b.gd-a.gd || b.gf-a.gf);
+    if(teams.length < 3) return;
+    const maxGames = teams.length - 1;
+    const groupDone = teams.every(t => t.p >= maxGames);
+    const third = teams[2];
+    const thirdGamesLeft = Math.max(0, maxGames - third.p);
+    const thirdMaxPts = third.pts + thirdGamesLeft * 3;
+    teams.slice(0, 2).forEach((t, i) => {
+      if(t.pts > thirdMaxPts || (groupDone && i < 2)) qualified.push(t);
+    });
+  });
+  if(!qualified.length) return;
+
+  // Fill TBD slots in the bracket left→right, top→bottom
+  const slots = document.querySelectorAll('#bracket .bt.tbd');
+  qualified.forEach((t, i) => {
+    const slot = slots[i];
+    if(!slot) return;
+    slot.className = 'bt';
+    slot.innerHTML = `<span class="bf">${t.f}</span><span class="bn">${t.n}</span>`;
+  });
 }
 
 // ═══════════════════════════════════════════════════
@@ -2019,6 +2055,7 @@ function renderKnockoutDynamic(rounds){
 showSkeleton();
 renderGroups();
 renderKnockout();
+updateKnockoutQualifiers();
 fetchMatches();
 fetchGroupStandings();
 fetchKnockoutData();
