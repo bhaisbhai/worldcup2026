@@ -1089,10 +1089,7 @@ function parseEvent(ev){
 // BBC Football title format: "{Home} v {Away} 🏳️🏳️ | 2026 FIFA World Cup | Group X"
 // We use playlistItems.list (not search.list) to get real-time uploads with no indexing lag.
 // UC→UU converts channel ID to its uploads playlist ID.
-const YT_KEY          = 'AIzaSyBvUlbLkg1RAdPyFmuADmOS_0a2277PUkA';
 const BBC_UPLOADS     = 'UUli0KmmXMDjcgqvsheHfv-Q'; // uploads playlist (UC→UU)
-const YT_PLAYLIST_URL = 'https://www.googleapis.com/youtube/v3/playlistItems';
-const YT_SEARCH_URL   = 'https://www.googleapis.com/youtube/v3/search'; // player highlights only
 
 // Cache: eventId → {videoId, title} | null (not found) | undefined (not fetched yet)
 const hlCache = {};
@@ -1109,7 +1106,7 @@ function getBBCCatalog(){
     const items = [];
     let pageToken = '';
     for(let page = 0; page < 2; page++){
-      const url = `${YT_PLAYLIST_URL}?part=snippet&playlistId=${BBC_UPLOADS}&maxResults=50${pageToken?'&pageToken='+pageToken:''}&key=${YT_KEY}`;
+      const url = `/api/highlights?mode=catalog${pageToken?'&pageToken='+encodeURIComponent(pageToken):''}`;
       const r = await fetch(url, { signal: AbortSignal.timeout(10000) });
       if(!r.ok) break;
       const d = await r.json();
@@ -2399,7 +2396,7 @@ async function fetchPlayerHighlight(athleteId, playerName, ev){
     const nameParts=playerName.toLowerCase().split(/\s+/);
     const lastName=nameParts[nameParts.length-1];
     const q=encodeURIComponent(`${playerName} FIFA World Cup 2026`);
-    const r=await fetch(`${YT_SEARCH_URL}?part=snippet&q=${q}&type=video&order=relevance&maxResults=10&key=${YT_KEY}`,{signal:AbortSignal.timeout(8000)});
+    const r=await fetch(`/api/highlights?q=${q}`,{signal:AbortSignal.timeout(8000)});
     const d=await r.json();
     const scored=(d.items||[]).map(i=>{
       const t=i.snippet.title.toLowerCase();
