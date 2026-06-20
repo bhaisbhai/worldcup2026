@@ -2634,55 +2634,89 @@ async function fetchLeaderboardData(){
     const tables = {goals:[], assists:[], yellow:[], red:[], clean:[]};
     const playerMap = {};
 
-    function parseLeaderCats(cats) {
-      cats.forEach(cat => {
-        const catName = (cat.displayName || cat.name || '').toLowerCase();
-        let matchedKey = null;
-        for(const [key, cfg] of Object.entries(LB_CAT_MAP)){
-          if(cfg.keys.some(k => catName.includes(k))){ matchedKey = key; break; }
-        }
-        if(!matchedKey) return;
-        const cfg = LB_CAT_MAP[matchedKey];
-        const entries = cat.leaders || cat.athletes || cat.stats || [];
-        const leaders = entries.map((entry, idx) => {
-          const athlete = entry.athlete || entry;
-          const abbr = athlete.team?.abbreviation || '';
-          const name = athlete.displayName || '';
-          const val  = parseFloat(entry.value ?? entry.displayValue) || 0;
-          const displayVal = entry.displayValue || String(val);
-          return { rank: idx+1, name, teamName: athlete.team?.displayName || '', abbr,
-                   f: FLAGS[abbr] || '🏳️', displayVal, val };
-        }).filter(l => l.name);
-        if(leaders.length) tables[matchedKey] = leaders.slice(0, 10);
-        leaders.forEach(l => {
-          const k = l.name + '||' + l.abbr;
-          if(!playerMap[k]) playerMap[k] = {
-            name: l.name, teamName: l.teamName, teamAbbr: l.abbr, f: l.f,
-            goals:0, assists:0, yellowCards:0, redCards:0, cleanSheets:0, teamPts:0,
-          };
-          playerMap[k][cfg.statKey] = l.val;
-        });
+    function addToMap(cfg, leaders) {
+      if(leaders.length) tables[Object.keys(LB_CAT_MAP).find(k=>LB_CAT_MAP[k]===cfg)] = leaders.slice(0,10);
+      leaders.forEach(l => {
+        const k = l.name+'||'+l.abbr;
+        if(!playerMap[k]) playerMap[k]={name:l.name,teamName:l.teamName,teamAbbr:l.abbr,f:l.f,
+          goals:0,assists:0,yellowCards:0,redCards:0,cleanSheets:0,teamPts:0};
+        playerMap[k][cfg.statKey]=l.val;
       });
     }
 
-    // Try v4 statistics first (server-side proxy bypasses CORS)
+    function matchCat(catName) {
+      for(const [key,cfg] of Object.entries(LB_CAT_MAP)){
+        if(cfg.keys.some(k=>catName.includes(k))) return cfg;
+      }
+      return null;
+    }
+
+    function toLeader(entry, idx) {
+      const athlete = entry.athlete || entry;
+      const abbr = athlete.team?.abbreviation||'';
+      const name = athlete.displayName||'';
+      const val  = parseFloat(entry.value??entry.displayValue)|| 0;
+      return {rank:idx+1,name,teamName:athlete.team?.displayName||'',abbr,
+              f:FLAGS[abbr]||'🏳️',displayVal:entry.displayValue||String(val),val};
+    }
+
+    // Parse structure A: categories[].{leaders[]|athletes[]} (v4 and v2 leaders)
+    function parseCatArray(cats) {
+      let found = 0;
+      cats.forEach(cat => {
+        const cfg = matchCat((cat.displayName||cat.name||'').toLowerCase());
+        if(!cfg) return;
+        const entries = cat.leaders||cat.athletes||cat.stats||[];
+        const leaders = entries.map(toLeader).filter(l=>l.name);
+        if(leaders.length){ addToMap(cfg,leaders); found++; }
+      });
+      return found;
+    }
+
+    // Parse structure B: results.categories[].{athletes[],names[]} (v4 alt format)
+    function parseResultsCats(cats) {
+      let found = 0;
+      cats.forEach(cat => {
+        const cfg = matchCat((cat.displayName||cat.name||'').toLowerCase());
+        if(!cfg) return;
+        const names = (cat.names||[]).map(n=>n.toLowerCase());
+        const statIdx = names.findIndex(n=>cfg.keys.some(k=>n.includes(k)));
+        const athletes = cat.athletes||[];
+        const leaders = athletes.map((entry,idx)=>{
+          const a=entry.athlete||entry;
+          const stats=entry.stats||[];
+          const val=parseFloat(statIdx>=0?stats[statIdx]:stats[0])||0;
+          return {rank:idx+1,name:a.displayName||'',teamName:a.team?.displayName||'',
+                  abbr:a.team?.abbreviation||'',f:FLAGS[a.team?.abbreviation||'']||'🏳️',
+                  displayVal:String(val),val};
+        }).filter(l=>l.name&&l.val>0);
+        if(leaders.length){ addToMap(cfg,leaders); found++; }
+      });
+      return found;
+    }
+
     let statsLoaded = false;
+
+    // Try v4 statistics via proxy (handles CORS server-side)
     try {
-      const r = await fetch(`${ESPN_STATS}?season=2026`, {signal:AbortSignal.timeout(10000)});
+      const r = await fetch(ESPN_STATS, {signal:AbortSignal.timeout(12000)});
       if(r.ok){
         const data = await r.json();
-        const cats = data.categories || data.statistics?.categories || data.results || [];
-        if(cats.length){ parseLeaderCats(cats); statsLoaded = true; }
+        // Try all known structures
+        const n = parseCatArray(data.categories||data.leaders||[]) ||
+                  parseResultsCats(data.results?.categories||[]) ||
+                  parseCatArray(data.statistics?.categories||[]);
+        if(n) statsLoaded = true;
       }
     } catch(e){}
 
-    // Fall back to v2 leaders if v4 gave nothing
+    // Fall back to v2 leaders
     if(!statsLoaded){
       try {
         const r = await fetch(`${ESPN_LEADERS}?season=2026`, {signal:AbortSignal.timeout(10000)});
         if(r.ok){
           const data = await r.json();
-          parseLeaderCats(data.leaders || data.categories || []);
+          parseCatArray(data.leaders||data.categories||[]);
         }
       } catch(e){}
     }
