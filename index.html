@@ -776,7 +776,7 @@ body{
   <div class="hdr-in">
     <div>
       <div class="wordmark">
-        <div class="wordmark-name" onclick="showGoalCelebration()" style="cursor:pointer">Game Buddy</div>
+        <div class="wordmark-name">Game Buddy</div>
         <div class="wordmark-event">FIFA World Cup 2026</div>
       </div>
     </div>
@@ -1573,6 +1573,19 @@ async function fetchMatches(){
     const data = await r.json();
     const raw = data.events || [];
     const events = raw.map(parseEvent);
+
+    // Goal celebration — detect score increases on live matches
+    if(lastEvents.length > 0){
+      const prev = {};
+      lastEvents.forEach(e => { prev[e.id] = { h: parseInt(e.home.score)||0, a: parseInt(e.away.score)||0 }; });
+      events.forEach(ev => {
+        if(ev.state !== 'in') return;
+        const p = prev[ev.id];
+        if(!p) return;
+        if((parseInt(ev.home.score)||0) > p.h || (parseInt(ev.away.score)||0) > p.a) showGoalCelebration();
+      });
+    }
+
     lastEvents = events;
     const dayLabel = data.day?.date || '';
     renderToday(events, dayLabel, isPatch);
