@@ -2630,100 +2630,86 @@ async function fetchLeaderboardData(){
       } catch(e){}
     }));
 
-    // ── Player stats: v4 statistics (via proxy) → fall back to v2 leaders ──
+    // ── Player stats: server-side aggregator (primary) → ESPN endpoints (fallback) ──
     const tables = {goals:[], assists:[], yellow:[], red:[], clean:[]};
     const playerMap = {};
 
-    function addToMap(cfg, leaders) {
-      if(leaders.length) tables[Object.keys(LB_CAT_MAP).find(k=>LB_CAT_MAP[k]===cfg)] = leaders.slice(0,10);
-      leaders.forEach(l => {
-        const k = l.name+'||'+l.abbr;
-        if(!playerMap[k]) playerMap[k]={name:l.name,teamName:l.teamName,teamAbbr:l.abbr,f:l.f,
-          goals:0,assists:0,yellowCards:0,redCards:0,cleanSheets:0,teamPts:0};
-        playerMap[k][cfg.statKey]=l.val;
-      });
-    }
-
     function matchCat(catName) {
       for(const [key,cfg] of Object.entries(LB_CAT_MAP)){
-        if(cfg.keys.some(k=>catName.includes(k))) return cfg;
+        if(cfg.keys.some(k=>catName.includes(k))) return [key,cfg];
       }
-      return null;
+      return [null,null];
     }
 
     function toLeader(entry, idx) {
       const athlete = entry.athlete || entry;
       const abbr = athlete.team?.abbreviation||'';
       const name = athlete.displayName||'';
-      const val  = parseFloat(entry.value??entry.displayValue)|| 0;
+      const val  = parseFloat(entry.value??entry.displayValue)||0;
       return {rank:idx+1,name,teamName:athlete.team?.displayName||'',abbr,
               f:FLAGS[abbr]||'🏳️',displayVal:entry.displayValue||String(val),val};
     }
 
-    // Parse structure A: categories[].{leaders[]|athletes[]} (v4 and v2 leaders)
-    function parseCatArray(cats) {
+    function parseCats(cats) {
       let found = 0;
       cats.forEach(cat => {
-        const cfg = matchCat((cat.displayName||cat.name||'').toLowerCase());
-        if(!cfg) return;
+        const [key,cfg] = matchCat((cat.displayName||cat.name||'').toLowerCase());
+        if(!key) return;
         const entries = cat.leaders||cat.athletes||cat.stats||[];
-        const leaders = entries.map(toLeader).filter(l=>l.name);
-        if(leaders.length){ addToMap(cfg,leaders); found++; }
+        const leaders = entries.map(toLeader).filter(l=>l.name&&l.val>0);
+        if(!leaders.length) return;
+        tables[key] = leaders.slice(0,10);
+        leaders.forEach(l => {
+          const k = l.name+'||'+l.abbr;
+          if(!playerMap[k]) playerMap[k]={name:l.name,teamName:l.teamName,teamAbbr:l.abbr,f:l.f,
+            goals:0,assists:0,yellowCards:0,redCards:0,cleanSheets:0,teamPts:0};
+          playerMap[k][cfg.statKey]=l.val;
+        });
+        found++;
       });
       return found;
     }
 
-    // Parse structure B: results.categories[].{athletes[],names[]} (v4 alt format)
-    function parseResultsCats(cats) {
-      let found = 0;
-      cats.forEach(cat => {
-        const cfg = matchCat((cat.displayName||cat.name||'').toLowerCase());
-        if(!cfg) return;
-        const names = (cat.names||[]).map(n=>n.toLowerCase());
-        const statIdx = names.findIndex(n=>cfg.keys.some(k=>n.includes(k)));
-        const athletes = cat.athletes||[];
-        const leaders = athletes.map((entry,idx)=>{
-          const a=entry.athlete||entry;
-          const stats=entry.stats||[];
-          const val=parseFloat(statIdx>=0?stats[statIdx]:stats[0])||0;
-          return {rank:idx+1,name:a.displayName||'',teamName:a.team?.displayName||'',
-                  abbr:a.team?.abbreviation||'',f:FLAGS[a.team?.abbreviation||'']||'🏳️',
-                  displayVal:String(val),val};
-        }).filter(l=>l.name&&l.val>0);
-        if(leaders.length){ addToMap(cfg,leaders); found++; }
-      });
-      return found;
-    }
-
+    // 1. Primary: our server-side match aggregator
     let statsLoaded = false;
-
-    // Try v4 statistics via proxy (handles CORS server-side)
     try {
-      const r = await fetch(ESPN_STATS, {signal:AbortSignal.timeout(12000)});
+      const r = await fetch('/api/playerstats', {signal:AbortSignal.timeout(9000)});
       if(r.ok){
         const data = await r.json();
-        // Try all known structures
-        const n = parseCatArray(data.categories||data.leaders||[]) ||
-                  parseResultsCats(data.results?.categories||[]) ||
-                  parseCatArray(data.statistics?.categories||[]);
-        if(n) statsLoaded = true;
+        if(parseCats(data.categories||[])) {
+          statsLoaded = true;
+          // Use matchCount from aggregator for the overview if available
+          if(data.matchCount) matchCount = data.matchCount;
+        }
       }
     } catch(e){}
 
-    // Fall back to v2 leaders
+    // 2. Fallback: ESPN v4 via proxy
     if(!statsLoaded){
       try {
-        const r = await fetch(`${ESPN_LEADERS}?season=2026`, {signal:AbortSignal.timeout(10000)});
+        const r = await fetch(ESPN_STATS, {signal:AbortSignal.timeout(8000)});
         if(r.ok){
           const data = await r.json();
-          parseCatArray(data.leaders||data.categories||[]);
+          const n = parseCats(data.categories||data.leaders||[]);
+          if(n) statsLoaded = true;
+        }
+      } catch(e){}
+    }
+
+    // 3. Fallback: ESPN v2 leaders
+    if(!statsLoaded){
+      try {
+        const r = await fetch(`${ESPN_LEADERS}?season=2026`, {signal:AbortSignal.timeout(8000)});
+        if(r.ok){
+          const data = await r.json();
+          parseCats(data.leaders||data.categories||[]);
         }
       } catch(e){}
     }
 
     // ── Team form from standings → enriches Watch algorithm ──
     try {
-      const r = await fetch(`${ESPN_STANDINGS}?season=2026`, {signal:AbortSignal.timeout(8000)});
+      const r = await fetch(ESPN_STANDINGS, {signal:AbortSignal.timeout(8000)});
       if(r.ok){
         const data = await r.json();
         const tPts = {};
