@@ -87,15 +87,6 @@ body{
 .tab.active{display:block}
 @keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 
-/* ── TODAY INFO BAR ─────────────────────────── */
-.day-bar{
-  display:flex;align-items:center;justify-content:center;
-  border-bottom:1px solid var(--border);padding-bottom:20px;margin-bottom:26px;gap:32px;
-}
-.day-stats{display:flex;gap:24px}
-.dstat .sv{font-size:20px;font-weight:700;font-family:var(--mono);font-variant-numeric:tabular-nums}
-.dstat .sv.green{color:var(--accent)}.dstat .sv.gold{color:var(--gold)}
-.dstat .sl{font-size:10px;color:var(--t2);text-transform:uppercase;letter-spacing:.8px;margin-top:2px}
 
 /* ── SECTION HEADER ─────────────────────────── */
 .sec-hd{display:flex;align-items:center;gap:9px;margin:26px 0 13px}
@@ -537,7 +528,6 @@ body{
   .main{padding:18px 14px}
   .mgrid,.ggrid{grid-template-columns:1fr}
   .sc{font-size:28px}.tflag{font-size:22px}
-  .day-stats{gap:16px}.dstat .sv{font-size:18px}
 }
 @media(max-width:480px){
   .tbtn{padding:13px 11px;font-size:13px}
@@ -1408,11 +1398,6 @@ function renderToday(events, dayDate, patch){
   // --- patch mode: update existing cards without wiping the DOM ---
   if(patch){
     renderDayNav(dispDate);
-    // update stat counters
-    const svs = wrap.querySelectorAll('.dstat .sv');
-    if(svs[0]) svs[0].textContent = live.length;
-    if(svs[1]) svs[1].textContent = finished.length;
-    if(svs[2]) svs[2].textContent = upcoming.length;
 
     const existingIds = new Set([...wrap.querySelectorAll('.mc[data-ev-id]')].map(c=>c.dataset.evId));
     const newIds      = new Set(events.map(e=>e.id));
@@ -1449,14 +1434,6 @@ function renderToday(events, dayDate, patch){
 
   renderDayNav(dispDate);
 
-  const bar = el('div','day-bar');
-  bar.innerHTML = `
-    <div class="day-stats">
-      <div class="dstat"><div class="sv green">${live.length}</div><div class="sl">Live</div></div>
-      <div class="dstat"><div class="sv">${finished.length}</div><div class="sl">Finished</div></div>
-      <div class="dstat"><div class="sv gold">${upcoming.length}</div><div class="sl">Upcoming</div></div>
-    </div>`;
-  wrap.append(bar);
 
   if(events.length===0){
     wrap.append(el('div','empty','No matches scheduled · Use the arrows to browse other days'));
