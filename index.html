@@ -2701,15 +2701,18 @@ async function fetchLeaderboardData(){
   if($('tab-leaderboard')?.classList.contains('active')) renderLeaderboard();
 
   try {
-    // Step 1: scoreboard across last 20 days → collect completed event IDs + total goals
     const dateStrs = [];
     const now = new Date();
     for(let i = 0; i <= 20; i++){
       const dt = new Date(now); dt.setDate(dt.getDate() - i);
       dateStrs.push(toDateStr(dt));
     }
+
     let totalGoals = 0, matchCount = 0;
+    const playerMap = {};
     const eventIds = [];
+
+    // Step 1: scoreboard — parse comp.details directly (no extra round-trips needed)
     await Promise.all(dateStrs.map(async ds => {
       try {
         const r = await fetch(`${ESPN_URL}?dates=${ds}&limit=50`, {signal: AbortSignal.timeout(7000)});
@@ -2718,32 +2721,30 @@ async function fetchLeaderboardData(){
         (data.events || []).forEach(ev => {
           const comp = ev.competitions?.[0];
           if(comp?.status?.type?.state !== 'post') return;
-          eventIds.push(ev.id);
           matchCount++;
+          eventIds.push(ev.id);
           (comp.competitors || []).forEach(c => { totalGoals += parseInt(c.score) || 0; });
+          absorbDetails(comp.details || [], playerMap);
         });
       } catch(e){}
     }));
 
-    const playerMap = {};
-
-    if(eventIds.length){
-      // Step 2: fetch each match summary and parse via data.plays (the proven ESPN path)
-      const uniqueIds = [...new Set(eventIds)];
-      await Promise.all(uniqueIds.map(async id => {
-        try {
-          const r = await fetch(`${ESPN_SUMMARY}?event=${id}`, {signal: AbortSignal.timeout(8000)});
-          if(!r.ok) return;
-          const d = await r.json();
-          const plays = d?.plays || [];
-          if(plays.length){
-            absorbPlays(plays, playerMap);
-          } else {
-            // Fallback: header.competitions[0].details (different ESPN response shape)
-            absorbDetails(d?.header?.competitions?.[0]?.details || [], playerMap);
-          }
-        } catch(e){}
-      }));
+    // Step 2: if scoreboard details gave us nothing, fetch summaries in small batches
+    if(Object.keys(playerMap).length === 0 && eventIds.length){
+      const ids = [...new Set(eventIds)];
+      for(let i = 0; i < ids.length; i += 5){
+        await Promise.all(ids.slice(i, i+5).map(async id => {
+          try {
+            const r = await fetch(`${ESPN_SUMMARY}?event=${id}`, {signal: AbortSignal.timeout(8000)});
+            if(!r.ok) return;
+            const d = await r.json();
+            // Try plays first (used by match modal, confirmed working)
+            const plays = d?.plays || [];
+            if(plays.length) absorbPlays(plays, playerMap);
+            else absorbDetails(d?.header?.competitions?.[0]?.details || [], playerMap);
+          } catch(e){}
+        }));
+      }
     }
 
     addTeamPts(playerMap);
