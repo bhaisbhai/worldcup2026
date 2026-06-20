@@ -1549,8 +1549,9 @@ async function fetchMatches(){
   } catch(e){
     if(lastEvents.length === 0) showErr();
   }
-  setRefreshLabel('Auto-refresh in 30s', false);
-  refreshIn = 30;
+  const hasLive = lastEvents.some(e => e.state === 'in');
+  refreshIn = hasLive ? 10 : 30;
+  setRefreshLabel(`Auto-refresh in ${refreshIn}s`, false);
 }
 
 function showErr(){
