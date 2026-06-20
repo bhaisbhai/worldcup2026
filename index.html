@@ -1460,7 +1460,7 @@ function renderToday(events, dayDate, patch){
 
     if(patch){
       live.forEach(ev => {
-        if(!ev.isHT) liveClocks[ev.id] = { minute:parseMinute(ev.displayClock), fetchedAt:Date.now() };
+        if(!ev.isHT) liveClocks[ev.id] = { minute:parseMinute(ev.displayClock), raw:ev.displayClock, fetchedAt:Date.now() };
       });
       return;
     }
@@ -1500,7 +1500,7 @@ function renderToday(events, dayDate, patch){
   section(`<div class="sbadge ft">✓ Finished</div>`, finished);
 
   live.forEach(ev => {
-    if(!ev.isHT) liveClocks[ev.id] = { minute:parseMinute(ev.displayClock), fetchedAt:Date.now() };
+    if(!ev.isHT) liveClocks[ev.id] = { minute:parseMinute(ev.displayClock), raw:ev.displayClock, fetchedAt:Date.now() };
   });
 
   setTimeout(observeCards, 30);
@@ -1756,9 +1756,14 @@ function tick(){
     const id = el.dataset.clockid;
     const state = liveClocks[id];
     if(state){
-      const elapsed = Math.floor((now - state.fetchedAt)/1000);
-      const cur = Math.min(state.minute + elapsed, 90);
-      el.textContent = cur+"'";
+      if(state.minute >= 90){
+        // Stoppage time — show exact value from ESPN (e.g. "90+6'")
+        el.textContent = state.raw;
+      } else {
+        const elapsed = Math.floor((now - state.fetchedAt)/1000);
+        const cur = Math.min(state.minute + elapsed, 90);
+        el.textContent = cur+"'";
+      }
     }
   });
 
