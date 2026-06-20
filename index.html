@@ -695,8 +695,8 @@ body{
     <button class="tbtn active" data-tab="today">Today</button>
     <button class="tbtn" data-tab="groups">Groups</button>
     <button class="tbtn" data-tab="knockout">Knockout</button>
-    <button class="tbtn" data-tab="leaderboard">📊 Stats</button>
-    <button class="tbtn" data-tab="myteam" id="myteamTab">⭐ My Team</button>
+    <button class="tbtn" data-tab="leaderboard">Stats</button>
+    <button class="tbtn" data-tab="myteam" id="myteamTab">My Team</button>
   </nav>
 </div>
 
@@ -2490,112 +2490,157 @@ function renderKnockoutDynamic(rounds){
 // ═══════════════════════════════════════════════════
 //  LEADERBOARD
 // ═══════════════════════════════════════════════════
-const ESPN_LEADERS = 'https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/leaders';
-const ESPN_SCOREBOARD_STATS = ESPN_URL + '?limit=100';
-
-let lbCache = null;           // { goals, assists, yellow, red, shots, saves, ts }
+let lbCache = null;
 let lbFetching = false;
 let lbLastFetch = 0;
-const LB_TTL = 5 * 60 * 1000; // 5 minutes
+const LB_TTL = 5 * 60 * 1000;
 
-// ── Watch-list algorithm weights ────────────────────
+// ── Watch-list algorithm ─────────────────────────────
 function calcWatchScore(p){
   return (
-    (p.goals       || 0) * 12  +
-    (p.assists     || 0) * 8   +
+    (p.goals         || 0) * 12  +
+    (p.assists       || 0) * 8   +
     (p.shotsOnTarget || 0) * 2.5 +
-    (p.shots       || 0) * 0.8 +
-    (p.keyPasses   || 0) * 3   +
-    (p.tackles     || 0) * 1.8 +
+    (p.shots         || 0) * 0.8 +
+    (p.keyPasses     || 0) * 3   +
+    (p.tackles       || 0) * 1.8 +
     (p.interceptions || 0) * 2.2 +
-    (p.clearances  || 0) * 1   +
-    (p.saves       || 0) * 2   +
+    (p.clearances    || 0) * 1   +
+    (p.saves         || 0) * 2   +
     ((p.passAcc||0) >= 88 ? 4 : (p.passAcc||0) >= 80 ? 2 : 0) +
-    ((p.teamPts||0) >= 7 ? 3 : (p.teamPts||0) >= 4 ? 1.5 : 0) +
-    (p.yellowCards || 0) * -1.5 +
-    (p.redCards    || 0) * -10
+    ((p.teamPts||0)  >= 7 ? 3 : (p.teamPts||0) >= 4 ? 1.5 : 0) +
+    (p.yellowCards   || 0) * -1.5 +
+    (p.redCards      || 0) * -10
   );
 }
 
-function mergePlayerList(existing, additions, statKey){
-  additions.forEach(entry => {
-    const name = entry.athlete?.displayName || entry.athlete?.shortName || '';
-    const flag = entry.athlete?.flag?.href ? '' : (entry.athlete?.team?.displayName || '');
-    const teamName = entry.athlete?.team?.displayName || entry.athlete?.team?.name || '';
-    const teamAbbr = entry.athlete?.team?.abbreviation || '';
-    const val = parseFloat(entry.value) || 0;
-    const f = FLAGS[teamAbbr] || '🏳️';
-    let found = existing.find(p => p.name === name);
-    if(!found){
-      found = { name, teamName, teamAbbr, f };
-      existing.push(found);
+// Map ESPN boxscore stat label → our player key
+const STAT_LABEL_MAP = {
+  'G':'goals','A':'assists','YC':'yellowCards','RC':'redCards',
+  'SH':'shots','SOG':'shotsOnTarget','SV':'saves',
+  'TK':'tackles','IN':'interceptions','CL':'clearances',
+  'KP':'keyPasses','PA':'passAcc','FC':'foulsCommitted',
+};
+
+function upsertPlayer(map, name, teamName, teamAbbr){
+  if(!name) return null;
+  if(!map[name]) map[name] = {
+    name, teamName, teamAbbr,
+    f: FLAGS[teamAbbr] || '🏳️',
+  };
+  return map[name];
+}
+
+function addTeamPts(playerMap){
+  Object.values(playerMap).forEach(p => {
+    const g = GROUPS_DATA.find(g => g.teams.some(t =>
+      t.n === p.teamName ||
+      p.teamName.toLowerCase().includes(t.n.toLowerCase()) ||
+      t.n.toLowerCase().includes(p.teamName.toLowerCase())
+    ));
+    if(g){
+      const t = g.teams.find(t =>
+        t.n === p.teamName ||
+        p.teamName.toLowerCase().includes(t.n.toLowerCase()) ||
+        t.n.toLowerCase().includes(p.teamName.toLowerCase())
+      );
+      if(t) p.teamPts = t.pts;
     }
-    found[statKey] = val;
   });
+}
+
+// Parse one match summary boxscore and add stats into playerMap
+function absorbSummary(data, playerMap){
+  const teamGroups = data?.boxscore?.players || [];
+  teamGroups.forEach(tg => {
+    const teamName = tg.team?.displayName || '';
+    const teamAbbr = tg.team?.abbreviation || '';
+    (tg.statistics || []).forEach(statCat => {
+      const labels = statCat.labels || [];
+      (statCat.athletes || []).forEach(row => {
+        const athlete = row.athlete || {};
+        const playerName = athlete.displayName || athlete.shortName || '';
+        if(!playerName) return;
+        const p = upsertPlayer(playerMap, playerName, teamName, teamAbbr);
+        (row.stats || []).forEach((val, i) => {
+          const key = STAT_LABEL_MAP[labels[i]];
+          if(key){
+            const n = parseFloat(val) || 0;
+            p[key] = (p[key] || 0) + n;
+          }
+        });
+      });
+    });
+  });
+}
+
+// Build ranked table [{rank,name,teamName,teamAbbr,f,val}] from playerMap for a stat key
+function buildTable(playerMap, statKey, limit=10){
+  return Object.values(playerMap)
+    .filter(p => (p[statKey]||0) > 0)
+    .sort((a,b) => (b[statKey]||0) - (a[statKey]||0))
+    .slice(0, limit)
+    .map((p,i) => ({ rank:i+1, name:p.name, teamName:p.teamName, f:p.f, val:String(p[statKey]) }));
 }
 
 async function fetchLeaderboardData(){
   if(lbFetching) return;
-  if(lbCache && Date.now() - lbLastFetch < LB_TTL) return;
+  if(lbCache?.ts && Date.now() - lbLastFetch < LB_TTL) return;
   lbFetching = true;
 
   try {
-    const r = await fetch(ESPN_LEADERS, { signal: AbortSignal.timeout(9000) });
-    if(!r.ok) throw new Error(r.status);
-    const data = await r.json();
-    const categories = data.leaders || data.categories || [];
+    // Collect completed match IDs from the last 10 days
+    const eventIds = [];
+    const now = new Date();
+    const dateStrs = [];
+    for(let d = 0; d <= 10; d++){
+      const dt = new Date(now); dt.setDate(now.getDate() - d);
+      dateStrs.push(toDateStr(dt));
+    }
+    await Promise.all(dateStrs.map(async ds => {
+      try {
+        const r = await fetch(`${ESPN_URL}?dates=${ds}`, {signal: AbortSignal.timeout(7000)});
+        if(!r.ok) return;
+        const data = await r.json();
+        (data.events||[]).forEach(ev => {
+          const state = ev.competitions?.[0]?.status?.type?.state;
+          if(state === 'post') eventIds.push(ev.id);
+        });
+      } catch(e){}
+    }));
 
-    const allPlayers = [];
-    const tables = { goals:[], assists:[], yellow:[], red:[], shots:[], saves:[] };
+    if(!eventIds.length){
+      lbCache = { tables:{goals:[],assists:[],yellow:[],red:[]}, watchList:[], ts:null, error:true };
+      lbFetching = false;
+      if($('tab-leaderboard')?.classList.contains('active')) renderLeaderboard();
+      return;
+    }
 
-    categories.forEach(cat => {
-      const key = (cat.name||cat.abbreviation||'').toLowerCase();
-      const leaders = cat.leaders || cat.athletes || [];
+    // Fetch summaries for up to 24 most recent completed matches
+    const playerMap = {};
+    const recent = [...new Set(eventIds)].slice(-24);
+    await Promise.all(recent.map(async id => {
+      try {
+        const r = await fetch(`${ESPN_SUMMARY}?event=${id}`, {signal: AbortSignal.timeout(7000)});
+        if(!r.ok) return;
+        const data = await r.json();
+        absorbSummary(data, playerMap);
+      } catch(e){}
+    }));
 
-      let tableKey = null;
-      let statKey  = null;
-      if(/goal/i.test(key))       { tableKey='goals';   statKey='goals'; }
-      else if(/assist/i.test(key)){ tableKey='assists';  statKey='assists'; }
-      else if(/yellow/i.test(key)){ tableKey='yellow';   statKey='yellowCards'; }
-      else if(/red/i.test(key))   { tableKey='red';      statKey='redCards'; }
-      else if(/shot.*on/i.test(key)){ statKey='shotsOnTarget'; }
-      else if(/shot/i.test(key))  { tableKey='shots';   statKey='shots'; }
-      else if(/save/i.test(key))  { tableKey='saves';   statKey='saves'; }
-      else if(/tackle/i.test(key)){ statKey='tackles'; }
-      else if(/interc/i.test(key)){ statKey='interceptions'; }
-      else if(/pass.*acc/i.test(key)){ statKey='passAcc'; }
-      else if(/key.*pass/i.test(key)){ statKey='keyPasses'; }
+    addTeamPts(playerMap);
 
-      if(statKey) mergePlayerList(allPlayers, leaders, statKey);
-      if(tableKey){
-        tables[tableKey] = leaders.slice(0, 10).map((entry, i) => ({
-          rank:     i + 1,
-          name:     entry.athlete?.displayName || entry.athlete?.shortName || '—',
-          teamName: entry.athlete?.team?.displayName || '',
-          teamAbbr: entry.athlete?.team?.abbreviation || '',
-          f:        FLAGS[entry.athlete?.team?.abbreviation||''] || '🏳️',
-          val:      entry.displayValue || String(parseFloat(entry.value)||0),
-        }));
-      }
-    });
+    const tables = {
+      goals:   buildTable(playerMap, 'goals'),
+      assists: buildTable(playerMap, 'assists'),
+      yellow:  buildTable(playerMap, 'yellowCards'),
+      red:     buildTable(playerMap, 'redCards'),
+    };
 
-    // Enrich players with team points from GROUPS_DATA
-    allPlayers.forEach(p => {
-      const g = GROUPS_DATA.find(g => g.teams.some(t =>
-        t.n === p.teamName || t.n.toLowerCase().includes(p.teamName.toLowerCase()) ||
-        p.teamName.toLowerCase().includes(t.n.toLowerCase())
-      ));
-      if(g){
-        const t = g.teams.find(t => t.n === p.teamName || t.n.toLowerCase().includes(p.teamName.toLowerCase()) || p.teamName.toLowerCase().includes(t.n.toLowerCase()));
-        if(t) p.teamPts = t.pts;
-      }
-    });
-
-    // Build watch list — score every player and take top 10
-    const watchList = allPlayers
+    const watchList = Object.values(playerMap)
       .map(p => ({ ...p, watchScore: Math.round(calcWatchScore(p) * 10) / 10 }))
       .filter(p => p.watchScore > 0)
-      .sort((a, b) => b.watchScore - a.watchScore)
+      .sort((a,b) => b.watchScore - a.watchScore)
       .slice(0, 10);
 
     lbCache = { tables, watchList, ts: Date.now() };
