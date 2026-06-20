@@ -740,6 +740,19 @@ body{
 }
 .rb-card.open .rb-detail{display:block}
 
+/* ── DAILY SUMMARY ─────────────────────── */
+.ds-wrap{margin:0 0 14px}
+.ds-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:14px 14px 12px;position:relative}
+.ds-card-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.ds-card-title{font-size:12px;font-weight:700;color:var(--accent);letter-spacing:.4px;text-transform:uppercase}
+.ds-card-close{background:none;border:none;color:var(--t2);font-size:18px;line-height:1;cursor:pointer;padding:0 0 0 8px;flex-shrink:0}
+.ds-card-text{font-size:13px;color:var(--t2);line-height:1.6}
+.ds-pill{display:flex;align-items:center;gap:8px;padding:9px 12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;cursor:pointer;user-select:none}
+.ds-pill-lbl{font-size:12px;color:var(--t2);flex:1}
+.ds-pill-chevron{font-size:11px;color:var(--t2);transition:transform .2s}
+.ds-pill.open .ds-pill-chevron{transform:rotate(180deg)}
+.ds-pill-body{font-size:12px;color:var(--t2);line-height:1.6;padding:10px 12px 12px;border:1px solid rgba(255,255,255,.08);border-top:none;border-radius:0 0 10px 10px;margin-top:-1px;background:rgba(255,255,255,.03)}
+
 /* ── GOAL SCORERS STRIP ────────────────── */
 .mc-scorers{display:flex;justify-content:space-between;gap:6px;margin:6px 0 8px;min-height:0}
 .mc-scorers-h,.mc-scorers-a{font-size:10px;color:var(--t2);line-height:1.6;flex:1;white-space:pre-wrap}
@@ -1550,6 +1563,8 @@ function renderToday(events, dayDate, patch){
 
   renderDayNav(dispDate);
 
+  // Daily summary card (only on today's view)
+  if(!browseDate) renderSummary(wrap);
 
   if(events.length===0){
     wrap.append(el('div','empty','No matches scheduled · Use the arrows to browse other days'));
@@ -1609,6 +1624,66 @@ function showSkeleton(keepNav=false){
     g.append(s);
   }
   wrap.append(g);
+}
+
+// ═══════════════════════════════════════════════════
+//  DAILY SUMMARY
+// ═══════════════════════════════════════════════════
+let _summaryData = null;
+
+async function fetchDailySummary(){
+  try {
+    const r = await fetch('/data/daily-summary.json', { signal: AbortSignal.timeout(5000) });
+    if(r.ok) _summaryData = await r.json();
+  } catch(e) {}
+}
+
+function isDismissed(date){ return localStorage.getItem('ds_dismissed') === date; }
+
+function dismissSummary(date){
+  localStorage.setItem('ds_dismissed', date);
+  renderSummaryInPlace();
+}
+
+function toggleSummaryPill(){
+  const pill = document.querySelector('.ds-pill');
+  const body = document.querySelector('.ds-pill-body');
+  if(!pill || !body) return;
+  const open = pill.classList.toggle('open');
+  body.style.display = open ? 'block' : 'none';
+}
+
+function renderSummaryInPlace(){
+  const wrap = document.querySelector('.ds-wrap');
+  if(!wrap || !_summaryData) return;
+  wrap.innerHTML = buildSummaryHtml(_summaryData);
+}
+
+function buildSummaryHtml(d){
+  if(!d?.date || !d?.text) return '';
+  if(isDismissed(d.date)){
+    return `<div class="ds-pill" onclick="toggleSummaryPill()">
+      <span>📋</span>
+      <span class="ds-pill-lbl">${d.title || 'Yesterday\'s Recap'}</span>
+      <span class="ds-pill-chevron">▾</span>
+    </div>
+    <div class="ds-pill-body" style="display:none">${d.text}</div>`;
+  }
+  return `<div class="ds-card">
+    <div class="ds-card-hd">
+      <span class="ds-card-title">📋 ${d.title || 'Yesterday\'s Recap'}</span>
+      <button class="ds-card-close" onclick="dismissSummary('${d.date}')" aria-label="Dismiss">×</button>
+    </div>
+    <div class="ds-card-text">${d.text}</div>
+  </div>`;
+}
+
+function renderSummary(container){
+  if(!_summaryData) return;
+  const wrap = document.createElement('div');
+  wrap.className = 'ds-wrap';
+  wrap.innerHTML = buildSummaryHtml(_summaryData);
+  container.prepend(wrap);
 }
 
 async function fetchMatches(){
@@ -3469,7 +3544,7 @@ showSkeleton();
 renderGroups();
 renderKnockout();
 updateKnockoutQualifiers();
-fetchMatches();
+fetchDailySummary().then(() => fetchMatches());
 fetchGroupStandings();
 fetchKnockoutData();
 if(favTeam) renderMyTeam();
