@@ -35,9 +35,10 @@ body{
   max-width:1240px;margin:0 auto;padding:0 22px;
   display:flex;align-items:center;justify-content:space-between;height:66px;gap:12px;
 }
-.wordmark{font-size:18px;font-weight:700;letter-spacing:-.4px;line-height:1.2}
-.wordmark em{font-style:normal;color:var(--accent)}
-.sub{font-size:11px;color:var(--t2);margin-top:2px;letter-spacing:.3px}
+.wordmark{line-height:1.1}
+.wordmark-name{font-size:17px;font-weight:800;letter-spacing:-.4px;color:var(--text)}
+.wordmark-event{font-size:10px;font-weight:600;color:var(--accent);letter-spacing:.9px;text-transform:uppercase;margin-top:3px}
+.sub{font-size:10px;color:var(--t3);margin-top:3px;letter-spacing:.2px}
 .hdr-r{display:flex;align-items:center;gap:14px}
 
 /* live pill */
@@ -531,7 +532,7 @@ body{
 
 /* ── RESPONSIVE ─────────────────────────────── */
 @media(max-width:768px){
-  .hdr-in{height:58px}.wordmark{font-size:15px}.clock{display:none}
+  .hdr-in{height:58px}.wordmark-name{font-size:15px}.clock{display:none}
   .main{padding:18px 14px}
   .mgrid,.ggrid{grid-template-columns:1fr}
   .sc{font-size:28px}.tflag{font-size:22px}
@@ -669,8 +670,10 @@ body{
 <header class="hdr">
   <div class="hdr-in">
     <div>
-      <div class="wordmark">Game Buddy <em>FIFA World Cup</em> 2026</div>
-      <div class="sub">🇺🇸&thinsp;🇨🇦&thinsp;🇲🇽 &nbsp;·&nbsp; USA · Canada · Mexico</div>
+      <div class="wordmark">
+        <div class="wordmark-name">Game Buddy</div>
+        <div class="wordmark-event">FIFA World Cup 2026</div>
+      </div>
     </div>
     <div class="hdr-r">
       <div class="live-pill hidden" id="livePill"><div class="ldot"></div>LIVE</div>
