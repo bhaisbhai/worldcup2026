@@ -1040,7 +1040,7 @@ function countdown(dateObj){
 }
 
 function localTime(dateObj){
-  return dateObj.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+  return dateObj.toLocaleTimeString([],{hour:'numeric',minute:'2-digit',hour12:true});
 }
 
 // ═══════════════════════════════════════════════════
