@@ -21,7 +21,7 @@
 :root{
   --bg:#080808;--card:#111;--card2:#141414;--border:#1f1f1f;
   --accent:#00FF87;--red:#FF3B3B;--gold:#FFD700;
-  --text:#fff;--t2:#888;--t3:#3a3a3a;
+  --text:#fff;--t2:#888;--t3:#555;
   --r:12px;
   --font:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
   --mono:'SF Mono','Fira Code','Cascadia Code',ui-monospace,monospace;
@@ -162,7 +162,7 @@ body{
 .mc-cd{font-family:var(--mono);font-size:11px;color:var(--gold);font-weight:600}
 .mc-kickoff{display:flex;flex-direction:column;gap:1px}
 .mc-kickoff-time{font-size:18px;font-weight:700;color:var(--text);letter-spacing:-.5px;font-variant-numeric:tabular-nums;line-height:1.1}
-.mc-cd-sm{font-family:var(--mono);font-size:10px;color:var(--t3);font-weight:500}
+.mc-cd-sm{font-family:var(--mono);font-size:10px;color:var(--t2);font-weight:500}
 
 /* ── SKELETON ───────────────────────────────── */
 .skel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:11px}
@@ -386,7 +386,7 @@ body{
 
 /* win probability */
 .mc-prob{margin-bottom:14px}
-.mc-prob-lbl{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--t3);margin-bottom:6px}
+.mc-prob-lbl{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--t2);margin-bottom:6px}
 .mc-prob-bar{height:7px;border-radius:4px;overflow:hidden;display:flex;gap:2px;margin-bottom:5px}
 .mc-ph{background:var(--accent);transition:width .7s cubic-bezier(.4,0,.2,1);min-width:0}
 .mc-pd{background:#444;min-width:0;transition:width .7s .1s cubic-bezier(.4,0,.2,1)}
@@ -400,8 +400,8 @@ body{
 .mc-odds-team{font-size:9px;color:var(--t2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:5px}
 .mc-odds-pct{font-family:var(--mono);font-size:16px;font-weight:700;margin-bottom:3px}
 .mc-odds-dec{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--t1)}
-.mc-odds-ml{font-size:9px;color:var(--t3);margin-top:2px}
-.mc-odds-note{font-size:9px;color:var(--t3);text-align:right;margin-bottom:14px}
+.mc-odds-ml{font-size:9px;color:var(--t2);margin-top:2px}
+.mc-odds-note{font-size:9px;color:var(--t2);text-align:right;margin-bottom:14px}
 /* UK TV badge */
 .mc-tv-uk{color:#60b8ff;font-weight:600}
 /* lineup rating badge */
@@ -413,7 +413,7 @@ body{
 /* form guide */
 .mc-form-row{display:flex;gap:12px;margin-bottom:16px}
 .mc-form-side{flex:1;min-width:0}
-.mc-form-lbl{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--t3);margin-bottom:5px}
+.mc-form-lbl{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--t2);margin-bottom:5px}
 .mc-form-team{font-size:11px;font-weight:600;margin-bottom:5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .mc-fdots{display:flex;gap:3px}
 .mc-fdot{width:22px;height:22px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;flex-shrink:0}
@@ -422,7 +422,7 @@ body{
 .mc-fdot.L{background:rgba(255,59,59,.12);color:#ff7070;border:1px solid rgba(255,59,59,.3)}
 
 /* key players */
-.mc-sect-hd{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--t3);margin-bottom:8px}
+.mc-sect-hd{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--t2);margin-bottom:8px}
 .mc-leaders-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:16px}
 .mc-lcard{background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:10px;padding:10px 12px}
 .mc-lcard-flag{font-size:14px;margin-bottom:3px}
@@ -433,13 +433,13 @@ body{
 /* info grid */
 .mc-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:16px}
 .mc-ibox{background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:10px;padding:10px 12px}
-.mc-ibox-lbl{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--t3);margin-bottom:4px}
+.mc-ibox-lbl{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--t2);margin-bottom:4px}
 .mc-ibox-val{font-size:12px;font-weight:600;line-height:1.4}
 .mc-ibox-sub{font-size:10px;color:var(--t2);margin-top:2px}
 
 /* goal timeline */
 .mc-tl{margin-bottom:18px}
-.mc-tl-lbl{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--t3);margin-bottom:10px}
+.mc-tl-lbl{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--t2);margin-bottom:10px}
 .mc-tl-track{height:3px;background:rgba(255,255,255,.09);border-radius:2px;position:relative;margin:16px 0 5px}
 .mc-tl-mins{display:flex;justify-content:space-between;font-family:var(--mono);font-size:8px;color:var(--t3)}
 .mc-tl-dot{position:absolute;top:50%;transform:translate(-50%,-50%);width:9px;height:9px;border-radius:50%;cursor:help;transition:transform .15s}
@@ -449,7 +449,7 @@ body{
 
 /* scorers */
 .mc-scorers{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
-.mc-scol-lbl{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--t3);margin-bottom:5px;display:flex;align-items:center;gap:5px}
+.mc-scol-lbl{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--t2);margin-bottom:5px;display:flex;align-items:center;gap:5px}
 .mc-sdot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
 .mc-sdot.home{background:var(--accent)}.mc-sdot.away{background:#ff5555}
 .mc-srow{display:flex;align-items:center;gap:5px;padding:3px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:11px}
