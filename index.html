@@ -739,6 +739,43 @@ body{
   line-height:1.8;border-top:1px solid rgba(255,255,255,.04);padding-top:12px;
 }
 .rb-card.open .rb-detail{display:block}
+
+/* ── GOAL CELEBRATION ──────────────────── */
+.goal-particle{
+  position:fixed;pointer-events:none;z-index:9999;
+  transform:translate(-50%,-50%) scale(0);
+  animation:goalParticle var(--dur,900ms) var(--delay,0ms) cubic-bezier(.2,.8,.4,1) forwards;
+}
+@keyframes goalParticle{
+  0%  {transform:translate(-50%,-50%) scale(0) rotate(0deg);opacity:1}
+  12% {transform:translate(calc(-50% + var(--tx)*.12),calc(-50% + var(--ty)*.12 - 50px)) scale(2.2) rotate(90deg);opacity:1}
+  40% {transform:translate(calc(-50% + var(--tx)*.45),calc(-50% + var(--ty)*.45 - 110px)) scale(1.4) rotate(300deg);opacity:1}
+  100%{transform:translate(calc(-50% + var(--tx)),calc(-50% + var(--ty))) scale(0.15) rotate(780deg);opacity:0}
+}
+.goal-banner{
+  position:fixed;top:50%;left:50%;
+  transform:translate(-50%,-50%) scale(0.4);
+  background:linear-gradient(135deg,#00ff87,#00c853);
+  color:#000;font-weight:900;font-size:32px;
+  padding:14px 32px;border-radius:16px;
+  box-shadow:0 0 0 4px rgba(0,255,135,.3),0 8px 40px rgba(0,0,0,.6);
+  letter-spacing:.5px;z-index:10000;pointer-events:none;
+  animation:goalBanner 1.6s cubic-bezier(.34,1.56,.64,1) forwards;
+}
+@keyframes goalBanner{
+  0%  {transform:translate(-50%,-50%) scale(0.4);opacity:0}
+  18% {transform:translate(-50%,-50%) scale(1.05);opacity:1}
+  55% {transform:translate(-50%,-50%) scale(1);opacity:1}
+  80% {transform:translate(-50%,-50%) scale(1);opacity:1}
+  100%{transform:translate(-50%,-50%) scale(0.9);opacity:0}
+}
+#goal-demo-btn{
+  position:fixed;bottom:80px;right:16px;z-index:8000;
+  background:var(--accent);color:#000;border:none;
+  border-radius:20px;padding:9px 16px;font-size:13px;font-weight:700;
+  cursor:pointer;box-shadow:0 4px 14px rgba(0,255,135,.35);
+  display:flex;align-items:center;gap:6px;
+}
 </style>
 </head>
 <body>
@@ -3386,6 +3423,55 @@ fetchKnockoutData();
 if(favTeam) renderMyTeam();
 setTimeout(observeCards, 200);
 setInterval(tick, 1000);
+
+// ═══════════════════════════════════════════════════
+//  GOAL CELEBRATION
+// ═══════════════════════════════════════════════════
+function showGoalCelebration(ox, oy){
+  ox = ox ?? window.innerWidth  / 2;
+  oy = oy ?? window.innerHeight / 2;
+
+  // Banner
+  const banner = document.createElement('div');
+  banner.className = 'goal-banner';
+  banner.textContent = '⚽ GOAL!';
+  document.body.appendChild(banner);
+  setTimeout(() => banner.remove(), 1700);
+
+  // Particles — two waves for depth
+  const waves = [
+    { n:14, distMin:110, distMax:240, sizeMin:20, sizeMax:36, durMin:850, durMax:1100, delayMax:0   },
+    { n:8,  distMin:60,  distMax:140, sizeMin:14, sizeMax:22, durMin:600, durMax:800,  delayMax:120 },
+  ];
+  waves.forEach(w => {
+    for(let i=0;i<w.n;i++){
+      const angle  = (360/w.n)*i + (Math.random()-.5)*25;
+      const dist   = w.distMin + Math.random()*(w.distMax-w.distMin);
+      const dur    = w.durMin  + Math.random()*(w.durMax-w.durMin);
+      const delay  = Math.random()*w.delayMax;
+      const size   = w.sizeMin + Math.random()*(w.sizeMax-w.sizeMin);
+      const rad    = angle*Math.PI/180;
+      const tx     = Math.cos(rad)*dist;
+      const ty     = Math.sin(rad)*dist;
+      const p      = document.createElement('div');
+      p.className  = 'goal-particle';
+      p.textContent= '⚽';
+      p.style.cssText=`left:${ox}px;top:${oy}px;font-size:${size}px;`+
+        `--tx:${tx}px;--ty:${ty}px;--dur:${dur}ms;--delay:${delay}ms;`;
+      document.body.appendChild(p);
+      setTimeout(()=>p.remove(), dur+delay+100);
+    }
+  });
+}
+
+// Demo button
+(function(){
+  const btn = document.createElement('button');
+  btn.id = 'goal-demo-btn';
+  btn.innerHTML = '⚽ Demo Goal';
+  btn.onclick = () => showGoalCelebration();
+  document.body.appendChild(btn);
+})();
 </script>
 </body>
 </html>
