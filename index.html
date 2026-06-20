@@ -515,9 +515,28 @@ body{
 
 @media(max-width:600px){
   .modal-bg{padding:0;align-items:flex-end}
-  .modal{border-radius:16px 16px 0 0;max-height:90vh}
-  .mc-snums{font-size:32px}
-  .mc-flag{font-size:24px}
+  .modal{
+    border-radius:16px 16px 0 0;
+    max-height:88vh;        /* fallback for older browsers */
+    max-height:88dvh;       /* dvh = excludes browser chrome — fixes iOS cut-off */
+    padding-bottom:env(safe-area-inset-bottom, 0px);
+  }
+  .modal::before{           /* drag handle indicator */
+    content:'';display:block;width:36px;height:4px;border-radius:2px;
+    background:#333;margin:10px auto 0;flex-shrink:0;
+  }
+  .mc-hdr{padding:10px 16px 0}
+  .mc-teams-row{padding:4px 0 10px}
+  .mc-flag{font-size:22px}
+  .mc-snums{font-size:30px}
+  .mc-tname{font-size:11px}
+  .mc-close-wrap{top:6px;right:10px}
+  .mc-body{padding:14px 16px}
+  .mc-cd-time{font-size:28px;letter-spacing:2px}
+  .mc-odds-tbl{gap:4px}
+  .mc-odds-cell{padding:8px 6px}
+  .mc-odds-pct{font-size:14px}
+  .mc-odds-dec{font-size:11px}
   .mc-leaders-grid,.mc-lu-cols,.mc-scorers,.mc-info-grid{grid-template-columns:1fr}
   .mc-form-row{flex-direction:column}
 }
