@@ -93,7 +93,7 @@ function saveLog(name, data) {
 }
 
 // ─── Gemini ────────────────────────────────────────────────────────────────
-async function callGemini(prompt, schema, retries = 2) {
+async function callGemini(prompt, schema, retries = 3) {
   if (!GEMINI_KEY) throw new Error('GEMINI_API_KEY not set');
 
   const body = {
@@ -116,7 +116,7 @@ async function callGemini(prompt, schema, retries = 2) {
       });
       if (!r.ok) {
         const txt = await r.text();
-        throw new Error(`Gemini ${r.status}: ${txt.slice(0,300)}`);
+        throw Object.assign(new Error(`Gemini ${r.status}: ${txt.slice(0,300)}`), { status: r.status });
       }
       const d = await r.json();
       const text = d.candidates?.[0]?.content?.parts?.[0]?.text;
@@ -124,8 +124,10 @@ async function callGemini(prompt, schema, retries = 2) {
       return JSON.parse(text);
     } catch (e) {
       if (attempt === retries) throw e;
-      console.warn(`  ⚠ Gemini attempt ${attempt+1} failed: ${e.message} — retrying in ${(attempt+1)*2}s`);
-      await sleep((attempt+1) * 2000);
+      // 429 = rate limit: wait long enough to clear the 60s RPM window
+      const wait = e.status === 429 ? (attempt + 1) * 20000 : (attempt + 1) * 3000;
+      console.warn(`  ⚠ Gemini attempt ${attempt+1} failed: ${e.message} — retrying in ${wait/1000}s`);
+      await sleep(wait);
     }
   }
 }
@@ -483,12 +485,12 @@ async function main() {
         console.error(`  ✗ batch ${Math.floor(i/BATCH_SIZE)+1} failed: ${e.message}`);
         saveLog('matches-error', { batch: batch.map(m => m.id), error: e.message });
       }
-      if (i + BATCH_SIZE < newMatches.length) await sleep(1500);
+      if (i + BATCH_SIZE < newMatches.length) await sleep(6000);
     }
   }
   matchesAI.updated = now.toISOString();
   saveJson(path.join(OUT_DIR, 'matches_ai.json'), matchesAI);
-  await sleep(1000);
+  await sleep(6000);
 
   // ── 2. Team statuses ──
   const teamsList = Object.values(teamsSeen);
@@ -505,7 +507,7 @@ async function main() {
   }
   teamsAI.updated = now.toISOString();
   saveJson(path.join(OUT_DIR, 'teams_ai.json'), teamsAI);
-  await sleep(1000);
+  await sleep(6000);
 
   // ── 3. Player verdicts ──
   const playersList = Object.values(playersSeen);
@@ -522,7 +524,7 @@ async function main() {
   }
   playersAI.updated = now.toISOString();
   saveJson(path.join(OUT_DIR, 'players_ai.json'), playersAI);
-  await sleep(1000);
+  await sleep(6000);
 
   // ── 4. Daily recap ──
   const recapDay = allCompleted.filter(m => isoDate(new Date(m.date)) === isoDate(yesterday));
@@ -536,7 +538,7 @@ async function main() {
       saveLog('recap-error', { error: e.message });
     }
   }
-  await sleep(1000);
+  await sleep(6000);
 
   // ── 5. Today's preview ──
   console.log(`\n[pipeline] Generating today's preview for ${isoDate(today)}…`);
