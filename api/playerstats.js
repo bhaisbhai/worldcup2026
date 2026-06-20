@@ -53,36 +53,66 @@ module.exports = async function (req, res) {
       try {
         const data = await get(`${SUMMARY}?event=${id}`);
 
-        // Attempt 1: boxscore.players (most reliable — full per-player stat table)
+        // Attempt 1: rosters[].roster[].stats[] — where ESPN soccer actually stores per-player stats
         let gotStats = false;
-        for (const teamSec of data.boxscore?.players || []) {
-          const tAbbr = teamSec.team?.abbreviation || '';
-          const tName = teamSec.team?.displayName || '';
-          for (const cat of teamSec.statistics || []) {
-            const keys = (cat.keys || cat.names || []).map(k => k.toLowerCase());
-            const idx = {
-              goals:   keys.findIndex(k => k === 'goals' || k === 'goal'),
-              assists: keys.findIndex(k => k === 'assists' || k === 'assist'),
-              yellow:  keys.findIndex(k => k.includes('yellow')),
-              red:     keys.findIndex(k => k.includes('redcard') || k === 'red' || k === 'reds'),
+        for (const teamRoster of data.rosters || []) {
+          const tAbbr = teamRoster.team?.abbreviation || '';
+          const tName = teamRoster.team?.displayName || '';
+          for (const entry of teamRoster.roster || []) {
+            const name = entry.athlete?.displayName || '';
+            if (!name) continue;
+            const stats = entry.stats || [];
+            const getStat = n => {
+              const s = stats.find(x => x.name === n);
+              return Math.round(parseFloat(s?.value ?? s?.displayValue)) || 0;
             };
-            for (const entry of cat.athletes || []) {
-              const name = entry.athlete?.displayName || '';
-              if (!name) continue;
-              const stats = entry.stats || [];
+            const goals   = getStat('totalGoals');
+            const assists = getStat('goalAssists');
+            const yellow  = getStat('yellowCards');
+            const red     = getStat('redCards');
+            if (goals || assists || yellow || red) {
               const k = player(name, tName, tAbbr);
-              if (idx.goals   >= 0) { const v = parseInt(stats[idx.goals])   || 0; playerMap[k].goals   += v; if (v) gotStats = true; }
-              if (idx.assists >= 0)   playerMap[k].assists     += parseInt(stats[idx.assists]) || 0;
-              if (idx.yellow  >= 0)   playerMap[k].yellowCards += parseInt(stats[idx.yellow])  || 0;
-              if (idx.red     >= 0)   playerMap[k].redCards    += parseInt(stats[idx.red])     || 0;
+              playerMap[k].goals       += goals;
+              playerMap[k].assists     += assists;
+              playerMap[k].yellowCards += yellow;
+              playerMap[k].redCards    += red;
+              gotStats = true;
             }
           }
         }
 
-        // Attempt 2: keyEvents (goals, cards with athlete names)
+        // Attempt 2: boxscore.players fallback
+        if (!gotStats) {
+          for (const teamSec of data.boxscore?.players || []) {
+            const tAbbr = teamSec.team?.abbreviation || '';
+            const tName = teamSec.team?.displayName || '';
+            for (const cat of teamSec.statistics || []) {
+              const keys = (cat.keys || cat.names || []).map(k => k.toLowerCase());
+              const idx = {
+                goals:   keys.findIndex(k => k === 'goals' || k === 'goal' || k === 'totalgoals'),
+                assists: keys.findIndex(k => k === 'assists' || k === 'assist' || k === 'goalassists'),
+                yellow:  keys.findIndex(k => k.includes('yellow')),
+                red:     keys.findIndex(k => k.includes('redcard') || k === 'red' || k === 'reds'),
+              };
+              for (const entry of cat.athletes || []) {
+                const name = entry.athlete?.displayName || '';
+                if (!name) continue;
+                const stats = entry.stats || [];
+                const k = player(name, tName, tAbbr);
+                if (idx.goals   >= 0) { const v = parseInt(stats[idx.goals])   || 0; playerMap[k].goals   += v; if (v) gotStats = true; }
+                if (idx.assists >= 0)   playerMap[k].assists     += parseInt(stats[idx.assists]) || 0;
+                if (idx.yellow  >= 0)   playerMap[k].yellowCards += parseInt(stats[idx.yellow])  || 0;
+                if (idx.red     >= 0)   playerMap[k].redCards    += parseInt(stats[idx.red])     || 0;
+              }
+            }
+          }
+        }
+
+        // Attempt 3: keyEvents last resort
         if (!gotStats) {
           for (const ev of data.keyEvents || []) {
             const type = (ev.type?.text || ev.text || '').toLowerCase();
+            const isOwnGoal = type.includes('own goal') || type.includes('og');
             const athletes = ev.athletesInvolved || [];
             athletes.forEach((ath, idx) => {
               const name = ath.displayName || '';
@@ -90,12 +120,12 @@ module.exports = async function (req, res) {
               const tName = ath.team?.displayName  || ev.team?.displayName  || '';
               if (!name) return;
               const k = player(name, tName, tAbbr);
-              if ((type === 'goal' || type === 'goal scored') && !type.includes('og')) {
+              if (type.includes('goal') && !isOwnGoal) {
                 if (idx === 0) playerMap[k].goals++;
                 if (idx === 1) playerMap[k].assists++;
-              } else if (type.includes('yellow')) {
+              } else if (type.includes('yellow') || type === 'caution') {
                 playerMap[k].yellowCards++;
-              } else if (type.includes('red')) {
+              } else if (type.includes('red') || type === 'ejection') {
                 playerMap[k].redCards++;
               }
             });
