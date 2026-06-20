@@ -89,11 +89,9 @@ body{
 
 /* ── TODAY INFO BAR ─────────────────────────── */
 .day-bar{
-  display:flex;align-items:flex-end;justify-content:space-between;
-  border-bottom:1px solid var(--border);padding-bottom:20px;margin-bottom:26px;flex-wrap:wrap;gap:12px;
+  display:flex;align-items:center;justify-content:center;
+  border-bottom:1px solid var(--border);padding-bottom:20px;margin-bottom:26px;gap:32px;
 }
-.day-title{font-size:21px;font-weight:700;letter-spacing:-.4px}
-.day-meta{font-size:12px;color:var(--t2);margin-top:3px}
 .day-stats{display:flex;gap:24px}
 .dstat .sv{font-size:20px;font-weight:700;font-family:var(--mono);font-variant-numeric:tabular-nums}
 .dstat .sv.green{color:var(--accent)}.dstat .sv.gold{color:var(--gold)}
@@ -298,23 +296,26 @@ body{
 .trophy-t{font-size:10px;color:var(--t2);font-style:italic;text-align:center}
 
 /* ── DAY NAV ────────────────────────────────── */
-.day-nav{display:flex;align-items:center;gap:10px;margin-bottom:20px;flex-wrap:wrap}
+.day-nav{width:100%;margin-bottom:16px}
+.dnav-row{display:flex;align-items:center;width:100%}
 .dnav-btn{
-  background:none;border:1px solid var(--border);color:var(--t2);
-  font-family:var(--font);font-size:18px;line-height:1;padding:4px 12px;
-  border-radius:8px;cursor:pointer;transition:border-color .18s,color .18s;
+  flex-shrink:0;background:none;border:1px solid var(--border);color:var(--t2);
+  font-family:var(--font);font-size:20px;line-height:1;width:40px;height:40px;
+  display:flex;align-items:center;justify-content:center;
+  border-radius:10px;cursor:pointer;transition:border-color .18s,color .18s;
 }
 .dnav-btn:hover{border-color:#333;color:var(--text)}
 .dnav-btn:disabled{opacity:.25;cursor:default;pointer-events:none}
-.dnav-date{font-size:15px;font-weight:600;flex:1}
-.dnav-sub{font-size:11px;color:var(--t2);margin-top:1px}
+.dnav-center{flex:1;text-align:center;padding:0 10px}
+.dnav-date{font-size:16px;font-weight:700;letter-spacing:-.3px}
+.dnav-sub{font-size:11px;color:var(--t2);margin-top:2px}
+.dnav-back-row{text-align:center;margin-top:10px;display:none}
+.dnav-back-row.show{display:block}
 .dnav-today{
-  font-size:11px;font-weight:700;letter-spacing:.6px;padding:4px 11px;
+  font-size:11px;font-weight:700;letter-spacing:.6px;padding:5px 16px;
   background:rgba(0,255,135,.08);border:1px solid rgba(0,255,135,.2);
   color:var(--accent);border-radius:100px;cursor:pointer;transition:background .18s;
-  display:none;
 }
-.dnav-today.show{display:inline-block}
 .dnav-today:hover{background:rgba(0,255,135,.15)}
 .mc{cursor:pointer}
 .mc.vis:hover{transform:translateY(-2px);border-color:#272727;box-shadow:0 10px 32px rgba(0,0,0,.45)}
@@ -541,7 +542,6 @@ body{
 @media(max-width:480px){
   .tbtn{padding:13px 11px;font-size:13px}
   .mc-venue{display:none}
-  .day-bar{flex-direction:column;align-items:flex-start}
 }
 
 /* ── BRACKET MATCH INFO ─────────────────────────── */
@@ -1250,14 +1250,18 @@ function renderDayNav(d){
   const next = shiftDate(d, 1);
   const isTod = isToday(d);
   nav.innerHTML = `
-    <button class="dnav-btn" id="navPrev" title="${fmtDate(prev)}">‹</button>
-    <div>
-      <div class="dnav-date">${fmtDate(d)}</div>
-      <div class="dnav-sub">${d.getFullYear()} · FIFA World Cup</div>
+    <div class="dnav-row">
+      <button class="dnav-btn" id="navPrev" title="${fmtDate(prev)}">‹</button>
+      <div class="dnav-center">
+        <div class="dnav-date">${fmtDate(d)}, ${d.getFullYear()}</div>
+        <div class="dnav-sub">FIFA World Cup 2026 · Group Stage</div>
+      </div>
+      <button class="dnav-btn" id="navNext" title="${fmtDate(next)}"
+        ${next > WC_END ? 'disabled' : ''}>›</button>
     </div>
-    <button class="dnav-btn" id="navNext" title="${fmtDate(next)}"
-      ${next > WC_END ? 'disabled' : ''}>›</button>
-    <button class="dnav-today${isTod?'':' show'}" id="navToday">Back to Today</button>`;
+    <div class="dnav-back-row${isTod?'':' show'}">
+      <button class="dnav-today" id="navToday">Back to Today</button>
+    </div>`;
   $('navPrev').onclick = () => goToDate(shiftDate(d,-1));
   $('navNext').onclick = () => goToDate(shiftDate(d, 1));
   const bt = $('navToday'); if(bt) bt.onclick = () => goToDate(null);
@@ -1388,13 +1392,8 @@ function renderToday(events, dayDate, patch){
 
   renderDayNav(dispDate);
 
-  const dateStr = fmtDate(dispDate) + `, ${dispDate.getFullYear()}`;
   const bar = el('div','day-bar');
   bar.innerHTML = `
-    <div>
-      <div class="day-title">${dateStr}</div>
-      <div class="day-meta">FIFA World Cup 2026 · Group Stage</div>
-    </div>
     <div class="day-stats">
       <div class="dstat"><div class="sv green">${live.length}</div><div class="sl">Live</div></div>
       <div class="dstat"><div class="sv">${finished.length}</div><div class="sl">Finished</div></div>
@@ -1482,11 +1481,7 @@ async function fetchMatches(){
 function showErr(){
   const wrap = $('today-content');
   wrap.innerHTML = '';
-  const bar = el('div','day-bar');
-  const now = new Date();
-  const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
-  bar.innerHTML = `<div><div class="day-title">${months[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()}</div><div class="day-meta">FIFA World Cup 2026 · Group Stage</div></div>`;
-  wrap.append(bar);
+  renderDayNav(new Date());
   const e = el('div','err-card show');
   e.innerHTML = `<div class="err-icon">📡</div>
     <div class="err-title">Live scores unavailable</div>
