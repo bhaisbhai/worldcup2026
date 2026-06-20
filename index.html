@@ -974,6 +974,7 @@ const KO_DATA = {
 // ═══════════════════════════════════════════════════
 const ESPN_URL      = 'https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard';
 const ESPN_STANDINGS= 'https://site.api.espn.com/apis/v2/sports/soccer/fifa.world/standings';
+const ESPN_STATS    = 'https://site.api.espn.com/apis/v4/sports/soccer/fifa.world/statistics';
 
 // UK broadcast schedule — sorted abbreviation pair → channel
 const UK_TV = {
@@ -2577,30 +2578,21 @@ function renderKnockoutDynamic(rounds){
 }
 
 // ═══════════════════════════════════════════════════
-//  LEADERBOARD (Player Stats)
+//  LEADERBOARD (Player Stats — ESPN v4 statistics API)
 // ═══════════════════════════════════════════════════
 let lbCache = null;
 let lbFetching = false;
 let lbLastFetch = 0;
 const LB_TTL = 5 * 60 * 1000;
 
-function lbUpsert(map, name, teamName, teamAbbr){
-  if(!name) return null;
-  const key = name + '||' + teamAbbr;
-  if(!map[key]) map[key] = {
-    name, teamName, teamAbbr,
-    f: FLAGS[teamAbbr] || '🏳️',
-    goals:0, assists:0, yellowCards:0, redCards:0, cleanSheets:0, teamPts:0,
-  };
-  return map[key];
-}
-
-function lbTable(playerMap, key, limit=10){
-  return Object.values(playerMap)
-    .filter(p => (p[key]||0) > 0)
-    .sort((a,b) => (b[key]||0) - (a[key]||0))
-    .slice(0, limit);
-}
+// Map ESPN category display names → our internal keys + display config
+const LB_CAT_MAP = {
+  goals:       {keys:['scoring','goals','top scorer'],      valCls:'g', label:'Top Scorers',   statKey:'goals'},
+  assists:     {keys:['assist'],                            valCls:'a', label:'Top Assists',    statKey:'assists'},
+  yellow:      {keys:['yellow'],                            valCls:'y', label:'Yellow Cards',   statKey:'yellowCards'},
+  red:         {keys:['red card','red-card','reds'],        valCls:'r', label:'Red Cards',      statKey:'redCards'},
+  clean:       {keys:['clean sheet','clean-sheet','saves'], valCls:'c', label:'Clean Sheets',   statKey:'cleanSheets'},
+};
 
 function lbWatchScore(p){
   return (p.goals||0)*12 + (p.assists||0)*8 + (p.cleanSheets||0)*5 +
@@ -2615,9 +2607,8 @@ async function fetchLeaderboardData(){
   if($('tab-leaderboard')?.classList.contains('active')) renderLeaderboard();
 
   try {
-    // ── Step 1: scoreboard scan for completed match IDs + overview totals ──
+    // ── Overview: match + goal counts from scoreboard ──
     let totalGoals = 0, matchCount = 0;
-    const matches = []; // {id, teams:[{abbr,name,score}]}
     const now = new Date();
     const dateStrs = [];
     for(let i = 0; i <= 14; i++){
@@ -2633,88 +2624,56 @@ async function fetchLeaderboardData(){
           const comp = ev.competitions?.[0];
           if(comp?.status?.type?.state !== 'post') return;
           matchCount++;
-          const teams = (comp.competitors||[]).map(c => ({
-            abbr: c.team?.abbreviation||'', name: c.team?.displayName||'',
-            score: parseInt(c.score)||0,
-          }));
-          teams.forEach(t => { totalGoals += t.score; });
-          matches.push({id: ev.id, teams});
+          (comp.competitors||[]).forEach(c => { totalGoals += parseInt(c.score)||0; });
         });
       } catch(e){}
     }));
 
-    // ── Step 2: fetch each summary for player-level stats (batch 3, 300ms gap) ──
+    // ── Player stats: ESPN v4 statistics endpoint ──
+    const tables = {goals:[], assists:[], yellow:[], red:[], clean:[]};
     const playerMap = {};
-    const seenIds = [...new Set(matches.map(m => m.id))];
-    const matchTeams = Object.fromEntries(matches.map(m => [m.id, m.teams]));
 
-    for(let i = 0; i < seenIds.length; i += 3){
-      await Promise.all(seenIds.slice(i, i+3).map(async id => {
-        try {
-          const r = await fetch(`${ESPN_SUMMARY}?event=${id}`, {signal:AbortSignal.timeout(10000)});
-          if(!r.ok) return;
-          const d = await r.json();
+    try {
+      const r = await fetch(`${ESPN_STATS}?season=2026`, {signal:AbortSignal.timeout(10000)});
+      if(r.ok){
+        const data = await r.json();
+        (data.categories||[]).forEach(cat => {
+          const catName = (cat.displayName || cat.name || '').toLowerCase();
 
-          // Goals, assists, cards from plays array (same source as match modal)
-          (d?.plays||[]).forEach(play => {
-            const tt = (play.type?.text||'').toLowerCase();
-            const isOG = tt.includes('own goal') || tt.includes('own-goal');
-            const isGoal = (play.scoringPlay===true || tt.includes('goal'))
-                           && !isOG && !tt.includes('miss') && !tt.includes('saved')
-                           && !tt.includes('blocked') && !tt.includes('offside');
-            const isYellow = tt.includes('yellow');
-            const isRed = tt.includes('red card') || tt.includes('second yellow');
-            const tAbbr = play.team?.abbreviation||'';
-            const tName = play.team?.displayName||'';
-            const parts = play.participants||[];
-
-            if(isGoal){
-              const sc = parts.find(pp=>pp.type==='scorer') || (parts.length===1 ? parts[0] : null);
-              const as = parts.find(pp=>pp.type==='assist');
-              if(sc?.athlete?.displayName){
-                const p = lbUpsert(playerMap, sc.athlete.displayName,
-                  tName||sc.athlete.team?.displayName||'', tAbbr||sc.athlete.team?.abbreviation||'');
-                if(p) p.goals++;
-              }
-              if(as?.athlete?.displayName){
-                const a = lbUpsert(playerMap, as.athlete.displayName,
-                  as.athlete.team?.displayName||tName, as.athlete.team?.abbreviation||tAbbr);
-                if(a) a.assists++;
-              }
-            } else if(isYellow || isRed){
-              const rc = parts.find(pp=>['recipient','player','carded'].includes(pp.type))
-                         || (parts.length===1 ? parts[0] : null);
-              if(rc?.athlete?.displayName){
-                const p = lbUpsert(playerMap, rc.athlete.displayName, tName, tAbbr);
-                if(p){ isYellow ? p.yellowCards++ : p.redCards++; }
-              }
-            }
-          });
-
-          // Clean sheets: team that conceded 0 → find their starting GK in rosters
-          const comps = matchTeams[id] || [];
-          if(comps.length === 2){
-            comps.forEach((team, idx) => {
-              const opponent = comps[1-idx];
-              if(opponent.score !== 0) return; // opponent scored, no clean sheet
-              const rosters = d?.rosters||[];
-              const tr = rosters.find(r => r.team?.abbreviation === team.abbr);
-              if(!tr) return;
-              const gk = (tr.entries||[]).find(e =>
-                e.athlete?.position?.abbreviation === 'GK' && e.starter !== false
-              );
-              if(gk?.athlete?.displayName){
-                const p = lbUpsert(playerMap, gk.athlete.displayName, team.name, team.abbr);
-                if(p) p.cleanSheets++;
-              }
-            });
+          // Match category to our known types
+          let matchedKey = null;
+          for(const [key, cfg] of Object.entries(LB_CAT_MAP)){
+            if(cfg.keys.some(k => catName.includes(k))){ matchedKey = key; break; }
           }
-        } catch(e){}
-      }));
-      if(i+3 < seenIds.length) await new Promise(r=>setTimeout(r,1000));
-    }
+          if(!matchedKey) return;
 
-    // ── Step 3: standings API → team points for Watch algorithm ──
+          const cfg = LB_CAT_MAP[matchedKey];
+          const leaders = (cat.stats || cat.leaders || cat.athletes || []).map((stat, idx) => {
+            const athlete = stat.athlete || stat;
+            const abbr = athlete.team?.abbreviation || '';
+            const name = athlete.displayName || '';
+            const val  = parseFloat(stat.value ?? stat.displayValue) || 0;
+            const displayVal = stat.displayValue || String(val);
+            return { rank: idx+1, name, teamName: athlete.team?.displayName || '', abbr,
+                     f: FLAGS[abbr] || '🏳️', displayVal, val };
+          }).filter(l => l.name);
+
+          tables[matchedKey] = leaders.slice(0, 10);
+
+          // Build unified playerMap for Watch algorithm
+          leaders.forEach(l => {
+            const k = l.name + '||' + l.abbr;
+            if(!playerMap[k]) playerMap[k] = {
+              name: l.name, teamName: l.teamName, teamAbbr: l.abbr, f: l.f,
+              goals:0, assists:0, yellowCards:0, redCards:0, cleanSheets:0, teamPts:0,
+            };
+            playerMap[k][cfg.statKey] = l.val;
+          });
+        });
+      }
+    } catch(e){}
+
+    // ── Team form from standings → enriches Watch algorithm ──
     try {
       const r = await fetch(`${ESPN_STANDINGS}?season=2026`, {signal:AbortSignal.timeout(8000)});
       if(r.ok){
@@ -2733,18 +2692,12 @@ async function fetchLeaderboardData(){
     } catch(e){}
 
     lbCache = {
-      tables: {
-        goals:   lbTable(playerMap,'goals'),
-        assists: lbTable(playerMap,'assists'),
-        yellow:  lbTable(playerMap,'yellowCards'),
-        red:     lbTable(playerMap,'redCards'),
-        clean:   lbTable(playerMap,'cleanSheets'),
-      },
+      tables,
       watchList: Object.values(playerMap)
-        .map(p=>({...p, ws: Math.round(lbWatchScore(p)*10)/10}))
-        .filter(p=>p.ws>0)
-        .sort((a,b)=>b.ws-a.ws)
-        .slice(0,10),
+        .map(p => ({...p, ws: Math.round(lbWatchScore(p)*10)/10}))
+        .filter(p => p.ws > 0)
+        .sort((a,b) => b.ws - a.ws)
+        .slice(0, 10),
       meta: {matchCount, totalGoals, avgGoals: matchCount ? (totalGoals/matchCount).toFixed(1):'—'},
       ts: Date.now(), error: false,
     };
@@ -2759,7 +2712,7 @@ async function fetchLeaderboardData(){
   if($('tab-leaderboard')?.classList.contains('active')) renderLeaderboard();
 }
 
-function lbStatBox(rows, valKey, valCls, title, limit=10){
+function lbStatBox(rows, valCls, title, limit=10){
   rows = (rows||[]).slice(0, limit);
   const syms = ['🥇','🥈','🥉'];
   const hd = title ? `<div class="lb-box-hd"><span class="lb-box-title">${title}</span></div>` : '';
@@ -2771,7 +2724,7 @@ function lbStatBox(rows, valKey, valCls, title, limit=10){
           <div class="lb-name">${p.name}</div>
           <div class="lb-team">${p.teamName}</div>
         </div>
-        <span class="lb-val ${valCls}">${p[valKey]||0}</span>
+        <span class="lb-val ${valCls}">${p.displayVal}</span>
       </div>`).join('')
     : `<div class="lb-empty">No data yet — check back after matches complete.</div>`;
   return `<div class="lb-box">${hd}${body}</div>`;
@@ -2800,11 +2753,11 @@ function renderLeaderboard(){
     ? `<div class="watch-list">${wl.map((p,i) => {
         const syms = ['🥇','🥈','🥉'];
         const pills = [];
-        if(p.goals)       pills.push({c:'g',t:`${p.goals}G`});
-        if(p.assists)     pills.push({c:'a',t:`${p.assists}A`});
-        if(p.cleanSheets) pills.push({c:'c',t:`${p.cleanSheets}CS`});
-        if(p.yellowCards) pills.push({c:'d',t:`${p.yellowCards}🟨`});
-        if(p.redCards)    pills.push({c:'d',t:`${p.redCards}🟥`});
+        if(p.goals)       pills.push({c:'g', t:`${p.goals}G`});
+        if(p.assists)     pills.push({c:'a', t:`${p.assists}A`});
+        if(p.cleanSheets) pills.push({c:'c', t:`${p.cleanSheets}CS`});
+        if(p.yellowCards) pills.push({c:'d', t:`${p.yellowCards}🟨`});
+        if(p.redCards)    pills.push({c:'d', t:`${p.redCards}🟥`});
         return `<div class="watch-card">
           <span class="watch-pos${i<3?' top3':''}">${i<3?syms[i]:i+1}</span>
           <span class="watch-flag">${p.f}</span>
@@ -2845,19 +2798,19 @@ function renderLeaderboard(){
     </div>
 
     <div class="lb-section">Top Scorers</div>
-    ${lbStatBox(t.goals,'goals','g')}
+    ${lbStatBox(t.goals,'g')}
 
     <div class="lb-section">Top Assists</div>
-    ${lbStatBox(t.assists,'assists','a')}
+    ${lbStatBox(t.assists,'a')}
 
     <div class="lb-section">Discipline</div>
     <div class="lb-2col">
-      ${lbStatBox(t.yellow,'yellowCards','y','Yellow Cards',5)}
-      ${lbStatBox(t.red,'redCards','r','Red Cards',5)}
+      ${lbStatBox(t.yellow,'y','Yellow Cards',5)}
+      ${lbStatBox(t.red,'r','Red Cards',5)}
     </div>
 
     <div class="lb-section">Clean Sheets</div>
-    ${lbStatBox(t.clean,'cleanSheets','c')}
+    ${lbStatBox(t.clean,'c')}
 
     <div class="watch-hd">Players to Watch</div>
     <div class="watch-algo">Goals ×12 · Assists ×8 · Clean Sheets ×5 · Team form bonus · Yellow −1.5 · Red −10</div>
