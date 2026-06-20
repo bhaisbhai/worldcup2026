@@ -573,39 +573,43 @@ body{
 .install-x{background:none;border:none;color:var(--t3);font-size:20px;cursor:pointer;padding:0 2px;line-height:1;flex-shrink:0}
 
 /* ── LEADERBOARD ────────────────────────────────── */
+.lb-page{max-width:680px;margin:0 auto}
 .lb-hd{font-size:24px;font-weight:800;letter-spacing:-.5px;padding:24px 0 4px}
-.lb-sub{font-size:12px;color:var(--t2);margin-bottom:20px;line-height:1.6}
-.lb-refresh{font-size:10px;color:var(--t3);margin-left:8px}
-.lb-cols{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px}
-@media(max-width:600px){.lb-cols{grid-template-columns:1fr}}
-.lb-box{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden}
-.lb-box-hd{padding:12px 16px 10px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
-.lb-box-icon{font-size:16px}
+.lb-meta{font-size:12px;color:var(--t2);margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px}
+.lb-ts{font-size:11px;color:var(--t3)}
+.lb-refresh-btn{background:none;border:1px solid var(--border);color:var(--t3);font-family:var(--font);font-size:10px;padding:4px 12px;border-radius:6px;cursor:pointer;transition:all .15s;letter-spacing:.2px}
+.lb-refresh-btn:hover{border-color:#333;color:var(--text)}
+.lb-overview{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:22px}
+.lb-ov-cell{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 10px;text-align:center}
+.lb-ov-val{font-size:24px;font-weight:800;font-family:var(--mono);letter-spacing:-.5px}
+.lb-ov-lbl{font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.8px;margin-top:4px}
+.lb-section{font-size:9px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:var(--t3);margin:24px 0 10px}
+.lb-box{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:10px}
+.lb-box-hd{padding:11px 16px;border-bottom:1px solid var(--border)}
 .lb-box-title{font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--t2)}
-.lb-row{display:flex;align-items:center;gap:10px;padding:9px 14px;border-bottom:1px solid rgba(255,255,255,.03);transition:background .15s}
+.lb-row{display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid rgba(255,255,255,.03)}
 .lb-row:last-child{border-bottom:none}
-.lb-row:hover{background:rgba(255,255,255,.025)}
-.lb-rank{font-size:11px;font-weight:700;color:var(--t3);min-width:18px;text-align:center}
-.lb-rank.g{color:var(--gold)}
-.lb-flag{font-size:16px;flex-shrink:0}
+.lb-rank{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--t3);min-width:18px;text-align:center;flex-shrink:0}
+.lb-rank.gold{color:var(--gold)}
+.lb-flag{font-size:17px;flex-shrink:0}
 .lb-info{flex:1;min-width:0}
 .lb-name{font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.lb-team{font-size:10px;color:var(--t3);margin-top:1px}
-.lb-val{font-size:17px;font-weight:800;font-family:var(--mono);color:var(--accent);min-width:28px;text-align:right}
-.lb-val.card-y{color:var(--gold)}
-.lb-val.card-r{color:var(--red)}
-
-.watch-hd{font-size:14px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--t2);margin:24px 0 12px;padding-top:20px;border-top:1px solid var(--border)}
-.watch-algo{font-size:10px;color:var(--t3);margin-bottom:14px;line-height:1.7}
-.watch-list{display:flex;flex-direction:column;gap:10px;margin-bottom:28px}
+.lb-team{font-size:10px;color:var(--t3);margin-top:2px}
+.lb-val{font-size:20px;font-weight:800;font-family:var(--mono);min-width:26px;text-align:right;flex-shrink:0}
+.lb-val.g{color:var(--accent)}.lb-val.a{color:#64c8ff}.lb-val.y{color:var(--gold)}.lb-val.r{color:var(--red)}
+.lb-2col{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.lb-empty{padding:18px 16px;font-size:12px;color:var(--t3);line-height:1.7}
+.watch-hd{font-size:9px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:var(--t3);margin:24px 0 10px}
+.watch-algo{font-size:10px;color:var(--t3);margin-bottom:12px;line-height:1.75;padding:10px 14px;background:rgba(255,255,255,.025);border-radius:8px;border:1px solid var(--border)}
+.watch-list{display:flex;flex-direction:column;gap:8px;margin-bottom:28px}
 .watch-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:12px;transition:border-color .15s}
 .watch-card:hover{border-color:#2a2a2a}
-.watch-pos{font-size:11px;font-weight:800;color:var(--t3);min-width:20px;text-align:center}
+.watch-pos{font-family:var(--mono);font-size:11px;font-weight:800;color:var(--t3);min-width:20px;text-align:center;flex-shrink:0}
 .watch-pos.top3{color:var(--gold)}
-.watch-flag{font-size:28px;flex-shrink:0;line-height:1}
+.watch-flag{font-size:26px;flex-shrink:0;line-height:1}
 .watch-info{flex:1;min-width:0}
-.watch-name{font-size:14px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.watch-team{font-size:11px;color:var(--t3);margin-top:1px}
+.watch-name{font-size:13px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.watch-team{font-size:10px;color:var(--t3);margin-top:1px}
 .watch-pills{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
 .watch-pill{font-size:9px;font-weight:700;padding:2px 7px;border-radius:5px;letter-spacing:.3px}
 .watch-pill.g{background:rgba(0,255,135,.1);color:var(--accent)}
@@ -613,6 +617,8 @@ body{
 .watch-pill.d{background:rgba(255,215,0,.1);color:var(--gold)}
 .watch-pill.s{background:rgba(255,255,255,.06);color:var(--t2)}
 .watch-score{text-align:right;flex-shrink:0}
+.watch-score-val{font-size:20px;font-weight:800;font-family:var(--mono);color:var(--accent)}
+.watch-score-lbl{font-size:8px;color:var(--t3);letter-spacing:.5px;text-transform:uppercase;margin-top:1px}
 .watch-score-val{font-size:20px;font-weight:800;font-family:var(--mono);color:var(--accent)}
 .watch-score-lbl{font-size:8px;color:var(--t3);letter-spacing:.5px;text-transform:uppercase;margin-top:1px}
 
@@ -2607,92 +2613,75 @@ function addTeamPts(playerMap){
   });
 }
 
-// Parse one match summary — ESPN soccer stores events in header.competitions[0].details,
-// not in boxscore.players (which is empty for soccer). We parse both paths.
-function absorbSummary(data, playerMap){
+// ── Primary parser: data.plays (same source the match modal uses for goals) ──
+// Each play has: scoringPlay bool, type.text, team.{displayName,abbreviation},
+// participants[{type:'scorer'|'assist'|'recipient', athlete:{displayName,team}}]
+function absorbPlays(plays, playerMap){
+  plays.forEach(play => {
+    const tt = (play.type?.text || '').toLowerCase();
+    const isOG     = tt.includes('own goal') || tt.includes('own-goal');
+    const isGoal   = (play.scoringPlay === true || tt.includes('goal')) && !isOG
+                     && !tt.includes('miss') && !tt.includes('saved') && !tt.includes('blocked');
+    const isYellow = tt.includes('yellow');
+    const isRed    = tt.includes('red card') || tt.includes('red-card') || tt.includes('second yellow');
 
-  // ── Path 1: header event details (goals, assists, cards) ─────────────────
-  const details = data?.header?.competitions?.[0]?.details || [];
-  details.forEach(d => {
-    const typeText = (d.type?.text || '').toLowerCase();
-    const athletes = d.athletesInvolved || [];
-    if(!athletes.length) return;
+    const tName = play.team?.displayName   || '';
+    const tAbbr = play.team?.abbreviation  || '';
+    const parts = play.participants || [];
 
-    const primary    = athletes[0];
-    const teamName   = d.team?.displayName   || primary?.team?.displayName   || '';
-    const teamAbbr   = d.team?.abbreviation  || primary?.team?.abbreviation  || '';
-    const playerName = primary?.displayName  || '';
-    if(!playerName) return;
-
-    const p = upsertPlayer(playerMap, playerName, teamName, teamAbbr);
-
-    const isGoal    = typeText.includes('goal') && !typeText.includes('own goal')
-                      && !typeText.includes('miss') && !typeText.includes('saved');
-    const isOwnGoal = typeText.includes('own goal');
-    const isYellow  = typeText.includes('yellow card');
-    const isRed     = typeText.includes('red card') || typeText.includes('second yellow');
-    const isPen     = typeText.includes('penalty') && typeText.includes('scored');
-
-    if(isGoal || isPen){
-      p.goals = (p.goals || 0) + 1;
-      // Second athlete in the details is usually the assister
-      if(athletes[1]){
-        const an = athletes[1].displayName || '';
-        const at = athletes[1].team?.displayName  || teamName;
-        const aa = athletes[1].team?.abbreviation || teamAbbr;
-        if(an){
-          const a = upsertPlayer(playerMap, an, at, aa);
-          a.assists = (a.assists || 0) + 1;
-        }
+    if(isGoal){
+      const scorer = parts.find(pp => pp.type === 'scorer') || parts[0];
+      const assist = parts.find(pp => pp.type === 'assist');
+      if(scorer?.athlete?.displayName && tName){
+        const p = upsertPlayer(playerMap, scorer.athlete.displayName, tName, tAbbr);
+        p.goals = (p.goals || 0) + 1;
       }
-    } else if(isOwnGoal){
-      p.ownGoals = (p.ownGoals || 0) + 1;
-    } else if(isYellow){
-      p.yellowCards = (p.yellowCards || 0) + 1;
-    } else if(isRed){
-      p.redCards = (p.redCards || 0) + 1;
+      if(assist?.athlete?.displayName){
+        const at = assist.athlete.team?.displayName  || tName;
+        const aa = assist.athlete.team?.abbreviation || tAbbr;
+        const a  = upsertPlayer(playerMap, assist.athlete.displayName, at, aa);
+        a.assists = (a.assists || 0) + 1;
+      }
+    } else if(isYellow || isRed){
+      const carded = parts.find(pp => ['recipient','player','carded'].includes(pp.type)) || parts[0];
+      if(carded?.athlete?.displayName && tName){
+        const p = upsertPlayer(playerMap, carded.athlete.displayName, tName, tAbbr);
+        if(isYellow) p.yellowCards = (p.yellowCards || 0) + 1;
+        else         p.redCards    = (p.redCards    || 0) + 1;
+      }
     }
   });
+}
 
-  // ── Path 2: scoringPlays array (present in some ESPN responses) ──────────
-  const scoring = data?.scoringPlays || [];
-  scoring.forEach(sp => {
-    const typeText = (sp.type?.text || '').toLowerCase();
-    if(!typeText.includes('goal')) return;
-    (sp.athletesInvolved || []).forEach((ath, idx) => {
-      const name   = ath.displayName || '';
-      const tName  = ath.team?.displayName  || sp.team?.displayName  || '';
-      const tAbbr  = ath.team?.abbreviation || sp.team?.abbreviation || '';
-      if(!name) return;
-      const p = upsertPlayer(playerMap, name, tName, tAbbr);
-      // Only first athlete is the scorer (avoid double-counting with path 1)
-      if(idx === 0 && !(details.length)) p.goals = (p.goals || 0) + 1;
-      if(idx === 1 && !(details.length)) p.assists = (p.assists || 0) + 1;
-    });
-  });
-
-  // ── Path 3: boxscore.players (works if ESPN provides soccer player stats) ─
-  const teamGroups = data?.boxscore?.players || [];
-  teamGroups.forEach(tg => {
-    const teamName = tg.team?.displayName || '';
-    const teamAbbr = tg.team?.abbreviation || '';
-    (tg.statistics || []).forEach(statCat => {
-      const labels = statCat.labels || statCat.keys || [];
-      (statCat.athletes || []).forEach(row => {
-        const athlete = row.athlete || {};
-        const playerName = athlete.displayName || athlete.shortName || '';
-        if(!playerName) return;
-        const p = upsertPlayer(playerMap, playerName, teamName, teamAbbr);
-        (row.stats || []).forEach((val, i) => {
-          const raw = labels[i] || '';
-          const key = STAT_LABEL_MAP[raw] || STAT_LABEL_MAP[raw.toUpperCase()];
-          if(key){
-            const n = parseFloat(val) || 0;
-            if(n) p[key] = (p[key] || 0) + n;
-          }
-        });
-      });
-    });
+// ── Fallback: header.competitions[0].details (different ESPN response shape) ─
+function absorbDetails(details, playerMap){
+  details.forEach(d => {
+    const tt = (d.type?.text || '').toLowerCase();
+    const ath = d.athletesInvolved || [];
+    if(!ath.length) return;
+    const tName = d.team?.displayName  || ath[0]?.team?.displayName  || '';
+    const tAbbr = d.team?.abbreviation || ath[0]?.team?.abbreviation || '';
+    const pName = ath[0]?.displayName  || '';
+    if(!pName || !tName) return;
+    const isOG  = tt.includes('own goal');
+    const isGoal = (tt.includes('goal') || (tt.includes('penalty') && tt.includes('scor')))
+                   && !isOG && !tt.includes('miss') && !tt.includes('saved');
+    const isYellow = tt.includes('yellow');
+    const isRed    = tt.includes('red card') || tt.includes('second yellow');
+    if(isGoal){
+      const p = upsertPlayer(playerMap, pName, tName, tAbbr);
+      p.goals = (p.goals || 0) + 1;
+      if(ath[1]?.displayName){
+        const a = upsertPlayer(playerMap, ath[1].displayName, ath[1].team?.displayName||tName, ath[1].team?.abbreviation||tAbbr);
+        a.assists = (a.assists || 0) + 1;
+      }
+    } else if(isYellow){
+      const p = upsertPlayer(playerMap, pName, tName, tAbbr);
+      p.yellowCards = (p.yellowCards || 0) + 1;
+    } else if(isRed){
+      const p = upsertPlayer(playerMap, pName, tName, tAbbr);
+      p.redCards = (p.redCards || 0) + 1;
+    }
   });
 }
 
@@ -2709,66 +2698,77 @@ async function fetchLeaderboardData(){
   if(lbFetching) return;
   if(lbCache?.ts && Date.now() - lbLastFetch < LB_TTL) return;
   lbFetching = true;
+  if($('tab-leaderboard')?.classList.contains('active')) renderLeaderboard();
 
   try {
-    // Collect completed match IDs from the last 10 days
-    const eventIds = [];
-    const now = new Date();
+    // Step 1: scoreboard across last 20 days → collect completed event IDs + total goals
     const dateStrs = [];
-    for(let d = 0; d <= 10; d++){
-      const dt = new Date(now); dt.setDate(now.getDate() - d);
+    const now = new Date();
+    for(let i = 0; i <= 20; i++){
+      const dt = new Date(now); dt.setDate(dt.getDate() - i);
       dateStrs.push(toDateStr(dt));
     }
+    let totalGoals = 0, matchCount = 0;
+    const eventIds = [];
     await Promise.all(dateStrs.map(async ds => {
       try {
-        const r = await fetch(`${ESPN_URL}?dates=${ds}`, {signal: AbortSignal.timeout(7000)});
+        const r = await fetch(`${ESPN_URL}?dates=${ds}&limit=50`, {signal: AbortSignal.timeout(7000)});
         if(!r.ok) return;
         const data = await r.json();
-        (data.events||[]).forEach(ev => {
-          const state = ev.competitions?.[0]?.status?.type?.state;
-          if(state === 'post') eventIds.push(ev.id);
+        (data.events || []).forEach(ev => {
+          const comp = ev.competitions?.[0];
+          if(comp?.status?.type?.state !== 'post') return;
+          eventIds.push(ev.id);
+          matchCount++;
+          (comp.competitors || []).forEach(c => { totalGoals += parseInt(c.score) || 0; });
         });
       } catch(e){}
     }));
 
-    if(!eventIds.length){
-      lbCache = { tables:{goals:[],assists:[],yellow:[],red:[]}, watchList:[], ts:null, error:true };
-      lbFetching = false;
-      if($('tab-leaderboard')?.classList.contains('active')) renderLeaderboard();
-      return;
-    }
-
-    // Fetch summaries for up to 24 most recent completed matches
     const playerMap = {};
-    const recent = [...new Set(eventIds)].slice(-24);
-    await Promise.all(recent.map(async id => {
-      try {
-        const r = await fetch(`${ESPN_SUMMARY}?event=${id}`, {signal: AbortSignal.timeout(7000)});
-        if(!r.ok) return;
-        const data = await r.json();
-        absorbSummary(data, playerMap);
-      } catch(e){}
-    }));
+
+    if(eventIds.length){
+      // Step 2: fetch each match summary and parse via data.plays (the proven ESPN path)
+      const uniqueIds = [...new Set(eventIds)];
+      await Promise.all(uniqueIds.map(async id => {
+        try {
+          const r = await fetch(`${ESPN_SUMMARY}?event=${id}`, {signal: AbortSignal.timeout(8000)});
+          if(!r.ok) return;
+          const d = await r.json();
+          const plays = d?.plays || [];
+          if(plays.length){
+            absorbPlays(plays, playerMap);
+          } else {
+            // Fallback: header.competitions[0].details (different ESPN response shape)
+            absorbDetails(d?.header?.competitions?.[0]?.details || [], playerMap);
+          }
+        } catch(e){}
+      }));
+    }
 
     addTeamPts(playerMap);
 
-    const tables = {
-      goals:   buildTable(playerMap, 'goals'),
-      assists: buildTable(playerMap, 'assists'),
-      yellow:  buildTable(playerMap, 'yellowCards'),
-      red:     buildTable(playerMap, 'redCards'),
+    lbCache = {
+      tables: {
+        goals:   buildTable(playerMap, 'goals'),
+        assists: buildTable(playerMap, 'assists'),
+        yellow:  buildTable(playerMap, 'yellowCards'),
+        red:     buildTable(playerMap, 'redCards'),
+      },
+      watchList: Object.values(playerMap)
+        .map(p => ({...p, watchScore: Math.round(calcWatchScore(p)*10)/10}))
+        .filter(p => p.watchScore > 0)
+        .sort((a,b) => b.watchScore - a.watchScore)
+        .slice(0, 10),
+      meta: { matchCount, totalGoals, avgGoals: matchCount ? (totalGoals/matchCount).toFixed(1) : '—' },
+      ts: Date.now(), error: false
     };
-
-    const watchList = Object.values(playerMap)
-      .map(p => ({ ...p, watchScore: Math.round(calcWatchScore(p) * 10) / 10 }))
-      .filter(p => p.watchScore > 0)
-      .sort((a,b) => b.watchScore - a.watchScore)
-      .slice(0, 10);
-
-    lbCache = { tables, watchList, ts: Date.now() };
     lbLastFetch = Date.now();
-  } catch(e) {
-    if(!lbCache) lbCache = { tables:{goals:[],assists:[],yellow:[],red:[],shots:[],saves:[]}, watchList:[], ts:null, error:true };
+  } catch(e){
+    if(!lbCache) lbCache = {
+      tables:{goals:[],assists:[],yellow:[],red:[]}, watchList:[],
+      meta:{matchCount:0,totalGoals:0,avgGoals:'—'}, ts:null, error:true
+    };
   }
   lbFetching = false;
   if($('tab-leaderboard')?.classList.contains('active')) renderLeaderboard();
@@ -2778,48 +2778,67 @@ function renderLeaderboard(){
   const sec = $('tab-leaderboard');
   if(!sec) return;
 
-  const isLoading = !lbCache;
-  const tsStr = lbCache?.ts
-    ? `Updated ${timeAgo(new Date(lbCache.ts).toISOString())}`
-    : lbCache?.error ? 'Could not load — retrying…' : '';
-
-  if(isLoading){
-    sec.innerHTML = `
+  if(!lbCache || lbFetching){
+    sec.innerHTML = `<div class="inner lb-page">
       <div class="lb-hd">Tournament Stats</div>
-      <div class="lb-sub">FIFA World Cup 2026 · Live statistics &amp; player rankings</div>
-      <div class="lineup-loading">Loading stats…</div>`;
-    fetchLeaderboardData();
+      <div class="lb-meta"><span class="lb-ts">FIFA World Cup 2026</span></div>
+      <div class="lineup-loading">Loading stats…</div>
+    </div>`;
+    if(!lbFetching) fetchLeaderboardData();
     return;
   }
 
-  sec.innerHTML = `
+  const m = lbCache.meta || {};
+  const tsStr = lbCache.ts ? timeAgo(new Date(lbCache.ts).toISOString()) : null;
+
+  sec.innerHTML = `<div class="inner lb-page">
     <div class="lb-hd">Tournament Stats</div>
-    <div class="lb-sub">FIFA World Cup 2026 · Live statistics &amp; player rankings${tsStr?`<span class="lb-refresh">${tsStr}</span>`:''}</div>
-
-    <div class="lb-cols">
-      ${renderLbTable('⚽ Top Scorers','goals','g')}
-      ${renderLbTable('🎯 Top Assists','assists','a')}
-      ${renderLbTable('🟨 Yellow Cards','yellow','card-y')}
-      ${renderLbTable('🟥 Red Cards','red','card-r')}
+    <div class="lb-meta">
+      <span class="lb-ts">FIFA World Cup 2026${tsStr ? ` · Updated ${tsStr}` : ''}</span>
+      <button class="lb-refresh-btn" onclick="lbCache=null;renderLeaderboard()">Refresh</button>
     </div>
 
-    <div class="watch-hd">🔭 Top 10 Players to Watch</div>
-    <div class="watch-algo">
-      Weighted algorithm across all live stats — Goals ×12 · Assists ×8 · Shots on Target ×2.5 ·
-      Key Passes ×3 · Tackles ×1.8 · Interceptions ×2.2 · Pass Accuracy bonus ·
-      Team form bonus · Yellow Cards −1.5 · Red Cards −10
+    <div class="lb-overview">
+      <div class="lb-ov-cell">
+        <div class="lb-ov-val">${m.matchCount || 0}</div>
+        <div class="lb-ov-lbl">Matches</div>
+      </div>
+      <div class="lb-ov-cell">
+        <div class="lb-ov-val" style="color:var(--accent)">${m.totalGoals || 0}</div>
+        <div class="lb-ov-lbl">Goals</div>
+      </div>
+      <div class="lb-ov-cell">
+        <div class="lb-ov-val" style="color:var(--gold)">${m.avgGoals || '—'}</div>
+        <div class="lb-ov-lbl">Per Game</div>
+      </div>
     </div>
-    ${renderWatchList()}`;
+
+    <div class="lb-section">Top Scorers</div>
+    ${lbStatBox(lbCache.tables.goals, 'g')}
+
+    <div class="lb-section">Top Assists</div>
+    ${lbStatBox(lbCache.tables.assists, 'a')}
+
+    <div class="lb-section">Discipline</div>
+    <div class="lb-2col">
+      ${lbStatBox(lbCache.tables.yellow, 'y', 'Yellow Cards', 5)}
+      ${lbStatBox(lbCache.tables.red,    'r', 'Red Cards',    5)}
+    </div>
+
+    <div class="watch-hd">Players to Watch</div>
+    <div class="watch-algo">Weighted score — Goals ×12 · Assists ×8 · Team form bonus · Yellow −1.5 · Red −10</div>
+    ${lbWatchList()}
+  </div>`;
 
   if(Date.now() - lbLastFetch > LB_TTL) fetchLeaderboardData();
 }
 
-function renderLbTable(title, key, valCls){
-  const rows = lbCache?.tables?.[key] || [];
-  const rowsHtml = rows.length
-    ? rows.map(p => `
-      <div class="lb-row">
-        <span class="lb-rank${p.rank<=3?' g':''}">${p.rank<=3?['🥇','🥈','🥉'][p.rank-1]:p.rank}</span>
+function lbStatBox(rows, valCls, title, limit=10){
+  rows = (rows || []).slice(0, limit);
+  const rankSyms = ['🥇','🥈','🥉'];
+  const body = rows.length
+    ? rows.map((p,i) => `<div class="lb-row">
+        <span class="lb-rank${i<3?' gold':''}">${i<3 ? rankSyms[i] : i+1}</span>
         <span class="lb-flag">${p.f}</span>
         <div class="lb-info">
           <div class="lb-name">${p.name}</div>
@@ -2827,43 +2846,33 @@ function renderLbTable(title, key, valCls){
         </div>
         <span class="lb-val ${valCls}">${p.val}</span>
       </div>`).join('')
-    : `<div class="lb-row" style="padding:16px 14px">
-        <span style="color:var(--t3);font-size:12px">Stats will appear here as matches are played</span>
-       </div>`;
+    : `<div class="lb-empty">Stats will appear here once match data is available.</div>`;
 
-  return `<div class="lb-box">
-    <div class="lb-box-hd"><span class="lb-box-title">${title}</span></div>
-    ${rowsHtml}
-  </div>`;
+  const hd = title ? `<div class="lb-box-hd"><span class="lb-box-title">${title}</span></div>` : '';
+  return `<div class="lb-box">${hd}${body}</div>`;
 }
 
-function renderWatchList(){
+function lbWatchList(){
   const list = lbCache?.watchList || [];
   if(!list.length){
-    return `<div style="text-align:center;padding:32px 0;color:var(--t3);font-size:13px;line-height:1.8">
-      The Players to Watch list is built from live match stats.<br>
-      Check back once games are underway.
+    return `<div style="text-align:center;padding:32px 0;color:var(--t3);font-size:13px;line-height:1.9">
+      This list ranks players algorithmically<br>from live match stats. Check back soon.
     </div>`;
   }
-  return `<div class="watch-list">${list.map((p, i) => {
-    const pos = i + 1;
+  const rankSyms = ['🥇','🥈','🥉'];
+  return `<div class="watch-list">${list.map((p,i) => {
     const pills = [];
-    if(p.goals)         pills.push({cls:'g', txt:`${p.goals}G`});
-    if(p.assists)       pills.push({cls:'a', txt:`${p.assists}A`});
-    if(p.shotsOnTarget) pills.push({cls:'s', txt:`${p.shotsOnTarget} SOT`});
-    if(p.keyPasses)     pills.push({cls:'a', txt:`${p.keyPasses} KP`});
-    if(p.tackles)       pills.push({cls:'d', txt:`${p.tackles} TKL`});
-    if(p.passAcc)       pills.push({cls:'s', txt:`${p.passAcc}% PASS`});
-    if(p.saves)         pills.push({cls:'d', txt:`${p.saves} SV`});
-    if(p.yellowCards)   pills.push({cls:'d', txt:`${p.yellowCards}🟨`});
-    const pillsHtml = pills.map(pl => `<span class="watch-pill ${pl.cls}">${pl.txt}</span>`).join('');
+    if(p.goals)       pills.push({c:'g', t:`${p.goals}G`});
+    if(p.assists)     pills.push({c:'a', t:`${p.assists}A`});
+    if(p.yellowCards) pills.push({c:'d', t:`${p.yellowCards}🟨`});
+    if(p.redCards)    pills.push({c:'d', t:`${p.redCards}🟥`});
     return `<div class="watch-card">
-      <span class="watch-pos${pos<=3?' top3':''}">${pos<=3?['🥇','🥈','🥉'][pos-1]:pos}</span>
+      <span class="watch-pos${i<3?' top3':''}">${i<3?rankSyms[i]:i+1}</span>
       <span class="watch-flag">${p.f}</span>
       <div class="watch-info">
         <div class="watch-name">${p.name}</div>
         <div class="watch-team">${p.teamName}</div>
-        <div class="watch-pills">${pillsHtml}</div>
+        <div class="watch-pills">${pills.map(pl=>`<span class="watch-pill ${pl.c}">${pl.t}</span>`).join('')}</div>
       </div>
       <div class="watch-score">
         <div class="watch-score-val">${p.watchScore}</div>
@@ -2873,17 +2882,10 @@ function renderWatchList(){
   }).join('')}</div>`;
 }
 
-// Auto-refresh leaderboard every 5 min when tab is active
-let lbRefreshTimer = null;
-function startLbRefresh(){
-  if(lbRefreshTimer) return;
-  lbRefreshTimer = setInterval(() => {
-    if($('tab-leaderboard')?.classList.contains('active')){
-      fetchLeaderboardData();
-    }
-  }, LB_TTL);
-}
-startLbRefresh();
+// Auto-refresh leaderboard every 5 min when active
+setInterval(() => {
+  if($('tab-leaderboard')?.classList.contains('active')) fetchLeaderboardData();
+}, LB_TTL);
 
 // ═══════════════════════════════════════════════════
 //  PWA INSTALL BANNER
