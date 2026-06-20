@@ -662,6 +662,59 @@ body{
 .fav-gtbl .gteam{display:flex;align-items:center;gap:7px}
 
 @media(max-width:768px){.tp-grid{grid-template-columns:repeat(auto-fill,minmax(80px,1fr))}}
+
+/* ── RULEBOOK ───────────────────────────────────── */
+.rb-page{max-width:680px;margin:0 auto}
+.rb-hd{padding:24px 0 4px}
+.rb-hd-title{font-size:24px;font-weight:800;letter-spacing:-.5px}
+.rb-hd-sub{font-size:12px;color:var(--t2);margin-top:4px;line-height:1.6}
+.rb-spotlight{
+  background:linear-gradient(135deg,rgba(0,255,135,.08) 0%,rgba(0,255,135,.03) 100%);
+  border:1px solid rgba(0,255,135,.2);border-radius:14px;padding:16px 18px;margin:18px 0 22px;
+}
+.rb-spot-eyebrow{font-size:9px;font-weight:800;letter-spacing:1.2px;color:var(--accent);
+  text-transform:uppercase;margin-bottom:8px}
+.rb-spot-title{font-size:15px;font-weight:700;letter-spacing:-.2px;margin-bottom:5px}
+.rb-spot-body{font-size:12px;color:var(--t2);line-height:1.75}
+.rb-filter{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;margin-bottom:20px;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none}
+.rb-filter::-webkit-scrollbar{display:none}
+.rb-pill{
+  flex-shrink:0;background:none;border:1px solid var(--border);color:var(--t2);
+  font-family:var(--font);font-size:11px;font-weight:600;padding:6px 14px;
+  border-radius:100px;cursor:pointer;transition:all .18s;white-space:nowrap;
+}
+.rb-pill.active{background:rgba(0,255,135,.1);border-color:rgba(0,255,135,.35);color:var(--accent)}
+.rb-pill:hover:not(.active){border-color:#333;color:var(--text)}
+.rb-sec-label{font-size:9px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;
+  color:var(--t3);margin:24px 0 10px;padding-top:4px}
+.rb-sec-label:first-of-type{margin-top:0}
+.rb-card{
+  background:var(--card);border:1px solid var(--border);border-radius:12px;
+  margin-bottom:8px;overflow:hidden;cursor:pointer;transition:border-color .15s;
+}
+.rb-card:hover{border-color:#2a2a2a}
+.rb-card.open{border-color:#303030}
+.rb-card-head{display:flex;align-items:flex-start;gap:12px;padding:14px 16px}
+.rb-icon{font-size:22px;flex-shrink:0;line-height:1.2;width:28px;text-align:center}
+.rb-card-body{flex:1;min-width:0}
+.rb-badge{
+  display:inline-block;font-size:8px;font-weight:800;letter-spacing:.9px;
+  text-transform:uppercase;padding:2px 7px;border-radius:4px;margin-bottom:5px;
+}
+.rb-badge.new{background:rgba(0,255,135,.15);color:var(--accent)}
+.rb-badge.updated{background:rgba(255,215,0,.12);color:#ffd700}
+.rb-badge.core{background:rgba(255,255,255,.06);color:var(--t3)}
+.rb-card-title{font-size:14px;font-weight:700;letter-spacing:-.2px;line-height:1.3;margin-bottom:4px}
+.rb-card-summary{font-size:12px;color:var(--t2);line-height:1.65}
+.rb-chevron{flex-shrink:0;color:var(--t3);font-size:12px;align-self:center;
+  transition:transform .2s;margin-left:4px;padding-top:2px}
+.rb-card.open .rb-chevron{transform:rotate(90deg)}
+.rb-detail{
+  display:none;padding:0 16px 16px 56px;font-size:12px;color:var(--t2);
+  line-height:1.8;border-top:1px solid rgba(255,255,255,.04);padding-top:12px;
+}
+.rb-card.open .rb-detail{display:block}
 </style>
 </head>
 <body>
@@ -700,6 +753,7 @@ body{
     <button class="tbtn" data-tab="knockout">Knockout</button>
     <button class="tbtn" data-tab="leaderboard">Stats</button>
     <button class="tbtn" data-tab="myteam" id="myteamTab">My Team</button>
+    <button class="tbtn" data-tab="rulebook">Rulebook</button>
   </nav>
 </div>
 
@@ -724,6 +778,9 @@ body{
 
   <!-- MY TEAM -->
   <section id="tab-myteam" class="tab"></section>
+
+  <!-- RULEBOOK -->
+  <section id="tab-rulebook" class="tab"></section>
 
 </main>
 
@@ -1609,6 +1666,7 @@ document.querySelectorAll('.tbtn').forEach(btn => {
     $('tab-'+btn.dataset.tab).classList.add('active');
     if(btn.dataset.tab === 'leaderboard') renderLeaderboard();
     if(btn.dataset.tab === 'myteam') renderMyTeam();
+    if(btn.dataset.tab === 'rulebook') renderRulebook();
     setTimeout(observeCards, 40);
   });
 });
@@ -3018,6 +3076,217 @@ async function fetchFavNews(team){
 
   const el2 = $('favNews');
   if(el2) el2.innerHTML='<div class="mc-news-empty">News will appear here on match days</div>';
+}
+
+// ═══════════════════════════════════════════════════
+//  RULEBOOK
+// ═══════════════════════════════════════════════════
+const RULEBOOK_DATA = [
+  // ─── NEW FOR WC 2026 ───────────────────────────
+  {
+    id:'format48',badge:'new',label:'WC 2026',cat:'format',icon:'🌍',
+    title:'48-Team Tournament Format',
+    summary:'The biggest expansion in World Cup history — 48 teams across 12 groups of 4. Top 2 from each group plus 8 best third-placed teams (32 total) advance to the knockout round.',
+    detail:'For the first time, 48 nations compete for the World Cup across 16 venues in the USA, Canada and Mexico. Twelve groups of 4 play a round-robin; the top 2 in each group plus the 8 best-ranked third-place finishers advance to the Round of 32 — a completely new knockout round. This adds roughly a week of football and means 104 total matches. Group-stage tiebreakers: points → goal difference → goals scored → head-to-head points → head-to-head GD → fair play (cards) → FIFA ranking.'
+  },
+  {
+    id:'saot',badge:'new',label:'WC 2026 Tech',cat:'tech',icon:'📡',
+    title:'Semi-Automatic Offside Technology',
+    summary:'AI-powered limb tracking plots 29 body data points per player at 50 frames per second, making offside calls in under 30 seconds with animated 3D replays shown on stadium screens.',
+    detail:'Dedicated tracking cameras installed at each stadium follow every player and the ball continuously. At the moment a through-ball is played, the system automatically freezes all 29 tracked body points and checks the offside line against the second-last defender. The result is delivered to the VAR room in seconds — compared to around 70 seconds for manual review at previous tournaments. A computer-generated 3D animation is broadcast to fans in the stadium and on TV so the decision is transparent. First used at WC 2022 Qatar, confirmed for all WC 2026 venues.'
+  },
+  {
+    id:'official-cards',badge:'new',label:'From 2024-25',cat:'conduct',icon:'🟨',
+    title:'Yellow & Red Cards for Team Officials',
+    summary:'Coaches, physios and bench staff can now receive formal yellow and red cards for misconduct. A red card means expulsion to the stands and a disciplinary hearing.',
+    detail:'Under previous rules, team officials could only be vaguely "sent to the stands" with no formal record. The 2024-25 IFAB Laws change formalises this: a yellow card is shown to the technical area for dissent, entering the field without permission, deliberate time-wasting, or throwing objects onto the pitch. A second yellow or serious misconduct = red card and immediate expulsion. The card is directed at the technical area generally, with the specific individual identified to the fourth official. All cautions carry over to future matches through the standard disciplinary process.'
+  },
+  {
+    id:'concussion-sub',badge:'new',label:'From 2023-24',cat:'subs',icon:'🧠',
+    title:'Permanent Concussion Substitute',
+    summary:'Each team may make one additional substitution per match if a player sustains a suspected concussion — bringing the total to 6 subs in normal time.',
+    detail:'If a player shows signs of concussion during a match, teams can use a dedicated concussion substitution slot on top of the standard 5 available changes. The substituted player cannot return, even if the concussion assessment later clears them. Both teams retain the right to use this substitute whether or not the other team does. The referee must sanction the substitution and the medical staff must assess the player. This change was driven by player welfare concerns and reduces the pressure on medical staff to quickly clear players to return. In extra time, the standard additional substitution (6th total) is separate from this concussion substitute.'
+  },
+  // ─── UPDATED RULES ─────────────────────────────
+  {
+    id:'added-time',badge:'updated',label:'Enforced WC 2022+',cat:'match',icon:'⏱',
+    title:'Accurate Time Added (Stoppage Time)',
+    summary:'Referees must log and add time for every stoppage: goal celebrations (~30s), substitutions (~30s), VAR checks (full duration), injuries, and deliberate time-wasting.',
+    detail:'At previous tournaments, added time was routinely underestimated. From WC 2022 onwards, FIFA instructs fourth officials to track all stoppages in real time and display the accumulated added time. A goal celebration adds at least 30 seconds; a substitution window adds 30 seconds per player changed; VAR reviews add the full check duration; injury treatment adds the actual time off the pitch. The result: first halves regularly see 5-8 minutes added, second halves often see 10-15+ minutes. Referees who add insufficient time face formal review by FIFA Match Officials. This is designed to ensure roughly 60 minutes of actual ball-in-play time per match.'
+  },
+  {
+    id:'gk-penalty',badge:'updated',label:'Clarified 2024',cat:'setpiece',icon:'🥅',
+    title:'Goalkeeper Position at Penalties',
+    summary:'GK must have at least one foot on or in line with the goal line at the moment the ball is kicked. Moving early when a save is made = penalty retaken.',
+    detail:'The rule requiring goalkeepers to stay on the goal line until the ball is kicked has always existed but was rarely enforced. Since 2024, VAR is used to check goalkeeper position on penalties. If the keeper moves both feet off the line before the kick is taken and makes a save, the penalty is retaken and the goalkeeper receives a caution. If the keeper encroaches but the ball goes in, the goal stands. If the kick misses but the keeper encroached, it is retaken. The shooter\'s run-up and feinting remain permitted as long as the ball is not kicked and re-kicked (which would be a foul by the kicker).'
+  },
+  {
+    id:'var',badge:'updated',label:'Ongoing',cat:'tech',icon:'📺',
+    title:'VAR — Video Assistant Referee',
+    summary:'VAR corrects "clear and obvious errors" in four categories only: goals, penalties, direct red cards, and mistaken identity. Soft or marginal calls are not reviewed.',
+    detail:'The Video Assistant Referee sits in a review centre and monitors all four reviewable categories: (1) Goals — checking for offside, handball, or fouls in the build-up; (2) Penalty decisions — whether a foul occurred inside the box; (3) Direct red card incidents (violent conduct, serious foul play) — but NOT second yellow cards; (4) Mistaken identity — if the wrong player is carded or dismissed. The on-field referee is always the final decision maker. VAR may recommend a pitchside monitor review (OFR — On-Field Review), where the referee watches the incident on a screen at the touchline. The "clear and obvious error" threshold means a 50/50 foul that the referee saw live is not overturned — only errors that are clearly wrong.'
+  },
+  {
+    id:'handball',badge:'updated',label:'Clarified',cat:'conduct',icon:'✋',
+    title:'Handball Rule',
+    summary:'Deliberate handball is always a foul. Accidental handball by an attacker that leads to a goal or clear chance disallows the goal. Arm position relative to the body is the key test.',
+    detail:'Handball is deliberately touching the ball with any part of the arm from the tip of the shoulder to the fingertips. Key scenarios: (1) Any handball by a goalkeeper outside their area is a foul; (2) Accidental handball by a defending player in their own box that denies a goal or opportunity = penalty; (3) Accidental handball by an attacking player that leads directly to a goal (by themselves or a teammate immediately after) = no goal; (4) A player accidentally handles the ball then scores or creates a clear chance = no goal/assist. The "natural silhouette" test: if the arm is close to the body or used for balance in a natural position, handball is less likely. An arm stretched unnaturally wide, even if unintentional, is more likely to be called.'
+  },
+  {
+    id:'encroachment',badge:'updated',label:'Strict Enforcement',cat:'setpiece',icon:'🚧',
+    title:'Wall Distance & Free Kick Encroachment',
+    summary:'Defensive walls must be 9.15m (10 yards) from the ball. Encroaching before the kick is taken results in an automatic yellow card and the kick is retaken.',
+    detail:'At free kicks near goal, the defensive wall must be at least 9.15 metres from the ball. Referees use vanishing spray to mark the 9.15m line. If any defending player encroaches (moves inside that distance before the ball is kicked), the kick is retaken and the offending player is booked. From 2019, attacking players are also banned from standing in the defensive wall — doing so earns a yellow card. For free kicks, the kicking team may choose to take it quickly before the wall is set — the referee will not stop play for this. Only when the referee signals will they wait for the wall to be established.'
+  },
+  {
+    id:'treatment',badge:'updated',label:'Enforced',cat:'conduct',icon:'🏥',
+    title:'Players Must Leave Field for Treatment',
+    summary:'A player who signals for medical attention and receives on-field treatment must temporarily leave the pitch. They can return after the next stoppage.',
+    detail:'To prevent time-wasting via feigned injuries and to allow medical staff to properly assess players, any player who receives on-pitch treatment (other than a head/neck injury, where immediate assessment is required) must leave the field. They may return once the ball next goes out of play or at the next natural break. The referee has discretion to prevent a player from returning at an inopportune moment (e.g. during a quick counter-attack). This rule is enforced in addition to the standard "treatment off the pitch" guideline that has existed for years.'
+  },
+  {
+    id:'dropped-ball',badge:'updated',label:'From 2019',cat:'setpiece',icon:'⬇',
+    title:'Dropped Ball Restart',
+    summary:'The ball is returned to the team that last touched it (or to the goalkeeper if last touched in the penalty area). The contested 50/50 drop is gone.',
+    detail:'When play is stopped for any reason not covered by the other laws — e.g. an injury where the ball was in open play, or a simultaneous double foul — the restart is a dropped ball. Under the new protocol, the referee drops the ball to the goalkeeper if it was last in their penalty area, or to a player from the team that last touched it in open play. All other players must be at least 4.5m away. This eliminates the old custom of kicking the ball out voluntarily and returning possession — a custom that was entirely at the opposition\'s discretion.'
+  },
+  // ─── CORE LAWS ─────────────────────────────────
+  {
+    id:'offside',badge:'core',label:'Law 11',cat:'conduct',icon:'📐',
+    title:'Offside',
+    summary:'A player is offside if any goal-scoring body part (head, torso, feet — not arms) is beyond the second-last defender at the exact moment the ball is played.',
+    detail:'A player is in an offside position when they are in the opponent\'s half of the pitch AND any part of the body that can legally score — head, torso, or feet, but not the arms — is nearer to the opponent\'s goal line than both the ball and the second-to-last opponent (usually the last outfield player, with the goalkeeper as last). Being in an offside position is not an offence. It only becomes one when the player becomes actively involved: receives a pass, interferes with an opponent\'s vision, or wins a loose ball from a save. SAOT at WC 2026 tracks 29 body points to make pixel-precise automated calls.'
+  },
+  {
+    id:'five-subs',badge:'core',label:'Confirmed WC 2026',cat:'subs',icon:'🔄',
+    title:'5 Substitutions Per Match',
+    summary:'Teams may make up to 5 substitutions in a maximum of 3 windows plus half-time. In extra time, one additional substitution is allowed (6 total).',
+    detail:'Each team has 5 substitution slots per match. Substitutions can only be made in 3 windows during normal time plus the half-time interval — so teams must group changes. Multiple players can be substituted in one window (e.g. bringing on 3 players at the 60th minute counts as one window). A substituted player cannot return. In extra time, each team is permitted one further substitution, making a maximum of 6 total. Additionally, the concussion substitute rule allows a 7th change if a player sustains a head injury. The substitution board must display both the player coming off and on — any unannounced substitution can result in a caution for the team official.'
+  },
+  {
+    id:'extra-time',badge:'core',label:'Knockout Rounds',cat:'match',icon:'⚽',
+    title:'Extra Time & Penalty Shootout',
+    summary:'Knockout matches level after 90 minutes go to 2×15 min extra time, then a standard alternating penalty shootout (5 kicks each, then sudden death).',
+    detail:'In knockout rounds only: if the score is level at full-time, two additional 15-minute periods are played (accurate stoppage time is added to each half of ET). Each team may make one additional substitution during extra time. If still level after extra time, a penalty shootout follows the standard alternating format — Team A then Team B, repeated. Five kicks per team; if still level, sudden death (one kick each until one team misses and the other scores). The "ABBA" format experimented in other competitions is NOT used at WC 2026. No golden goal rule applies during extra time.'
+  },
+  {
+    id:'yellow-accum',badge:'core',label:'Discipline',cat:'conduct',icon:'🟡',
+    title:'Yellow Card Accumulation & Bans',
+    summary:'Two yellows in one match = red. Tournament yellows carry over from the group stage through the Round of 16. The slate is wiped before the quarter-finals.',
+    detail:'Two yellow cards received by the same player in a single match = automatic red card and immediate dismissal. That player is then suspended for the next match. Yellow cards from the group stage and the Round of 32 (new at WC 2026) carry over cumulatively. A player who reaches 2 accumulated yellows across those rounds is suspended for one match. Cards are wiped clean before the quarter-final stage — so a player with 1 yellow heading into the QF starts fresh. A direct red card = minimum 1 match suspension; violent conduct or serious foul play may result in longer bans decided by the FIFA Disciplinary Committee.'
+  },
+  {
+    id:'goal-kick',badge:'core',label:'Law 16',cat:'setpiece',icon:'🦵',
+    title:'Goal Kicks — No Need to Leave the Box',
+    summary:'Since 2019: the ball is in play as soon as a goal kick is taken, even before it leaves the penalty area. Attackers may enter the box once the kick is taken.',
+    detail:'Under the old rules, a goal kick was only in play once the ball left the penalty area, meaning attackers had to stay outside and goalkeepers had to hoof it long. Since 2019, the ball is in play the instant it is kicked — goalkeepers can pass to a defender inside the box immediately. Attackers must still be outside the penalty area at the moment of the kick, but may enter the box as soon as the ball is played. If an attacking player enters early and the goalkeeper plays a short kick, the referee stops play and the kick is retaken.'
+  },
+  {
+    id:'referee-signals',badge:'core',label:'Refereeing',cat:'tech',icon:'🖐',
+    title:'Referee Signals & Communication',
+    summary:'The referee is the sole timekeeping authority. Earpiece communication with assistants and the VAR room is standard. The fourth official manages the technical area and substitution boards.',
+    detail:'The referee controls all match decisions and is the sole timekeeping authority — the clock on stadium scoreboards is not official. The referee wears an earpiece connected to the assistant referees (ARs) and the VAR room, allowing real-time communication. The fourth official (4th) manages the technical area, handles substitution boards and added-time boards, and manages bench conduct. Two additional assistant referees (AARs) are stationed behind each goal at WC 2026 to monitor goal-line incidents and penalty box situations. On-Field Referee microphones are broadcast to the public to improve transparency, particularly for VAR decisions.'
+  },
+];
+
+const RB_FILTERS = [
+  {id:'all',   label:'All Rules'},
+  {id:'new',   label:'New & Updated'},
+  {id:'tech',  label:'VAR & Tech'},
+  {id:'setpiece',label:'Set Pieces'},
+  {id:'conduct',label:'Player Conduct'},
+  {id:'subs',  label:'Substitutions'},
+  {id:'match', label:'Match Format'},
+  {id:'format',label:'Tournament'},
+];
+
+function renderRulebook(){
+  const sec = $('tab-rulebook');
+  if(sec.dataset.loaded) return;
+  sec.dataset.loaded = '1';
+
+  let activeFilter = 'all';
+
+  function filteredRules(){
+    if(activeFilter === 'all') return RULEBOOK_DATA;
+    if(activeFilter === 'new') return RULEBOOK_DATA.filter(r=>r.badge==='new'||r.badge==='updated');
+    return RULEBOOK_DATA.filter(r=>r.cat===activeFilter);
+  }
+
+  function buildCards(rules){
+    if(!rules.length){
+      return `<div style="color:var(--t3);font-size:13px;text-align:center;padding:40px 0">No rules in this category</div>`;
+    }
+
+    let html = '';
+    if(activeFilter === 'all'){
+      const newRules   = rules.filter(r=>r.badge==='new');
+      const updated    = rules.filter(r=>r.badge==='updated');
+      const core       = rules.filter(r=>r.badge==='core');
+      if(newRules.length) html += `<div class="rb-sec-label">New for WC 2026</div>`  + newRules.map(cardHTML).join('');
+      if(updated.length)  html += `<div class="rb-sec-label">Updated Rules</div>`    + updated.map(cardHTML).join('');
+      if(core.length)     html += `<div class="rb-sec-label">Core Laws (Reference)</div>` + core.map(cardHTML).join('');
+    } else {
+      html = rules.map(cardHTML).join('');
+    }
+    return html;
+  }
+
+  function cardHTML(r){
+    return `<div class="rb-card" id="rbc-${r.id}" onclick="toggleRBCard('${r.id}')">
+      <div class="rb-card-head">
+        <div class="rb-icon">${r.icon}</div>
+        <div class="rb-card-body">
+          <div><span class="rb-badge ${r.badge}">${r.label}</span></div>
+          <div class="rb-card-title">${r.title}</div>
+          <div class="rb-card-summary">${r.summary}</div>
+        </div>
+        <div class="rb-chevron">›</div>
+      </div>
+      <div class="rb-detail">${r.detail}</div>
+    </div>`;
+  }
+
+  function render(){
+    const rules = filteredRules();
+    cardsEl.innerHTML = buildCards(rules);
+  }
+
+  sec.innerHTML = `<div class="inner rb-page">
+    <div class="rb-hd">
+      <div class="rb-hd-title">Laws of the Game</div>
+      <div class="rb-hd-sub">Official referee rules for FIFA World Cup 2026 — including every change made for this tournament.</div>
+    </div>
+    <div class="rb-spotlight">
+      <div class="rb-spot-eyebrow">What's New in 2026</div>
+      <div class="rb-spot-title">48 Teams, New Tech, Stricter Conduct Rules</div>
+      <div class="rb-spot-body">World Cup 2026 introduces the biggest format change in tournament history (48 teams, 12 groups), continues Semi-Automatic Offside Technology from 2022, and enforces new 2024-25 IFAB laws covering formal yellow/red cards for coaches and permanent concussion substitutes. Tap any rule below to read the full detail.</div>
+    </div>
+    <div class="rb-filter" id="rbFilter"></div>
+    <div id="rbCards"></div>
+  </div>`;
+
+  const filterEl = $('rbFilter');
+  const cardsEl  = $('rbCards');
+
+  filterEl.innerHTML = RB_FILTERS.map(f=>
+    `<button class="rb-pill${f.id===activeFilter?' active':''}" onclick="setRBFilter('${f.id}')">${f.label}</button>`
+  ).join('');
+
+  render();
+
+  window.setRBFilter = function(id){
+    activeFilter = id;
+    filterEl.querySelectorAll('.rb-pill').forEach(p=>{
+      p.classList.toggle('active', p.textContent === RB_FILTERS.find(f=>f.id===id).label);
+    });
+    render();
+  };
+
+  window.toggleRBCard = function(id){
+    const card = document.getElementById('rbc-'+id);
+    if(card) card.classList.toggle('open');
+  };
 }
 
 // ═══════════════════════════════════════════════════
