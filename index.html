@@ -1489,8 +1489,8 @@ function renderToday(events, dayDate, patch){
   }
 
   section(`<div class="sbadge live"><div class="rd"></div>Live Now</div>`, live);
-  section(`<div class="sbadge ft">✓ Finished</div>`, finished);
   section(`<div class="sbadge up">🕐 Upcoming</div>`, upcoming);
+  section(`<div class="sbadge ft">✓ Finished</div>`, finished);
 
   live.forEach(ev => {
     if(!ev.isHT) liveClocks[ev.id] = { minute:parseMinute(ev.displayClock), fetchedAt:Date.now() };
