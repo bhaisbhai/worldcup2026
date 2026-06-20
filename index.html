@@ -2441,6 +2441,25 @@ function renderKnockoutDynamic(rounds){
 // ═══════════════════════════════════════════════════
 //  PWA INSTALL BANNER
 // ═══════════════════════════════════════════════════
+
+// Inject a manifest so Chrome/Android fires beforeinstallprompt
+(function injectManifest(){
+  const m = {
+    name:'FIFA World Cup 2026',short_name:'WC 2026',
+    start_url:'./',display:'standalone',
+    background_color:'#080808',theme_color:'#080808',
+    description:'Live scores, standings & knockout bracket for FIFA World Cup 2026',
+    icons:[{
+      src:'data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" rx="20" fill="#080808"/><text y="82" x="8" font-size="85">⚽</text></svg>'),
+      sizes:'any',type:'image/svg+xml'
+    }]
+  };
+  const blob = new Blob([JSON.stringify(m)],{type:'application/manifest+json'});
+  const link = document.createElement('link');
+  link.rel='manifest'; link.href=URL.createObjectURL(blob);
+  document.head.appendChild(link);
+})();
+
 let deferredInstallPrompt = null;
 
 function dismissInstall(){
