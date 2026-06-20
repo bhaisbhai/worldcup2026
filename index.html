@@ -1276,7 +1276,7 @@ function buildCard(ev){
     badge=`<div class="mc-badge ft">FT</div>`;
     foot_l=`<div class="mc-ft-time">Full Time</div>`;
   } else {
-    badge=`<div class="mc-badge up">Upcoming</div>`;
+    badge=``;
     foot_l=`<div class="mc-kickoff">
       <div class="mc-kickoff-time">${localTime(ev.date)}</div>
       <div class="mc-cd-sm" data-cdid="${ev.id}" data-ts="${ev.date.getTime()}">${countdown(ev.date)}</div>
@@ -1397,7 +1397,7 @@ function patchCard(card, ev){
   const badge = card.querySelector('.mc-badge');
   if(badge){
     badge.className = `mc-badge ${isLive?'live':isFt?'ft':'up'}`;
-    badge.textContent = isLive?'● Live':isFt?'FT':'Upcoming';
+    badge.textContent = isLive?'● Live':isFt?'FT':'';
   }
 
   if(ev.state !== 'pre'){
