@@ -2549,7 +2549,7 @@ function renderKnockoutDynamic(rounds){
 let lbCache = null;
 let lbFetching = false;
 let lbLastFetch = 0;
-const LB_TTL = 5 * 60 * 1000;
+const LB_TTL = 5 * 60 * 1000; // re-fetch every 5 min
 
 // ── Watch-list algorithm ─────────────────────────────
 function calcWatchScore(p){
@@ -2572,10 +2572,16 @@ function calcWatchScore(p){
 
 // Map ESPN boxscore stat label → our player key
 const STAT_LABEL_MAP = {
+  // Short codes (ESPN boxscore labels)
   'G':'goals','A':'assists','YC':'yellowCards','RC':'redCards',
   'SH':'shots','SOG':'shotsOnTarget','SV':'saves',
   'TK':'tackles','IN':'interceptions','CL':'clearances',
   'KP':'keyPasses','PA':'passAcc','FC':'foulsCommitted',
+  // Full-word keys (ESPN soccer sometimes uses these)
+  'goals':'goals','assists':'assists','yellowCards':'yellowCards','redCards':'redCards',
+  'totalShots':'shots','shotsOnTarget':'shotsOnTarget','saves':'saves',
+  'tackles':'tackles','interceptions':'interceptions','clearances':'clearances',
+  'keyPasses':'keyPasses','passAccuracy':'passAcc','foulsCommitted':'foulsCommitted',
 };
 
 function upsertPlayer(map, name, teamName, teamAbbr){
@@ -2605,24 +2611,88 @@ function addTeamPts(playerMap){
   });
 }
 
-// Parse one match summary boxscore and add stats into playerMap
+// Parse one match summary — ESPN soccer stores events in header.competitions[0].details,
+// not in boxscore.players (which is empty for soccer). We parse both paths.
 function absorbSummary(data, playerMap){
+
+  // ── Path 1: header event details (goals, assists, cards) ─────────────────
+  const details = data?.header?.competitions?.[0]?.details || [];
+  details.forEach(d => {
+    const typeText = (d.type?.text || '').toLowerCase();
+    const athletes = d.athletesInvolved || [];
+    if(!athletes.length) return;
+
+    const primary    = athletes[0];
+    const teamName   = d.team?.displayName   || primary?.team?.displayName   || '';
+    const teamAbbr   = d.team?.abbreviation  || primary?.team?.abbreviation  || '';
+    const playerName = primary?.displayName  || '';
+    if(!playerName) return;
+
+    const p = upsertPlayer(playerMap, playerName, teamName, teamAbbr);
+
+    const isGoal    = typeText.includes('goal') && !typeText.includes('own goal')
+                      && !typeText.includes('miss') && !typeText.includes('saved');
+    const isOwnGoal = typeText.includes('own goal');
+    const isYellow  = typeText.includes('yellow card');
+    const isRed     = typeText.includes('red card') || typeText.includes('second yellow');
+    const isPen     = typeText.includes('penalty') && typeText.includes('scored');
+
+    if(isGoal || isPen){
+      p.goals = (p.goals || 0) + 1;
+      // Second athlete in the details is usually the assister
+      if(athletes[1]){
+        const an = athletes[1].displayName || '';
+        const at = athletes[1].team?.displayName  || teamName;
+        const aa = athletes[1].team?.abbreviation || teamAbbr;
+        if(an){
+          const a = upsertPlayer(playerMap, an, at, aa);
+          a.assists = (a.assists || 0) + 1;
+        }
+      }
+    } else if(isOwnGoal){
+      p.ownGoals = (p.ownGoals || 0) + 1;
+    } else if(isYellow){
+      p.yellowCards = (p.yellowCards || 0) + 1;
+    } else if(isRed){
+      p.redCards = (p.redCards || 0) + 1;
+    }
+  });
+
+  // ── Path 2: scoringPlays array (present in some ESPN responses) ──────────
+  const scoring = data?.scoringPlays || [];
+  scoring.forEach(sp => {
+    const typeText = (sp.type?.text || '').toLowerCase();
+    if(!typeText.includes('goal')) return;
+    (sp.athletesInvolved || []).forEach((ath, idx) => {
+      const name   = ath.displayName || '';
+      const tName  = ath.team?.displayName  || sp.team?.displayName  || '';
+      const tAbbr  = ath.team?.abbreviation || sp.team?.abbreviation || '';
+      if(!name) return;
+      const p = upsertPlayer(playerMap, name, tName, tAbbr);
+      // Only first athlete is the scorer (avoid double-counting with path 1)
+      if(idx === 0 && !(details.length)) p.goals = (p.goals || 0) + 1;
+      if(idx === 1 && !(details.length)) p.assists = (p.assists || 0) + 1;
+    });
+  });
+
+  // ── Path 3: boxscore.players (works if ESPN provides soccer player stats) ─
   const teamGroups = data?.boxscore?.players || [];
   teamGroups.forEach(tg => {
     const teamName = tg.team?.displayName || '';
     const teamAbbr = tg.team?.abbreviation || '';
     (tg.statistics || []).forEach(statCat => {
-      const labels = statCat.labels || [];
+      const labels = statCat.labels || statCat.keys || [];
       (statCat.athletes || []).forEach(row => {
         const athlete = row.athlete || {};
         const playerName = athlete.displayName || athlete.shortName || '';
         if(!playerName) return;
         const p = upsertPlayer(playerMap, playerName, teamName, teamAbbr);
         (row.stats || []).forEach((val, i) => {
-          const key = STAT_LABEL_MAP[labels[i]];
+          const raw = labels[i] || '';
+          const key = STAT_LABEL_MAP[raw] || STAT_LABEL_MAP[raw.toUpperCase()];
           if(key){
             const n = parseFloat(val) || 0;
-            p[key] = (p[key] || 0) + n;
+            if(n) p[key] = (p[key] || 0) + n;
           }
         });
       });
