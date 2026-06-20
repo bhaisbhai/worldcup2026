@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="WC 2026">
+<meta name="apple-mobile-web-app-title" content="Game Buddy">
 <meta name="theme-color" content="#080808">
-<title>FIFA World Cup 2026 — Live Scores</title>
+<title>Game Buddy — FIFA World Cup 2026</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -35,9 +35,10 @@ body{
   max-width:1240px;margin:0 auto;padding:0 22px;
   display:flex;align-items:center;justify-content:space-between;height:66px;gap:12px;
 }
-.wordmark{font-size:18px;font-weight:700;letter-spacing:-.4px;line-height:1.2}
-.wordmark em{font-style:normal;color:var(--accent)}
-.sub{font-size:11px;color:var(--t2);margin-top:2px;letter-spacing:.3px}
+.wordmark{line-height:1.1}
+.wordmark-name{font-size:17px;font-weight:800;letter-spacing:-.4px;color:var(--text)}
+.wordmark-event{font-size:10px;font-weight:600;color:var(--accent);letter-spacing:.9px;text-transform:uppercase;margin-top:3px}
+.sub{font-size:10px;color:var(--t3);margin-top:3px;letter-spacing:.2px}
 .hdr-r{display:flex;align-items:center;gap:14px}
 
 /* live pill */
@@ -86,17 +87,6 @@ body{
 .tab.active{display:block}
 @keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 
-/* ── TODAY INFO BAR ─────────────────────────── */
-.day-bar{
-  display:flex;align-items:flex-end;justify-content:space-between;
-  border-bottom:1px solid var(--border);padding-bottom:20px;margin-bottom:26px;flex-wrap:wrap;gap:12px;
-}
-.day-title{font-size:21px;font-weight:700;letter-spacing:-.4px}
-.day-meta{font-size:12px;color:var(--t2);margin-top:3px}
-.day-stats{display:flex;gap:24px}
-.dstat .sv{font-size:20px;font-weight:700;font-family:var(--mono);font-variant-numeric:tabular-nums}
-.dstat .sv.green{color:var(--accent)}.dstat .sv.gold{color:var(--gold)}
-.dstat .sl{font-size:10px;color:var(--t2);text-transform:uppercase;letter-spacing:.8px;margin-top:2px}
 
 /* ── SECTION HEADER ─────────────────────────── */
 .sec-hd{display:flex;align-items:center;gap:9px;margin:26px 0 13px}
@@ -238,10 +228,13 @@ body{
 .ggrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(355px,1fr));gap:14px}
 .gcard{
   background:var(--card);border:1px solid var(--border);border-radius:var(--r);
-  overflow:hidden;opacity:0;transform:translateY(12px);transition:border-color .2s;
+  overflow:hidden;opacity:0;transform:translateY(12px);transition:border-color .2s,box-shadow .2s;
 }
-.gcard.vis{opacity:1;transform:translateY(0);transition:opacity .38s ease,transform .38s ease}
+.gcard.vis{opacity:1;transform:translateY(0);transition:opacity .38s ease,transform .38s ease,border-color .2s,box-shadow .2s}
 .gcard:hover{border-color:#272727}
+.gcard--today{border-color:rgba(0,255,135,.28)!important;box-shadow:0 0 0 1px rgba(0,255,135,.07)}
+.gcard--today .gcard-hd{background:rgba(0,255,135,.04)}
+.gtoday-dot{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--accent);margin-left:7px;vertical-align:middle;animation:pDot 1.6s ease-in-out infinite}
 .gcard-hd{
   padding:10px 15px;background:rgba(255,255,255,.025);border-bottom:1px solid var(--border);
   display:flex;align-items:center;justify-content:space-between;
@@ -297,23 +290,26 @@ body{
 .trophy-t{font-size:10px;color:var(--t2);font-style:italic;text-align:center}
 
 /* ── DAY NAV ────────────────────────────────── */
-.day-nav{display:flex;align-items:center;gap:10px;margin-bottom:20px;flex-wrap:wrap}
+.day-nav{width:100%;margin-bottom:16px}
+.dnav-row{display:flex;align-items:center;width:100%}
 .dnav-btn{
-  background:none;border:1px solid var(--border);color:var(--t2);
-  font-family:var(--font);font-size:18px;line-height:1;padding:4px 12px;
-  border-radius:8px;cursor:pointer;transition:border-color .18s,color .18s;
+  flex-shrink:0;background:none;border:1px solid var(--border);color:var(--t2);
+  font-family:var(--font);font-size:20px;line-height:1;width:40px;height:40px;
+  display:flex;align-items:center;justify-content:center;
+  border-radius:10px;cursor:pointer;transition:border-color .18s,color .18s;
 }
 .dnav-btn:hover{border-color:#333;color:var(--text)}
 .dnav-btn:disabled{opacity:.25;cursor:default;pointer-events:none}
-.dnav-date{font-size:15px;font-weight:600;flex:1}
-.dnav-sub{font-size:11px;color:var(--t2);margin-top:1px}
+.dnav-center{flex:1;text-align:center;padding:0 10px}
+.dnav-date{font-size:16px;font-weight:700;letter-spacing:-.3px}
+.dnav-sub{font-size:11px;color:var(--t2);margin-top:2px}
+.dnav-back-row{text-align:center;margin-top:10px;display:none}
+.dnav-back-row.show{display:block}
 .dnav-today{
-  font-size:11px;font-weight:700;letter-spacing:.6px;padding:4px 11px;
+  font-size:11px;font-weight:700;letter-spacing:.6px;padding:5px 16px;
   background:rgba(0,255,135,.08);border:1px solid rgba(0,255,135,.2);
   color:var(--accent);border-radius:100px;cursor:pointer;transition:background .18s;
-  display:none;
 }
-.dnav-today.show{display:inline-block}
 .dnav-today:hover{background:rgba(0,255,135,.15)}
 .mc{cursor:pointer}
 .mc.vis:hover{transform:translateY(-2px);border-color:#272727;box-shadow:0 10px 32px rgba(0,0,0,.45)}
@@ -522,25 +518,42 @@ body{
 
 @media(max-width:600px){
   .modal-bg{padding:0;align-items:flex-end}
-  .modal{border-radius:16px 16px 0 0;max-height:90vh}
-  .mc-snums{font-size:32px}
-  .mc-flag{font-size:24px}
+  .modal{
+    border-radius:16px 16px 0 0;
+    max-height:88vh;        /* fallback for older browsers */
+    max-height:88dvh;       /* dvh = excludes browser chrome — fixes iOS cut-off */
+    padding-bottom:env(safe-area-inset-bottom, 0px);
+  }
+  .modal::before{           /* drag handle indicator */
+    content:'';display:block;width:36px;height:4px;border-radius:2px;
+    background:#333;margin:10px auto 0;flex-shrink:0;
+  }
+  .mc-hdr{padding:10px 16px 0}
+  .mc-teams-row{padding:4px 0 10px}
+  .mc-flag{font-size:22px}
+  .mc-snums{font-size:30px}
+  .mc-tname{font-size:11px}
+  .mc-close-wrap{top:6px;right:10px}
+  .mc-body{padding:14px 16px}
+  .mc-cd-time{font-size:28px;letter-spacing:2px}
+  .mc-odds-tbl{gap:4px}
+  .mc-odds-cell{padding:8px 6px}
+  .mc-odds-pct{font-size:14px}
+  .mc-odds-dec{font-size:11px}
   .mc-leaders-grid,.mc-lu-cols,.mc-scorers,.mc-info-grid{grid-template-columns:1fr}
   .mc-form-row{flex-direction:column}
 }
 
 /* ── RESPONSIVE ─────────────────────────────── */
 @media(max-width:768px){
-  .hdr-in{height:58px}.wordmark{font-size:15px}.clock{display:none}
+  .hdr-in{height:58px}.wordmark-name{font-size:15px}.clock{display:none}
   .main{padding:18px 14px}
   .mgrid,.ggrid{grid-template-columns:1fr}
   .sc{font-size:28px}.tflag{font-size:22px}
-  .day-stats{gap:16px}.dstat .sv{font-size:18px}
 }
 @media(max-width:480px){
   .tbtn{padding:13px 11px;font-size:13px}
   .mc-venue{display:none}
-  .day-bar{flex-direction:column;align-items:flex-start}
 }
 
 /* ── BRACKET MATCH INFO ─────────────────────────── */
@@ -563,45 +576,50 @@ body{
 .install-x{background:none;border:none;color:var(--t3);font-size:20px;cursor:pointer;padding:0 2px;line-height:1;flex-shrink:0}
 
 /* ── LEADERBOARD ────────────────────────────────── */
+.lb-page{max-width:680px;margin:0 auto}
 .lb-hd{font-size:24px;font-weight:800;letter-spacing:-.5px;padding:24px 0 4px}
-.lb-sub{font-size:12px;color:var(--t2);margin-bottom:20px;line-height:1.6}
-.lb-refresh{font-size:10px;color:var(--t3);margin-left:8px}
-.lb-cols{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px}
-@media(max-width:600px){.lb-cols{grid-template-columns:1fr}}
-.lb-box{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden}
-.lb-box-hd{padding:12px 16px 10px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
-.lb-box-icon{font-size:16px}
-.lb-box-title{font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--t2)}
-.lb-row{display:flex;align-items:center;gap:10px;padding:9px 14px;border-bottom:1px solid rgba(255,255,255,.03);transition:background .15s}
+.lb-meta{font-size:12px;color:var(--t2);margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px}
+.lb-ts{font-size:11px;color:var(--t3)}
+.lb-refresh-btn{background:none;border:1px solid var(--border);color:var(--t3);font-family:var(--font);font-size:10px;padding:4px 12px;border-radius:6px;cursor:pointer;transition:all .15s;letter-spacing:.2px}
+.lb-refresh-btn:hover{border-color:#333;color:var(--text)}
+.lb-overview{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:22px}
+.lb-ov-cell{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 10px;text-align:center}
+.lb-ov-val{font-size:24px;font-weight:800;font-family:var(--mono);letter-spacing:-.5px}
+.lb-ov-lbl{font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.8px;margin-top:4px}
+.lb-section{font-size:9px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:var(--t3);margin:24px 0 10px}
+.lb-box{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:10px}
+.lb-box-hd{padding:10px 16px;border-bottom:1px solid var(--border)}
+.lb-box-title{font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--t2)}
+.lb-row{display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid rgba(255,255,255,.03)}
 .lb-row:last-child{border-bottom:none}
-.lb-row:hover{background:rgba(255,255,255,.025)}
-.lb-rank{font-size:11px;font-weight:700;color:var(--t3);min-width:18px;text-align:center}
-.lb-rank.g{color:var(--gold)}
-.lb-flag{font-size:16px;flex-shrink:0}
+.lb-rank{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--t3);min-width:20px;text-align:center;flex-shrink:0}
+.lb-rank.gold{color:var(--gold)}
+.lb-flag{font-size:18px;flex-shrink:0}
 .lb-info{flex:1;min-width:0}
 .lb-name{font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.lb-team{font-size:10px;color:var(--t3);margin-top:1px}
-.lb-val{font-size:17px;font-weight:800;font-family:var(--mono);color:var(--accent);min-width:28px;text-align:right}
-.lb-val.card-y{color:var(--gold)}
-.lb-val.card-r{color:var(--red)}
-
-.watch-hd{font-size:14px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--t2);margin:24px 0 12px;padding-top:20px;border-top:1px solid var(--border)}
-.watch-algo{font-size:10px;color:var(--t3);margin-bottom:14px;line-height:1.7}
-.watch-list{display:flex;flex-direction:column;gap:10px;margin-bottom:28px}
+.lb-team{font-size:10px;color:var(--t3);margin-top:2px}
+.lb-val{font-size:20px;font-weight:800;font-family:var(--mono);min-width:24px;text-align:right;flex-shrink:0}
+.lb-val.g{color:var(--accent)}.lb-val.a{color:#64c8ff}.lb-val.y{color:var(--gold)}.lb-val.r{color:var(--red)}.lb-val.c{color:#a78bfa}
+.lb-2col{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.lb-empty{padding:20px 16px;font-size:12px;color:var(--t3);line-height:1.7;text-align:center}
+/* Players to Watch */
+.watch-hd{font-size:9px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:var(--t3);margin:24px 0 6px}
+.watch-algo{font-size:10px;color:var(--t3);margin-bottom:12px;line-height:1.75;padding:9px 13px;background:rgba(255,255,255,.025);border-radius:8px;border:1px solid var(--border)}
+.watch-list{display:flex;flex-direction:column;gap:8px;margin-bottom:28px}
 .watch-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:12px;transition:border-color .15s}
 .watch-card:hover{border-color:#2a2a2a}
-.watch-pos{font-size:11px;font-weight:800;color:var(--t3);min-width:20px;text-align:center}
+.watch-pos{font-family:var(--mono);font-size:11px;font-weight:800;color:var(--t3);min-width:20px;text-align:center;flex-shrink:0}
 .watch-pos.top3{color:var(--gold)}
-.watch-flag{font-size:28px;flex-shrink:0;line-height:1}
+.watch-flag{font-size:26px;flex-shrink:0;line-height:1}
 .watch-info{flex:1;min-width:0}
-.watch-name{font-size:14px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.watch-team{font-size:11px;color:var(--t3);margin-top:1px}
+.watch-name{font-size:13px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.watch-team{font-size:10px;color:var(--t3);margin-top:1px}
 .watch-pills{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
 .watch-pill{font-size:9px;font-weight:700;padding:2px 7px;border-radius:5px;letter-spacing:.3px}
 .watch-pill.g{background:rgba(0,255,135,.1);color:var(--accent)}
 .watch-pill.a{background:rgba(100,200,255,.1);color:#64c8ff}
+.watch-pill.c{background:rgba(167,139,250,.1);color:#a78bfa}
 .watch-pill.d{background:rgba(255,215,0,.1);color:var(--gold)}
-.watch-pill.s{background:rgba(255,255,255,.06);color:var(--t2)}
 .watch-score{text-align:right;flex-shrink:0}
 .watch-score-val{font-size:20px;font-weight:800;font-family:var(--mono);color:var(--accent)}
 .watch-score-lbl{font-size:8px;color:var(--t3);letter-spacing:.5px;text-transform:uppercase;margin-top:1px}
@@ -661,6 +679,59 @@ body{
 .fav-gtbl .gteam{display:flex;align-items:center;gap:7px}
 
 @media(max-width:768px){.tp-grid{grid-template-columns:repeat(auto-fill,minmax(80px,1fr))}}
+
+/* ── RULEBOOK ───────────────────────────────────── */
+.rb-page{max-width:680px;margin:0 auto}
+.rb-hd{padding:24px 0 4px}
+.rb-hd-title{font-size:24px;font-weight:800;letter-spacing:-.5px}
+.rb-hd-sub{font-size:12px;color:var(--t2);margin-top:4px;line-height:1.6}
+.rb-spotlight{
+  background:linear-gradient(135deg,rgba(0,255,135,.08) 0%,rgba(0,255,135,.03) 100%);
+  border:1px solid rgba(0,255,135,.2);border-radius:14px;padding:16px 18px;margin:18px 0 22px;
+}
+.rb-spot-eyebrow{font-size:9px;font-weight:800;letter-spacing:1.2px;color:var(--accent);
+  text-transform:uppercase;margin-bottom:8px}
+.rb-spot-title{font-size:15px;font-weight:700;letter-spacing:-.2px;margin-bottom:5px}
+.rb-spot-body{font-size:12px;color:var(--t2);line-height:1.75}
+.rb-filter{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;margin-bottom:20px;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none}
+.rb-filter::-webkit-scrollbar{display:none}
+.rb-pill{
+  flex-shrink:0;background:none;border:1px solid var(--border);color:var(--t2);
+  font-family:var(--font);font-size:11px;font-weight:600;padding:6px 14px;
+  border-radius:100px;cursor:pointer;transition:all .18s;white-space:nowrap;
+}
+.rb-pill.active{background:rgba(0,255,135,.1);border-color:rgba(0,255,135,.35);color:var(--accent)}
+.rb-pill:hover:not(.active){border-color:#333;color:var(--text)}
+.rb-sec-label{font-size:9px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;
+  color:var(--t3);margin:24px 0 10px;padding-top:4px}
+.rb-sec-label:first-of-type{margin-top:0}
+.rb-card{
+  background:var(--card);border:1px solid var(--border);border-radius:12px;
+  margin-bottom:8px;overflow:hidden;cursor:pointer;transition:border-color .15s;
+}
+.rb-card:hover{border-color:#2a2a2a}
+.rb-card.open{border-color:#303030}
+.rb-card-head{display:flex;align-items:flex-start;gap:12px;padding:14px 16px}
+.rb-icon{font-size:22px;flex-shrink:0;line-height:1.2;width:28px;text-align:center}
+.rb-card-body{flex:1;min-width:0}
+.rb-badge{
+  display:inline-block;font-size:8px;font-weight:800;letter-spacing:.9px;
+  text-transform:uppercase;padding:2px 7px;border-radius:4px;margin-bottom:5px;
+}
+.rb-badge.new{background:rgba(0,255,135,.15);color:var(--accent)}
+.rb-badge.updated{background:rgba(255,215,0,.12);color:#ffd700}
+.rb-badge.core{background:rgba(255,255,255,.06);color:var(--t3)}
+.rb-card-title{font-size:14px;font-weight:700;letter-spacing:-.2px;line-height:1.3;margin-bottom:4px}
+.rb-card-summary{font-size:12px;color:var(--t2);line-height:1.65}
+.rb-chevron{flex-shrink:0;color:var(--t3);font-size:12px;align-self:center;
+  transition:transform .2s;margin-left:4px;padding-top:2px}
+.rb-card.open .rb-chevron{transform:rotate(90deg)}
+.rb-detail{
+  display:none;padding:0 16px 16px 56px;font-size:12px;color:var(--t2);
+  line-height:1.8;border-top:1px solid rgba(255,255,255,.04);padding-top:12px;
+}
+.rb-card.open .rb-detail{display:block}
 </style>
 </head>
 <body>
@@ -669,8 +740,10 @@ body{
 <header class="hdr">
   <div class="hdr-in">
     <div>
-      <div class="wordmark">FIFA <em>World Cup</em> 2026</div>
-      <div class="sub">🇺🇸&thinsp;🇨🇦&thinsp;🇲🇽 &nbsp;·&nbsp; USA · Canada · Mexico</div>
+      <div class="wordmark">
+        <div class="wordmark-name">Game Buddy</div>
+        <div class="wordmark-event">FIFA World Cup 2026</div>
+      </div>
     </div>
     <div class="hdr-r">
       <div class="live-pill hidden" id="livePill"><div class="ldot"></div>LIVE</div>
@@ -695,8 +768,9 @@ body{
     <button class="tbtn active" data-tab="today">Today</button>
     <button class="tbtn" data-tab="groups">Groups</button>
     <button class="tbtn" data-tab="knockout">Knockout</button>
-    <button class="tbtn" data-tab="leaderboard">📊 Stats</button>
-    <button class="tbtn" data-tab="myteam" id="myteamTab">⭐ My Team</button>
+    <button class="tbtn" data-tab="leaderboard">Stats</button>
+    <button class="tbtn" data-tab="myteam" id="myteamTab">My Team</button>
+    <button class="tbtn" data-tab="rulebook">Rules</button>
   </nav>
 </div>
 
@@ -721,6 +795,9 @@ body{
 
   <!-- MY TEAM -->
   <section id="tab-myteam" class="tab"></section>
+
+  <!-- RULEBOOK -->
+  <section id="tab-rulebook" class="tab"></section>
 
 </main>
 
@@ -895,8 +972,9 @@ const KO_DATA = {
 // ═══════════════════════════════════════════════════
 //  STATE
 // ═══════════════════════════════════════════════════
-const ESPN_URL      = 'https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard';
-const ESPN_STANDINGS= 'https://site.api.espn.com/apis/v2/sports/soccer/fifa.world/standings';
+const ESPN_URL      = '/api/scoreboard';
+const ESPN_STANDINGS= '/api/standings';
+const ESPN_LEADERS  = '/api/leaders';
 
 // UK broadcast schedule — sorted abbreviation pair → channel
 const UK_TV = {
@@ -920,7 +998,8 @@ const UK_TV = {
   'COL|POR':'BBC One','COD|UZB':'BBC Two','ALG|AUT':'BBC Two','ARG|JOR':'BBC One',
 };
 function getUKChannel(a1, a2){ return UK_TV[[a1,a2].sort().join('|')] || 'BBC/ITV'; }
-const ESPN_SUMMARY  = 'https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/summary';
+const ESPN_SUMMARY  = '/api/summary';
+const ESPN_STATS    = '/api/statistics';
 let liveClocks = {};
 let refreshIn = 30;
 let lastEvents = [];
@@ -1247,14 +1326,18 @@ function renderDayNav(d){
   const next = shiftDate(d, 1);
   const isTod = isToday(d);
   nav.innerHTML = `
-    <button class="dnav-btn" id="navPrev" title="${fmtDate(prev)}">‹</button>
-    <div>
-      <div class="dnav-date">${fmtDate(d)}</div>
-      <div class="dnav-sub">${d.getFullYear()} · FIFA World Cup</div>
+    <div class="dnav-row">
+      <button class="dnav-btn" id="navPrev" title="${fmtDate(prev)}">‹</button>
+      <div class="dnav-center">
+        <div class="dnav-date">${fmtDate(d)}, ${d.getFullYear()}</div>
+        <div class="dnav-sub">FIFA World Cup 2026 · Group Stage</div>
+      </div>
+      <button class="dnav-btn" id="navNext" title="${fmtDate(next)}"
+        ${next > WC_END ? 'disabled' : ''}>›</button>
     </div>
-    <button class="dnav-btn" id="navNext" title="${fmtDate(next)}"
-      ${next > WC_END ? 'disabled' : ''}>›</button>
-    <button class="dnav-today${isTod?'':' show'}" id="navToday">Back to Today</button>`;
+    <div class="dnav-back-row${isTod?'':' show'}">
+      <button class="dnav-today" id="navToday">Back to Today</button>
+    </div>`;
   $('navPrev').onclick = () => goToDate(shiftDate(d,-1));
   $('navNext').onclick = () => goToDate(shiftDate(d, 1));
   const bt = $('navToday'); if(bt) bt.onclick = () => goToDate(null);
@@ -1344,11 +1427,6 @@ function renderToday(events, dayDate, patch){
   // --- patch mode: update existing cards without wiping the DOM ---
   if(patch){
     renderDayNav(dispDate);
-    // update stat counters
-    const svs = wrap.querySelectorAll('.dstat .sv');
-    if(svs[0]) svs[0].textContent = live.length;
-    if(svs[1]) svs[1].textContent = finished.length;
-    if(svs[2]) svs[2].textContent = upcoming.length;
 
     const existingIds = new Set([...wrap.querySelectorAll('.mc[data-ev-id]')].map(c=>c.dataset.evId));
     const newIds      = new Set(events.map(e=>e.id));
@@ -1385,19 +1463,6 @@ function renderToday(events, dayDate, patch){
 
   renderDayNav(dispDate);
 
-  const dateStr = fmtDate(dispDate) + `, ${dispDate.getFullYear()}`;
-  const bar = el('div','day-bar');
-  bar.innerHTML = `
-    <div>
-      <div class="day-title">${dateStr}</div>
-      <div class="day-meta">FIFA World Cup 2026 · Group Stage</div>
-    </div>
-    <div class="day-stats">
-      <div class="dstat"><div class="sv green">${live.length}</div><div class="sl">Live</div></div>
-      <div class="dstat"><div class="sv">${finished.length}</div><div class="sl">Finished</div></div>
-      <div class="dstat"><div class="sv gold">${upcoming.length}</div><div class="sl">Upcoming</div></div>
-    </div>`;
-  wrap.append(bar);
 
   if(events.length===0){
     wrap.append(el('div','empty','No matches scheduled · Use the arrows to browse other days'));
@@ -1468,6 +1533,13 @@ async function fetchMatches(){
     lastEvents = events;
     const dayLabel = data.day?.date || '';
     renderToday(events, dayLabel, isPatch);
+    // Track which groups play today (only when viewing today's date)
+    if(!browseDate){
+      todayGroupIds = new Set(
+        events.map(e => (e.group||'').match(/Group\s+([A-L])/i)?.[1]).filter(Boolean)
+      );
+      highlightTodayGroups();
+    }
     hideErr();
   } catch(e){
     if(lastEvents.length === 0) showErr();
@@ -1479,11 +1551,7 @@ async function fetchMatches(){
 function showErr(){
   const wrap = $('today-content');
   wrap.innerHTML = '';
-  const bar = el('div','day-bar');
-  const now = new Date();
-  const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
-  bar.innerHTML = `<div><div class="day-title">${months[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()}</div><div class="day-meta">FIFA World Cup 2026 · Group Stage</div></div>`;
-  wrap.append(bar);
+  renderDayNav(new Date());
   const e = el('div','err-card show');
   e.innerHTML = `<div class="err-icon">📡</div>
     <div class="err-title">Live scores unavailable</div>
@@ -1500,6 +1568,27 @@ function hideErr(){
 // ═══════════════════════════════════════════════════
 //  GROUPS
 // ═══════════════════════════════════════════════════
+let todayGroupIds = new Set();
+
+function highlightTodayGroups(){
+  document.querySelectorAll('.gcard[data-group]').forEach(card => {
+    const gId = card.dataset.group;
+    const isToday = todayGroupIds.has(gId);
+    card.classList.toggle('gcard--today', isToday);
+    const lbl = card.querySelector('.gcard-hd-l');
+    if(lbl){
+      const existing = lbl.querySelector('.gtoday-dot');
+      if(isToday && !existing){
+        const dot = document.createElement('span');
+        dot.className = 'gtoday-dot';
+        lbl.appendChild(dot);
+      } else if(!isToday && existing){
+        existing.remove();
+      }
+    }
+  });
+}
+
 function renderGroups(){
   const sec = $('tab-groups');
   sec.innerHTML = `
@@ -1509,6 +1598,7 @@ function renderGroups(){
   const grid = $('ggrid');
   GROUPS_DATA.forEach((g,gi) => {
     const card = el('div','gcard');
+    card.dataset.group = g.id;
     card.style.transitionDelay = gi*25+'ms';
     const played = g.teams.reduce((s,t)=>s+t.p,0)/2;
     card.innerHTML = `
@@ -1611,6 +1701,7 @@ document.querySelectorAll('.tbtn').forEach(btn => {
     $('tab-'+btn.dataset.tab).classList.add('active');
     if(btn.dataset.tab === 'leaderboard') renderLeaderboard();
     if(btn.dataset.tab === 'myteam') renderMyTeam();
+    if(btn.dataset.tab === 'rulebook') renderRulebook();
     setTimeout(observeCards, 40);
   });
 });
@@ -2488,235 +2579,285 @@ function renderKnockoutDynamic(rounds){
 }
 
 // ═══════════════════════════════════════════════════
-//  LEADERBOARD
+//  LEADERBOARD (Player Stats — ESPN v4 statistics API)
 // ═══════════════════════════════════════════════════
-const ESPN_LEADERS = 'https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/leaders';
-const ESPN_SCOREBOARD_STATS = ESPN_URL + '?limit=100';
-
-let lbCache = null;           // { goals, assists, yellow, red, shots, saves, ts }
+let lbCache = null;
 let lbFetching = false;
 let lbLastFetch = 0;
-const LB_TTL = 5 * 60 * 1000; // 5 minutes
+const LB_TTL = 5 * 60 * 1000;
 
-// ── Watch-list algorithm weights ────────────────────
-function calcWatchScore(p){
-  return (
-    (p.goals       || 0) * 12  +
-    (p.assists     || 0) * 8   +
-    (p.shotsOnTarget || 0) * 2.5 +
-    (p.shots       || 0) * 0.8 +
-    (p.keyPasses   || 0) * 3   +
-    (p.tackles     || 0) * 1.8 +
-    (p.interceptions || 0) * 2.2 +
-    (p.clearances  || 0) * 1   +
-    (p.saves       || 0) * 2   +
-    ((p.passAcc||0) >= 88 ? 4 : (p.passAcc||0) >= 80 ? 2 : 0) +
-    ((p.teamPts||0) >= 7 ? 3 : (p.teamPts||0) >= 4 ? 1.5 : 0) +
-    (p.yellowCards || 0) * -1.5 +
-    (p.redCards    || 0) * -10
-  );
-}
+// Map ESPN category display names → our internal keys + display config
+const LB_CAT_MAP = {
+  goals:       {keys:['scoring','goals','top scorer'],      valCls:'g', label:'Top Scorers',   statKey:'goals'},
+  assists:     {keys:['assist'],                            valCls:'a', label:'Top Assists',    statKey:'assists'},
+  yellow:      {keys:['yellow'],                            valCls:'y', label:'Yellow Cards',   statKey:'yellowCards'},
+  red:         {keys:['red card','red-card','reds'],        valCls:'r', label:'Red Cards',      statKey:'redCards'},
+  clean:       {keys:['clean sheet','clean-sheet','saves'], valCls:'c', label:'Clean Sheets',   statKey:'cleanSheets'},
+};
 
-function mergePlayerList(existing, additions, statKey){
-  additions.forEach(entry => {
-    const name = entry.athlete?.displayName || entry.athlete?.shortName || '';
-    const flag = entry.athlete?.flag?.href ? '' : (entry.athlete?.team?.displayName || '');
-    const teamName = entry.athlete?.team?.displayName || entry.athlete?.team?.name || '';
-    const teamAbbr = entry.athlete?.team?.abbreviation || '';
-    const val = parseFloat(entry.value) || 0;
-    const f = FLAGS[teamAbbr] || '🏳️';
-    let found = existing.find(p => p.name === name);
-    if(!found){
-      found = { name, teamName, teamAbbr, f };
-      existing.push(found);
-    }
-    found[statKey] = val;
-  });
+function lbWatchScore(p){
+  return (p.goals||0)*12 + (p.assists||0)*8 + (p.cleanSheets||0)*5 +
+    ((p.teamPts||0) >= 7 ? 4 : (p.teamPts||0) >= 4 ? 2 : 0) +
+    (p.yellowCards||0)*-1.5 + (p.redCards||0)*-10;
 }
 
 async function fetchLeaderboardData(){
   if(lbFetching) return;
-  if(lbCache && Date.now() - lbLastFetch < LB_TTL) return;
+  if(lbCache?.ts && Date.now() - lbLastFetch < LB_TTL) return;
   lbFetching = true;
+  if($('tab-leaderboard')?.classList.contains('active')) renderLeaderboard();
 
   try {
-    const r = await fetch(ESPN_LEADERS, { signal: AbortSignal.timeout(9000) });
-    if(!r.ok) throw new Error(r.status);
-    const data = await r.json();
-    const categories = data.leaders || data.categories || [];
+    // ── Overview: match + goal counts from scoreboard ──
+    let totalGoals = 0, matchCount = 0;
+    const now = new Date();
+    const dateStrs = [];
+    for(let i = 0; i <= 14; i++){
+      const dt = new Date(now); dt.setDate(dt.getDate()-i);
+      dateStrs.push(toDateStr(dt));
+    }
+    await Promise.all(dateStrs.map(async ds => {
+      try {
+        const r = await fetch(`${ESPN_URL}?dates=${ds}&limit=50`, {signal:AbortSignal.timeout(7000)});
+        if(!r.ok) return;
+        const data = await r.json();
+        (data.events||[]).forEach(ev => {
+          const comp = ev.competitions?.[0];
+          if(comp?.status?.type?.state !== 'post') return;
+          matchCount++;
+          (comp.competitors||[]).forEach(c => { totalGoals += parseInt(c.score)||0; });
+        });
+      } catch(e){}
+    }));
 
-    const allPlayers = [];
-    const tables = { goals:[], assists:[], yellow:[], red:[], shots:[], saves:[] };
+    // ── Player stats: server-side aggregator (primary) → ESPN endpoints (fallback) ──
+    const tables = {goals:[], assists:[], yellow:[], red:[], clean:[]};
+    const playerMap = {};
 
-    categories.forEach(cat => {
-      const key = (cat.name||cat.abbreviation||'').toLowerCase();
-      const leaders = cat.leaders || cat.athletes || [];
-
-      let tableKey = null;
-      let statKey  = null;
-      if(/goal/i.test(key))       { tableKey='goals';   statKey='goals'; }
-      else if(/assist/i.test(key)){ tableKey='assists';  statKey='assists'; }
-      else if(/yellow/i.test(key)){ tableKey='yellow';   statKey='yellowCards'; }
-      else if(/red/i.test(key))   { tableKey='red';      statKey='redCards'; }
-      else if(/shot.*on/i.test(key)){ statKey='shotsOnTarget'; }
-      else if(/shot/i.test(key))  { tableKey='shots';   statKey='shots'; }
-      else if(/save/i.test(key))  { tableKey='saves';   statKey='saves'; }
-      else if(/tackle/i.test(key)){ statKey='tackles'; }
-      else if(/interc/i.test(key)){ statKey='interceptions'; }
-      else if(/pass.*acc/i.test(key)){ statKey='passAcc'; }
-      else if(/key.*pass/i.test(key)){ statKey='keyPasses'; }
-
-      if(statKey) mergePlayerList(allPlayers, leaders, statKey);
-      if(tableKey){
-        tables[tableKey] = leaders.slice(0, 10).map((entry, i) => ({
-          rank:     i + 1,
-          name:     entry.athlete?.displayName || entry.athlete?.shortName || '—',
-          teamName: entry.athlete?.team?.displayName || '',
-          teamAbbr: entry.athlete?.team?.abbreviation || '',
-          f:        FLAGS[entry.athlete?.team?.abbreviation||''] || '🏳️',
-          val:      entry.displayValue || String(parseFloat(entry.value)||0),
-        }));
+    function matchCat(catName) {
+      for(const [key,cfg] of Object.entries(LB_CAT_MAP)){
+        if(cfg.keys.some(k=>catName.includes(k))) return [key,cfg];
       }
-    });
+      return [null,null];
+    }
 
-    // Enrich players with team points from GROUPS_DATA
-    allPlayers.forEach(p => {
-      const g = GROUPS_DATA.find(g => g.teams.some(t =>
-        t.n === p.teamName || t.n.toLowerCase().includes(p.teamName.toLowerCase()) ||
-        p.teamName.toLowerCase().includes(t.n.toLowerCase())
-      ));
-      if(g){
-        const t = g.teams.find(t => t.n === p.teamName || t.n.toLowerCase().includes(p.teamName.toLowerCase()) || p.teamName.toLowerCase().includes(t.n.toLowerCase()));
-        if(t) p.teamPts = t.pts;
+    function toLeader(entry, idx) {
+      const athlete = entry.athlete || entry;
+      const abbr = athlete.team?.abbreviation||'';
+      const name = athlete.displayName||'';
+      const val  = parseFloat(entry.value??entry.displayValue)||0;
+      return {rank:idx+1,name,teamName:athlete.team?.displayName||'',abbr,
+              f:FLAGS[abbr]||'🏳️',displayVal:entry.displayValue||String(val),val};
+    }
+
+    function parseCats(cats) {
+      let found = 0;
+      cats.forEach(cat => {
+        const [key,cfg] = matchCat((cat.displayName||cat.name||'').toLowerCase());
+        if(!key) return;
+        const entries = cat.leaders||cat.athletes||cat.stats||[];
+        const leaders = entries.map(toLeader).filter(l=>l.name&&l.val>0);
+        if(!leaders.length) return;
+        tables[key] = leaders.slice(0,10);
+        leaders.forEach(l => {
+          const k = l.name+'||'+l.abbr;
+          if(!playerMap[k]) playerMap[k]={name:l.name,teamName:l.teamName,teamAbbr:l.abbr,f:l.f,
+            goals:0,assists:0,yellowCards:0,redCards:0,cleanSheets:0,teamPts:0};
+          playerMap[k][cfg.statKey]=l.val;
+        });
+        found++;
+      });
+      return found;
+    }
+
+    // 1. Primary: our server-side match aggregator
+    let statsLoaded = false;
+    try {
+      const r = await fetch('/api/playerstats', {signal:AbortSignal.timeout(9000)});
+      if(r.ok){
+        const data = await r.json();
+        if(parseCats(data.categories||[])) {
+          statsLoaded = true;
+          // Use matchCount from aggregator for the overview if available
+          if(data.matchCount) matchCount = data.matchCount;
+        }
       }
-    });
+    } catch(e){}
 
-    // Build watch list — score every player and take top 10
-    const watchList = allPlayers
-      .map(p => ({ ...p, watchScore: Math.round(calcWatchScore(p) * 10) / 10 }))
-      .filter(p => p.watchScore > 0)
-      .sort((a, b) => b.watchScore - a.watchScore)
-      .slice(0, 10);
+    // 2. Fallback: ESPN v4 via proxy
+    if(!statsLoaded){
+      try {
+        const r = await fetch(ESPN_STATS, {signal:AbortSignal.timeout(8000)});
+        if(r.ok){
+          const data = await r.json();
+          const n = parseCats(data.categories||data.leaders||[]);
+          if(n) statsLoaded = true;
+        }
+      } catch(e){}
+    }
 
-    lbCache = { tables, watchList, ts: Date.now() };
+    // 3. Fallback: ESPN v2 leaders
+    if(!statsLoaded){
+      try {
+        const r = await fetch(`${ESPN_LEADERS}?season=2026`, {signal:AbortSignal.timeout(8000)});
+        if(r.ok){
+          const data = await r.json();
+          parseCats(data.leaders||data.categories||[]);
+        }
+      } catch(e){}
+    }
+
+    // ── Team form from standings → enriches Watch algorithm ──
+    try {
+      const r = await fetch(ESPN_STANDINGS, {signal:AbortSignal.timeout(8000)});
+      if(r.ok){
+        const data = await r.json();
+        const tPts = {};
+        (data.children||[]).forEach(child => {
+          (child.standings?.entries||[]).forEach(entry => {
+            const abbr = entry.team?.abbreviation||'';
+            if(abbr) tPts[abbr] = getStat(entry.stats||[], 'points');
+          });
+        });
+        Object.values(playerMap).forEach(p => {
+          if(tPts[p.teamAbbr] !== undefined) p.teamPts = tPts[p.teamAbbr];
+        });
+      }
+    } catch(e){}
+
+    lbCache = {
+      tables,
+      watchList: Object.values(playerMap)
+        .map(p => ({...p, ws: Math.round(lbWatchScore(p)*10)/10}))
+        .filter(p => p.ws > 0)
+        .sort((a,b) => b.ws - a.ws)
+        .slice(0, 10),
+      meta: {matchCount, totalGoals, avgGoals: matchCount ? (totalGoals/matchCount).toFixed(1):'—'},
+      ts: Date.now(), error: false,
+    };
     lbLastFetch = Date.now();
-  } catch(e) {
-    if(!lbCache) lbCache = { tables:{goals:[],assists:[],yellow:[],red:[],shots:[],saves:[]}, watchList:[], ts:null, error:true };
+  } catch(e){
+    if(!lbCache) lbCache = {
+      tables:{goals:[],assists:[],yellow:[],red:[],clean:[]}, watchList:[],
+      meta:{matchCount:0,totalGoals:0,avgGoals:'—'}, ts:null, error:true,
+    };
   }
   lbFetching = false;
   if($('tab-leaderboard')?.classList.contains('active')) renderLeaderboard();
+}
+
+function lbStatBox(rows, valCls, title, limit=10){
+  rows = (rows||[]).slice(0, limit);
+  const syms = ['🥇','🥈','🥉'];
+  const hd = title ? `<div class="lb-box-hd"><span class="lb-box-title">${title}</span></div>` : '';
+  const body = rows.length
+    ? rows.map((p,i) => `<div class="lb-row">
+        <span class="lb-rank${i<3?' gold':''}">${i<3?syms[i]:i+1}</span>
+        <span class="lb-flag">${p.f}</span>
+        <div class="lb-info">
+          <div class="lb-name">${p.name}</div>
+          <div class="lb-team">${p.teamName}</div>
+        </div>
+        <span class="lb-val ${valCls}">${p.displayVal}</span>
+      </div>`).join('')
+    : `<div class="lb-empty">No data yet — check back after matches complete.</div>`;
+  return `<div class="lb-box">${hd}${body}</div>`;
 }
 
 function renderLeaderboard(){
   const sec = $('tab-leaderboard');
   if(!sec) return;
 
-  const isLoading = !lbCache;
-  const tsStr = lbCache?.ts
-    ? `Updated ${timeAgo(new Date(lbCache.ts).toISOString())}`
-    : lbCache?.error ? 'Could not load — retrying…' : '';
-
-  if(isLoading){
-    sec.innerHTML = `
-      <div class="lb-hd">Tournament Stats</div>
-      <div class="lb-sub">FIFA World Cup 2026 · Live statistics &amp; player rankings</div>
-      <div class="lineup-loading">Loading stats…</div>`;
-    fetchLeaderboardData();
+  if(!lbCache || lbFetching){
+    sec.innerHTML = `<div class="inner lb-page">
+      <div class="lb-hd">Stats</div>
+      <div class="lb-meta"><span class="lb-ts">FIFA World Cup 2026</span></div>
+      <div class="lineup-loading">Loading player stats…</div>
+    </div>`;
+    if(!lbFetching) fetchLeaderboardData();
     return;
   }
 
-  sec.innerHTML = `
-    <div class="lb-hd">Tournament Stats</div>
-    <div class="lb-sub">FIFA World Cup 2026 · Live statistics &amp; player rankings${tsStr?`<span class="lb-refresh">${tsStr}</span>`:''}</div>
+  const m  = lbCache.meta||{};
+  const ts = lbCache.ts ? timeAgo(new Date(lbCache.ts).toISOString()) : null;
+  const t  = lbCache.tables||{};
+  const wl = lbCache.watchList||[];
 
-    <div class="lb-cols">
-      ${renderLbTable('⚽ Top Scorers','goals','g')}
-      ${renderLbTable('🎯 Top Assists','assists','a')}
-      ${renderLbTable('🟨 Yellow Cards','yellow','card-y')}
-      ${renderLbTable('🟥 Red Cards','red','card-r')}
+  const watchHtml = wl.length
+    ? `<div class="watch-list">${wl.map((p,i) => {
+        const syms = ['🥇','🥈','🥉'];
+        const pills = [];
+        if(p.goals)       pills.push({c:'g', t:`${p.goals}G`});
+        if(p.assists)     pills.push({c:'a', t:`${p.assists}A`});
+        if(p.cleanSheets) pills.push({c:'c', t:`${p.cleanSheets}CS`});
+        if(p.yellowCards) pills.push({c:'d', t:`${p.yellowCards}🟨`});
+        if(p.redCards)    pills.push({c:'d', t:`${p.redCards}🟥`});
+        return `<div class="watch-card">
+          <span class="watch-pos${i<3?' top3':''}">${i<3?syms[i]:i+1}</span>
+          <span class="watch-flag">${p.f}</span>
+          <div class="watch-info">
+            <div class="watch-name">${p.name}</div>
+            <div class="watch-team">${p.teamName}</div>
+            <div class="watch-pills">${pills.map(pl=>`<span class="watch-pill ${pl.c}">${pl.t}</span>`).join('')}</div>
+          </div>
+          <div class="watch-score">
+            <div class="watch-score-val">${p.ws}</div>
+            <div class="watch-score-lbl">Score</div>
+          </div>
+        </div>`;
+      }).join('')}</div>`
+    : `<div style="text-align:center;padding:32px 0;color:var(--t3);font-size:13px;line-height:1.9">
+        Algorithm runs once player stats are available.
+       </div>`;
+
+  sec.innerHTML = `<div class="inner lb-page">
+    <div class="lb-hd">Stats</div>
+    <div class="lb-meta">
+      <span class="lb-ts">FIFA World Cup 2026${ts ? ` · Updated ${ts}` : ''}</span>
+      <button class="lb-refresh-btn" onclick="lbCache=null;lbLastFetch=0;renderLeaderboard()">Refresh</button>
+    </div>
+    <div class="lb-overview">
+      <div class="lb-ov-cell">
+        <div class="lb-ov-val">${m.matchCount||0}</div>
+        <div class="lb-ov-lbl">Matches</div>
+      </div>
+      <div class="lb-ov-cell">
+        <div class="lb-ov-val" style="color:var(--accent)">${m.totalGoals||0}</div>
+        <div class="lb-ov-lbl">Goals</div>
+      </div>
+      <div class="lb-ov-cell">
+        <div class="lb-ov-val" style="color:var(--gold)">${m.avgGoals||'—'}</div>
+        <div class="lb-ov-lbl">Per Game</div>
+      </div>
     </div>
 
-    <div class="watch-hd">🔭 Top 10 Players to Watch</div>
-    <div class="watch-algo">
-      Weighted algorithm across all live stats — Goals ×12 · Assists ×8 · Shots on Target ×2.5 ·
-      Key Passes ×3 · Tackles ×1.8 · Interceptions ×2.2 · Pass Accuracy bonus ·
-      Team form bonus · Yellow Cards −1.5 · Red Cards −10
+    <div class="lb-section">Top Scorers</div>
+    ${lbStatBox(t.goals,'g')}
+
+    <div class="lb-section">Top Assists</div>
+    ${lbStatBox(t.assists,'a')}
+
+    <div class="lb-section">Discipline</div>
+    <div class="lb-2col">
+      ${lbStatBox(t.yellow,'y','Yellow Cards',5)}
+      ${lbStatBox(t.red,'r','Red Cards',5)}
     </div>
-    ${renderWatchList()}`;
+
+    <div class="lb-section">Clean Sheets</div>
+    ${lbStatBox(t.clean,'c')}
+
+    <div class="watch-hd">Players to Watch</div>
+    <div class="watch-algo">Goals ×12 · Assists ×8 · Clean Sheets ×5 · Team form bonus · Yellow −1.5 · Red −10</div>
+    ${watchHtml}
+  </div>`;
 
   if(Date.now() - lbLastFetch > LB_TTL) fetchLeaderboardData();
 }
 
-function renderLbTable(title, key, valCls){
-  const rows = lbCache?.tables?.[key] || [];
-  const rowsHtml = rows.length
-    ? rows.map(p => `
-      <div class="lb-row">
-        <span class="lb-rank${p.rank<=3?' g':''}">${p.rank<=3?['🥇','🥈','🥉'][p.rank-1]:p.rank}</span>
-        <span class="lb-flag">${p.f}</span>
-        <div class="lb-info">
-          <div class="lb-name">${p.name}</div>
-          <div class="lb-team">${p.teamName}</div>
-        </div>
-        <span class="lb-val ${valCls}">${p.val}</span>
-      </div>`).join('')
-    : `<div class="lb-row" style="padding:16px 14px">
-        <span style="color:var(--t3);font-size:12px">Stats will appear here as matches are played</span>
-       </div>`;
-
-  return `<div class="lb-box">
-    <div class="lb-box-hd"><span class="lb-box-title">${title}</span></div>
-    ${rowsHtml}
-  </div>`;
-}
-
-function renderWatchList(){
-  const list = lbCache?.watchList || [];
-  if(!list.length){
-    return `<div style="text-align:center;padding:32px 0;color:var(--t3);font-size:13px;line-height:1.8">
-      The Players to Watch list is built from live match stats.<br>
-      Check back once games are underway.
-    </div>`;
-  }
-  return `<div class="watch-list">${list.map((p, i) => {
-    const pos = i + 1;
-    const pills = [];
-    if(p.goals)         pills.push({cls:'g', txt:`${p.goals}G`});
-    if(p.assists)       pills.push({cls:'a', txt:`${p.assists}A`});
-    if(p.shotsOnTarget) pills.push({cls:'s', txt:`${p.shotsOnTarget} SOT`});
-    if(p.keyPasses)     pills.push({cls:'a', txt:`${p.keyPasses} KP`});
-    if(p.tackles)       pills.push({cls:'d', txt:`${p.tackles} TKL`});
-    if(p.passAcc)       pills.push({cls:'s', txt:`${p.passAcc}% PASS`});
-    if(p.saves)         pills.push({cls:'d', txt:`${p.saves} SV`});
-    if(p.yellowCards)   pills.push({cls:'d', txt:`${p.yellowCards}🟨`});
-    const pillsHtml = pills.map(pl => `<span class="watch-pill ${pl.cls}">${pl.txt}</span>`).join('');
-    return `<div class="watch-card">
-      <span class="watch-pos${pos<=3?' top3':''}">${pos<=3?['🥇','🥈','🥉'][pos-1]:pos}</span>
-      <span class="watch-flag">${p.f}</span>
-      <div class="watch-info">
-        <div class="watch-name">${p.name}</div>
-        <div class="watch-team">${p.teamName}</div>
-        <div class="watch-pills">${pillsHtml}</div>
-      </div>
-      <div class="watch-score">
-        <div class="watch-score-val">${p.watchScore}</div>
-        <div class="watch-score-lbl">Score</div>
-      </div>
-    </div>`;
-  }).join('')}</div>`;
-}
-
-// Auto-refresh leaderboard every 5 min when tab is active
-let lbRefreshTimer = null;
-function startLbRefresh(){
-  if(lbRefreshTimer) return;
-  lbRefreshTimer = setInterval(() => {
-    if($('tab-leaderboard')?.classList.contains('active')){
-      fetchLeaderboardData();
-    }
-  }, LB_TTL);
-}
-startLbRefresh();
+// Auto-refresh every 5 min when Stats tab is active
+setInterval(() => {
+  if($('tab-leaderboard')?.classList.contains('active')) fetchLeaderboardData();
+}, LB_TTL);
 
 // ═══════════════════════════════════════════════════
 //  PWA INSTALL BANNER
@@ -2725,7 +2866,7 @@ startLbRefresh();
 // Inject a manifest so Chrome/Android fires beforeinstallprompt
 (function injectManifest(){
   const m = {
-    name:'FIFA World Cup 2026',short_name:'WC 2026',
+    name:'Game Buddy - FIFA World Cup 2026',short_name:'Game Buddy',
     start_url:'./',display:'standalone',
     background_color:'#080808',theme_color:'#080808',
     description:'Live scores, standings & knockout bracket for FIFA World Cup 2026',
@@ -2975,6 +3116,217 @@ async function fetchFavNews(team){
 
   const el2 = $('favNews');
   if(el2) el2.innerHTML='<div class="mc-news-empty">News will appear here on match days</div>';
+}
+
+// ═══════════════════════════════════════════════════
+//  RULEBOOK
+// ═══════════════════════════════════════════════════
+const RULEBOOK_DATA = [
+  // ─── NEW FOR WC 2026 ───────────────────────────
+  {
+    id:'format48',badge:'new',label:'WC 2026',cat:'format',icon:'🌍',
+    title:'48-Team Tournament Format',
+    summary:'The biggest expansion in World Cup history — 48 teams across 12 groups of 4. Top 2 from each group plus 8 best third-placed teams (32 total) advance to the knockout round.',
+    detail:'For the first time, 48 nations compete for the World Cup across 16 venues in the USA, Canada and Mexico. Twelve groups of 4 play a round-robin; the top 2 in each group plus the 8 best-ranked third-place finishers advance to the Round of 32 — a completely new knockout round. This adds roughly a week of football and means 104 total matches. Group-stage tiebreakers: points → goal difference → goals scored → head-to-head points → head-to-head GD → fair play (cards) → FIFA ranking.'
+  },
+  {
+    id:'saot',badge:'new',label:'WC 2026 Tech',cat:'tech',icon:'📡',
+    title:'Semi-Automatic Offside Technology',
+    summary:'AI-powered limb tracking plots 29 body data points per player at 50 frames per second, making offside calls in under 30 seconds with animated 3D replays shown on stadium screens.',
+    detail:'Dedicated tracking cameras installed at each stadium follow every player and the ball continuously. At the moment a through-ball is played, the system automatically freezes all 29 tracked body points and checks the offside line against the second-last defender. The result is delivered to the VAR room in seconds — compared to around 70 seconds for manual review at previous tournaments. A computer-generated 3D animation is broadcast to fans in the stadium and on TV so the decision is transparent. First used at WC 2022 Qatar, confirmed for all WC 2026 venues.'
+  },
+  {
+    id:'official-cards',badge:'new',label:'From 2024-25',cat:'conduct',icon:'🟨',
+    title:'Yellow & Red Cards for Team Officials',
+    summary:'Coaches, physios and bench staff can now receive formal yellow and red cards for misconduct. A red card means expulsion to the stands and a disciplinary hearing.',
+    detail:'Under previous rules, team officials could only be vaguely "sent to the stands" with no formal record. The 2024-25 IFAB Laws change formalises this: a yellow card is shown to the technical area for dissent, entering the field without permission, deliberate time-wasting, or throwing objects onto the pitch. A second yellow or serious misconduct = red card and immediate expulsion. The card is directed at the technical area generally, with the specific individual identified to the fourth official. All cautions carry over to future matches through the standard disciplinary process.'
+  },
+  {
+    id:'concussion-sub',badge:'new',label:'From 2023-24',cat:'subs',icon:'🧠',
+    title:'Permanent Concussion Substitute',
+    summary:'Each team may make one additional substitution per match if a player sustains a suspected concussion — bringing the total to 6 subs in normal time.',
+    detail:'If a player shows signs of concussion during a match, teams can use a dedicated concussion substitution slot on top of the standard 5 available changes. The substituted player cannot return, even if the concussion assessment later clears them. Both teams retain the right to use this substitute whether or not the other team does. The referee must sanction the substitution and the medical staff must assess the player. This change was driven by player welfare concerns and reduces the pressure on medical staff to quickly clear players to return. In extra time, the standard additional substitution (6th total) is separate from this concussion substitute.'
+  },
+  // ─── UPDATED RULES ─────────────────────────────
+  {
+    id:'added-time',badge:'updated',label:'Enforced WC 2022+',cat:'match',icon:'⏱',
+    title:'Accurate Time Added (Stoppage Time)',
+    summary:'Referees must log and add time for every stoppage: goal celebrations (~30s), substitutions (~30s), VAR checks (full duration), injuries, and deliberate time-wasting.',
+    detail:'At previous tournaments, added time was routinely underestimated. From WC 2022 onwards, FIFA instructs fourth officials to track all stoppages in real time and display the accumulated added time. A goal celebration adds at least 30 seconds; a substitution window adds 30 seconds per player changed; VAR reviews add the full check duration; injury treatment adds the actual time off the pitch. The result: first halves regularly see 5-8 minutes added, second halves often see 10-15+ minutes. Referees who add insufficient time face formal review by FIFA Match Officials. This is designed to ensure roughly 60 minutes of actual ball-in-play time per match.'
+  },
+  {
+    id:'gk-penalty',badge:'updated',label:'Clarified 2024',cat:'setpiece',icon:'🥅',
+    title:'Goalkeeper Position at Penalties',
+    summary:'GK must have at least one foot on or in line with the goal line at the moment the ball is kicked. Moving early when a save is made = penalty retaken.',
+    detail:'The rule requiring goalkeepers to stay on the goal line until the ball is kicked has always existed but was rarely enforced. Since 2024, VAR is used to check goalkeeper position on penalties. If the keeper moves both feet off the line before the kick is taken and makes a save, the penalty is retaken and the goalkeeper receives a caution. If the keeper encroaches but the ball goes in, the goal stands. If the kick misses but the keeper encroached, it is retaken. The shooter\'s run-up and feinting remain permitted as long as the ball is not kicked and re-kicked (which would be a foul by the kicker).'
+  },
+  {
+    id:'var',badge:'updated',label:'Ongoing',cat:'tech',icon:'📺',
+    title:'VAR — Video Assistant Referee',
+    summary:'VAR corrects "clear and obvious errors" in four categories only: goals, penalties, direct red cards, and mistaken identity. Soft or marginal calls are not reviewed.',
+    detail:'The Video Assistant Referee sits in a review centre and monitors all four reviewable categories: (1) Goals — checking for offside, handball, or fouls in the build-up; (2) Penalty decisions — whether a foul occurred inside the box; (3) Direct red card incidents (violent conduct, serious foul play) — but NOT second yellow cards; (4) Mistaken identity — if the wrong player is carded or dismissed. The on-field referee is always the final decision maker. VAR may recommend a pitchside monitor review (OFR — On-Field Review), where the referee watches the incident on a screen at the touchline. The "clear and obvious error" threshold means a 50/50 foul that the referee saw live is not overturned — only errors that are clearly wrong.'
+  },
+  {
+    id:'handball',badge:'updated',label:'Clarified',cat:'conduct',icon:'✋',
+    title:'Handball Rule',
+    summary:'Deliberate handball is always a foul. Accidental handball by an attacker that leads to a goal or clear chance disallows the goal. Arm position relative to the body is the key test.',
+    detail:'Handball is deliberately touching the ball with any part of the arm from the tip of the shoulder to the fingertips. Key scenarios: (1) Any handball by a goalkeeper outside their area is a foul; (2) Accidental handball by a defending player in their own box that denies a goal or opportunity = penalty; (3) Accidental handball by an attacking player that leads directly to a goal (by themselves or a teammate immediately after) = no goal; (4) A player accidentally handles the ball then scores or creates a clear chance = no goal/assist. The "natural silhouette" test: if the arm is close to the body or used for balance in a natural position, handball is less likely. An arm stretched unnaturally wide, even if unintentional, is more likely to be called.'
+  },
+  {
+    id:'encroachment',badge:'updated',label:'Strict Enforcement',cat:'setpiece',icon:'🚧',
+    title:'Wall Distance & Free Kick Encroachment',
+    summary:'Defensive walls must be 9.15m (10 yards) from the ball. Encroaching before the kick is taken results in an automatic yellow card and the kick is retaken.',
+    detail:'At free kicks near goal, the defensive wall must be at least 9.15 metres from the ball. Referees use vanishing spray to mark the 9.15m line. If any defending player encroaches (moves inside that distance before the ball is kicked), the kick is retaken and the offending player is booked. From 2019, attacking players are also banned from standing in the defensive wall — doing so earns a yellow card. For free kicks, the kicking team may choose to take it quickly before the wall is set — the referee will not stop play for this. Only when the referee signals will they wait for the wall to be established.'
+  },
+  {
+    id:'treatment',badge:'updated',label:'Enforced',cat:'conduct',icon:'🏥',
+    title:'Players Must Leave Field for Treatment',
+    summary:'A player who signals for medical attention and receives on-field treatment must temporarily leave the pitch. They can return after the next stoppage.',
+    detail:'To prevent time-wasting via feigned injuries and to allow medical staff to properly assess players, any player who receives on-pitch treatment (other than a head/neck injury, where immediate assessment is required) must leave the field. They may return once the ball next goes out of play or at the next natural break. The referee has discretion to prevent a player from returning at an inopportune moment (e.g. during a quick counter-attack). This rule is enforced in addition to the standard "treatment off the pitch" guideline that has existed for years.'
+  },
+  {
+    id:'dropped-ball',badge:'updated',label:'From 2019',cat:'setpiece',icon:'⬇',
+    title:'Dropped Ball Restart',
+    summary:'The ball is returned to the team that last touched it (or to the goalkeeper if last touched in the penalty area). The contested 50/50 drop is gone.',
+    detail:'When play is stopped for any reason not covered by the other laws — e.g. an injury where the ball was in open play, or a simultaneous double foul — the restart is a dropped ball. Under the new protocol, the referee drops the ball to the goalkeeper if it was last in their penalty area, or to a player from the team that last touched it in open play. All other players must be at least 4.5m away. This eliminates the old custom of kicking the ball out voluntarily and returning possession — a custom that was entirely at the opposition\'s discretion.'
+  },
+  // ─── CORE LAWS ─────────────────────────────────
+  {
+    id:'offside',badge:'core',label:'Law 11',cat:'conduct',icon:'📐',
+    title:'Offside',
+    summary:'A player is offside if any goal-scoring body part (head, torso, feet — not arms) is beyond the second-last defender at the exact moment the ball is played.',
+    detail:'A player is in an offside position when they are in the opponent\'s half of the pitch AND any part of the body that can legally score — head, torso, or feet, but not the arms — is nearer to the opponent\'s goal line than both the ball and the second-to-last opponent (usually the last outfield player, with the goalkeeper as last). Being in an offside position is not an offence. It only becomes one when the player becomes actively involved: receives a pass, interferes with an opponent\'s vision, or wins a loose ball from a save. SAOT at WC 2026 tracks 29 body points to make pixel-precise automated calls.'
+  },
+  {
+    id:'five-subs',badge:'core',label:'Confirmed WC 2026',cat:'subs',icon:'🔄',
+    title:'5 Substitutions Per Match',
+    summary:'Teams may make up to 5 substitutions in a maximum of 3 windows plus half-time. In extra time, one additional substitution is allowed (6 total).',
+    detail:'Each team has 5 substitution slots per match. Substitutions can only be made in 3 windows during normal time plus the half-time interval — so teams must group changes. Multiple players can be substituted in one window (e.g. bringing on 3 players at the 60th minute counts as one window). A substituted player cannot return. In extra time, each team is permitted one further substitution, making a maximum of 6 total. Additionally, the concussion substitute rule allows a 7th change if a player sustains a head injury. The substitution board must display both the player coming off and on — any unannounced substitution can result in a caution for the team official.'
+  },
+  {
+    id:'extra-time',badge:'core',label:'Knockout Rounds',cat:'match',icon:'⚽',
+    title:'Extra Time & Penalty Shootout',
+    summary:'Knockout matches level after 90 minutes go to 2×15 min extra time, then a standard alternating penalty shootout (5 kicks each, then sudden death).',
+    detail:'In knockout rounds only: if the score is level at full-time, two additional 15-minute periods are played (accurate stoppage time is added to each half of ET). Each team may make one additional substitution during extra time. If still level after extra time, a penalty shootout follows the standard alternating format — Team A then Team B, repeated. Five kicks per team; if still level, sudden death (one kick each until one team misses and the other scores). The "ABBA" format experimented in other competitions is NOT used at WC 2026. No golden goal rule applies during extra time.'
+  },
+  {
+    id:'yellow-accum',badge:'core',label:'Discipline',cat:'conduct',icon:'🟡',
+    title:'Yellow Card Accumulation & Bans',
+    summary:'Two yellows in one match = red. Tournament yellows carry over from the group stage through the Round of 16. The slate is wiped before the quarter-finals.',
+    detail:'Two yellow cards received by the same player in a single match = automatic red card and immediate dismissal. That player is then suspended for the next match. Yellow cards from the group stage and the Round of 32 (new at WC 2026) carry over cumulatively. A player who reaches 2 accumulated yellows across those rounds is suspended for one match. Cards are wiped clean before the quarter-final stage — so a player with 1 yellow heading into the QF starts fresh. A direct red card = minimum 1 match suspension; violent conduct or serious foul play may result in longer bans decided by the FIFA Disciplinary Committee.'
+  },
+  {
+    id:'goal-kick',badge:'core',label:'Law 16',cat:'setpiece',icon:'🦵',
+    title:'Goal Kicks — No Need to Leave the Box',
+    summary:'Since 2019: the ball is in play as soon as a goal kick is taken, even before it leaves the penalty area. Attackers may enter the box once the kick is taken.',
+    detail:'Under the old rules, a goal kick was only in play once the ball left the penalty area, meaning attackers had to stay outside and goalkeepers had to hoof it long. Since 2019, the ball is in play the instant it is kicked — goalkeepers can pass to a defender inside the box immediately. Attackers must still be outside the penalty area at the moment of the kick, but may enter the box as soon as the ball is played. If an attacking player enters early and the goalkeeper plays a short kick, the referee stops play and the kick is retaken.'
+  },
+  {
+    id:'referee-signals',badge:'core',label:'Refereeing',cat:'tech',icon:'🖐',
+    title:'Referee Signals & Communication',
+    summary:'The referee is the sole timekeeping authority. Earpiece communication with assistants and the VAR room is standard. The fourth official manages the technical area and substitution boards.',
+    detail:'The referee controls all match decisions and is the sole timekeeping authority — the clock on stadium scoreboards is not official. The referee wears an earpiece connected to the assistant referees (ARs) and the VAR room, allowing real-time communication. The fourth official (4th) manages the technical area, handles substitution boards and added-time boards, and manages bench conduct. Two additional assistant referees (AARs) are stationed behind each goal at WC 2026 to monitor goal-line incidents and penalty box situations. On-Field Referee microphones are broadcast to the public to improve transparency, particularly for VAR decisions.'
+  },
+];
+
+const RB_FILTERS = [
+  {id:'all',   label:'All Rules'},
+  {id:'new',   label:'New & Updated'},
+  {id:'tech',  label:'VAR & Tech'},
+  {id:'setpiece',label:'Set Pieces'},
+  {id:'conduct',label:'Player Conduct'},
+  {id:'subs',  label:'Substitutions'},
+  {id:'match', label:'Match Format'},
+  {id:'format',label:'Tournament'},
+];
+
+function renderRulebook(){
+  const sec = $('tab-rulebook');
+  if(sec.dataset.loaded) return;
+  sec.dataset.loaded = '1';
+
+  let activeFilter = 'all';
+
+  function filteredRules(){
+    if(activeFilter === 'all') return RULEBOOK_DATA;
+    if(activeFilter === 'new') return RULEBOOK_DATA.filter(r=>r.badge==='new'||r.badge==='updated');
+    return RULEBOOK_DATA.filter(r=>r.cat===activeFilter);
+  }
+
+  function buildCards(rules){
+    if(!rules.length){
+      return `<div style="color:var(--t3);font-size:13px;text-align:center;padding:40px 0">No rules in this category</div>`;
+    }
+
+    let html = '';
+    if(activeFilter === 'all'){
+      const newRules   = rules.filter(r=>r.badge==='new');
+      const updated    = rules.filter(r=>r.badge==='updated');
+      const core       = rules.filter(r=>r.badge==='core');
+      if(newRules.length) html += `<div class="rb-sec-label">New for WC 2026</div>`  + newRules.map(cardHTML).join('');
+      if(updated.length)  html += `<div class="rb-sec-label">Updated Rules</div>`    + updated.map(cardHTML).join('');
+      if(core.length)     html += `<div class="rb-sec-label">Core Laws (Reference)</div>` + core.map(cardHTML).join('');
+    } else {
+      html = rules.map(cardHTML).join('');
+    }
+    return html;
+  }
+
+  function cardHTML(r){
+    return `<div class="rb-card" id="rbc-${r.id}" onclick="toggleRBCard('${r.id}')">
+      <div class="rb-card-head">
+        <div class="rb-icon">${r.icon}</div>
+        <div class="rb-card-body">
+          <div><span class="rb-badge ${r.badge}">${r.label}</span></div>
+          <div class="rb-card-title">${r.title}</div>
+          <div class="rb-card-summary">${r.summary}</div>
+        </div>
+        <div class="rb-chevron">›</div>
+      </div>
+      <div class="rb-detail">${r.detail}</div>
+    </div>`;
+  }
+
+  function render(){
+    const rules = filteredRules();
+    cardsEl.innerHTML = buildCards(rules);
+  }
+
+  sec.innerHTML = `<div class="inner rb-page">
+    <div class="rb-hd">
+      <div class="rb-hd-title">Laws of the Game</div>
+      <div class="rb-hd-sub">Official referee rules for FIFA World Cup 2026 — including every change made for this tournament.</div>
+    </div>
+    <div class="rb-spotlight">
+      <div class="rb-spot-eyebrow">What's New in 2026</div>
+      <div class="rb-spot-title">48 Teams, New Tech, Stricter Conduct Rules</div>
+      <div class="rb-spot-body">World Cup 2026 introduces the biggest format change in tournament history (48 teams, 12 groups), continues Semi-Automatic Offside Technology from 2022, and enforces new 2024-25 IFAB laws covering formal yellow/red cards for coaches and permanent concussion substitutes. Tap any rule below to read the full detail.</div>
+    </div>
+    <div class="rb-filter" id="rbFilter"></div>
+    <div id="rbCards"></div>
+  </div>`;
+
+  const filterEl = $('rbFilter');
+  const cardsEl  = $('rbCards');
+
+  filterEl.innerHTML = RB_FILTERS.map(f=>
+    `<button class="rb-pill${f.id===activeFilter?' active':''}" onclick="setRBFilter('${f.id}')">${f.label}</button>`
+  ).join('');
+
+  render();
+
+  window.setRBFilter = function(id){
+    activeFilter = id;
+    filterEl.querySelectorAll('.rb-pill').forEach(p=>{
+      p.classList.toggle('active', p.textContent === RB_FILTERS.find(f=>f.id===id).label);
+    });
+    render();
+  };
+
+  window.toggleRBCard = function(id){
+    const card = document.getElementById('rbc-'+id);
+    if(card) card.classList.toggle('open');
+  };
 }
 
 // ═══════════════════════════════════════════════════
