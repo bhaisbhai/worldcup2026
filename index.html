@@ -160,6 +160,9 @@ body{
 .mc-ft-time{font-size:11px;color:var(--t2)}
 .mc-venue{font-size:11px;color:var(--t2);text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:160px}
 .mc-cd{font-family:var(--mono);font-size:11px;color:var(--gold);font-weight:600}
+.mc-kickoff{display:flex;flex-direction:column;gap:1px}
+.mc-kickoff-time{font-size:18px;font-weight:700;color:var(--text);letter-spacing:-.5px;font-variant-numeric:tabular-nums;line-height:1.1}
+.mc-cd-sm{font-family:var(--mono);font-size:10px;color:var(--t3);font-weight:500}
 
 /* ── SKELETON ───────────────────────────────── */
 .skel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:11px}
@@ -1249,7 +1252,10 @@ function buildCard(ev){
     foot_l=`<div class="mc-ft-time">Full Time</div>`;
   } else {
     badge=`<div class="mc-badge up">Upcoming</div>`;
-    foot_l=`<div class="mc-cd" data-cdid="${ev.id}" data-ts="${ev.date.getTime()}">${countdown(ev.date)}</div>`;
+    foot_l=`<div class="mc-kickoff">
+      <div class="mc-kickoff-time">${localTime(ev.date)}</div>
+      <div class="mc-cd-sm" data-cdid="${ev.id}" data-ts="${ev.date.getTime()}">${countdown(ev.date)}</div>
+    </div>`;
   }
 
   // score
@@ -1379,20 +1385,24 @@ function patchCard(card, ev){
   if(tnames[0]) tnames[0].classList.toggle('winner', ev.home.winner);
   if(tnames[1]) tnames[1].classList.toggle('winner', ev.away.winner);
 
-  const footL = card.querySelector('.mc-min,.mc-ft-time,.mc-cd');
+  const footL = card.querySelector('.mc-min,.mc-ft-time,.mc-cd,.mc-kickoff');
   if(footL){
     if(isLive){
-      footL.className = ev.isHT ? 'mc-min ht' : 'mc-min';
-      delete footL.dataset.cdid;
-      if(ev.isHT){ delete footL.dataset.clockid; footL.textContent='HT'; }
-      else { footL.dataset.clockid=ev.id; footL.textContent=ev.displayClock; }
+      const next = document.createElement('div');
+      next.className = ev.isHT ? 'mc-min ht' : 'mc-min';
+      if(ev.isHT){ next.textContent='HT'; }
+      else { next.dataset.clockid=ev.id; next.textContent=ev.displayClock; }
+      footL.replaceWith(next);
     } else if(isFt){
-      footL.className='mc-ft-time'; delete footL.dataset.clockid; delete footL.dataset.cdid;
-      footL.textContent='Full Time';
+      const next = document.createElement('div');
+      next.className='mc-ft-time'; next.textContent='Full Time';
+      footL.replaceWith(next);
     } else {
-      footL.className='mc-cd';
-      footL.dataset.cdid=ev.id; footL.dataset.ts=ev.date.getTime();
-      delete footL.dataset.clockid;
+      // still pre — update the countdown child inside the kickoff wrapper
+      const cd = footL.classList.contains('mc-kickoff')
+        ? footL.querySelector('[data-cdid]')
+        : footL;
+      if(cd){ cd.dataset.cdid=ev.id; cd.dataset.ts=ev.date.getTime(); }
     }
   }
 
