@@ -573,7 +573,7 @@ body{
 .install-x{background:none;border:none;color:var(--t3);font-size:20px;cursor:pointer;padding:0 2px;line-height:1;flex-shrink:0}
 
 /* ── LEADERBOARD ────────────────────────────────── */
-.lb-page{max-width:720px;margin:0 auto}
+.lb-page{max-width:680px;margin:0 auto}
 .lb-hd{font-size:24px;font-weight:800;letter-spacing:-.5px;padding:24px 0 4px}
 .lb-meta{font-size:12px;color:var(--t2);margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px}
 .lb-ts{font-size:11px;color:var(--t3)}
@@ -584,42 +584,42 @@ body{
 .lb-ov-val{font-size:24px;font-weight:800;font-family:var(--mono);letter-spacing:-.5px}
 .lb-ov-lbl{font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.8px;margin-top:4px}
 .lb-section{font-size:9px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:var(--t3);margin:24px 0 10px}
-/* Top teams table */
-.lb-teams-box{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:10px}
-.lb-teams-hdr{display:grid;grid-template-columns:28px 1fr 34px 22px 34px 36px;gap:2px;align-items:center;padding:8px 14px;border-bottom:1px solid var(--border)}
-.lb-teams-hdr span{font-size:9px;font-weight:700;letter-spacing:.7px;text-transform:uppercase;color:var(--t3);text-align:right}
-.lb-teams-hdr span:nth-child(2){text-align:left}
-.lb-team-row{display:grid;grid-template-columns:28px 1fr 34px 22px 34px 36px;gap:2px;align-items:center;padding:9px 14px;border-bottom:1px solid rgba(255,255,255,.03)}
-.lb-team-row:last-child{border-bottom:none}
-.lb-team-row:nth-child(even){background:rgba(255,255,255,.012)}
-.lb-tr-rank{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--t3);text-align:center}
-.lb-tr-rank.top{color:var(--accent)}
-.lb-tr-team{display:flex;align-items:center;gap:7px;min-width:0}
-.lb-tr-flag{font-size:15px;flex-shrink:0}
-.lb-tr-name{font-size:12px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.lb-tr-grp{font-family:var(--mono);font-size:9px;font-weight:700;color:var(--t3);text-align:right}
-.lb-tr-stat{font-family:var(--mono);font-size:12px;font-weight:600;text-align:right;color:var(--t2)}
-.lb-tr-stat.pos{color:#4cff9f}.lb-tr-stat.neg{color:var(--red)}
-.lb-tr-pts{font-family:var(--mono);font-size:14px;font-weight:800;text-align:right;color:var(--accent)}
-/* Group standings grid */
-.lb-grp-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:28px}
-@media(max-width:540px){.lb-grp-grid{grid-template-columns:1fr}}
-.lb-grp-card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden}
-.lb-grp-hd{padding:10px 14px;border-bottom:1px solid var(--border);font-size:11px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--t2)}
-.lb-grp-tbl{width:100%;border-collapse:collapse}
-.lb-grp-tbl th{font-size:8px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--t3);padding:6px 7px 5px;text-align:right}
-.lb-grp-tbl th:first-child{text-align:left;padding-left:12px}
-.lb-grp-tbl td{font-size:11px;padding:7px 7px;text-align:right;color:var(--t2);font-family:var(--mono)}
-.lb-grp-tbl td:first-child{text-align:left;padding-left:12px;font-family:var(--font);color:var(--text)}
-.lb-grp-tbl tr:nth-child(odd) td{background:rgba(255,255,255,.012)}
-.lb-grp-tbl tr:first-child td{background:rgba(0,255,135,.035)}
-.lb-grp-tbl .lb-gd-pos{color:#4cff9f}
-.lb-grp-tbl .lb-gd-neg{color:var(--red)}
-.lb-grp-tbl .lb-pts{font-weight:800;color:var(--text)}
-.lb-grp-team{display:flex;align-items:center;gap:6px}
-.lb-grp-flag{font-size:13px;flex-shrink:0}
-.lb-grp-tname{font-size:11px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:88px}
-.lb-qualified{color:var(--accent)!important;font-weight:700!important}
+.lb-box{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:10px}
+.lb-box-hd{padding:10px 16px;border-bottom:1px solid var(--border)}
+.lb-box-title{font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--t2)}
+.lb-row{display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid rgba(255,255,255,.03)}
+.lb-row:last-child{border-bottom:none}
+.lb-rank{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--t3);min-width:20px;text-align:center;flex-shrink:0}
+.lb-rank.gold{color:var(--gold)}
+.lb-flag{font-size:18px;flex-shrink:0}
+.lb-info{flex:1;min-width:0}
+.lb-name{font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lb-team{font-size:10px;color:var(--t3);margin-top:2px}
+.lb-val{font-size:20px;font-weight:800;font-family:var(--mono);min-width:24px;text-align:right;flex-shrink:0}
+.lb-val.g{color:var(--accent)}.lb-val.a{color:#64c8ff}.lb-val.y{color:var(--gold)}.lb-val.r{color:var(--red)}.lb-val.c{color:#a78bfa}
+.lb-2col{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.lb-empty{padding:20px 16px;font-size:12px;color:var(--t3);line-height:1.7;text-align:center}
+/* Players to Watch */
+.watch-hd{font-size:9px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:var(--t3);margin:24px 0 6px}
+.watch-algo{font-size:10px;color:var(--t3);margin-bottom:12px;line-height:1.75;padding:9px 13px;background:rgba(255,255,255,.025);border-radius:8px;border:1px solid var(--border)}
+.watch-list{display:flex;flex-direction:column;gap:8px;margin-bottom:28px}
+.watch-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:12px;transition:border-color .15s}
+.watch-card:hover{border-color:#2a2a2a}
+.watch-pos{font-family:var(--mono);font-size:11px;font-weight:800;color:var(--t3);min-width:20px;text-align:center;flex-shrink:0}
+.watch-pos.top3{color:var(--gold)}
+.watch-flag{font-size:26px;flex-shrink:0;line-height:1}
+.watch-info{flex:1;min-width:0}
+.watch-name{font-size:13px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.watch-team{font-size:10px;color:var(--t3);margin-top:1px}
+.watch-pills{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.watch-pill{font-size:9px;font-weight:700;padding:2px 7px;border-radius:5px;letter-spacing:.3px}
+.watch-pill.g{background:rgba(0,255,135,.1);color:var(--accent)}
+.watch-pill.a{background:rgba(100,200,255,.1);color:#64c8ff}
+.watch-pill.c{background:rgba(167,139,250,.1);color:#a78bfa}
+.watch-pill.d{background:rgba(255,215,0,.1);color:var(--gold)}
+.watch-score{text-align:right;flex-shrink:0}
+.watch-score-val{font-size:20px;font-weight:800;font-family:var(--mono);color:var(--accent)}
+.watch-score-lbl{font-size:8px;color:var(--t3);letter-spacing:.5px;text-transform:uppercase;margin-top:1px}
 
 /* ── MY TEAM ────────────────────────────────────── */
 .tp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px;margin-top:14px}
@@ -765,7 +765,7 @@ body{
     <button class="tbtn active" data-tab="today">Today</button>
     <button class="tbtn" data-tab="groups">Groups</button>
     <button class="tbtn" data-tab="knockout">Knockout</button>
-    <button class="tbtn" data-tab="leaderboard">Standings</button>
+    <button class="tbtn" data-tab="leaderboard">Stats</button>
     <button class="tbtn" data-tab="myteam" id="myteamTab">My Team</button>
     <button class="tbtn" data-tab="rulebook">Rules</button>
   </nav>
@@ -2545,12 +2545,36 @@ function renderKnockoutDynamic(rounds){
 }
 
 // ═══════════════════════════════════════════════════
-//  LEADERBOARD (Live Standings)
+//  LEADERBOARD (Player Stats)
 // ═══════════════════════════════════════════════════
 let lbCache = null;
 let lbFetching = false;
 let lbLastFetch = 0;
 const LB_TTL = 5 * 60 * 1000;
+
+function lbUpsert(map, name, teamName, teamAbbr){
+  if(!name) return null;
+  const key = name + '||' + teamAbbr;
+  if(!map[key]) map[key] = {
+    name, teamName, teamAbbr,
+    f: FLAGS[teamAbbr] || '🏳️',
+    goals:0, assists:0, yellowCards:0, redCards:0, cleanSheets:0, teamPts:0,
+  };
+  return map[key];
+}
+
+function lbTable(playerMap, key, limit=10){
+  return Object.values(playerMap)
+    .filter(p => (p[key]||0) > 0)
+    .sort((a,b) => (b[key]||0) - (a[key]||0))
+    .slice(0, limit);
+}
+
+function lbWatchScore(p){
+  return (p.goals||0)*12 + (p.assists||0)*8 + (p.cleanSheets||0)*5 +
+    ((p.teamPts||0) >= 7 ? 4 : (p.teamPts||0) >= 4 ? 2 : 0) +
+    (p.yellowCards||0)*-1.5 + (p.redCards||0)*-10;
+}
 
 async function fetchLeaderboardData(){
   if(lbFetching) return;
@@ -2559,77 +2583,166 @@ async function fetchLeaderboardData(){
   if($('tab-leaderboard')?.classList.contains('active')) renderLeaderboard();
 
   try {
-    // Scoreboard: count completed matches + total goals
+    // ── Step 1: scoreboard scan for completed match IDs + overview totals ──
     let totalGoals = 0, matchCount = 0;
+    const matches = []; // {id, teams:[{abbr,name,score}]}
     const now = new Date();
     const dateStrs = [];
-    for(let i = 0; i <= 30; i++){
-      const dt = new Date(now); dt.setDate(dt.getDate() - i);
+    for(let i = 0; i <= 14; i++){
+      const dt = new Date(now); dt.setDate(dt.getDate()-i);
       dateStrs.push(toDateStr(dt));
     }
     await Promise.all(dateStrs.map(async ds => {
       try {
-        const r = await fetch(`${ESPN_URL}?dates=${ds}&limit=50`, {signal: AbortSignal.timeout(7000)});
+        const r = await fetch(`${ESPN_URL}?dates=${ds}&limit=50`, {signal:AbortSignal.timeout(7000)});
         if(!r.ok) return;
         const data = await r.json();
-        (data.events || []).forEach(ev => {
+        (data.events||[]).forEach(ev => {
           const comp = ev.competitions?.[0];
           if(comp?.status?.type?.state !== 'post') return;
           matchCount++;
-          (comp.competitors || []).forEach(c => { totalGoals += parseInt(c.score) || 0; });
+          const teams = (comp.competitors||[]).map(c => ({
+            abbr: c.team?.abbreviation||'', name: c.team?.displayName||'',
+            score: parseInt(c.score)||0,
+          }));
+          teams.forEach(t => { totalGoals += t.score; });
+          matches.push({id: ev.id, teams});
         });
       } catch(e){}
     }));
 
-    // Standings: all 12 groups from ESPN standings API
-    let standingsGroups = [];
+    // ── Step 2: fetch each summary for player-level stats (batch 3, 300ms gap) ──
+    const playerMap = {};
+    const seenIds = [...new Set(matches.map(m => m.id))];
+    const matchTeams = Object.fromEntries(matches.map(m => [m.id, m.teams]));
+
+    for(let i = 0; i < seenIds.length; i += 3){
+      await Promise.all(seenIds.slice(i, i+3).map(async id => {
+        try {
+          const r = await fetch(`${ESPN_SUMMARY}?event=${id}`, {signal:AbortSignal.timeout(10000)});
+          if(!r.ok) return;
+          const d = await r.json();
+
+          // Goals, assists, cards from plays array (same source as match modal)
+          (d?.plays||[]).forEach(play => {
+            const tt = (play.type?.text||'').toLowerCase();
+            const isOG = tt.includes('own goal') || tt.includes('own-goal');
+            const isGoal = (play.scoringPlay===true || tt.includes('goal'))
+                           && !isOG && !tt.includes('miss') && !tt.includes('saved')
+                           && !tt.includes('blocked') && !tt.includes('offside');
+            const isYellow = tt.includes('yellow');
+            const isRed = tt.includes('red card') || tt.includes('second yellow');
+            const tAbbr = play.team?.abbreviation||'';
+            const tName = play.team?.displayName||'';
+            const parts = play.participants||[];
+
+            if(isGoal){
+              const sc = parts.find(pp=>pp.type==='scorer') || (parts.length===1 ? parts[0] : null);
+              const as = parts.find(pp=>pp.type==='assist');
+              if(sc?.athlete?.displayName){
+                const p = lbUpsert(playerMap, sc.athlete.displayName,
+                  tName||sc.athlete.team?.displayName||'', tAbbr||sc.athlete.team?.abbreviation||'');
+                if(p) p.goals++;
+              }
+              if(as?.athlete?.displayName){
+                const a = lbUpsert(playerMap, as.athlete.displayName,
+                  as.athlete.team?.displayName||tName, as.athlete.team?.abbreviation||tAbbr);
+                if(a) a.assists++;
+              }
+            } else if(isYellow || isRed){
+              const rc = parts.find(pp=>['recipient','player','carded'].includes(pp.type))
+                         || (parts.length===1 ? parts[0] : null);
+              if(rc?.athlete?.displayName){
+                const p = lbUpsert(playerMap, rc.athlete.displayName, tName, tAbbr);
+                if(p){ isYellow ? p.yellowCards++ : p.redCards++; }
+              }
+            }
+          });
+
+          // Clean sheets: team that conceded 0 → find their starting GK in rosters
+          const comps = matchTeams[id] || [];
+          if(comps.length === 2){
+            comps.forEach((team, idx) => {
+              const opponent = comps[1-idx];
+              if(opponent.score !== 0) return; // opponent scored, no clean sheet
+              const rosters = d?.rosters||[];
+              const tr = rosters.find(r => r.team?.abbreviation === team.abbr);
+              if(!tr) return;
+              const gk = (tr.entries||[]).find(e =>
+                e.athlete?.position?.abbreviation === 'GK' && e.starter !== false
+              );
+              if(gk?.athlete?.displayName){
+                const p = lbUpsert(playerMap, gk.athlete.displayName, team.name, team.abbr);
+                if(p) p.cleanSheets++;
+              }
+            });
+          }
+        } catch(e){}
+      }));
+      if(i+3 < seenIds.length) await new Promise(r=>setTimeout(r,300));
+    }
+
+    // ── Step 3: standings API → team points for Watch algorithm ──
     try {
-      const r = await fetch(`${ESPN_STANDINGS}?season=2026`, {signal: AbortSignal.timeout(8000)});
+      const r = await fetch(`${ESPN_STANDINGS}?season=2026`, {signal:AbortSignal.timeout(8000)});
       if(r.ok){
         const data = await r.json();
-        standingsGroups = (data.children || []).map(child => {
-          const m = (child.name || '').match(/Group\s+([A-La-l])/i);
-          const gId = m ? m[1].toUpperCase() : child.name;
-          const teams = (child.standings?.entries || []).map(entry => {
-            const stats = entry.stats || [];
-            const abbr  = entry.team?.abbreviation || '';
-            const gf    = getStat(stats, 'pointsFor');
-            const ga    = getStat(stats, 'pointsAgainst');
-            return {
-              n:   entry.team?.displayName || entry.team?.name || '',
-              abbr,
-              f:   FLAGS[abbr] || '🏳️',
-              p:   getStat(stats, 'gamesPlayed'),
-              w:   getStat(stats, 'wins'),
-              d:   getStat(stats, 'ties'),
-              l:   getStat(stats, 'losses'),
-              gf, ga,
-              gd:  gf - ga,
-              pts: getStat(stats, 'points'),
-              clinched: /advance|qualified/i.test(entry.note?.description || ''),
-            };
-          }).sort((a,b) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf);
-          return { id: gId, name: child.name || `Group ${gId}`, teams };
-        }).filter(g => g.teams.length > 0).sort((a,b) => a.id.localeCompare(b.id));
+        const tPts = {};
+        (data.children||[]).forEach(child => {
+          (child.standings?.entries||[]).forEach(entry => {
+            const abbr = entry.team?.abbreviation||'';
+            if(abbr) tPts[abbr] = getStat(entry.stats||[], 'points');
+          });
+        });
+        Object.values(playerMap).forEach(p => {
+          if(tPts[p.teamAbbr] !== undefined) p.teamPts = tPts[p.teamAbbr];
+        });
       }
     } catch(e){}
 
     lbCache = {
-      meta: { matchCount, totalGoals, avgGoals: matchCount ? (totalGoals/matchCount).toFixed(1) : '—' },
-      standingsGroups,
-      ts: Date.now(),
-      error: false,
+      tables: {
+        goals:   lbTable(playerMap,'goals'),
+        assists: lbTable(playerMap,'assists'),
+        yellow:  lbTable(playerMap,'yellowCards'),
+        red:     lbTable(playerMap,'redCards'),
+        clean:   lbTable(playerMap,'cleanSheets'),
+      },
+      watchList: Object.values(playerMap)
+        .map(p=>({...p, ws: Math.round(lbWatchScore(p)*10)/10}))
+        .filter(p=>p.ws>0)
+        .sort((a,b)=>b.ws-a.ws)
+        .slice(0,10),
+      meta: {matchCount, totalGoals, avgGoals: matchCount ? (totalGoals/matchCount).toFixed(1):'—'},
+      ts: Date.now(), error: false,
     };
     lbLastFetch = Date.now();
   } catch(e){
     if(!lbCache) lbCache = {
-      meta: {matchCount:0, totalGoals:0, avgGoals:'—'},
-      standingsGroups: [],
-      ts: null, error: true,
+      tables:{goals:[],assists:[],yellow:[],red:[],clean:[]}, watchList:[],
+      meta:{matchCount:0,totalGoals:0,avgGoals:'—'}, ts:null, error:true,
     };
   }
   lbFetching = false;
   if($('tab-leaderboard')?.classList.contains('active')) renderLeaderboard();
+}
+
+function lbStatBox(rows, valKey, valCls, title, limit=10){
+  rows = (rows||[]).slice(0, limit);
+  const syms = ['🥇','🥈','🥉'];
+  const hd = title ? `<div class="lb-box-hd"><span class="lb-box-title">${title}</span></div>` : '';
+  const body = rows.length
+    ? rows.map((p,i) => `<div class="lb-row">
+        <span class="lb-rank${i<3?' gold':''}">${i<3?syms[i]:i+1}</span>
+        <span class="lb-flag">${p.f}</span>
+        <div class="lb-info">
+          <div class="lb-name">${p.name}</div>
+          <div class="lb-team">${p.teamName}</div>
+        </div>
+        <span class="lb-val ${valCls}">${p[valKey]||0}</span>
+      </div>`).join('')
+    : `<div class="lb-empty">No data yet — check back after matches complete.</div>`;
+  return `<div class="lb-box">${hd}${body}</div>`;
 }
 
 function renderLeaderboard(){
@@ -2638,105 +2751,91 @@ function renderLeaderboard(){
 
   if(!lbCache || lbFetching){
     sec.innerHTML = `<div class="inner lb-page">
-      <div class="lb-hd">Standings</div>
+      <div class="lb-hd">Stats</div>
       <div class="lb-meta"><span class="lb-ts">FIFA World Cup 2026</span></div>
-      <div class="lineup-loading">Loading standings…</div>
+      <div class="lineup-loading">Loading player stats…</div>
     </div>`;
     if(!lbFetching) fetchLeaderboardData();
     return;
   }
 
-  const m  = lbCache.meta || {};
+  const m  = lbCache.meta||{};
   const ts = lbCache.ts ? timeAgo(new Date(lbCache.ts).toISOString()) : null;
-  const groups = lbCache.standingsGroups || [];
+  const t  = lbCache.tables||{};
+  const wl = lbCache.watchList||[];
 
-  // Flatten + sort all teams for the top-teams leaderboard
-  const allTeams = [];
-  groups.forEach(g => g.teams.forEach(t => allTeams.push({...t, group: g.id})));
-  allTeams.sort((a,b) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf);
-
-  const topTeamsHtml = allTeams.length ? `
-    <div class="lb-section">Top Teams</div>
-    <div class="lb-teams-box">
-      <div class="lb-teams-hdr">
-        <span>#</span><span>Team</span><span>Grp</span><span>P</span><span>GD</span><span>Pts</span>
-      </div>
-      ${allTeams.map((t,i) => {
-        const gd  = t.gd > 0 ? `+${t.gd}` : String(t.gd);
-        const gdC = t.gd > 0 ? 'pos' : t.gd < 0 ? 'neg' : '';
-        return `<div class="lb-team-row">
-          <span class="lb-tr-rank${i < 8 ? ' top' : ''}">${i+1}</span>
-          <div class="lb-tr-team">
-            <span class="lb-tr-flag">${t.f}</span>
-            <span class="lb-tr-name">${t.n}</span>
+  const watchHtml = wl.length
+    ? `<div class="watch-list">${wl.map((p,i) => {
+        const syms = ['🥇','🥈','🥉'];
+        const pills = [];
+        if(p.goals)       pills.push({c:'g',t:`${p.goals}G`});
+        if(p.assists)     pills.push({c:'a',t:`${p.assists}A`});
+        if(p.cleanSheets) pills.push({c:'c',t:`${p.cleanSheets}CS`});
+        if(p.yellowCards) pills.push({c:'d',t:`${p.yellowCards}🟨`});
+        if(p.redCards)    pills.push({c:'d',t:`${p.redCards}🟥`});
+        return `<div class="watch-card">
+          <span class="watch-pos${i<3?' top3':''}">${i<3?syms[i]:i+1}</span>
+          <span class="watch-flag">${p.f}</span>
+          <div class="watch-info">
+            <div class="watch-name">${p.name}</div>
+            <div class="watch-team">${p.teamName}</div>
+            <div class="watch-pills">${pills.map(pl=>`<span class="watch-pill ${pl.c}">${pl.t}</span>`).join('')}</div>
           </div>
-          <span class="lb-tr-grp">${t.group}</span>
-          <span class="lb-tr-stat">${t.p}</span>
-          <span class="lb-tr-stat ${gdC}">${gd}</span>
-          <span class="lb-tr-pts">${t.pts}</span>
+          <div class="watch-score">
+            <div class="watch-score-val">${p.ws}</div>
+            <div class="watch-score-lbl">Score</div>
+          </div>
         </div>`;
-      }).join('')}
-    </div>` : '';
-
-  const groupsHtml = groups.length ? `
-    <div class="lb-section">Group Standings</div>
-    <div class="lb-grp-grid">
-      ${groups.map(g => `
-        <div class="lb-grp-card">
-          <div class="lb-grp-hd">${g.name}</div>
-          <table class="lb-grp-tbl">
-            <thead><tr>
-              <th>Team</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GD</th><th>Pts</th>
-            </tr></thead>
-            <tbody>${g.teams.map(t => {
-              const gd  = t.gd > 0 ? `+${t.gd}` : String(t.gd);
-              const gdC = t.gd > 0 ? 'lb-gd-pos' : t.gd < 0 ? 'lb-gd-neg' : '';
-              return `<tr>
-                <td><div class="lb-grp-team">
-                  <span class="lb-grp-flag">${t.f}</span>
-                  <span class="lb-grp-tname${t.clinched ? ' lb-qualified' : ''}">${t.n}</span>
-                </div></td>
-                <td>${t.p}</td><td>${t.w}</td><td>${t.d}</td><td>${t.l}</td>
-                <td class="${gdC}">${gd}</td>
-                <td class="lb-pts">${t.pts}</td>
-              </tr>`;
-            }).join('')}</tbody>
-          </table>
-        </div>`).join('')}
-    </div>` : `
-    <div class="lb-section">Group Standings</div>
-    <div style="text-align:center;padding:40px 20px;color:var(--t3);font-size:13px;line-height:2">
-      Standings will appear once group stage begins.
-    </div>`;
+      }).join('')}</div>`
+    : `<div style="text-align:center;padding:32px 0;color:var(--t3);font-size:13px;line-height:1.9">
+        Algorithm runs once player stats are available.
+       </div>`;
 
   sec.innerHTML = `<div class="inner lb-page">
-    <div class="lb-hd">Standings</div>
+    <div class="lb-hd">Stats</div>
     <div class="lb-meta">
       <span class="lb-ts">FIFA World Cup 2026${ts ? ` · Updated ${ts}` : ''}</span>
       <button class="lb-refresh-btn" onclick="lbCache=null;lbLastFetch=0;renderLeaderboard()">Refresh</button>
     </div>
     <div class="lb-overview">
       <div class="lb-ov-cell">
-        <div class="lb-ov-val">${m.matchCount || 0}</div>
+        <div class="lb-ov-val">${m.matchCount||0}</div>
         <div class="lb-ov-lbl">Matches</div>
       </div>
       <div class="lb-ov-cell">
-        <div class="lb-ov-val" style="color:var(--accent)">${m.totalGoals || 0}</div>
+        <div class="lb-ov-val" style="color:var(--accent)">${m.totalGoals||0}</div>
         <div class="lb-ov-lbl">Goals</div>
       </div>
       <div class="lb-ov-cell">
-        <div class="lb-ov-val" style="color:var(--gold)">${m.avgGoals || '—'}</div>
+        <div class="lb-ov-val" style="color:var(--gold)">${m.avgGoals||'—'}</div>
         <div class="lb-ov-lbl">Per Game</div>
       </div>
     </div>
-    ${topTeamsHtml}
-    ${groupsHtml}
+
+    <div class="lb-section">Top Scorers</div>
+    ${lbStatBox(t.goals,'goals','g')}
+
+    <div class="lb-section">Top Assists</div>
+    ${lbStatBox(t.assists,'assists','a')}
+
+    <div class="lb-section">Discipline</div>
+    <div class="lb-2col">
+      ${lbStatBox(t.yellow,'yellowCards','y','Yellow Cards',5)}
+      ${lbStatBox(t.red,'redCards','r','Red Cards',5)}
+    </div>
+
+    <div class="lb-section">Clean Sheets</div>
+    ${lbStatBox(t.clean,'cleanSheets','c')}
+
+    <div class="watch-hd">Players to Watch</div>
+    <div class="watch-algo">Goals ×12 · Assists ×8 · Clean Sheets ×5 · Team form bonus · Yellow −1.5 · Red −10</div>
+    ${watchHtml}
   </div>`;
 
   if(Date.now() - lbLastFetch > LB_TTL) fetchLeaderboardData();
 }
 
-// Auto-refresh when tab is active
+// Auto-refresh every 5 min when Stats tab is active
 setInterval(() => {
   if($('tab-leaderboard')?.classList.contains('active')) fetchLeaderboardData();
 }, LB_TTL);
