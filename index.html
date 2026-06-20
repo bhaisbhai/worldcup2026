@@ -741,6 +741,21 @@ body{
 .rb-card.open .rb-detail{display:block}
 
 /* ── GOAL CELEBRATION ──────────────────── */
+.goal-banner{
+  position:fixed;top:42%;left:50%;
+  transform:translate(-50%,-50%) scale(0.6);
+  color:#fff;font-weight:900;font-size:56px;
+  letter-spacing:4px;z-index:10000;pointer-events:none;
+  text-shadow:0 0 30px rgba(255,255,255,.5),0 2px 8px rgba(0,0,0,.8);
+  animation:goalBanner 1.8s cubic-bezier(.34,1.4,.64,1) forwards;
+}
+@keyframes goalBanner{
+  0%  {transform:translate(-50%,-50%) scale(0.6);opacity:0}
+  20% {transform:translate(-50%,-50%) scale(1.06);opacity:1}
+  55% {transform:translate(-50%,-50%) scale(1);opacity:1}
+  85% {transform:translate(-50%,-50%) scale(1);opacity:1}
+  100%{transform:translate(-50%,-50%) scale(1.02);opacity:0}
+}
 .goal-particle{
   position:fixed;pointer-events:none;z-index:9999;
   transform:translate(-50%,-50%) scale(0);
@@ -3406,6 +3421,13 @@ setInterval(tick, 1000);
 function showGoalCelebration(ox, oy){
   ox = ox ?? window.innerWidth  / 2;
   oy = oy ?? window.innerHeight / 2;
+
+  // Banner
+  const banner = document.createElement('div');
+  banner.className = 'goal-banner';
+  banner.textContent = 'GOAL!';
+  document.body.appendChild(banner);
+  setTimeout(() => banner.remove(), 1900);
 
   // Particles — two waves for depth
   const waves = [
