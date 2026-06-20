@@ -3,6 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="WC 2026">
+<meta name="theme-color" content="#080808">
 <title>FIFA World Cup 2026 — Live Scores</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -538,6 +542,81 @@ body{
   .mc-venue{display:none}
   .day-bar{flex-direction:column;align-items:flex-start}
 }
+
+/* ── BRACKET MATCH INFO ─────────────────────────── */
+.bm-info{font-size:9px;color:var(--t3);padding:2px 8px 5px;letter-spacing:.2px;line-height:1.6;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bt.lbl{color:var(--t2);font-size:10px}
+
+/* ── INSTALL BANNER ─────────────────────────────── */
+.install-banner{
+  display:none;align-items:center;gap:10px;padding:9px 18px;
+  background:rgba(0,255,135,.05);border-bottom:1px solid rgba(0,255,135,.12);
+  font-size:12px;color:var(--t2);
+}
+.install-banner.show{display:flex}
+.install-txt{flex:1}
+.install-btn{
+  background:var(--accent);color:#000;border:none;border-radius:8px;
+  font-size:11px;font-weight:700;padding:5px 13px;cursor:pointer;flex-shrink:0;
+  font-family:var(--font);letter-spacing:.3px;
+}
+.install-x{background:none;border:none;color:var(--t3);font-size:20px;cursor:pointer;padding:0 2px;line-height:1;flex-shrink:0}
+
+/* ── MY TEAM ────────────────────────────────────── */
+.tp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px;margin-top:14px}
+.tp-card{
+  background:var(--card);border:1px solid var(--border);border-radius:10px;
+  padding:12px 8px;text-align:center;cursor:pointer;
+  transition:border-color .15s,transform .15s;
+}
+.tp-card:hover{border-color:#333;transform:translateY(-2px)}
+.tp-flag{font-size:24px;margin-bottom:4px}
+.tp-name{font-size:10px;font-weight:600;line-height:1.3;color:var(--t2)}
+.tp-grp{font-size:9px;color:var(--t3);margin-top:2px}
+
+.fav-hero{display:flex;align-items:center;gap:16px;padding:0 0 20px;border-bottom:1px solid var(--border);margin-bottom:0}
+.fav-flag-lg{font-size:54px;line-height:1;flex-shrink:0}
+.fav-meta{min-width:0}
+.fav-name{font-size:22px;font-weight:700;letter-spacing:-.4px}
+.fav-sub{font-size:12px;color:var(--t2);margin-top:3px;line-height:1.5}
+.fav-change{background:none;border:1px solid var(--border);color:var(--t2);font-size:11px;
+  padding:4px 11px;border-radius:8px;cursor:pointer;margin-top:10px;display:inline-block;
+  font-family:var(--font);transition:border-color .15s;letter-spacing:.2px}
+.fav-change:hover{border-color:#444;color:var(--text)}
+.fav-sect{font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;
+  color:var(--t3);margin:22px 0 10px;padding-top:20px;border-top:1px solid var(--border)}
+.fav-sect:first-of-type{border-top:none;padding-top:0;margin-top:20px}
+
+.fav-match{
+  background:var(--card);border:1px solid var(--border);border-radius:10px;
+  padding:14px 16px;display:flex;align-items:center;gap:10px;cursor:pointer;
+  margin-bottom:8px;transition:border-color .15s;
+}
+.fav-match:hover{border-color:#272727}
+.fav-match-teams{flex:1;min-width:0}
+.fav-match-row{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;margin-bottom:2px}
+.fav-match-row:last-child{margin-bottom:0}
+.fav-match-flag{font-size:14px;flex-shrink:0}
+.fav-match-team{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fav-match-gs{font-family:var(--mono);font-size:13px;font-weight:700;min-width:14px;text-align:right}
+.fav-match-gs.win{color:var(--accent)}.fav-match-gs.loss{color:#ff5555}
+.fav-match-meta{font-size:10px;color:var(--t2);margin-top:5px}
+.fav-pill{font-size:10px;font-weight:700;padding:2px 8px;border-radius:5px;flex-shrink:0;letter-spacing:.4px;align-self:center}
+.fav-pill.live{background:rgba(255,59,59,.12);color:var(--red)}
+.fav-pill.ft{background:rgba(255,255,255,.06);color:var(--t2)}
+.fav-pill.up{background:rgba(255,215,0,.08);color:var(--gold)}
+
+.fav-gtbl{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.fav-gtbl th{padding:7px 10px;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  color:var(--t3);text-align:center;border-bottom:1px solid var(--border)}
+.fav-gtbl th.tl{text-align:left;padding-left:14px}
+.fav-gtbl td{padding:9px 10px;font-size:12px;text-align:center;border-bottom:1px solid rgba(255,255,255,.03)}
+.fav-gtbl td.tl{text-align:left;padding-left:14px}
+.fav-gtbl tr:last-child td{border-bottom:none}
+.fav-gtbl tr.me td{background:rgba(0,255,135,.04)}
+.fav-gtbl .gteam{display:flex;align-items:center;gap:7px}
+
+@media(max-width:768px){.tp-grid{grid-template-columns:repeat(auto-fill,minmax(80px,1fr))}}
 </style>
 </head>
 <body>
@@ -559,12 +638,20 @@ body{
   </div>
 </header>
 
+<!-- INSTALL BANNER -->
+<div class="install-banner" id="installBanner">
+  <span class="install-txt" id="installTxt">📲 Add to your home screen for a full app experience</span>
+  <button class="install-btn" id="installBtn">Add App</button>
+  <button class="install-x" onclick="dismissInstall()" title="Dismiss">×</button>
+</div>
+
 <!-- TABS -->
 <div class="tabs-bar">
   <nav class="tabs">
     <button class="tbtn active" data-tab="today">Today</button>
     <button class="tbtn" data-tab="groups">Groups</button>
     <button class="tbtn" data-tab="knockout">Knockout</button>
+    <button class="tbtn" data-tab="myteam" id="myteamTab">⭐ My Team</button>
   </nav>
 </div>
 
@@ -583,6 +670,9 @@ body{
 
   <!-- KNOCKOUT -->
   <section id="tab-knockout" class="tab"></section>
+
+  <!-- MY TEAM -->
+  <section id="tab-myteam" class="tab"></section>
 
 </main>
 
@@ -697,28 +787,62 @@ GROUPS_DATA.forEach(g => {
 });
 
 // ═══════════════════════════════════════════════════
-//  KNOCKOUT (static bracket)
+//  KNOCKOUT BRACKET DATA  (FIFA official bracket)
+//  Left side feeds left SF → Final ← right SF ← Right
+//  Within each side: pairs of R32 → R16 → QF → SF
 // ═══════════════════════════════════════════════════
-const KO_LEFT = [
-  [{n:'TBD'},{n:'TBD'}],
-  [{n:'TBD'},{n:'TBD'}],
-  [{n:'TBD'},{n:'TBD'}],
-  [{n:'TBD'},{n:'TBD'}],
-  [{n:'TBD'},{n:'TBD'}],
-  [{n:'TBD'},{n:'TBD'}],
-  [{n:'TBD'},{n:'TBD'}],
-  [{n:'TBD'},{n:'TBD'}]
-];
-const KO_RIGHT = [
-  [{n:'TBD'},{n:'TBD'}],
-  [{n:'TBD'},{n:'TBD'}],
-  [{n:'TBD'},{n:'TBD'}],
-  [{n:'TBD'},{n:'TBD'}],
-  [{n:'TBD'},{n:'TBD'}],
-  [{n:'TBD'},{n:'TBD'}],
-  [{n:'TBD'},{n:'TBD'}],
-  [{n:'TBD'},{n:'TBD'}]
-];
+const KO_DATA = {
+  left:{
+    r32:[
+      {num:73, h:'Runner-up A', a:'Runner-up B',    stad:'SoFi Stadium',          city:'Los Angeles',     date:'Jun 28'},
+      {num:75, h:'Winner F',    a:'Runner-up C',    stad:'Estadio BBVA',           city:'Monterrey',       date:'Jun 29'},
+      {num:74, h:'Winner E',    a:'3rd A/B/C/D/F',  stad:'Gillette Stadium',       city:'Foxborough',      date:'Jun 29'},
+      {num:77, h:'Winner I',    a:'3rd C/D/F/G/H',  stad:'MetLife Stadium',        city:'East Rutherford', date:'Jun 30'},
+      {num:76, h:'Winner C',    a:'Runner-up F',    stad:'NRG Stadium',            city:'Houston',         date:'Jun 29'},
+      {num:78, h:'Runner-up E', a:'Runner-up I',    stad:'AT&T Stadium',           city:'Arlington',       date:'Jun 30'},
+      {num:79, h:'Winner A',    a:'3rd C/E/F/H/I',  stad:'Estadio Azteca',         city:'Mexico City',     date:'Jun 30'},
+      {num:80, h:'Winner L',    a:'3rd E/H/I/J/K',  stad:'Mercedes-Benz Stadium',  city:'Atlanta',         date:'Jul 1'},
+    ],
+    r16:[
+      {num:90, h:'W M73', a:'W M75', stad:'NRG Stadium',             city:'Houston',         date:'Jul 5'},
+      {num:89, h:'W M74', a:'W M77', stad:'Lincoln Financial Field', city:'Philadelphia',    date:'Jul 5'},
+      {num:91, h:'W M76', a:'W M78', stad:'MetLife Stadium',         city:'East Rutherford', date:'Jul 6'},
+      {num:92, h:'W M79', a:'W M80', stad:'Estadio Azteca',          city:'Mexico City',     date:'Jul 6'},
+    ],
+    qf:[
+      {num:97,  h:'W M90', a:'W M89', stad:'Gillette Stadium', city:'Foxborough',  date:'Jul 9'},
+      {num:98,  h:'W M91', a:'W M92', stad:'SoFi Stadium',     city:'Los Angeles', date:'Jul 10'},
+    ],
+    sf:[
+      {num:101, h:'W M97', a:'W M98', stad:'AT&T Stadium', city:'Arlington', date:'Jul 14'},
+    ],
+  },
+  right:{
+    r32:[
+      {num:81, h:'Winner D',    a:'3rd B/E/F/I/J',  stad:"Levi's Stadium",        city:'Santa Clara',  date:'Jul 1'},
+      {num:82, h:'Winner G',    a:'3rd A/E/H/I/J',  stad:'Lumen Field',           city:'Seattle',      date:'Jul 1'},
+      {num:83, h:'Runner-up K', a:'Runner-up L',    stad:'BMO Field',             city:'Toronto',      date:'Jul 2'},
+      {num:84, h:'Winner H',    a:'Runner-up J',    stad:'SoFi Stadium',          city:'Los Angeles',  date:'Jul 2'},
+      {num:85, h:'Winner B',    a:'3rd E/F/G/I/J',  stad:'BC Place',              city:'Vancouver',    date:'Jul 2'},
+      {num:87, h:'Winner K',    a:'3rd D/E/I/J/L',  stad:'Arrowhead Stadium',     city:'Kansas City',  date:'Jul 3'},
+      {num:86, h:'Winner J',    a:'Runner-up H',    stad:'Hard Rock Stadium',     city:'Miami',        date:'Jul 3'},
+      {num:88, h:'Runner-up D', a:'Runner-up G',    stad:'AT&T Stadium',          city:'Arlington',    date:'Jul 3'},
+    ],
+    r16:[
+      {num:94, h:'W M81', a:'W M82', stad:'Lumen Field',            city:'Seattle',    date:'Jul 7'},
+      {num:93, h:'W M83', a:'W M84', stad:'AT&T Stadium',           city:'Arlington',  date:'Jul 7'},
+      {num:96, h:'W M85', a:'W M87', stad:'BC Place',               city:'Vancouver',  date:'Jul 8'},
+      {num:95, h:'W M86', a:'W M88', stad:'Mercedes-Benz Stadium',  city:'Atlanta',    date:'Jul 8'},
+    ],
+    qf:[
+      {num:99,  h:'W M93', a:'W M94', stad:'Hard Rock Stadium', city:'Miami',       date:'Jul 11'},
+      {num:100, h:'W M95', a:'W M96', stad:'Arrowhead Stadium', city:'Kansas City', date:'Jul 11'},
+    ],
+    sf:[
+      {num:102, h:'W M99', a:'W M100', stad:'Mercedes-Benz Stadium', city:'Atlanta', date:'Jul 15'},
+    ],
+  },
+};
 
 // ═══════════════════════════════════════════════════
 //  STATE
@@ -1369,62 +1493,63 @@ function renderGroups(){
 // ═══════════════════════════════════════════════════
 //  KNOCKOUT
 // ═══════════════════════════════════════════════════
+function koSlotKey(label){
+  const w = label.match(/^Winner ([A-L])$/);    if(w)  return '1'+w[1];
+  const r = label.match(/^Runner-up ([A-L])$/); if(r)  return '2'+r[1];
+  return null;
+}
+
 function renderKnockout(){
   const sec = $('tab-knockout');
   sec.innerHTML = `
     <div class="ko-hd">Knockout Stage</div>
-    <div class="ko-sub">Round of 32 · Round of 16 · Quarter-Finals · Semi-Finals · Final — MetLife Stadium, July 19</div>
+    <div class="ko-sub">Round of 32 · Round of 16 · Quarter-Finals · Semi-Finals · Final — MetLife Stadium, Jul 19</div>
     <div class="bscroll"><div class="bracket" id="bracket"></div></div>`;
   const b = $('bracket');
 
-  function mkRound(label, matches){
+  function mkKOTeam(label){
+    const key = koSlotKey(label);
+    const bt = el('div','bt lbl');
+    if(key) bt.dataset.slot = key;
+    bt.innerHTML = `<span class="bn">${label}</span>`;
+    return bt;
+  }
+
+  function mkKOMatch(m){
+    const div = el('div','bm');
+    div.append(mkKOTeam(m.h));
+    div.append(el('div','bsep'));
+    div.append(mkKOTeam(m.a));
+    const info = el('div','bm-info');
+    info.textContent = `M${m.num} · ${m.stad}, ${m.city} · ${m.date}`;
+    div.append(info);
+    return div;
+  }
+
+  function mkKORound(label, matches){
     const r = el('div','brd');
     r.innerHTML = `<div class="brd-lbl">${label}</div>`;
     const bm = el('div','bmatches');
-    matches.forEach(pair=>{
-      const m = el('div','bm');
-      [pair[0],pair[1]].forEach((t,i)=>{
-        if(i===1){ const s=el('div','bsep'); m.append(s); }
-        const bt = el('div', t&&t.n&&t.n!=='TBD'?'bt':'bt tbd');
-        bt.innerHTML = t&&t.f&&t.n!=='TBD'
-          ? `<span class="bf">${t.f}</span><span class="bn">${t.n}</span>`
-          : `<span class="bn">— TBD —</span>`;
-        m.append(bt);
-      });
-      bm.append(m);
-    });
+    matches.forEach(m => bm.append(mkKOMatch(m)));
     r.append(bm);
     return r;
   }
 
-  function mkTBDRound(label, count){
-    const r = el('div','brd');
-    r.innerHTML = `<div class="brd-lbl">${label}</div>`;
-    const bm = el('div','bmatches');
-    for(let i=0;i<count;i++){
-      const m = el('div','bm');
-      m.innerHTML = `<div class="bt tbd"><span class="bn">— TBD —</span></div>
-        <div class="bsep"></div>
-        <div class="bt tbd"><span class="bn">— TBD —</span></div>`;
-      bm.append(m);
-    }
-    r.append(bm);
-    return r;
-  }
-
-  b.append(mkRound('Round of 32', KO_LEFT));
-  b.append(mkTBDRound('Round of 16', 4));
-  b.append(mkTBDRound('Quarter-Finals', 2));
-  b.append(mkTBDRound('Semi-Finals', 1));
+  b.append(mkKORound('Round of 32',    KO_DATA.left.r32));
+  b.append(mkKORound('Round of 16',    KO_DATA.left.r16));
+  b.append(mkKORound('Quarter-Finals', KO_DATA.left.qf));
+  b.append(mkKORound('Semi-Finals',    KO_DATA.left.sf));
 
   const trophy = el('div','trophy');
-  trophy.innerHTML = `<div class="trophy-i">🏆</div><div class="trophy-l">Final<br>Jul 19</div><div class="trophy-t">MetLife<br>Stadium</div>`;
+  trophy.innerHTML = `<div class="trophy-i">🏆</div><div class="trophy-l">Final<br>Jul 19</div><div class="trophy-t">MetLife Stadium<br>East Rutherford</div>`;
   b.append(trophy);
 
-  b.append(mkTBDRound('Semi-Finals', 1));
-  b.append(mkTBDRound('Quarter-Finals', 2));
-  b.append(mkTBDRound('Round of 16', 4));
-  b.append(mkRound('Round of 32', KO_RIGHT));
+  b.append(mkKORound('Semi-Finals',    KO_DATA.right.sf));
+  b.append(mkKORound('Quarter-Finals', KO_DATA.right.qf));
+  b.append(mkKORound('Round of 16',    KO_DATA.right.r16));
+  b.append(mkKORound('Round of 32',    KO_DATA.right.r32));
+
+  updateKnockoutFromGroups();
 }
 
 // ═══════════════════════════════════════════════════
@@ -1436,6 +1561,7 @@ document.querySelectorAll('.tbtn').forEach(btn => {
     document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
     btn.classList.add('active');
     $('tab-'+btn.dataset.tab).classList.add('active');
+    if(btn.dataset.tab === 'myteam') renderMyTeam();
     setTimeout(observeCards, 40);
   });
 });
@@ -2211,77 +2337,43 @@ async function fetchGroupStandings(){
   } catch(e){ /* keep static data */ }
 }
 
-function updateKnockoutQualifiers(){
-  // WC2026: 12 groups of 4 teams, round-robin → max_games = n-1 = 3.
-  // Reads from GROUPS_DATA (already processed with correct p/pts values).
-  // A team clinches top-2 when pts > max the 3rd-place team can reach.
-  const qualified = [];
+function updateKnockoutFromGroups(){
   GROUPS_DATA.forEach(g => {
     const teams = (g.teams||[]).slice().sort((a,b) => b.pts-a.pts || b.gd-a.gd || b.gf-a.gf);
     if(teams.length < 3) return;
-    const maxGames = teams.length - 1;
+    const maxGames = 3;
     const groupDone = teams.every(t => t.p >= maxGames);
     const third = teams[2];
-    const thirdGamesLeft = Math.max(0, maxGames - third.p);
-    const thirdMaxPts = third.pts + thirdGamesLeft * 3;
-    teams.slice(0, 2).forEach((t, i) => {
-      if(t.pts > thirdMaxPts || (groupDone && i < 2)) qualified.push(t);
-    });
-  });
-  if(!qualified.length) return;
+    const thirdMaxPts = third.pts + Math.max(0, maxGames - third.p) * 3;
 
-  // Fill TBD slots in the bracket left→right, top→bottom
-  const slots = document.querySelectorAll('#bracket .bt.tbd');
-  qualified.forEach((t, i) => {
-    const slot = slots[i];
-    if(!slot) return;
-    slot.className = 'bt';
-    slot.innerHTML = `<span class="bf">${t.f}</span><span class="bn">${t.n}</span>`;
+    if(groupDone || teams[0].pts > thirdMaxPts){
+      fillKOSlot('1'+g.id, teams[0]);
+    }
+    if(groupDone && teams[1]){
+      fillKOSlot('2'+g.id, teams[1]);
+    }
   });
 }
+
+function fillKOSlot(key, team){
+  document.querySelectorAll(`#bracket [data-slot="${key}"]`).forEach(bt => {
+    bt.className = 'bt';
+    delete bt.dataset.slot;
+    bt.innerHTML = `<span class="bf">${team.f}</span><span class="bn">${team.n}</span>`;
+  });
+}
+
+// keep old name as alias for callers
+function updateKnockoutQualifiers(){ updateKnockoutFromGroups(); }
 
 // ═══════════════════════════════════════════════════
 //  FETCH KNOCKOUT BRACKET
 // ═══════════════════════════════════════════════════
 async function fetchKnockoutData(){
-  try {
-    const r = await fetch(ESPN_URL+'?limit=200', { signal: AbortSignal.timeout(8000) });
-    if(!r.ok) return;
-    const data = await r.json();
-    const raw = data.events || [];
-
-    // Filter for knockout (type.id 3 = playoffs, or round names that aren't "Group")
-    const koEvents = raw.filter(ev => {
-      const sType = ev.season?.type;
-      const roundName = ev.competitions?.[0]?.altGameNote || ev.name || '';
-      return sType === 3 || (!roundName.match(/Group/i) && roundName.match(/Round|Quarter|Semi|Final/i));
-    });
-    if(!koEvents.length) return;
-
-    // Group by round label
-    const rounds = {};
-    const roundOrder = ['Round of 32','Round of 16','Quarter-Final','Semi-Final','Final'];
-    koEvents.forEach(ev => {
-      const comp  = ev.competitions[0];
-      const note  = comp.altGameNote || ev.name || '';
-      let label   = 'Knockout';
-      if(note.match(/32/i))              label = 'Round of 32';
-      else if(note.match(/16/i))         label = 'Round of 16';
-      else if(note.match(/quarter/i))    label = 'Quarter-Final';
-      else if(note.match(/semi/i))       label = 'Semi-Final';
-      else if(note.match(/final/i))      label = 'Final';
-
-      if(!rounds[label]) rounds[label] = [];
-      const home = comp.competitors.find(c=>c.homeAway==='home') || comp.competitors[0];
-      const away = comp.competitors.find(c=>c.homeAway==='away') || comp.competitors[1];
-      const toTeam = (t) => t
-        ? { f: FLAGS[t.team.abbreviation]||'🏳️', n: t.team.displayName||'TBD', score: parseInt(t.score)||null, winner: t.winner||false }
-        : { n:'TBD' };
-      rounds[label].push([toTeam(home), toTeam(away), comp.status?.type?.state]);
-    });
-
-    renderKnockoutDynamic(rounds);
-  } catch(e){ /* keep static bracket */ }
+  // Static KO_DATA bracket is authoritative during the group stage.
+  // Once knockout rounds begin (Jun 28+), live scores will be overlaid
+  // via ESPN match cards — no need to rebuild the bracket structure here.
+  return;
 }
 
 function renderKnockoutDynamic(rounds){
@@ -2347,6 +2439,246 @@ function renderKnockoutDynamic(rounds){
 }
 
 // ═══════════════════════════════════════════════════
+//  PWA INSTALL BANNER
+// ═══════════════════════════════════════════════════
+let deferredInstallPrompt = null;
+
+function dismissInstall(){
+  const b = $('installBanner');
+  if(b) b.classList.remove('show');
+  sessionStorage.setItem('installDismissed','1');
+}
+
+(function initInstallBanner(){
+  if(sessionStorage.getItem('installDismissed')) return;
+  const isInStandalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone;
+  if(isInStandalone) return;
+
+  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) && !window.MSStream;
+  if(isIOS){
+    const txt = $('installTxt');
+    if(txt) txt.textContent = '📲 Tap Share  then "Add to Home Screen" to install';
+    const btn = $('installBtn');
+    if(btn) btn.style.display = 'none';
+    const banner = $('installBanner');
+    if(banner) banner.classList.add('show');
+    return;
+  }
+
+  window.addEventListener('beforeinstallprompt', e => {
+    e.preventDefault();
+    deferredInstallPrompt = e;
+    const banner = $('installBanner');
+    if(banner) banner.classList.add('show');
+  });
+
+  const btn = $('installBtn');
+  if(btn){
+    btn.onclick = async () => {
+      if(!deferredInstallPrompt) return;
+      deferredInstallPrompt.prompt();
+      const {outcome} = await deferredInstallPrompt.userChoice;
+      deferredInstallPrompt = null;
+      if(outcome === 'accepted') dismissInstall();
+    };
+  }
+})();
+
+// ═══════════════════════════════════════════════════
+//  MY TEAM
+// ═══════════════════════════════════════════════════
+let favTeam = null;
+try{ favTeam = JSON.parse(localStorage.getItem('favTeam')||'null'); }catch(e){}
+
+function setFavTeam(team){
+  favTeam = team;
+  localStorage.setItem('favTeam', JSON.stringify(team));
+  renderMyTeam();
+}
+
+function renderMyTeam(){
+  const sec = $('tab-myteam');
+  if(!sec) return;
+  if(!favTeam){ renderTeamPicker(sec); } else { renderTeamPage(sec, favTeam); }
+}
+
+function renderTeamPicker(sec){
+  const allTeams = [];
+  GROUPS_DATA.forEach(g => g.teams.forEach(t => allTeams.push({...t, group:g.id})));
+  allTeams.sort((a,b) => a.n.localeCompare(b.n));
+
+  sec.innerHTML = `
+    <div class="ko-hd">Choose Your Team</div>
+    <div class="ko-sub">Follow your team's journey at FIFA World Cup 2026</div>
+    <div class="tp-grid" id="tpGrid"></div>`;
+
+  const grid = $('tpGrid');
+  allTeams.forEach(t => {
+    const card = el('div','tp-card');
+    card.innerHTML = `<div class="tp-flag">${t.f}</div><div class="tp-name">${t.n}</div><div class="tp-grp">Group ${t.group}</div>`;
+    card.onclick = () => setFavTeam({...t});
+    grid.append(card);
+  });
+}
+
+function renderTeamPage(sec, team){
+  const gData = GROUPS_DATA.find(g => g.teams.some(t => t.n === team.n));
+
+  sec.innerHTML = `
+    <div class="fav-hero">
+      <div class="fav-flag-lg">${team.f}</div>
+      <div class="fav-meta">
+        <div class="fav-name">${team.n}</div>
+        <div class="fav-sub">${gData?`Group ${gData.id} · FIFA World Cup 2026`:'FIFA World Cup 2026'}</div>
+        <button class="fav-change" onclick="favTeam=null;localStorage.removeItem('favTeam');renderMyTeam()">Change team</button>
+      </div>
+    </div>
+    ${gData?`<div class="fav-sect">Group ${gData.id} Standings</div>${renderFavGroupTable(gData,team)}`:''}
+    <div class="fav-sect">Recent &amp; Upcoming</div>
+    <div id="favMatches"><div class="lineup-loading">Checking schedule…</div></div>
+    <div class="fav-sect">Latest News</div>
+    <div id="favNews"><div class="lineup-loading">Loading…</div></div>`;
+
+  fetchFavMatches(team);
+  fetchFavNews(team);
+}
+
+function renderFavGroupTable(g, myTeam){
+  const sorted = (g.teams||[]).slice().sort((a,b)=>b.pts-a.pts||b.gd-a.gd||b.gf-a.gf);
+  return`<table class="fav-gtbl">
+    <thead><tr>
+      <th class="tl">Team</th><th>P</th><th>W</th><th>D</th><th>L</th>
+      <th>GF</th><th>GA</th><th>GD</th><th>Pts</th>
+    </tr></thead>
+    <tbody>${sorted.map(t=>{
+      const me = t.n===myTeam.n;
+      return`<tr${me?' class="me"':''}>
+        <td class="tl"><div class="gteam"><span>${t.f}</span><span>${t.n}</span></div></td>
+        <td>${t.p}</td><td>${t.w}</td><td>${t.d}</td><td>${t.l}</td>
+        <td>${t.gf}</td><td>${t.ga}</td>
+        <td style="color:${t.gd>=0?'var(--accent)':'#ff5555'}">${t.gd>0?'+':''}${t.gd}</td>
+        <td><b>${t.pts}</b></td>
+      </tr>`;
+    }).join('')}</tbody>
+  </table>`;
+}
+
+function favTeamMatch(espnName, teamN){
+  if(!espnName||!teamN) return false;
+  const a = espnName.toLowerCase().trim();
+  const b = teamN.toLowerCase().trim();
+  if(a===b) return true;
+  if(b==='usa' && a.includes('united states')) return true;
+  if(b==='south korea' && (a.includes('korea rep')||a.includes('south korea'))) return true;
+  if(b==='ivory coast' && (a.includes('ivory')||a.includes('ivoire')||a.includes('cote'))) return true;
+  if(b==='czech republic' && (a.includes('czech')||a.includes('czechia'))) return true;
+  if(b==='dr congo' && a.includes('congo')) return true;
+  return a.includes(b)||b.includes(a);
+}
+
+async function fetchFavMatches(team){
+  const container = $('favMatches');
+  if(!container) return;
+
+  const dates = [];
+  const now = new Date();
+  for(let d=-5;d<=5;d++){
+    const dt = new Date(now);
+    dt.setDate(now.getDate()+d);
+    dates.push(toDateStr(dt));
+  }
+
+  const found = [];
+  await Promise.all(dates.map(async dateStr => {
+    try{
+      const r = await fetch(`${ESPN_URL}?dates=${dateStr}`,{signal:AbortSignal.timeout(8000)});
+      if(!r.ok) return;
+      const data = await r.json();
+      (data.events||[]).map(parseEvent).forEach(ev => {
+        if(favTeamMatch(ev.home.name,team.n)||favTeamMatch(ev.away.name,team.n)){
+          if(!found.some(e=>e.id===ev.id)) found.push(ev);
+        }
+      });
+    }catch(e){}
+  }));
+
+  found.sort((a,b)=>a.date-b.date);
+
+  const el2 = $('favMatches');
+  if(!el2) return;
+
+  if(!found.length){
+    el2.innerHTML='<div class="mc-news-empty">No matches in the coming days — check back soon</div>';
+    return;
+  }
+
+  el2.innerHTML = found.map(ev=>{
+    const isHome = favTeamMatch(ev.home.name,team.n);
+    const myT  = isHome?ev.home:ev.away;
+    const oppT = isHome?ev.away:ev.home;
+    const isLive = ev.state==='in';
+    const isFt   = ev.state==='post';
+    const statusLbl = isLive?'LIVE':isFt?'FT':'UP';
+    const myWin  = isFt&&myT.winner;
+    const oppWin = isFt&&oppT.winner;
+    return`<div class="fav-match">
+      <div class="fav-match-teams">
+        <div class="fav-match-row">
+          <span class="fav-match-flag">${flag(myT.abbr)||team.f}</span>
+          <span class="fav-match-team">${myT.name}</span>
+          ${isFt||isLive?`<span class="fav-match-gs${myWin?' win':oppWin?' loss':''}">${myT.score}</span>`:''}
+        </div>
+        <div class="fav-match-row">
+          <span class="fav-match-flag">${flag(oppT.abbr)}</span>
+          <span class="fav-match-team">${oppT.name}</span>
+          ${isFt||isLive?`<span class="fav-match-gs${oppWin?' win':myWin?' loss':''}">${oppT.score}</span>`:''}
+        </div>
+        <div class="fav-match-meta">${ev.group||''}${ev.venue?' · '+ev.venue:''} · ${localTime(ev.date)}</div>
+      </div>
+      <span class="fav-pill ${statusLbl.toLowerCase()}">${statusLbl}</span>
+    </div>`;
+  }).join('');
+}
+
+async function fetchFavNews(team){
+  const container = $('favNews');
+  if(!container) return;
+
+  const teamEv = (lastEvents||[]).find(ev =>
+    favTeamMatch(ev.home.name,team.n)||favTeamMatch(ev.away.name,team.n)
+  );
+
+  if(teamEv){
+    try{
+      const r = await fetch(`${ESPN_SUMMARY}?event=${teamEv.id}`,{signal:AbortSignal.timeout(9000)});
+      if(r.ok){
+        const data = await r.json();
+        const articles = data?.news?.articles||[];
+        if(articles.length){
+          const el2 = $('favNews');
+          if(!el2) return;
+          el2.innerHTML = articles.slice(0,5).map(a=>{
+            const url = a.links?.web?.href||'#';
+            const img = a.images?.[0]?.url||'';
+            const dt  = a.lastModified||a.published||'';
+            return`<a class="mc-news-item" href="${url}" target="_blank" rel="noopener">
+              ${img?`<img class="mc-news-img" src="${img}" alt="" loading="lazy">`:'<div class="mc-news-img"></div>'}
+              <div class="mc-news-cnt">
+                <div class="mc-news-ttl">${a.headline||'—'}</div>
+                <div class="mc-news-meta">ESPN${dt?' · '+timeAgo(dt):''}</div>
+              </div></a>`;
+          }).join('');
+          return;
+        }
+      }
+    }catch(e){}
+  }
+
+  const el2 = $('favNews');
+  if(el2) el2.innerHTML='<div class="mc-news-empty">News will appear here on match days</div>';
+}
+
+// ═══════════════════════════════════════════════════
 //  INIT
 // ═══════════════════════════════════════════════════
 showSkeleton();
@@ -2356,6 +2688,7 @@ updateKnockoutQualifiers();
 fetchMatches();
 fetchGroupStandings();
 fetchKnockoutData();
+if(favTeam) renderMyTeam();
 setTimeout(observeCards, 200);
 setInterval(tick, 1000);
 </script>
