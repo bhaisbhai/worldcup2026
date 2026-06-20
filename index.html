@@ -740,6 +740,12 @@ body{
 }
 .rb-card.open .rb-detail{display:block}
 
+/* ── GOAL SCORERS STRIP ────────────────── */
+.mc-scorers{display:flex;justify-content:space-between;gap:6px;margin:6px 0 8px;min-height:0}
+.mc-scorers-h,.mc-scorers-a{font-size:10px;color:var(--t2);line-height:1.6;flex:1;white-space:pre-wrap}
+.mc-scorers-a{text-align:right}
+.mc-scorer-og{color:#ff7070}
+
 /* ── GOAL CELEBRATION ──────────────────── */
 .goal-banner{
   position:fixed;top:42%;left:50%;
@@ -1085,6 +1091,23 @@ function parseEvent(ev){
   const groupMatch = groupNote.match(/Group ([A-Z])/);
   const groupLabel = groupMatch ? `Group ${groupMatch[1]}` : groupNote;
 
+  // Extract goal events from comp.details (available in scoreboard for completed matches)
+  const homeAbbr = home.team.abbreviation;
+  const goals = (comp.details || [])
+    .filter(d => {
+      const t = (d.type?.text || d.type?.name || '').toLowerCase();
+      return t.includes('goal');
+    })
+    .map(d => {
+      const og  = d.ownGoal || false;
+      const pen = d.penaltyKick || false;
+      const raw = d.athletesInvolved?.[0];
+      const name = raw?.shortName || raw?.displayName || (og ? 'OG' : '');
+      const min  = d.clock?.displayValue || '';
+      const isHome = (d.team?.abbreviation || '') === homeAbbr;
+      return { name: og ? 'OG' : name, min, isHome, og, pen };
+    });
+
   return {
     id: ev.id,
     state,                         // "pre"|"in"|"post"
@@ -1108,6 +1131,7 @@ function parseEvent(ev){
     city: comp.venue?.address?.city || '',
     group: groupLabel,
     bcast,
+    goals,
   };
 }
 
@@ -1253,6 +1277,29 @@ async function fetchHighlight(ev){
 
 const YT_ICON = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>`;
 
+function renderScorers(goals){
+  if(!goals || !goals.length) return '';
+  // Group by name, preserving order of first appearance
+  function group(list){
+    const map = new Map();
+    list.forEach(g => {
+      const k = g.name || 'OG';
+      if(!map.has(k)) map.set(k, { name: k, mins: [], og: g.og });
+      map.get(k).mins.push(g.min + (g.pen ? ' (p)' : ''));
+    });
+    return [...map.values()].map(e =>
+      `<span${e.og?' class="mc-scorer-og"':''}>${e.name} ${e.mins.join(', ')}</span>`
+    ).join('\n');
+  }
+  const h = group(goals.filter(g =>  g.isHome));
+  const a = group(goals.filter(g => !g.isHome));
+  if(!h && !a) return '';
+  return `<div class="mc-scorers">
+    <div class="mc-scorers-h">${h}</div>
+    <div class="mc-scorers-a">${a}</div>
+  </div>`;
+}
+
 // ═══════════════════════════════════════════════════
 //  BUILD MATCH CARD
 // ═══════════════════════════════════════════════════
@@ -1317,6 +1364,7 @@ function buildCard(ev){
         <div class="tname${ev.away.winner?' winner':''}">${ev.away.name}</div>
       </div>
     </div>
+    ${isFt ? renderScorers(ev.goals) : ''}
     <div class="mc-foot">${foot_l}${foot_r}</div>
     ${hlHtml}
   `;
