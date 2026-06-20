@@ -2601,75 +2601,53 @@ async function fetchLeaderboardData(){
     lbCache = { tables, watchList, ts: Date.now() };
     lbLastFetch = Date.now();
   } catch(e) {
-    // Build a fallback watch list from GROUPS_DATA alone
-    if(!lbCache) buildFallbackWatchList();
+    if(!lbCache) lbCache = { tables:{goals:[],assists:[],yellow:[],red:[],shots:[],saves:[]}, watchList:[], ts:null, error:true };
   }
   lbFetching = false;
   if($('tab-leaderboard')?.classList.contains('active')) renderLeaderboard();
-}
-
-function buildFallbackWatchList(){
-  // Curated list of tournament favourites when no live stats are available yet
-  const seeds = [
-    {name:'Kylian Mbappé',     teamName:'France',      teamAbbr:'FRA', goals:2, assists:1, shotsOnTarget:4},
-    {name:'Erling Haaland',    teamName:'Norway',      teamAbbr:'NOR', goals:3, assists:0, shotsOnTarget:5},
-    {name:'Lamine Yamal',      teamName:'Spain',       teamAbbr:'ESP', goals:1, assists:2, shotsOnTarget:3, keyPasses:4},
-    {name:'Vinicius Jr.',      teamName:'Brazil',      teamAbbr:'BRA', goals:1, assists:1, shotsOnTarget:3, keyPasses:3},
-    {name:'Lionel Messi',      teamName:'Argentina',   teamAbbr:'ARG', goals:1, assists:2, shots:4, keyPasses:5},
-    {name:'Jude Bellingham',   teamName:'England',     teamAbbr:'ENG', goals:1, assists:1, tackles:3, keyPasses:3},
-    {name:'Bukayo Saka',       teamName:'England',     teamAbbr:'ENG', goals:1, assists:2, shotsOnTarget:2, keyPasses:3},
-    {name:'Pedri',             teamName:'Spain',       teamAbbr:'ESP', goals:0, assists:1, passAcc:91, keyPasses:5, tackles:2},
-    {name:'Florian Wirtz',     teamName:'Germany',     teamAbbr:'GER', goals:1, assists:1, shotsOnTarget:2, keyPasses:4},
-    {name:'Rafael Leão',       teamName:'Portugal',    teamAbbr:'POR', goals:2, assists:0, shotsOnTarget:3, keyPasses:2},
-  ];
-
-  seeds.forEach(p => {
-    p.f = FLAGS[p.teamAbbr] || '🏳️';
-    const g = GROUPS_DATA.find(gr => gr.teams.some(t => t.n === p.teamName));
-    if(g){ const t = g.teams.find(t => t.n === p.teamName); if(t) p.teamPts = t.pts; }
-    p.watchScore = Math.round(calcWatchScore(p) * 10) / 10;
-  });
-
-  lbCache = {
-    tables: { goals:[], assists:[], yellow:[], red:[], shots:[], saves:[] },
-    watchList: seeds.sort((a,b) => b.watchScore - a.watchScore),
-    ts: null,
-    fallback: true,
-  };
 }
 
 function renderLeaderboard(){
   const sec = $('tab-leaderboard');
   if(!sec) return;
 
+  const isLoading = !lbCache;
   const tsStr = lbCache?.ts
     ? `Updated ${timeAgo(new Date(lbCache.ts).toISOString())}`
-    : lbCache?.fallback ? 'Curated · live data loads on match days' : 'Loading…';
+    : lbCache?.error ? 'Could not load — retrying…' : '';
+
+  if(isLoading){
+    sec.innerHTML = `
+      <div class="lb-hd">Tournament Stats</div>
+      <div class="lb-sub">FIFA World Cup 2026 · Live statistics &amp; player rankings</div>
+      <div class="lineup-loading">Loading stats…</div>`;
+    fetchLeaderboardData();
+    return;
+  }
 
   sec.innerHTML = `
     <div class="lb-hd">Tournament Stats</div>
-    <div class="lb-sub">FIFA World Cup 2026 · Live statistics &amp; player rankings<span class="lb-refresh">${tsStr}</span></div>
+    <div class="lb-sub">FIFA World Cup 2026 · Live statistics &amp; player rankings${tsStr?`<span class="lb-refresh">${tsStr}</span>`:''}</div>
 
-    <div class="lb-cols" id="lbTables">
-      ${renderLbTable('⚽ Top Scorers','goals','g','Goals')}
-      ${renderLbTable('🎯 Top Assists','assists','a','Assists')}
-      ${renderLbTable('🟨 Yellow Cards','yellow','card-y','YC')}
-      ${renderLbTable('🟥 Red Cards','red','card-r','RC')}
+    <div class="lb-cols">
+      ${renderLbTable('⚽ Top Scorers','goals','g')}
+      ${renderLbTable('🎯 Top Assists','assists','a')}
+      ${renderLbTable('🟨 Yellow Cards','yellow','card-y')}
+      ${renderLbTable('🟥 Red Cards','red','card-r')}
     </div>
 
     <div class="watch-hd">🔭 Top 10 Players to Watch</div>
     <div class="watch-algo">
-      Algorithm weights: Goals ×12 · Assists ×8 · Shots on Target ×2.5 · Key Passes ×3 ·
-      Tackles ×1.8 · Interceptions ×2.2 · Pass Accuracy bonus · Team form bonus · Yellow Cards −1.5 · Red Cards −10
+      Weighted algorithm across all live stats — Goals ×12 · Assists ×8 · Shots on Target ×2.5 ·
+      Key Passes ×3 · Tackles ×1.8 · Interceptions ×2.2 · Pass Accuracy bonus ·
+      Team form bonus · Yellow Cards −1.5 · Red Cards −10
     </div>
     ${renderWatchList()}`;
 
-  if(!lbCache || (Date.now() - lbLastFetch > LB_TTL)){
-    fetchLeaderboardData();
-  }
+  if(Date.now() - lbLastFetch > LB_TTL) fetchLeaderboardData();
 }
 
-function renderLbTable(title, key, valCls, valLabel){
+function renderLbTable(title, key, valCls){
   const rows = lbCache?.tables?.[key] || [];
   const rowsHtml = rows.length
     ? rows.map(p => `
@@ -2682,7 +2660,9 @@ function renderLbTable(title, key, valCls, valLabel){
         </div>
         <span class="lb-val ${valCls}">${p.val}</span>
       </div>`).join('')
-    : `<div class="lb-row"><span style="color:var(--t3);font-size:12px;padding:4px 0">Data loads on match days</span></div>`;
+    : `<div class="lb-row" style="padding:16px 14px">
+        <span style="color:var(--t3);font-size:12px">Stats will appear here as matches are played</span>
+       </div>`;
 
   return `<div class="lb-box">
     <div class="lb-box-hd"><span class="lb-box-title">${title}</span></div>
@@ -2693,7 +2673,10 @@ function renderLbTable(title, key, valCls, valLabel){
 function renderWatchList(){
   const list = lbCache?.watchList || [];
   if(!list.length){
-    return `<div class="mc-news-empty">Watch list builds once player stats are available</div>`;
+    return `<div style="text-align:center;padding:32px 0;color:var(--t3);font-size:13px;line-height:1.8">
+      The Players to Watch list is built from live match stats.<br>
+      Check back once games are underway.
+    </div>`;
   }
   return `<div class="watch-list">${list.map((p, i) => {
     const pos = i + 1;
