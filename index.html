@@ -1303,7 +1303,7 @@ function buildCard(ev){
 
   card.innerHTML = `
     <div class="mc-top">
-      ${badge}
+      ${badge || '<div></div>'}
       <div class="mc-grp">${ev.group}<br><span class="mc-tv-uk">${getUKChannel(ev.home.abbr,ev.away.abbr)}</span></div>
     </div>
     <div class="mc-teams">
