@@ -398,10 +398,14 @@ async function main() {
   fs.mkdirSync(OUT_DIR, { recursive: true });
   fs.mkdirSync(LOG_DIR, { recursive: true });
 
-  // Load existing data files (merge, don't overwrite)
-  const matchesAI  = loadJson(path.join(OUT_DIR, 'matches_ai.json'),  { updated: null, matches: {} });
-  const teamsAI    = loadJson(path.join(OUT_DIR, 'teams_ai.json'),    { updated: null, teams: {} });
-  const playersAI  = loadJson(path.join(OUT_DIR, 'players_ai.json'),  { updated: null, players: {} });
+  // Load (or create) unified master file
+  const MASTER_FILE = path.join(OUT_DIR, 'ai_master.json');
+  const master = loadJson(MASTER_FILE, { lastUpdated: null, teams: {}, matches: {}, days: {}, today_preview: {}, players: {} });
+  if (!master.matches)       master.matches       = {};
+  if (!master.teams)         master.teams         = {};
+  if (!master.players)       master.players       = {};
+  if (!master.days)          master.days          = {};
+  if (!master.today_preview) master.today_preview = {};
 
   const now       = new Date();
   const yesterday = new Date(now); yesterday.setUTCDate(yesterday.getUTCDate() - 1);
@@ -472,14 +476,14 @@ async function main() {
   }
 
   // ── 1. Match summaries ──
-  const newMatches = allCompleted.filter(m => !matchesAI.matches[m.id]);
+  const newMatches = allCompleted.filter(m => !master.matches[m.id]);
   if (newMatches.length) {
     console.log(`\n[pipeline] Generating summaries for ${newMatches.length} new match(es)…`);
     for (let i = 0; i < newMatches.length; i += BATCH_SIZE) {
       const batch = newMatches.slice(i, i + BATCH_SIZE);
       try {
         const results = await genMatchSummaries(batch, summaries);
-        Object.assign(matchesAI.matches, results);
+        Object.assign(master.matches, results);
         console.log(`  ✓ batch ${Math.floor(i/BATCH_SIZE)+1}: ${Object.keys(results).length} summaries`);
       } catch (e) {
         console.error(`  ✗ batch ${Math.floor(i/BATCH_SIZE)+1} failed: ${e.message}`);
@@ -488,8 +492,8 @@ async function main() {
       if (i + BATCH_SIZE < newMatches.length) await sleep(6000);
     }
   }
-  matchesAI.updated = now.toISOString();
-  saveJson(path.join(OUT_DIR, 'matches_ai.json'), matchesAI);
+  master.lastUpdated = now.toISOString();
+  saveJson(MASTER_FILE, master);
   await sleep(6000);
 
   // ── 2. Team statuses ──
@@ -498,15 +502,15 @@ async function main() {
     console.log(`\n[pipeline] Generating team statuses for ${teamsList.length} team(s)…`);
     try {
       const results = await genTeamStatuses(teamsList, standings);
-      Object.assign(teamsAI.teams, results);
+      Object.assign(master.teams, results);
       console.log(`  ✓ ${Object.keys(results).length} team statuses`);
     } catch (e) {
       console.error(`  ✗ team statuses failed: ${e.message}`);
       saveLog('teams-error', { error: e.message });
     }
   }
-  teamsAI.updated = now.toISOString();
-  saveJson(path.join(OUT_DIR, 'teams_ai.json'), teamsAI);
+  master.lastUpdated = now.toISOString();
+  saveJson(MASTER_FILE, master);
   await sleep(6000);
 
   // ── 3. Player verdicts ──
@@ -515,15 +519,15 @@ async function main() {
     console.log(`\n[pipeline] Generating verdicts for ${playersList.length} top-50 player(s)…`);
     try {
       const results = await genPlayerVerdicts(playersList);
-      Object.assign(playersAI.players, results);
+      Object.assign(master.players, results);
       console.log(`  ✓ ${Object.keys(results).length} player verdicts`);
     } catch (e) {
       console.error(`  ✗ player verdicts failed: ${e.message}`);
       saveLog('players-error', { error: e.message });
     }
   }
-  playersAI.updated = now.toISOString();
-  saveJson(path.join(OUT_DIR, 'players_ai.json'), playersAI);
+  master.lastUpdated = now.toISOString();
+  saveJson(MASTER_FILE, master);
   await sleep(6000);
 
   // ── 4. Daily recap ──
@@ -532,7 +536,11 @@ async function main() {
     console.log(`\n[pipeline] Generating daily recap for ${isoDate(yesterday)}…`);
     try {
       const recap = await genDailyRecap(recapDay, standings);
-      if (recap) saveJson(path.join(OUT_DIR, 'daily_recap.json'), recap);
+      if (recap) {
+        master.days[isoDate(yesterday)] = recap;
+        master.lastUpdated = now.toISOString();
+        saveJson(MASTER_FILE, master);
+      }
     } catch (e) {
       console.error(`  ✗ daily recap failed: ${e.message}`);
       saveLog('recap-error', { error: e.message });
@@ -547,7 +555,11 @@ async function main() {
     const upcoming = todayMatches.filter(m => m.status === 'pre' || m.status === 'scheduled' || !m.status);
     if (upcoming.length) {
       const preview = await genTodayPreview(upcoming, standings);
-      if (preview) saveJson(path.join(OUT_DIR, 'today_preview.json'), preview);
+      if (preview) {
+        master.today_preview = preview;
+        master.lastUpdated = now.toISOString();
+        saveJson(MASTER_FILE, master);
+      }
     } else {
       console.log('  — no upcoming matches today, skipping preview');
     }

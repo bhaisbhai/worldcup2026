@@ -1518,9 +1518,21 @@ function renderToday(events, dayDate, patch){
   if(!browseDate) renderPunditBriefing();
 }
 
-// ─── PUNDIT'S BRIEFING ─────────────────────────────
-let _pbCache = null;
+// ─── AI DATA (single fetch) ────────────────────────
+let _aiDataPromise = null;
+let _aiDataTs = 0;
 
+async function fetchAiData(){
+  if(_aiDataPromise && Date.now() - _aiDataTs < 5*60*1000) return _aiDataPromise;
+  _aiDataTs = Date.now();
+  _aiDataPromise = fetch('/assets/ai/ai_master.json')
+    .then(r => r.ok ? r.json() : {})
+    .then(d => { window.aiData = d || {}; })
+    .catch(() => { window.aiData = {}; });
+  return _aiDataPromise;
+}
+
+// ─── PUNDIT'S BRIEFING ─────────────────────────────
 async function renderPunditBriefing(){
   const wrap = $('today-content');
   if(!wrap) return;
@@ -1529,20 +1541,12 @@ async function renderPunditBriefing(){
   const old = wrap.querySelector('.pb-card');
   if(old) old.remove();
 
-  let preview = null, recap = null;
-  try {
-    if(!_pbCache || Date.now() - _pbCache.ts > 5*60*1000){
-      const [pr, re] = await Promise.allSettled([
-        fetch('/assets/ai/today_preview.json').then(r=>r.ok?r.json():null),
-        fetch('/assets/ai/daily_recap.json').then(r=>r.ok?r.json():null),
-      ]);
-      preview = pr.status==='fulfilled' ? pr.value : null;
-      recap   = re.status==='fulfilled' ? re.value : null;
-      _pbCache = { preview, recap, ts: Date.now() };
-    } else {
-      ({ preview, recap } = _pbCache);
-    }
-  } catch(e){ return; }
+  try { await fetchAiData(); } catch(e){ return; }
+  const ai = window.aiData || {};
+
+  const preview = ai.today_preview;
+  const yd = new Date(Date.now() - 86400000).toISOString().slice(0,10);
+  const recap = ai.days?.[yd];
 
   // decide which card to show
   const now = Date.now();
@@ -1561,7 +1565,7 @@ async function renderPunditBriefing(){
     ? [['The Big Ones', data.theBigOnes], ['Players to Watch', data.playersToWatch], ['Quirky Stat', data.quirkyTrivia]]
     : [['The Drama', data.theDrama], ['Must-Watch Highlights', data.mustWatchHighlights], ['Progression News', data.progressionNews]];
 
-  const ts = _pbCache.ts ? new Date(_pbCache.ts).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}) : '';
+  const ts = new Date(_aiDataTs).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
 
   card.innerHTML = `
     <div class="pb-hdr">
@@ -3425,6 +3429,7 @@ showSkeleton();
 renderGroups();
 renderKnockout();
 updateKnockoutQualifiers();
+fetchAiData();
 fetchMatches();
 fetchGroupStandings();
 fetchKnockoutData();
