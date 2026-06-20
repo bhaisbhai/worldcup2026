@@ -2679,7 +2679,7 @@ async function fetchLeaderboardData(){
           }
         } catch(e){}
       }));
-      if(i+3 < seenIds.length) await new Promise(r=>setTimeout(r,300));
+      if(i+3 < seenIds.length) await new Promise(r=>setTimeout(r,1000));
     }
 
     // ── Step 3: standings API → team points for Watch algorithm ──
