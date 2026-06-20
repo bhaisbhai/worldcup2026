@@ -5,7 +5,7 @@ module.exports = function createProxy(espnUrl) {
     try {
       const r = await fetch(url, {
         headers: { 'User-Agent': 'Mozilla/5.0' },
-        signal: AbortSignal.timeout(12000),
+        signal: AbortSignal.timeout(8000),
       });
       if (!r.ok) return res.status(r.status).json({ error: 'ESPN upstream error' });
       const data = await r.json();
