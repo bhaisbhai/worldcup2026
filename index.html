@@ -517,16 +517,11 @@ body{
 .pl-info-v{font-size:12px;font-weight:600}
 
 @media(max-width:600px){
-  .modal-bg{padding:0;align-items:flex-end}
+  .modal-bg{padding:16px 12px env(safe-area-inset-bottom,16px);align-items:center}
   .modal{
-    border-radius:16px 16px 0 0;
-    max-height:88vh;        /* fallback for older browsers */
-    max-height:88dvh;       /* dvh = excludes browser chrome — fixes iOS cut-off */
-    padding-bottom:env(safe-area-inset-bottom, 0px);
-  }
-  .modal::before{           /* drag handle indicator */
-    content:'';display:block;width:36px;height:4px;border-radius:2px;
-    background:#333;margin:10px auto 0;flex-shrink:0;
+    border-radius:16px;
+    max-height:88vh;
+    max-height:88dvh;
   }
   .mc-hdr{padding:10px 16px 0}
   .mc-teams-row{padding:4px 0 10px}
@@ -2093,9 +2088,13 @@ function mcMatchOverview(ev,data){
   const pos_h=gs(hStats,'possessionPct','possession'),pos_a=gs(aStats,'possessionPct','possession');
   const sho_h=gs(hStats,'totalShots','shots'),sho_a=gs(aStats,'totalShots','shots');
   const sot_h=gs(hStats,'shotsOnTarget','shotsOnGoal'),sot_a=gs(aStats,'shotsOnTarget','shotsOnGoal');
+  // Round possession to integer and ensure both sides sum to 100
+  const posHn=parseFloat(pos_h), posAn=parseFloat(pos_a);
+  const posHd=isNaN(posHn)?pos_h:Math.round(posHn)+'%';
+  const posAd=isNaN(posAn)?(isNaN(posHn)?pos_a:(100-Math.round(posHn))+'%'):Math.round(posAn)+'%';
   if(pos_h!=='—'||sho_h!=='—'){
     html+=`<div class="mc-snap">
-      <div class="mc-snap-box"><div class="mc-snap-val">${pos_h}</div><div class="mc-snap-lbl">Possession</div><div class="mc-snap-sides">${pos_h} · ${pos_a}</div></div>
+      <div class="mc-snap-box"><div class="mc-snap-val">${posHd}</div><div class="mc-snap-lbl">Possession</div><div class="mc-snap-sides">${posHd} · ${posAd}</div></div>
       <div class="mc-snap-box"><div class="mc-snap-val" style="color:var(--accent)">${sho_h}</div><div class="mc-snap-lbl">Shots</div><div class="mc-snap-sides">${sho_h} · ${sho_a}</div></div>
       <div class="mc-snap-box"><div class="mc-snap-val" style="color:var(--gold)">${sot_h}</div><div class="mc-snap-lbl">On Target</div><div class="mc-snap-sides">${sot_h} · ${sot_a}</div></div>
     </div>`;
