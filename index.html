@@ -752,30 +752,6 @@ body{
   40% {transform:translate(calc(-50% + var(--tx)*.45),calc(-50% + var(--ty)*.45 - 110px)) scale(1.4) rotate(300deg);opacity:1}
   100%{transform:translate(calc(-50% + var(--tx)),calc(-50% + var(--ty))) scale(0.15) rotate(780deg);opacity:0}
 }
-.goal-banner{
-  position:fixed;top:50%;left:50%;
-  transform:translate(-50%,-50%) scale(0.4);
-  background:linear-gradient(135deg,#00ff87,#00c853);
-  color:#000;font-weight:900;font-size:32px;
-  padding:14px 32px;border-radius:16px;
-  box-shadow:0 0 0 4px rgba(0,255,135,.3),0 8px 40px rgba(0,0,0,.6);
-  letter-spacing:.5px;z-index:10000;pointer-events:none;
-  animation:goalBanner 1.6s cubic-bezier(.34,1.56,.64,1) forwards;
-}
-@keyframes goalBanner{
-  0%  {transform:translate(-50%,-50%) scale(0.4);opacity:0}
-  18% {transform:translate(-50%,-50%) scale(1.05);opacity:1}
-  55% {transform:translate(-50%,-50%) scale(1);opacity:1}
-  80% {transform:translate(-50%,-50%) scale(1);opacity:1}
-  100%{transform:translate(-50%,-50%) scale(0.9);opacity:0}
-}
-#goal-demo-btn{
-  position:fixed;bottom:80px;right:16px;z-index:8000;
-  background:var(--accent);color:#000;border:none;
-  border-radius:20px;padding:9px 16px;font-size:13px;font-weight:700;
-  cursor:pointer;box-shadow:0 4px 14px rgba(0,255,135,.35);
-  display:flex;align-items:center;gap:6px;
-}
 </style>
 </head>
 <body>
@@ -785,7 +761,7 @@ body{
   <div class="hdr-in">
     <div>
       <div class="wordmark">
-        <div class="wordmark-name">Game Buddy</div>
+        <div class="wordmark-name" onclick="showGoalCelebration()" style="cursor:pointer">Game Buddy</div>
         <div class="wordmark-event">FIFA World Cup 2026</div>
       </div>
     </div>
@@ -3431,13 +3407,6 @@ function showGoalCelebration(ox, oy){
   ox = ox ?? window.innerWidth  / 2;
   oy = oy ?? window.innerHeight / 2;
 
-  // Banner
-  const banner = document.createElement('div');
-  banner.className = 'goal-banner';
-  banner.textContent = '⚽ GOAL!';
-  document.body.appendChild(banner);
-  setTimeout(() => banner.remove(), 1700);
-
   // Particles — two waves for depth
   const waves = [
     { n:14, distMin:110, distMax:240, sizeMin:20, sizeMax:36, durMin:850, durMax:1100, delayMax:0   },
@@ -3464,14 +3433,6 @@ function showGoalCelebration(ox, oy){
   });
 }
 
-// Demo button
-(function(){
-  const btn = document.createElement('button');
-  btn.id = 'goal-demo-btn';
-  btn.innerHTML = '⚽ Demo Goal';
-  btn.onclick = () => showGoalCelebration();
-  document.body.appendChild(btn);
-})();
 </script>
 </body>
 </html>
