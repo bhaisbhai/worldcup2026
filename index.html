@@ -228,10 +228,13 @@ body{
 .ggrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(355px,1fr));gap:14px}
 .gcard{
   background:var(--card);border:1px solid var(--border);border-radius:var(--r);
-  overflow:hidden;opacity:0;transform:translateY(12px);transition:border-color .2s;
+  overflow:hidden;opacity:0;transform:translateY(12px);transition:border-color .2s,box-shadow .2s;
 }
-.gcard.vis{opacity:1;transform:translateY(0);transition:opacity .38s ease,transform .38s ease}
+.gcard.vis{opacity:1;transform:translateY(0);transition:opacity .38s ease,transform .38s ease,border-color .2s,box-shadow .2s}
 .gcard:hover{border-color:#272727}
+.gcard--today{border-color:rgba(0,255,135,.28)!important;box-shadow:0 0 0 1px rgba(0,255,135,.07)}
+.gcard--today .gcard-hd{background:rgba(0,255,135,.04)}
+.gtoday-dot{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--accent);margin-left:7px;vertical-align:middle;animation:pDot 1.6s ease-in-out infinite}
 .gcard-hd{
   padding:10px 15px;background:rgba(255,255,255,.025);border-bottom:1px solid var(--border);
   display:flex;align-items:center;justify-content:space-between;
@@ -1528,6 +1531,13 @@ async function fetchMatches(){
     lastEvents = events;
     const dayLabel = data.day?.date || '';
     renderToday(events, dayLabel, isPatch);
+    // Track which groups play today (only when viewing today's date)
+    if(!browseDate){
+      todayGroupIds = new Set(
+        events.map(e => (e.group||'').match(/Group\s+([A-L])/i)?.[1]).filter(Boolean)
+      );
+      highlightTodayGroups();
+    }
     hideErr();
   } catch(e){
     if(lastEvents.length === 0) showErr();
@@ -1556,6 +1566,27 @@ function hideErr(){
 // ═══════════════════════════════════════════════════
 //  GROUPS
 // ═══════════════════════════════════════════════════
+let todayGroupIds = new Set();
+
+function highlightTodayGroups(){
+  document.querySelectorAll('.gcard[data-group]').forEach(card => {
+    const gId = card.dataset.group;
+    const isToday = todayGroupIds.has(gId);
+    card.classList.toggle('gcard--today', isToday);
+    const lbl = card.querySelector('.gcard-hd-l');
+    if(lbl){
+      const existing = lbl.querySelector('.gtoday-dot');
+      if(isToday && !existing){
+        const dot = document.createElement('span');
+        dot.className = 'gtoday-dot';
+        lbl.appendChild(dot);
+      } else if(!isToday && existing){
+        existing.remove();
+      }
+    }
+  });
+}
+
 function renderGroups(){
   const sec = $('tab-groups');
   sec.innerHTML = `
@@ -1565,6 +1596,7 @@ function renderGroups(){
   const grid = $('ggrid');
   GROUPS_DATA.forEach((g,gi) => {
     const card = el('div','gcard');
+    card.dataset.group = g.id;
     card.style.transitionDelay = gi*25+'ms';
     const played = g.teams.reduce((s,t)=>s+t.p,0)/2;
     card.innerHTML = `
