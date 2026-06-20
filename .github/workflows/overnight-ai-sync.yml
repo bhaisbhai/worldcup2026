@@ -1,0 +1,39 @@
+name: Overnight Gen AI Content Generation
+
+on:
+  schedule:
+    - cron: '0 5 * * *'   # 05:00 UTC / 06:00 BST daily
+  workflow_dispatch:        # Manual trigger for testing
+
+permissions:
+  contents: write
+
+jobs:
+  generate-and-sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run AI Synthesis Pipeline
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: node scripts/generate-ai-content.js
+
+      - name: Commit and Push AI Assets
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add assets/ai/*.json
+          if ! git diff-index --quiet HEAD; then
+            git commit -m "chore: automated overnight ai sports summary synchronization [skip ci]"
+            git push origin main
+          else
+            echo "No changes in generated assets. Skipping commit."
+          fi

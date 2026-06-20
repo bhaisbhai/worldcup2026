@@ -575,6 +575,26 @@ body{
 }
 .install-x{background:none;border:none;color:var(--t3);font-size:20px;cursor:pointer;padding:0 2px;line-height:1;flex-shrink:0}
 
+/* ── PUNDIT BRIEFING ────────────────────────────── */
+.pb-card{
+  background:linear-gradient(135deg,rgba(0,255,135,.06) 0%,rgba(17,17,17,1) 55%);
+  border:1px solid rgba(0,255,135,.22);border-radius:var(--r);
+  padding:16px 18px;margin:16px 0 4px;
+}
+.pb-hdr{display:flex;align-items:center;gap:9px;margin-bottom:12px}
+.pb-badge{
+  font-size:9px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;
+  background:rgba(0,255,135,.13);color:var(--accent);border:1px solid rgba(0,255,135,.3);
+  padding:3px 9px;border-radius:5px;flex-shrink:0;
+}
+.pb-title{font-size:15px;font-weight:700;letter-spacing:-.3px;line-height:1.3;flex:1}
+.pb-section{margin-bottom:10px}
+.pb-section:last-child{margin-bottom:0}
+.pb-lbl{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--t2);margin-bottom:4px}
+.pb-text{font-size:13px;color:rgba(255,255,255,.82);line-height:1.55}
+.pb-empty{font-size:12px;color:var(--t3);text-align:center;padding:6px 0}
+.pb-ts{font-size:10px;color:var(--t3);margin-top:11px;text-align:right;font-family:var(--mono)}
+
 /* ── LEADERBOARD ────────────────────────────────── */
 .lb-page{max-width:680px;margin:0 auto}
 .lb-hd{font-size:24px;font-weight:800;letter-spacing:-.5px;padding:24px 0 4px}
@@ -1493,7 +1513,76 @@ function renderToday(events, dayDate, patch){
   });
 
   setTimeout(observeCards, 30);
+
+  // inject Pundit's Briefing only when viewing today (not a browse date)
+  if(!browseDate) renderPunditBriefing();
 }
+
+// ─── PUNDIT'S BRIEFING ─────────────────────────────
+let _pbCache = null;
+
+async function renderPunditBriefing(){
+  const wrap = $('today-content');
+  if(!wrap) return;
+
+  // remove any stale card first
+  const old = wrap.querySelector('.pb-card');
+  if(old) old.remove();
+
+  let preview = null, recap = null;
+  try {
+    if(!_pbCache || Date.now() - _pbCache.ts > 5*60*1000){
+      const [pr, re] = await Promise.allSettled([
+        fetch('/assets/ai/today_preview.json').then(r=>r.ok?r.json():null),
+        fetch('/assets/ai/daily_recap.json').then(r=>r.ok?r.json():null),
+      ]);
+      preview = pr.status==='fulfilled' ? pr.value : null;
+      recap   = re.status==='fulfilled' ? re.value : null;
+      _pbCache = { preview, recap, ts: Date.now() };
+    } else {
+      ({ preview, recap } = _pbCache);
+    }
+  } catch(e){ return; }
+
+  // decide which card to show
+  const now = Date.now();
+  const firstKickoff = preview?.firstKickoffTime ? new Date(preview.firstKickoffTime).getTime() : null;
+  const usePreview   = preview?.headline && firstKickoff && now < firstKickoff;
+  const useRecap     = recap?.headline;
+
+  const data = usePreview ? preview : (useRecap ? recap : null);
+  if(!data) return;
+
+  const isPreview = usePreview;
+  const card = document.createElement('div');
+  card.className = 'pb-card';
+
+  const sections = isPreview
+    ? [['The Big Ones', data.theBigOnes], ['Players to Watch', data.playersToWatch], ['Quirky Stat', data.quirkyTrivia]]
+    : [['The Drama', data.theDrama], ['Must-Watch Highlights', data.mustWatchHighlights], ['Progression News', data.progressionNews]];
+
+  const ts = _pbCache.ts ? new Date(_pbCache.ts).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}) : '';
+
+  card.innerHTML = `
+    <div class="pb-hdr">
+      <div class="pb-badge">${isPreview ? 'Preview' : 'Recap'}</div>
+      <div class="pb-title">${esc(data.headline)}</div>
+    </div>
+    ${sections.filter(([,v])=>v).map(([lbl,txt])=>`
+      <div class="pb-section">
+        <div class="pb-lbl">${lbl}</div>
+        <div class="pb-text">${esc(txt)}</div>
+      </div>`).join('')}
+    ${ts ? `<div class="pb-ts">AI generated · ${ts}</div>` : ''}
+  `;
+
+  // insert before first section header (or append if none)
+  const firstSec = wrap.querySelector('.sec-hd');
+  if(firstSec) wrap.insertBefore(card, firstSec);
+  else wrap.append(card);
+}
+
+function esc(str){ return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
 // ═══════════════════════════════════════════════════
 //  FETCH ESPN

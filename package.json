@@ -1,6 +1,10 @@
 {
   "name": "worldcup2026",
   "version": "1.0.0",
+  "scripts": {
+    "pipeline:generate": "node scripts/generate-ai-content.js",
+    "pipeline:retro":    "node scripts/generate-ai-content.js --retro"
+  },
   "engines": {
     "node": ">=18"
   }
