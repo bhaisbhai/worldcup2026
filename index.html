@@ -974,7 +974,7 @@ const KO_DATA = {
 // ═══════════════════════════════════════════════════
 const ESPN_URL      = 'https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard';
 const ESPN_STANDINGS= 'https://site.api.espn.com/apis/v2/sports/soccer/fifa.world/standings';
-const ESPN_STATS    = 'https://site.api.espn.com/apis/v4/sports/soccer/fifa.world/statistics';
+const ESPN_LEADERS  = 'https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/leaders';
 
 // UK broadcast schedule — sorted abbreviation pair → channel
 const UK_TV = {
@@ -2629,23 +2629,18 @@ async function fetchLeaderboardData(){
       } catch(e){}
     }));
 
-    // ── Player stats: ESPN v4 statistics endpoint ──
+    // ── Player stats: ESPN v2 leaders endpoint ──
     const tables = {goals:[], assists:[], yellow:[], red:[], clean:[]};
     const playerMap = {};
-    let _debugInfo = '';
 
     try {
-      const r = await fetch(`${ESPN_STATS}?season=2026`, {signal:AbortSignal.timeout(10000)});
-      _debugInfo += `v4 status:${r.status} `;
+      const r = await fetch(`${ESPN_LEADERS}?season=2026`, {signal:AbortSignal.timeout(10000)});
       if(r.ok){
         const data = await r.json();
-        const cats = data.categories || data.statistics?.categories || data.results || [];
-        _debugInfo += `keys:[${Object.keys(data).join(',')}] cats:${cats.length} `;
+        const cats = data.leaders || data.categories || [];
         cats.forEach(cat => {
           const catName = (cat.displayName || cat.name || '').toLowerCase();
-          _debugInfo += `cat:"${catName}" `;
 
-          // Match category to our known types
           let matchedKey = null;
           for(const [key, cfg] of Object.entries(LB_CAT_MAP)){
             if(cfg.keys.some(k => catName.includes(k))){ matchedKey = key; break; }
@@ -2653,19 +2648,19 @@ async function fetchLeaderboardData(){
           if(!matchedKey) return;
 
           const cfg = LB_CAT_MAP[matchedKey];
-          const leaders = (cat.stats || cat.leaders || cat.athletes || []).map((stat, idx) => {
-            const athlete = stat.athlete || stat;
+          const entries = cat.leaders || cat.athletes || [];
+          const leaders = entries.map((entry, idx) => {
+            const athlete = entry.athlete || entry;
             const abbr = athlete.team?.abbreviation || '';
             const name = athlete.displayName || '';
-            const val  = parseFloat(stat.value ?? stat.displayValue) || 0;
-            const displayVal = stat.displayValue || String(val);
+            const val  = parseFloat(entry.value ?? entry.displayValue) || 0;
+            const displayVal = entry.displayValue || String(val);
             return { rank: idx+1, name, teamName: athlete.team?.displayName || '', abbr,
                      f: FLAGS[abbr] || '🏳️', displayVal, val };
           }).filter(l => l.name);
 
           tables[matchedKey] = leaders.slice(0, 10);
 
-          // Build unified playerMap for Watch algorithm
           leaders.forEach(l => {
             const k = l.name + '||' + l.abbr;
             if(!playerMap[k]) playerMap[k] = {
@@ -2704,13 +2699,13 @@ async function fetchLeaderboardData(){
         .sort((a,b) => b.ws - a.ws)
         .slice(0, 10),
       meta: {matchCount, totalGoals, avgGoals: matchCount ? (totalGoals/matchCount).toFixed(1):'—'},
-      ts: Date.now(), error: false, _debug: _debugInfo,
+      ts: Date.now(), error: false,
     };
     lbLastFetch = Date.now();
   } catch(e){
     if(!lbCache) lbCache = {
       tables:{goals:[],assists:[],yellow:[],red:[],clean:[]}, watchList:[],
-      meta:{matchCount:0,totalGoals:0,avgGoals:'—'}, ts:null, error:true, _debug:'exception:'+e,
+      meta:{matchCount:0,totalGoals:0,avgGoals:'—'}, ts:null, error:true,
     };
   }
   lbFetching = false;
@@ -2802,7 +2797,6 @@ function renderLeaderboard(){
       </div>
     </div>
 
-    ${lbCache._debug ? `<div style="font-size:9px;color:var(--t3);word-break:break-all;padding:6px 0 0;font-family:var(--mono)">${lbCache._debug}</div>` : ''}
     <div class="lb-section">Top Scorers</div>
     ${lbStatBox(t.goals,'g')}
 
