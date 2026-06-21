@@ -2711,9 +2711,24 @@ async function fetchAndRenderPlayer(athleteId, playerName, teamInfo, ev){
   // Enrich _playerClubs with club from general ESPN endpoint (browser can reach it even if pipeline couldn't)
   const pid=String(athleteId);
   if(!_playerClubs[pid]?.club){
-    const t=genAth.team||genAth.teams?.[0]||{};
-    const club=t.displayName||t.name||'';
-    const clubLogo=t.logos?.[0]?.href||t.logo||'';
+    // During WC, ESPN sets primary team = national team; scan all entries to find the club
+    const nationalName=(teamInfo.name||'').toLowerCase();
+    let club='',clubLogo='';
+    // genAth.teams can be [{team:{...},...}] or [{displayName:...}] depending on endpoint version
+    const allTeams=[
+      ...(Array.isArray(genAth.teams)?genAth.teams:[]),
+      genAth.team?{team:genAth.team}:{},
+    ];
+    for(const entry of allTeams){
+      const t=entry.team||entry;
+      const tName=(t.displayName||t.name||'').trim();
+      if(!tName||tName.toLowerCase()===nationalName) continue;
+      // Skip obvious national team patterns
+      if(/national\s+team|national\s+football/i.test(tName)) continue;
+      club=tName;
+      clubLogo=t.logos?.[0]?.href||t.logo||'';
+      break;
+    }
     if(club){
       if(_playerClubs[pid]){_playerClubs[pid].club=club;if(clubLogo)_playerClubs[pid].clubLogo=clubLogo;}
       else _playerClubs[pid]={name:playerName,club,clubLogo,teamName:teamInfo.name,teamAbbr:teamInfo.abbr,position:'',jersey:''};
