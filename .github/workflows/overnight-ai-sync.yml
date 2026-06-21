@@ -1,9 +1,9 @@
-name: Overnight Gen AI Content Generation
+name: Overnight AI Recap Generation
 
 on:
   schedule:
-    - cron: '0 8 * * *' # Scheduled daily at 08:00 UTC / 09:00 BST (after latest PT kickoffs end)
-  workflow_dispatch:   # Allows manual execution testing
+    - cron: '0 8 * * *'   # 08:00 UTC = 09:00 BST, after US West Coast late matches end
+  workflow_dispatch:        # Manual trigger for testing
 
 permissions:
   contents: write
@@ -15,29 +15,28 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js Environments
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
 
-      - name: Install Project Dependencies
+      - name: Install Dependencies
         run: npm ci
 
-      - name: Run AI Synthesis Engine Pipeline
+      - name: Run AI Pipeline
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          SPORTS_DATA_API_KEY: ${{ secrets.SPORTS_DATA_API_KEY }}
         run: npm run pipeline:generate
 
-      - name: Commit and Push Static Asset Synchronizations
+      - name: Commit and Push
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add public/assets/ai/ai_master.json public/assets/ai/csv/*.csv
+          git add data/recaps.json public/assets/ai/ai_master.json public/assets/ai/csv/
           if ! git diff-index --quiet HEAD; then
-            git commit -m "chore: automated overnight ai sports summary synchronization [skip ci]"
+            git commit -m "chore: daily AI recap sync [skip ci]"
             git push origin main
           else
-            echo "No changes found in generated assets. Skipping repository updates."
+            echo "No changes to commit."
           fi

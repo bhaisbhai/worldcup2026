@@ -35,7 +35,7 @@ async function callGemini(prompt: string, schema: any, retries = 10): Promise<an
     try {
       console.log(`🤖 Requesting Gemini (attempt ${attempt}/${retries})...`);
       const response = await ai.models.generateContent({
-        model: "gemini-3.5-flash",
+        model: "gemini-2.0-flash",
         contents: prompt,
         config: {
           responseMimeType: "application/json",
@@ -186,8 +186,10 @@ async function main() {
   }
 
   if (!targetDate) {
-    // Default to today in simulation context (2026-06-20)
-    targetDate = '2026-06-20';
+    // Default to yesterday — run after midnight so previous day's matches are complete
+    const d = new Date();
+    d.setDate(d.getDate() - 1);
+    targetDate = d.toISOString().split('T')[0];
   }
 
   console.log(`📅 Processing target date: ${targetDate}`);
@@ -203,7 +205,7 @@ async function main() {
   }
 
   // 2. Read existing master JSON database
-  const masterPath = path.resolve('/Users/rajarjan/Documents/game buddy/public/assets/ai/ai_master.json');
+  const masterPath = path.resolve(__dirname, '..', 'public', 'assets', 'ai', 'ai_master.json');
   let masterDB: any = { lastUpdated: '', teams: {}, matches: {}, days: {}, today_preview: {}, espnMatches: {}, espnStandings: [] };
 
   if (fs.existsSync(masterPath)) {
@@ -499,7 +501,7 @@ Adhere strictly to your British pundit persona: sarcastic, self-deprecating, and
           response.day.mustWatchHighlights,
           response.day.progressionNews
         ]];
-        const csvDir = path.resolve('/Users/rajarjan/Documents/game buddy/public/assets/ai/csv');
+        const csvDir = path.resolve(__dirname, '..', 'public', 'assets', 'ai', 'csv');
         if (!fs.existsSync(csvDir)) {
           fs.mkdirSync(csvDir, { recursive: true });
         }
@@ -509,6 +511,19 @@ Adhere strictly to your British pundit persona: sarcastic, self-deprecating, and
           0,
           daysCSVRows
         );
+        // Also update data/recaps.json (served via /api/recaps)
+        const recapsPath = path.resolve(__dirname, '..', 'data', 'recaps.json');
+        let recaps: any[] = [];
+        if (fs.existsSync(recapsPath)) {
+          try { recaps = JSON.parse(fs.readFileSync(recapsPath, 'utf-8')); } catch {}
+        }
+        const existingIdx = recaps.findIndex((r: any) => r.date === targetDate);
+        const recapEntry = { date: targetDate, ...response.day };
+        if (existingIdx !== -1) recaps[existingIdx] = recapEntry;
+        else recaps.push(recapEntry);
+        recaps.sort((a: any, b: any) => a.date.localeCompare(b.date));
+        fs.writeFileSync(recapsPath, JSON.stringify(recaps, null, 2), 'utf-8');
+        console.log(`🎉 data/recaps.json updated with ${targetDate} recap.`);
       }
 
       // Parse today_preview
@@ -578,7 +593,7 @@ Adhere strictly to your British pundit persona: sarcastic, self-deprecating, and
   console.log(`🎉 Master JSON database successfully synchronized at ${masterPath}`);
 
   // 8. Write/Append changes to CSV files
-  const csvDir = path.resolve('/Users/rajarjan/Documents/game buddy/public/assets/ai/csv');
+  const csvDir = path.resolve(__dirname, '..', 'public', 'assets', 'ai', 'csv');
   if (!fs.existsSync(csvDir)) {
     fs.mkdirSync(csvDir, { recursive: true });
   }

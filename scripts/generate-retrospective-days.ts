@@ -25,7 +25,7 @@ async function callGemini(prompt: string, schema: any, retries = 10): Promise<an
     try {
       console.log(`🤖 Requesting Gemini (attempt ${attempt}/${retries})...`);
       const response = await ai.models.generateContent({
-        model: "gemini-3.5-flash",
+        model: "gemini-2.0-flash",
         contents: prompt,
         config: {
           responseMimeType: "application/json",
@@ -77,7 +77,7 @@ function stringifyCSVRow(arr: string[]): string {
 }
 
 async function main() {
-  const masterPath = path.resolve('/Users/rajarjan/Documents/game buddy/public/assets/ai/ai_master.json');
+  const masterPath = path.resolve(__dirname, '..', 'public', 'assets', 'ai', 'ai_master.json');
   if (!fs.existsSync(masterPath)) {
     console.error("❌ master JSON does not exist!");
     return;
@@ -160,7 +160,7 @@ Adhere strictly to your British football pundit co-host persona: sarcastic, self
   console.log(`🎉 Master JSON updated successfully with daily summaries.`);
 
   // Write CSV
-  const csvPath = path.resolve('/Users/rajarjan/Documents/game buddy/public/assets/ai/csv/days_ai.csv');
+  const csvPath = path.resolve(__dirname, '..', 'public', 'assets', 'ai', 'csv', 'days_ai.csv');
   const headers = ['date', 'headline', 'theDrama', 'mustWatchHighlights', 'progressionNews'];
   
   // Sort rows by date
