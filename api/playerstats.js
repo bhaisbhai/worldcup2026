@@ -43,9 +43,10 @@ module.exports = async function (req, res) {
     // ── 2. Fetch all summaries in parallel (cap at 50) ──
     const playerMap = {};
 
-    function player(name, teamName, teamAbbr) {
+    function player(name, teamName, teamAbbr, athleteId = '') {
       const k = `${name}||${teamAbbr}`;
-      if (!playerMap[k]) playerMap[k] = { name, teamName, teamAbbr, goals: 0, assists: 0, yellowCards: 0, redCards: 0, cleanSheets: 0 };
+      if (!playerMap[k]) playerMap[k] = { id: athleteId, name, teamName, teamAbbr, goals: 0, assists: 0, yellowCards: 0, redCards: 0, cleanSheets: 0 };
+      else if (athleteId && !playerMap[k].id) playerMap[k].id = athleteId;
       return k;
     }
 
@@ -61,6 +62,7 @@ module.exports = async function (req, res) {
           for (const entry of teamRoster.roster || []) {
             const name = entry.athlete?.displayName || '';
             if (!name) continue;
+            const athleteId = String(entry.athlete?.id || '');
             const stats = entry.stats || [];
             const getStat = n => {
               const s = stats.find(x => x.name === n);
@@ -71,12 +73,15 @@ module.exports = async function (req, res) {
             const yellow  = getStat('yellowCards');
             const red     = getStat('redCards');
             if (goals || assists || yellow || red) {
-              const k = player(name, tName, tAbbr);
+              const k = player(name, tName, tAbbr, athleteId);
               playerMap[k].goals       += goals;
               playerMap[k].assists     += assists;
               playerMap[k].yellowCards += yellow;
               playerMap[k].redCards    += red;
               gotStats = true;
+            } else if (athleteId) {
+              // register ID even if no scoring stats yet (may appear in later attempts)
+              player(name, tName, tAbbr, athleteId);
             }
           }
         }
@@ -97,8 +102,9 @@ module.exports = async function (req, res) {
               for (const entry of cat.athletes || []) {
                 const name = entry.athlete?.displayName || '';
                 if (!name) continue;
+                const athleteId = String(entry.athlete?.id || '');
                 const stats = entry.stats || [];
-                const k = player(name, tName, tAbbr);
+                const k = player(name, tName, tAbbr, athleteId);
                 if (idx.goals   >= 0) { const v = parseInt(stats[idx.goals])   || 0; playerMap[k].goals   += v; if (v) gotStats = true; }
                 if (idx.assists >= 0)   playerMap[k].assists     += parseInt(stats[idx.assists]) || 0;
                 if (idx.yellow  >= 0)   playerMap[k].yellowCards += parseInt(stats[idx.yellow])  || 0;
@@ -118,8 +124,9 @@ module.exports = async function (req, res) {
               const name = ath.displayName || '';
               const tAbbr = ath.team?.abbreviation || ev.team?.abbreviation || '';
               const tName = ath.team?.displayName  || ev.team?.displayName  || '';
+              const athleteId = String(ath.id || '');
               if (!name) return;
-              const k = player(name, tName, tAbbr);
+              const k = player(name, tName, tAbbr, athleteId);
               if (type.includes('goal') && !isOwnGoal) {
                 if (idx === 0) playerMap[k].goals++;
                 if (idx === 1) playerMap[k].assists++;
@@ -159,6 +166,7 @@ module.exports = async function (req, res) {
           displayValue: String(p[key]),
           value: p[key],
           athlete: {
+            id: p.id || '',
             displayName: p.name,
             team: { displayName: p.teamName, abbreviation: p.teamAbbr },
           },
