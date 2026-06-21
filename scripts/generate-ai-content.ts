@@ -289,66 +289,47 @@ async function main() {
     console.warn(`⚠️ No matches found in ESPN Scoreboard for date ${targetDate}.`);
   }
 
-  // 1b. Fetch live group standings + compute per-team advancement status
+  // 1b. Fetch live group standings — store raw data for post-match status computation
+  // Status is computed AFTER today's completed results are applied (step 3b below)
   let standingsContext = '';
   let advancementStatus = '';
+  // Maps for post-match status computation
+  const teamStandingsMap = new Map<string, any>(); // teamCode → mutable standings entry
+  const groupTeamsMap = new Map<string, any[]>();   // groupName → ordered team list
   try {
     const standingsData = await fetchJSON('https://site.api.espn.com/apis/v2/sports/soccer/fifa.world/standings');
-    const groups: string[] = [];
-    const statusLines: string[] = [];
+    const preGroups: string[] = [];
 
     for (const child of standingsData.children || []) {
       const gName = child.name || '';
       const entries = (child.standings?.entries || []).map((e: any) => {
         const stats = e.stats || [];
         const get = (n: string) => stats.find((s: any) => s.name === n || s.shortDisplayName === n)?.value ?? 0;
+        const gf = get('pointsFor');
+        const ga = get('pointsAgainst');
         return {
-          abbr: (e.team?.abbreviation || '').padEnd(4),
+          abbr: (e.team?.abbreviation || '').trim(),
           mp: get('gamesPlayed'),
           w: get('wins'), d: get('ties'), l: get('losses'),
-          gf: get('pointsFor'), ga: get('pointsAgainst'),
-          pts: get('points'),
-          gd: get('pointsFor') - get('pointsAgainst'),
+          gf, ga, pts: get('points'), gd: gf - ga,
         };
-      }).sort((a: any, b: any) => b.pts - a.pts || b.gd - a.gd);
+      }).sort((a: any, b: any) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf);
 
-      // Standings table row
+      // Store in maps for later mutation
+      for (const e of entries) {
+        teamStandingsMap.set(e.abbr, { ...e, group: gName });
+      }
+      groupTeamsMap.set(gName, entries.map((e: any) => e.abbr));
+
+      // Pre-match standings table (for context only)
       const rows = entries.map((t: any) =>
-        `  ${t.abbr} P${t.mp} W${t.w} D${t.d} L${t.l} GF${t.gf} GA${t.ga} Pts${t.pts}`
+        `  ${t.abbr.padEnd(4)} P${t.mp} W${t.w} D${t.d} L${t.l} GF${t.gf} GA${t.ga} Pts${t.pts}`
       );
-      if (rows.length) groups.push(`${gName}:\n${rows.join('\n')}`);
-
-      // Per-team advancement status (World Cup 2026: top 2 + 8 best 3rd-place teams advance)
-      // Conservative threshold: 4 pts gives a realistic shot at best-3rd qualification
-      const BEST_THIRD_MIN = 4;
-      statusLines.push(`${gName}:`);
-      entries.forEach((t: any, idx: number) => {
-        const gamesLeft = 3 - t.mp;
-        const maxPts = t.pts + gamesLeft * 3;
-        const pos = idx + 1;
-        const p2Pts = entries[1]?.pts ?? 0;
-
-        let status: string;
-        if (t.mp === 3) {
-          if (pos <= 2) status = 'QUALIFIED (top 2 confirmed)';
-          else if (pos === 3 && t.pts >= BEST_THIRD_MIN) status = `POSSIBLE BEST-3RD (${t.pts} pts – awaiting other groups)`;
-          else status = `ELIMINATED (${t.pts} pts after all 3 games)`;
-        } else if (maxPts < p2Pts && maxPts < BEST_THIRD_MIN) {
-          status = `ELIMINATED (max ${maxPts} pts possible – cannot reach top 2 or best-3rd threshold)`;
-        } else if (maxPts < p2Pts) {
-          status = `NEEDS POINTS (cannot reach top 2, best-3rd route only – max ${maxPts} pts possible)`;
-        } else {
-          status = `IN CONTENTION (can still finish top 2 – ${gamesLeft} game${gamesLeft !== 1 ? 's' : ''} left)`;
-        }
-        statusLines.push(`  ${t.abbr.trim()}: ${status}`);
-      });
-      statusLines.push('');
+      if (rows.length) preGroups.push(`${gName}:\n${rows.join('\n')}`);
     }
 
-    if (groups.length) {
-      standingsContext = `GROUP STANDINGS (as of ${targetDate}):\n${groups.join('\n\n')}`;
-      advancementStatus = `COMPUTED ADVANCEMENT STATUS (as of ${targetDate}):\n${statusLines.join('\n')}`;
-      console.log(`📊 Fetched standings and computed advancement status for ${groups.length} groups`);
+    if (preGroups.length) {
+      console.log(`📊 Fetched pre-match standings for ${preGroups.length} groups — advancement status will be computed post-match`);
     }
   } catch (err) {
     console.warn('⚠️ Could not fetch standings — progression notes will lack group context');
@@ -533,6 +514,78 @@ async function main() {
     }
   }
 
+  // 3b. Apply today's completed results to standings, then compute advancement status
+  // This ensures Gemini sees pts/mp that INCLUDE today's matches — not the pre-match snapshot.
+  if (teamStandingsMap.size > 0) {
+    for (const match of completedMatchesForRecap) {
+      const home = teamStandingsMap.get(match.homeTeam);
+      const away = teamStandingsMap.get(match.awayTeam);
+      if (home) {
+        home.mp += 1;
+        home.gf += match.homeScore;
+        home.ga += match.awayScore;
+        home.gd = home.gf - home.ga;
+        if (match.homeScore > match.awayScore)       { home.w += 1; home.pts += 3; }
+        else if (match.homeScore === match.awayScore) { home.d += 1; home.pts += 1; }
+        else                                           { home.l += 1; }
+      }
+      if (away) {
+        away.mp += 1;
+        away.gf += match.awayScore;
+        away.ga += match.homeScore;
+        away.gd = away.gf - away.ga;
+        if (match.awayScore > match.homeScore)       { away.w += 1; away.pts += 3; }
+        else if (match.awayScore === match.homeScore) { away.d += 1; away.pts += 1; }
+        else                                           { away.l += 1; }
+      }
+    }
+
+    // World Cup 2026: 48 teams, 12 groups of 4. Top 2 from each group advance (24 teams).
+    // 8 best 3rd-place teams also advance → 32 total.
+    // Realistic best-3rd threshold: ~4 pts. 3 pts is borderline; 2 pts is almost always out.
+    const BEST_THIRD_MIN = 4;
+    const updatedGroups: string[] = [];
+    const statusLines: string[] = [];
+
+    for (const [gName, abbrList] of groupTeamsMap) {
+      // Re-sort entries with updated points
+      const updatedEntries = abbrList
+        .map((abbr: string) => teamStandingsMap.get(abbr))
+        .filter(Boolean)
+        .sort((a: any, b: any) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf);
+
+      const p2Pts = updatedEntries[1]?.pts ?? 0;
+      const rows: string[] = [];
+      statusLines.push(`${gName}:`);
+
+      updatedEntries.forEach((t: any, idx: number) => {
+        rows.push(`  ${t.abbr.padEnd(4)} P${t.mp} W${t.w} D${t.d} L${t.l} GF${t.gf} GA${t.ga} Pts${t.pts}`);
+        const gamesLeft = 3 - t.mp;
+        const maxPts = t.pts + gamesLeft * 3;
+        const pos = idx + 1;
+        let status: string;
+        if (t.mp === 3) {
+          if (pos <= 2)                              status = 'QUALIFIED (top 2 confirmed)';
+          else if (pos === 3 && t.pts >= BEST_THIRD_MIN) status = `POSSIBLE BEST-3RD (${t.pts} pts – awaiting other groups)`;
+          else                                       status = `ELIMINATED (${t.pts} pts after all 3 games – cannot reach best-3rd threshold)`;
+        } else if (maxPts < p2Pts && maxPts < BEST_THIRD_MIN) {
+          status = `ELIMINATED (max ${maxPts} pts possible – cannot reach top 2 or best-3rd threshold)`;
+        } else if (maxPts < p2Pts) {
+          status = `NEEDS POINTS (cannot reach top 2, best-3rd route only – max ${maxPts} pts possible)`;
+        } else {
+          status = `IN CONTENTION (can still finish top 2 – ${gamesLeft} game${gamesLeft !== 1 ? 's' : ''} left)`;
+        }
+        statusLines.push(`  ${t.abbr}: ${status}`);
+      });
+      statusLines.push('');
+      if (rows.length) updatedGroups.push(`${gName}:\n${rows.join('\n')}`);
+    }
+
+    standingsContext = `GROUP STANDINGS (after today's completed matches, ${targetDate}):\n${updatedGroups.join('\n\n')}`;
+    advancementStatus = `COMPUTED ADVANCEMENT STATUS (after today's completed matches, ${targetDate}):\n${statusLines.join('\n')}`;
+    console.log(`📊 Post-match standings and advancement status computed for ${updatedGroups.length} groups`);
+  }
+
   // 4. Fetch tomorrow's scoreboard for preview
   const tomorrow = new Date(new Date(targetDate).getTime() + 24 * 60 * 60 * 1000);
   const tomorrowStr = tomorrow.toISOString().split('T')[0];
@@ -674,13 +727,20 @@ async function main() {
     const prompt = `
 You are analyzing World Cup 2026 matches for date ${targetDate}.
 
+WORLD CUP 2026 FORMAT (critical for progression commentary):
+- 48 teams in 12 groups of 4. Top 2 from each group qualify automatically (24 teams total).
+- Additionally, the 8 BEST 3rd-place teams across all 12 groups also advance — so 8 out of 12 third-place finishers qualify.
+- A team finishing 3rd with 4+ points has a realistic shot; 3 points is borderline; 2 points or fewer is almost certainly out.
+- DO NOT say a 3rd-place team "might go home" or is eliminated unless their COMPUTED STATUS is explicitly ELIMINATED.
+
 ${standingsContext ? standingsContext + '\n' : ''}${advancementStatus ? advancementStatus + `
 ADVANCEMENT LANGUAGE RULES — YOU MUST FOLLOW THESE EXACTLY:
 - Status "ELIMINATED": you MAY say they are out, going home, booking flights.
 - Status "IN CONTENTION": say they are still in the hunt, have games to play, can qualify — do NOT imply they need a miracle or must win to survive.
 - Status "NEEDS POINTS": say they need a strong result to keep best-3rd hopes alive — do NOT say they're going home or must win outright to survive.
-- Status "POSSIBLE BEST-3RD": say they are waiting on other results — do NOT call them eliminated.
+- Status "POSSIBLE BEST-3RD": say they are in the running for a best-3rd slot, waiting on other groups — do NOT call them eliminated or suggest they need to win to survive.
 - Status "QUALIFIED": they are through — celebrate or comment accordingly.
+THE STANDINGS ABOVE ALREADY INCLUDE TODAY'S MATCH RESULTS. Do NOT re-add today's match points to compute standings — they are already applied. Trust the COMPUTED ADVANCEMENT STATUS exactly.
 VIOLATING THESE RULES (e.g. calling an IN CONTENTION or NEEDS POINTS team eliminated or saying they "must win or go home") is your single biggest failure mode. Do not do it.\n` : ''}
 MATCH DETAILS FOR TODAY (${targetDate}):
 ${dayMatchesList}
