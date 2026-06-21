@@ -500,10 +500,10 @@ body{
 .fp-dot{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;z-index:2;-webkit-tap-highlight-color:transparent}
 .fp-click{cursor:pointer}
 .fp-click:active .fp-circle{transform:scale(.88)}
-.fp-circle{width:27px;height:27px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;font-family:var(--mono);transition:transform .1s}
+.fp-circle{width:23px;height:23px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;font-family:var(--mono);transition:transform .1s}
 .fp-dot.home .fp-circle{background:var(--accent);color:#000;box-shadow:0 2px 8px rgba(0,255,135,.45)}
 .fp-dot.away .fp-circle{background:#e05252;color:#fff;box-shadow:0 2px 8px rgba(224,82,82,.45)}
-.fp-lbl{font-size:7.5px;color:#fff;text-align:center;margin-top:2px;max-width:48px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-shadow:0 1px 4px rgba(0,0,0,.95);letter-spacing:.1px;line-height:1.1}
+.fp-lbl{font-size:7px;color:#fff;text-align:center;margin-top:1px;max-width:44px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-shadow:0 1px 4px rgba(0,0,0,.95);letter-spacing:.1px;line-height:1.1}
 .fp-rtg{font-size:7px;font-weight:700;padding:1px 3px;border-radius:3px;margin-top:1px;line-height:1.3}
 .fp-rtg.hi{background:var(--accent);color:#000}
 .fp-rtg.mid{background:var(--gold);color:#000}
@@ -2651,9 +2651,9 @@ function mcLineups(ev,data){
     return Array.from({length:n},(_,i)=>pad+i*step);
   }
 
-  // Y% from top: home occupies bottom half, away top half
-  const HY={GK:90,DEF:75,MID:60,FWD:46};
-  const AY={GK:10,DEF:25,MID:40,FWD:54};
+  // Y% from top: keep each team in their own half so dots don't cross
+  const HY={GK:94,DEF:82,MID:68,FWD:57};
+  const AY={GK:6,DEF:18,MID:32,FWD:43};
 
   function makeDots(grp,yMap,isHome,ti){
     let out='';
