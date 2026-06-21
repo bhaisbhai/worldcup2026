@@ -1470,7 +1470,7 @@ function buildCard(ev){
         <div class="tname${ev.away.winner?' winner':''}">${ev.away.name}</div>
       </div>
     </div>
-    ${isFt ? renderScorers(ev.goals) : ''}
+    ${(isLive||isFt) ? renderScorers(ev.goals) : ''}
     <div class="mc-foot">${foot_l}${foot_r}</div>
     ${hlHtml}
   `;
@@ -2179,14 +2179,7 @@ function tick(){
     const id = el.dataset.clockid;
     const state = liveClocks[id];
     if(state){
-      if(state.minute >= 90){
-        // Stoppage time — show exact value from ESPN (e.g. "90+6'")
-        el.textContent = state.raw;
-      } else {
-        const elapsed = Math.floor((now - state.fetchedAt)/1000);
-        const cur = Math.min(state.minute + elapsed, 90);
-        el.textContent = cur+"'";
-      }
+      el.textContent = state.raw;
     }
   });
 
