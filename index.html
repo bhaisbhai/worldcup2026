@@ -1703,7 +1703,7 @@ function fmtRecapDate(iso){
 function renderSummary(container, dispDate){
   if(!_recapRows.length) return;
   const todayStr = new Date().toISOString().slice(0,10);
-  const ds = dispDate ? toDateStr(dispDate) : todayStr;
+  const ds = dispDate ? dispDate.toISOString().slice(0,10) : todayStr;
   // Exact match for this day; if on today and no recap yet, fall back to most recent
   const row = _recapRows.find(r => r.date === ds) || (ds === todayStr ? _recapRows[0] : null);
   if(!row) return;
