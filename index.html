@@ -1746,7 +1746,8 @@ function openSearch(){
   const inp=document.getElementById('searchInput');
   inp.value='';
   document.getElementById('searchResults').innerHTML=`<div class="srch-hint">Search for a player or country<br><span style="font-size:10px;opacity:.6">e.g. "Bellingham", "Brazil", "Real Madrid"</span></div>`;
-  requestAnimationFrame(()=>inp.focus());
+  // Double rAF: first frame removes hidden, second frame the overlay is painted and focusable
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{inp.focus();inp.click();}));
   document.addEventListener('keydown',_srchEscHandler);
 }
 function closeSearch(){
