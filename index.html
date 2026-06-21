@@ -1668,7 +1668,7 @@ function csvRow(line){
 
 async function fetchDailyRecaps(){
   try {
-    const r = await fetch('/data/days_ai.csv', { signal: AbortSignal.timeout(5000) });
+    const r = await fetch('/api/recaps', { signal: AbortSignal.timeout(5000) });
     if(r.ok){
       const text = await r.text();
       const today = new Date().toISOString().slice(0,10);
@@ -1706,7 +1706,10 @@ function renderSummary(container, dispDate){
       ${row.mustWatchHighlights?`<div class="recap-section"><div class="recap-section-lbl">Watch / Skip</div><div class="recap-section-txt">${row.mustWatchHighlights}</div></div>`:''}
       ${row.progressionNews?`<div class="recap-section"><div class="recap-section-lbl">Progression</div><div class="recap-section-txt">${row.progressionNews}</div></div>`:''}
     </div>`;
-  container.prepend(card);
+  // Insert after the day-nav (first child), before match sections
+  const nav = container.querySelector('#day-nav');
+  if(nav && nav.nextSibling) container.insertBefore(card, nav.nextSibling);
+  else container.append(card);
 }
 
 async function fetchMatches(){

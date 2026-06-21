@@ -4,6 +4,7 @@
     { "src": "index.html", "use": "@vercel/static" },
     { "src": "assets/**", "use": "@vercel/static" },
     { "src": "data/**", "use": "@vercel/static" },
+    { "src": "api/recaps.js", "use": "@vercel/node", "config": { "includeFiles": ["data/**"] } },
     { "src": "api/**/*.js", "use": "@vercel/node" }
   ],
   "routes": [
