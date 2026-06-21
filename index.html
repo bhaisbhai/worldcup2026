@@ -742,28 +742,44 @@ body{
 
 /* ── DAILY RECAP CARD ──────────────────── */
 .recap-card{
-  border:1px solid rgba(255,255,255,.07);border-left:2px solid var(--accent);
-  border-radius:10px;background:rgba(255,255,255,.02);
-  margin:0 0 14px;overflow:hidden;cursor:pointer;
-  -webkit-tap-highlight-color:transparent;
+  display:flex;flex-direction:column;
+  margin:0 0 12px;
+  border-radius:10px;
+  background:rgba(0,255,135,.04);
+  border:1px solid rgba(0,255,135,.12);
+  overflow:hidden;
+  cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;
+  transition:background .15s;
 }
-.recap-hdr{display:flex;align-items:center;gap:10px;padding:10px 14px}
+.recap-card:active{background:rgba(0,255,135,.07)}
+.recap-hdr{display:flex;align-items:center;gap:9px;padding:10px 13px}
 .recap-pill{
-  font-size:9px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;
-  color:var(--accent);flex-shrink:0;
+  font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase;
+  color:var(--accent);background:rgba(0,255,135,.1);border:1px solid rgba(0,255,135,.2);
+  padding:2px 7px;border-radius:4px;flex-shrink:0;line-height:1.6;
 }
 .recap-hl{
-  font-size:12px;color:var(--text);flex:1;line-height:1.35;
+  font-size:12px;font-weight:500;color:rgba(255,255,255,.8);flex:1;line-height:1.35;
   overflow:hidden;white-space:nowrap;text-overflow:ellipsis;
 }
-.recap-card.open .recap-hl{white-space:normal}
-.recap-chev{font-size:10px;color:var(--t3);transition:transform .2s;flex-shrink:0}
+.recap-card.open .recap-hl{white-space:normal;padding-bottom:0}
+.recap-chev{
+  font-size:11px;color:rgba(0,255,135,.5);
+  transition:transform .2s cubic-bezier(.4,0,.2,1);flex-shrink:0;
+}
 .recap-card.open .recap-chev{transform:rotate(180deg)}
-.recap-body{display:none;padding:0 14px 14px;border-top:1px solid rgba(255,255,255,.05)}
-.recap-card.open .recap-body{display:block}
+.recap-body{
+  max-height:0;overflow:hidden;
+  transition:max-height .3s cubic-bezier(.4,0,.2,1);
+}
+.recap-card.open .recap-body{max-height:600px}
+.recap-body-inner{padding:0 13px 13px;border-top:1px solid rgba(0,255,135,.08)}
 .recap-section{margin-top:10px}
-.recap-section-lbl{font-size:9px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
-.recap-section-txt{font-size:12px;color:rgba(255,255,255,.65);line-height:1.7}
+.recap-section-lbl{
+  font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  color:var(--accent);opacity:.6;margin-bottom:3px;
+}
+.recap-section-txt{font-size:12px;color:rgba(255,255,255,.6);line-height:1.7}
 
 /* ── GOAL SCORERS STRIP ────────────────── */
 .mc-scorers{display:flex;justify-content:space-between;gap:6px;margin:6px 0 8px;min-height:0}
@@ -1670,9 +1686,9 @@ async function fetchDailyRecaps(){
   try {
     const r = await fetch('/api/recaps', { signal: AbortSignal.timeout(5000) });
     if(r.ok){
-      const text = await r.text();
       const today = new Date().toISOString().slice(0,10);
-      _recapRows = parseCSV(text)
+      const rows = await r.json();
+      _recapRows = rows
         .filter(row => row.date && row.date <= today)
         .sort((a,b) => b.date.localeCompare(a.date)); // newest first
     }
@@ -1701,11 +1717,11 @@ function renderSummary(container, dispDate){
       <span class="recap-hl">${row.headline||''}</span>
       <span class="recap-chev">▾</span>
     </div>
-    <div class="recap-body">
+    <div class="recap-body"><div class="recap-body-inner">
       ${row.theDrama?`<div class="recap-section"><div class="recap-section-lbl">The Drama</div><div class="recap-section-txt">${row.theDrama}</div></div>`:''}
       ${row.mustWatchHighlights?`<div class="recap-section"><div class="recap-section-lbl">Watch / Skip</div><div class="recap-section-txt">${row.mustWatchHighlights}</div></div>`:''}
       ${row.progressionNews?`<div class="recap-section"><div class="recap-section-lbl">Progression</div><div class="recap-section-txt">${row.progressionNews}</div></div>`:''}
-    </div>`;
+    </div></div>`;
   // Insert after the day-nav (first child), before match sections
   const nav = container.querySelector('#day-nav');
   if(nav && nav.nextSibling) container.insertBefore(card, nav.nextSibling);
