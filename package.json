@@ -1,7 +1,28 @@
 {
-  "name": "worldcup2026",
+  "name": "world-cup-2026-game-buddy",
   "version": "1.0.0",
-  "engines": {
-    "node": ">=18"
+  "type": "module",
+  "description": "FIFA World Cup 2026 Game Buddy - High-Fidelity SPA & Overnight AI Pipeline",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "script:backfill": "tsx scripts/backfill-master.ts",
+    "pipeline:generate": "tsx scripts/generate-ai-content.ts",
+    "pipeline:retrospective-days": "tsx scripts/generate-retrospective-days.ts"
+  },
+  "dependencies": {
+    "@google/genai": "latest",
+    "dotenv": "^16.4.5",
+    "lucide": "^0.395.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.7",
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.3",
+    "tsx": "^4.7.2",
+    "typescript": "^5.4.5",
+    "vite": "^5.2.10"
   }
 }
