@@ -28,17 +28,43 @@ interface PlayerStats {
   headshot?: string;
 }
 
+function dateRange(startIso: string, endIso: string): string[] {
+  const dates: string[] = [];
+  const cur = new Date(startIso + 'T12:00:00Z');
+  const end = new Date(endIso + 'T12:00:00Z');
+  while (cur <= end) {
+    dates.push(cur.toISOString().slice(0,10).replace(/-/g,''));
+    cur.setDate(cur.getDate() + 1);
+  }
+  return dates;
+}
+
 async function main() {
   console.log('⚽ Aggregating player tournament stats from match summaries...');
 
-  // Fetch full scoreboard — WC 2026 group stage runs June-July 2026
-  const scoreData = await fetchJSON(
-    'https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?limit=200'
-  );
+  // Collect all events across the WC 2026 window (group stage + knockouts June 11 – July 19)
+  const today = new Date().toISOString().slice(0,10);
+  const days = dateRange('2026-06-11', today);
+  const seenIds = new Set<string>();
+  const allCompleted: any[] = [];
 
-  const events: any[] = scoreData.events || [];
-  const completed = events.filter((e: any) => e.status?.type?.completed === true);
-  console.log(`📋 ${completed.length} completed matches out of ${events.length} total`);
+  for (const d of days) {
+    try {
+      const scoreData = await fetchJSON(
+        `https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?dates=${d}`
+      );
+      for (const ev of scoreData.events || []) {
+        if (!seenIds.has(ev.id) && ev.status?.type?.completed === true) {
+          seenIds.add(ev.id);
+          allCompleted.push(ev);
+        }
+      }
+    } catch { /* skip day */ }
+    await sleep(100);
+  }
+
+  const completed = allCompleted;
+  console.log(`📋 ${completed.length} completed matches across WC 2026 so far`);
 
   const playerStats: Record<string, PlayerStats> = {};
 
