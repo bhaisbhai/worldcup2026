@@ -76,33 +76,36 @@ async function main() {
     await sleep(400);
   }
 
-  // Second pass: fill in missing clubs via individual athlete endpoint
+  // Second pass: use general (non-WC) ESPN soccer athlete endpoint to get club team
+  // The WC endpoint returns no club data — the general endpoint returns primary team = club
   const missing = Object.entries(playerClubs).filter(([, v]) => !v.club);
   if (missing.length > 0) {
-    console.log(`\n🔄 Backfilling ${missing.length} players without club via athlete endpoint...`);
+    console.log(`\n🔄 Fetching club data for ${missing.length} players via general ESPN athlete endpoint...`);
+    let filled = 0;
     for (const [id] of missing) {
       try {
         const profData = await fetchJSON(
-          `https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/athletes/${id}`
+          `https://site.api.espn.com/apis/site/v2/sports/soccer/athletes/${id}`
         );
-        const ath = profData.athlete || {};
+        const ath = profData.athlete || profData || {};
         const { club, clubLogo } = extractClub(ath);
-        if (club) playerClubs[id].club = club;
+        if (club) { playerClubs[id].club = club; filled++; }
         if (clubLogo) playerClubs[id].clubLogo = clubLogo;
         if (!playerClubs[id].position) playerClubs[id].position = ath.position?.abbreviation || '';
         if (!playerClubs[id].jersey) playerClubs[id].jersey = String(ath.jersey || '');
-        await sleep(200);
+        await sleep(150);
       } catch {
         // skip silently
       }
     }
+    console.log(`  ✅ Found club data for ${filled} players`);
   }
 
   const total = Object.keys(playerClubs).length;
   const withClub = Object.values(playerClubs).filter(v => v.club).length;
   console.log(`\n📊 ${total} players total, ${withClub} with club data (${Math.round(withClub / total * 100)}%)`);
 
-  const outPath = path.resolve(__dirname, '..', 'data', 'player-clubs.json');
+  const outPath = path.resolve(process.cwd(), 'data', 'player-clubs.json');
   fs.writeFileSync(outPath, JSON.stringify(playerClubs, null, 2), 'utf-8');
   console.log(`🎉 Written to ${outPath}`);
 }

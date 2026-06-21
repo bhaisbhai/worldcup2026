@@ -1833,7 +1833,17 @@ function openPlayerFromSearch(id){
 
 function openTeamFromSearch(teamName){
   closeSearch();
-  document.querySelector('.tbtn[data-tab="groups"]')?.click();
+  let teamObj=null;
+  for(const g of GROUPS_DATA){
+    const t=g.teams.find(t=>t.n===teamName);
+    if(t){teamObj={...t,group:g.id};break;}
+  }
+  if(!teamObj) return;
+  document.querySelectorAll('.tbtn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelector('.tbtn[data-tab="myteam"]')?.classList.add('active');
+  const sec=$('tab-myteam');
+  if(sec){sec.classList.add('active');renderTeamPage(sec,teamObj);}
 }
 
 async function fetchDailyRecaps(){
