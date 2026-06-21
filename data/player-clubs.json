@@ -145,11 +145,12 @@
   },
   "96970": {
     "name": "Cristian Romero",
-    "club": "",
+    "club": "Tottenham Hotspur",
     "teamName": "Argentina",
     "teamAbbr": "ARG",
     "position": "D",
-    "jersey": "13"
+    "jersey": "13",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/16rd0s1780011158.jpg"
   },
   "97111": {
     "name": "Hiroki Ito",
@@ -241,11 +242,12 @@
   },
   "108622": {
     "name": "Fernando Muslera",
-    "club": "",
+    "club": "Estudiantes de La Plata",
     "teamName": "Uruguay",
     "teamAbbr": "URU",
     "position": "G",
-    "jersey": "23"
+    "jersey": "23",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/ymi2401611385822.jpg"
   },
   "109204": {
     "name": "Edmílson Junior",
@@ -641,11 +643,12 @@
   },
   "146290": {
     "name": "Tim Ream",
-    "club": "",
+    "club": "Charlotte FC",
     "teamName": "United States",
     "teamAbbr": "USA",
     "position": "D",
-    "jersey": "13"
+    "jersey": "13",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/mld9co1771754514.jpg"
   },
   "146335": {
     "name": "Marten de Roon",
@@ -721,11 +724,12 @@
   },
   "150451": {
     "name": "Aïssa Mandi",
-    "club": "",
+    "club": "Lille",
     "teamName": "Algeria",
     "teamAbbr": "ALG",
     "position": "D",
-    "jersey": "2"
+    "jersey": "2",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/daf6z21503235226.jpg"
   },
   "151714": {
     "name": "Ladislav Krejcí",
@@ -841,11 +845,12 @@
   },
   "158626": {
     "name": "Emiliano Martínez",
-    "club": "",
+    "club": "Aston Villa",
     "teamName": "Argentina",
     "teamAbbr": "ARG",
     "position": "G",
-    "jersey": "23"
+    "jersey": "23",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/7drp311770201331.jpg"
   },
   "159042": {
     "name": "Rodrigo Aguirre",
@@ -969,11 +974,12 @@
   },
   "163940": {
     "name": "Riyad Mahrez",
-    "club": "",
+    "club": "Al-Ahli",
     "teamName": "Algeria",
     "teamAbbr": "ALG",
     "position": "F",
-    "jersey": "7"
+    "jersey": "7",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/ntcubf1780252347.jpg"
   },
   "164126": {
     "name": "Brice Samba",
@@ -1065,11 +1071,12 @@
   },
   "167192": {
     "name": "Gerónimo Rulli",
-    "club": "",
+    "club": "Marseille",
     "teamName": "Argentina",
     "teamAbbr": "ARG",
     "position": "G",
-    "jersey": "12"
+    "jersey": "12",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/jwu7kq1780011047.jpg"
   },
   "167213": {
     "name": "Jürgen Locadia",
@@ -1401,11 +1408,12 @@
   },
   "177927": {
     "name": "Juan Musso",
-    "club": "",
+    "club": "Atlético Madrid",
     "teamName": "Argentina",
     "teamAbbr": "ARG",
     "position": "G",
-    "jersey": "1"
+    "jersey": "1",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/3c9w9x1623582500.jpg"
   },
   "178071": {
     "name": "Jackson Irvine",
@@ -1441,11 +1449,12 @@
   },
   "179187": {
     "name": "Nabil Bentaleb",
-    "club": "",
+    "club": "Lille",
     "teamName": "Algeria",
     "teamAbbr": "ALG",
     "position": "M",
-    "jersey": "19"
+    "jersey": "19",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/kluyu41578151803.jpg"
   },
   "179767": {
     "name": "Giorgian de Arrascaeta",
@@ -1545,19 +1554,21 @@
   },
   "184118": {
     "name": "Seko Fofana",
-    "club": "",
+    "club": "FC Porto",
     "teamName": "Ivory Coast",
     "teamAbbr": "CIV",
     "position": "M",
-    "jersey": "6"
+    "jersey": "6",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/jby1d51546354375.jpg"
   },
   "184206": {
     "name": "Sergio Rochet",
-    "club": "",
+    "club": "Internacional",
     "teamName": "Uruguay",
     "teamAbbr": "URU",
     "position": "G",
-    "jersey": "1"
+    "jersey": "1",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/1k7zvv1718081124.jpg"
   },
   "184221": {
     "name": "Jonathan Osorio",
@@ -1705,19 +1716,21 @@
   },
   "188368": {
     "name": "Guillermo Varela",
-    "club": "",
+    "club": "Flamengo",
     "teamName": "Uruguay",
     "teamAbbr": "URU",
     "position": "D",
-    "jersey": "13"
+    "jersey": "13",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/64tm5q1718084552.jpg"
   },
   "188398": {
     "name": "José María Giménez",
-    "club": "",
+    "club": "Atlético Madrid",
     "teamName": "Uruguay",
     "teamAbbr": "URU",
     "position": "D",
-    "jersey": "2"
+    "jersey": "2",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/fphr8u1718082723.jpg"
   },
   "188411": {
     "name": "Riechedly Bazoer",
@@ -1857,11 +1870,12 @@
   },
   "193539": {
     "name": "Jean Michaël Seri",
-    "club": "",
+    "club": "Maribor",
     "teamName": "Ivory Coast",
     "teamAbbr": "CIV",
     "position": "M",
-    "jersey": "4"
+    "jersey": "4",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/w2snmk1629231742.jpg"
   },
   "193566": {
     "name": "Guillermo Martínez",
@@ -1897,11 +1911,12 @@
   },
   "194711": {
     "name": "Franck Kessié",
-    "club": "",
+    "club": "Al-Ahli",
     "teamName": "Ivory Coast",
     "teamAbbr": "CIV",
     "position": "M",
-    "jersey": "8"
+    "jersey": "8",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/jjgcgk1771663908.jpg"
   },
   "194736": {
     "name": "Alex Rufer",
@@ -2225,11 +2240,12 @@
   },
   "203067": {
     "name": "Santiago Mele",
-    "club": "",
+    "club": "Monterrey",
     "teamName": "Uruguay",
     "teamAbbr": "URU",
     "position": "G",
-    "jersey": "12"
+    "jersey": "12",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/dgr33p1718081529.jpg"
   },
   "203453": {
     "name": "Ehsan Hajsafi",
@@ -2465,11 +2481,12 @@
   },
   "210397": {
     "name": "Nicolas Pépé",
-    "club": "",
+    "club": "Villarreal",
     "teamName": "Ivory Coast",
     "teamAbbr": "CIV",
     "position": "F",
-    "jersey": "19"
+    "jersey": "19",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/7ewjmz1724779988.jpg"
   },
   "210778": {
     "name": "Duckens Nazon",
@@ -2529,11 +2546,12 @@
   },
   "212824": {
     "name": "Alejandro Zendejas",
-    "club": "",
+    "club": "América",
     "teamName": "United States",
     "teamAbbr": "USA",
     "position": "F",
-    "jersey": "26"
+    "jersey": "26",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/jdy8il1750328617.jpg"
   },
   "212900": {
     "name": "Fredrik Aursnes",
@@ -2569,11 +2587,12 @@
   },
   "213718": {
     "name": "Ibrahim Sangaré",
-    "club": "",
+    "club": "Nottingham Forest",
     "teamName": "Ivory Coast",
     "teamAbbr": "CIV",
     "position": "M",
-    "jersey": "18"
+    "jersey": "18",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/i5th491601324310.jpg"
   },
   "213725": {
     "name": "Ché Adams",
@@ -2705,11 +2724,12 @@
   },
   "216617": {
     "name": "Cristian Roldan",
-    "club": "",
+    "club": "Seattle Sounders",
     "teamName": "United States",
     "teamAbbr": "USA",
     "position": "M",
-    "jersey": "15"
+    "jersey": "15",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/qjzo2x1547923285.jpg"
   },
   "216937": {
     "name": "Eldor Shomurodov",
@@ -2913,11 +2933,12 @@
   },
   "220474": {
     "name": "Haji Wright",
-    "club": "",
+    "club": "Coventry City",
     "teamName": "United States",
     "teamAbbr": "USA",
     "position": "F",
-    "jersey": "19"
+    "jersey": "19",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/embitf1668434881.jpg"
   },
   "220538": {
     "name": "Nikola Katic",
@@ -2929,11 +2950,12 @@
   },
   "220703": {
     "name": "Ramy Bensebaini",
-    "club": "",
+    "club": "Borussia Dortmund",
     "teamName": "Algeria",
     "teamAbbr": "ALG",
     "position": "D",
-    "jersey": "21"
+    "jersey": "21",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/mq8sma1578119085.jpg"
   },
   "220714": {
     "name": "Waldemar Anton",
@@ -2969,11 +2991,12 @@
   },
   "222396": {
     "name": "Antonee Robinson",
-    "club": "",
+    "club": "Fulham",
     "teamName": "United States",
     "teamAbbr": "USA",
     "position": "D",
-    "jersey": "5"
+    "jersey": "5",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/310oc61772026492.jpg"
   },
   "222446": {
     "name": "Djibril Sow",
@@ -3001,11 +3024,12 @@
   },
   "222776": {
     "name": "Tyler Adams",
-    "club": "",
+    "club": "Bournemouth",
     "teamName": "United States",
     "teamAbbr": "USA",
     "position": "M",
-    "jersey": "4"
+    "jersey": "4",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/juonra1578227921.jpg"
   },
   "222793": {
     "name": "Dayot Upamecano",
@@ -3081,11 +3105,12 @@
   },
   "225561": {
     "name": "Luca Zidane",
-    "club": "",
+    "club": "Granada",
     "teamName": "Algeria",
     "teamAbbr": "ALG",
     "position": "G",
-    "jersey": "23"
+    "jersey": "23",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/8j590l1630065433.jpg"
   },
   "225563": {
     "name": "Salih Özcan",
@@ -3105,11 +3130,12 @@
   },
   "225607": {
     "name": "Christian Pulisic",
-    "club": "",
+    "club": "AC Milan",
     "teamName": "United States",
     "teamAbbr": "USA",
     "position": "M",
-    "jersey": "10"
+    "jersey": "10",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/40pxda1669799830.jpg"
   },
   "226301": {
     "name": "Mehdi Torabi",
@@ -3241,11 +3267,12 @@
   },
   "228619": {
     "name": "Auston Trusty",
-    "club": "",
+    "club": "Celtic",
     "teamName": "United States",
     "teamAbbr": "USA",
     "position": "D",
-    "jersey": "6"
+    "jersey": "6",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/dschej1641660200.jpg"
   },
   "229018": {
     "name": "Mikel Oyarzabal",
@@ -3393,11 +3420,12 @@
   },
   "231282": {
     "name": "Alban Lafont",
-    "club": "",
+    "club": "Panathinaikos",
     "teamName": "Ivory Coast",
     "teamAbbr": "CIV",
     "position": "G",
-    "jersey": "23"
+    "jersey": "23",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/6gq2a11546379817.jpg"
   },
   "231388": {
     "name": "Kylian Mbappé",
@@ -3521,11 +3549,12 @@
   },
   "234881": {
     "name": "Mathías Olivera",
-    "club": "",
+    "club": "Napoli",
     "teamName": "Uruguay",
     "teamAbbr": "URU",
     "position": "D",
-    "jersey": "16"
+    "jersey": "16",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/od71fp1771248714.jpg"
   },
   "235212": {
     "name": "Yazeed Abulaila",
@@ -3937,11 +3966,12 @@
   },
   "241116": {
     "name": "Houssem Aouar",
-    "club": "",
+    "club": "Al-Ittihad",
     "teamName": "Algeria",
     "teamAbbr": "ALG",
     "position": "M",
-    "jersey": "8"
+    "jersey": "8",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/ebmvo91780252792.jpg"
   },
   "241139": {
     "name": "Abdul Mumin",
@@ -3961,11 +3991,12 @@
   },
   "241225": {
     "name": "Santiago Bueno",
-    "club": "",
+    "club": "Wolverhampton Wanderers",
     "teamName": "Uruguay",
     "teamAbbr": "URU",
     "position": "D",
-    "jersey": "24"
+    "jersey": "24",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/m522lk1772032048.jpg"
   },
   "241325": {
     "name": "George Hirst",
@@ -4001,11 +4032,12 @@
   },
   "242593": {
     "name": "Evan Ndicka",
-    "club": "",
+    "club": "Roma",
     "teamName": "Ivory Coast",
     "teamAbbr": "CIV",
     "position": "D",
-    "jersey": "21"
+    "jersey": "21",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/kh9c4i1578087133.jpg"
   },
   "242614": {
     "name": "Luis Romo",
@@ -4049,11 +4081,12 @@
   },
   "244677": {
     "name": "Aymen Hussein",
-    "club": "",
+    "club": "Al-Karma",
     "teamName": "Iraq",
     "teamAbbr": "IRQ",
     "position": "F",
-    "jersey": "18"
+    "jersey": "18",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/ikbaqs1780442913.jpg"
   },
   "244679": {
     "name": "Hussein Ali",
@@ -4137,19 +4170,21 @@
   },
   "248276": {
     "name": "Alex Freeman",
-    "club": "",
+    "club": "Villarreal",
     "teamName": "United States",
     "teamAbbr": "USA",
     "position": "D",
-    "jersey": "16"
+    "jersey": "16",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/tg90jm1661805422.jpg"
   },
   "249072": {
     "name": "Christopher Operi",
-    "club": "",
+    "club": "İstanbul Başakşehir",
     "teamName": "Ivory Coast",
     "teamAbbr": "CIV",
     "position": "D",
-    "jersey": "13"
+    "jersey": "13",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/goo0tr1702293376.jpg"
   },
   "249299": {
     "name": "Alexis Mac Allister",
@@ -4193,11 +4228,12 @@
   },
   "249768": {
     "name": "Miles Robinson",
-    "club": "",
+    "club": "FC Cincinnati",
     "teamName": "United States",
     "teamAbbr": "USA",
     "position": "D",
-    "jersey": "12"
+    "jersey": "12",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/sy4qri1716792944.jpg"
   },
   "250059": {
     "name": "Jovane Cabral",
@@ -4241,11 +4277,12 @@
   },
   "250888": {
     "name": "Ghislain Konan",
-    "club": "",
+    "club": "Gil Vicente",
     "teamName": "Ivory Coast",
     "teamAbbr": "CIV",
     "position": "D",
-    "jersey": "3"
+    "jersey": "3",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/gtjiz91640623227.jpg"
   },
   "250945": {
     "name": "Aaron Wan-Bissaka",
@@ -4385,11 +4422,12 @@
   },
   "254007": {
     "name": "Joaquín Piquerez",
-    "club": "",
+    "club": "Palmeiras",
     "teamName": "Uruguay",
     "teamAbbr": "URU",
     "position": "D",
-    "jersey": "22"
+    "jersey": "22",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/j26ysq1749722117.jpg"
   },
   "254032": {
     "name": "Matías Viña",
@@ -4521,11 +4559,12 @@
   },
   "256715": {
     "name": "Weston McKennie",
-    "club": "",
+    "club": "Juventus",
     "teamName": "United States",
     "teamAbbr": "USA",
     "position": "M",
-    "jersey": "8"
+    "jersey": "8",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/k5lx3p1621545726.jpg"
   },
   "256724": {
     "name": "Song Bum-Keun",
@@ -4537,11 +4576,12 @@
   },
   "257055": {
     "name": "Parfait Guiagon",
-    "club": "",
+    "club": "Charleroi",
     "teamName": "Ivory Coast",
     "teamAbbr": "CIV",
     "position": "F",
-    "jersey": "25"
+    "jersey": "25",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/r4paxx1767727388.jpg"
   },
   "257336": {
     "name": "Tomás Chorý",
@@ -4681,19 +4721,21 @@
   },
   "259653": {
     "name": "Brenden Aaronson",
-    "club": "",
+    "club": "Leeds United",
     "teamName": "United States",
     "teamAbbr": "USA",
     "position": "M",
-    "jersey": "11"
+    "jersey": "11",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/giy6s01610921052.jpg"
   },
   "259743": {
     "name": "Amine Gouiri",
-    "club": "",
+    "club": "Marseille",
     "teamName": "Algeria",
     "teamAbbr": "ALG",
     "position": "F",
-    "jersey": "9"
+    "jersey": "9",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/xl6as41534013643.jpg"
   },
   "259835": {
     "name": "Roger Ibañez",
@@ -4801,11 +4843,12 @@
   },
   "261595": {
     "name": "Yahia Fofana",
-    "club": "",
+    "club": "Rizespor",
     "teamName": "Ivory Coast",
     "teamAbbr": "CIV",
     "position": "G",
-    "jersey": "1"
+    "jersey": "1",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/20kugp1680871103.jpg"
   },
   "262109": {
     "name": "Trevor Doornbusch",
@@ -5049,11 +5092,12 @@
   },
   "266027": {
     "name": "Timothy Weah",
-    "club": "",
+    "club": "Marseille",
     "teamName": "United States",
     "teamAbbr": "USA",
     "position": "F",
-    "jersey": "21"
+    "jersey": "21",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/jol9jt1533466615.jpg"
   },
   "266057": {
     "name": "Elisha Owusu",
@@ -5073,11 +5117,12 @@
   },
   "266291": {
     "name": "Sergiño Dest",
-    "club": "",
+    "club": "PSV Eindhoven",
     "teamName": "United States",
     "teamAbbr": "USA",
     "position": "D",
-    "jersey": "2"
+    "jersey": "2",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/e73vtf1659989281.jpg"
   },
   "266496": {
     "name": "Ibrahim Bayesh",
@@ -5233,11 +5278,12 @@
   },
   "269478": {
     "name": "Mohanad Ali",
-    "club": "",
+    "club": "Dibba Al-Fujairah",
     "teamName": "Iraq",
     "teamAbbr": "IRQ",
     "position": "F",
-    "jersey": "10"
+    "jersey": "10",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/ptoxm31780440519.jpg"
   },
   "269562": {
     "name": "Ayoub El Kaabi",
@@ -5425,11 +5471,12 @@
   },
   "272135": {
     "name": "Joe Scally",
-    "club": "",
+    "club": "Borussia Mönchengladbach",
     "teamName": "United States",
     "teamAbbr": "USA",
     "position": "D",
-    "jersey": "23"
+    "jersey": "23",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/yuvee01628889417.jpg"
   },
   "272489": {
     "name": "Dennis Dargahi",
@@ -5441,19 +5488,21 @@
   },
   "272512": {
     "name": "Rayan Aït-Nouri",
-    "club": "",
+    "club": "Manchester City",
     "teamName": "Algeria",
     "teamAbbr": "ALG",
     "position": "D",
-    "jersey": "15"
+    "jersey": "15",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/itf0a21780252666.jpg"
   },
   "272585": {
     "name": "Chris Richards",
-    "club": "",
+    "club": "Crystal Palace",
     "teamName": "United States",
     "teamAbbr": "USA",
     "position": "D",
-    "jersey": "3"
+    "jersey": "3",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/b5mhg01772141314.jpg"
   },
   "272700": {
     "name": "Orkun Kökçü",
@@ -5561,7 +5610,7 @@
   },
   "274166": {
     "name": "Ali Yousif",
-    "club": "",
+    "club": "_Retired-Soccer",
     "teamName": "Iraq",
     "teamAbbr": "IRQ",
     "position": "F",
@@ -5937,11 +5986,12 @@
   },
   "282643": {
     "name": "Folarin Balogun",
-    "club": "",
+    "club": "Monaco",
     "teamName": "United States",
     "teamAbbr": "USA",
     "position": "F",
-    "jersey": "20"
+    "jersey": "20",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/uc8q1x1781348667.jpg"
   },
   "282757": {
     "name": "Timothy Fayulu",
@@ -6017,11 +6067,12 @@
   },
   "284822": {
     "name": "Odilon Kossounou",
-    "club": "",
+    "club": "Atalanta",
     "teamName": "Ivory Coast",
     "teamAbbr": "CIV",
     "position": "D",
-    "jersey": "7"
+    "jersey": "7",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/qx8rn71623838893.jpg"
   },
   "285057": {
     "name": "Hamdy Fathy",
@@ -6057,19 +6108,21 @@
   },
   "285539": {
     "name": "Mohamed Amine Tougai",
-    "club": "",
+    "club": "Espérance de Tunis",
     "teamName": "Algeria",
     "teamAbbr": "ALG",
     "position": "D",
-    "jersey": "4"
+    "jersey": "4",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/xq5g7w1750491565.jpg"
   },
   "285547": {
     "name": "Zineddine Belaïd",
-    "club": "",
+    "club": "JS Kabylie",
     "teamName": "Algeria",
     "teamAbbr": "ALG",
     "position": "D",
-    "jersey": "5"
+    "jersey": "5",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/s6v5km1780251448.jpg"
   },
   "285756": {
     "name": "Sebastián Cáceres",
@@ -6129,11 +6182,12 @@
   },
   "286569": {
     "name": "Wilfried Singo",
-    "club": "",
+    "club": "Galatasaray",
     "teamName": "Ivory Coast",
     "teamAbbr": "CIV",
     "position": "D",
-    "jersey": "5"
+    "jersey": "5",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/emwwrg1769177944.jpg"
   },
   "286596": {
     "name": "Avazbek Ulmasaliyev",
@@ -6225,11 +6279,12 @@
   },
   "287078": {
     "name": "Hicham Boudaoui",
-    "club": "",
+    "club": "Nice",
     "teamName": "Algeria",
     "teamAbbr": "ALG",
     "position": "M",
-    "jersey": "14"
+    "jersey": "14",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/vgryvf1609022848.jpg"
   },
   "287177": {
     "name": "Nabil Donga",
@@ -6265,11 +6320,12 @@
   },
   "287572": {
     "name": "Samir Chergui",
-    "club": "",
+    "club": "Paris FC",
     "teamName": "Algeria",
     "teamAbbr": "ALG",
     "position": "D",
-    "jersey": "26"
+    "jersey": "26",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/5bvipu1727975448.jpg"
   },
   "287678": {
     "name": "Eren Elmali",
@@ -6345,11 +6401,12 @@
   },
   "288924": {
     "name": "Evann Guessand",
-    "club": "",
+    "club": "Crystal Palace",
     "teamName": "Ivory Coast",
     "teamAbbr": "CIV",
     "position": "M",
-    "jersey": "22"
+    "jersey": "22",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/2jox8i1770200799.jpg"
   },
   "288932": {
     "name": "Armin Gigovic",
@@ -6393,11 +6450,12 @@
   },
   "289120": {
     "name": "Ricardo Pepi",
-    "club": "",
+    "club": "PSV Eindhoven",
     "teamName": "United States",
     "teamAbbr": "USA",
     "position": "F",
-    "jersey": "9"
+    "jersey": "9",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/lrow6b1660051462.jpg"
   },
   "289877": {
     "name": "Moisés Caicedo",
@@ -6425,11 +6483,12 @@
   },
   "290230": {
     "name": "Giovanni Reyna",
-    "club": "",
+    "club": "Borussia Mönchengladbach",
     "teamName": "United States",
     "teamAbbr": "USA",
     "position": "M",
-    "jersey": "7"
+    "jersey": "7",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/k5690h1781348119.jpg"
   },
   "290232": {
     "name": "Angelo Stiller",
@@ -6457,11 +6516,12 @@
   },
   "290517": {
     "name": "Ramiz Zerrouki",
-    "club": "",
+    "club": "Twente",
     "teamName": "Algeria",
     "teamAbbr": "ALG",
     "position": "M",
-    "jersey": "6"
+    "jersey": "6",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/qmtnzt1780252440.jpg"
   },
   "290538": {
     "name": "Facundo Pellistri",
@@ -6561,11 +6621,12 @@
   },
   "291630": {
     "name": "Amad Diallo",
-    "club": "",
+    "club": "Manchester United",
     "teamName": "Ivory Coast",
     "teamAbbr": "CIV",
     "position": "M",
-    "jersey": "15"
+    "jersey": "15",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/f8maua1706525745.jpg"
   },
   "291697": {
     "name": "Kai Trewin",
@@ -6673,11 +6734,12 @@
   },
   "295771": {
     "name": "Sebastian Berhalter",
-    "club": "",
+    "club": "Vancouver Whitecaps",
     "teamName": "United States",
     "teamAbbr": "USA",
     "position": "M",
-    "jersey": "14"
+    "jersey": "14",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/gz2uk71679513092.jpg"
   },
   "295847": {
     "name": "Federico Viñas",
@@ -6921,11 +6983,12 @@
   },
   "299346": {
     "name": "Oussama Benbot",
-    "club": "",
+    "club": "USM Alger",
     "teamName": "Algeria",
     "teamAbbr": "ALG",
     "position": "G",
-    "jersey": "16"
+    "jersey": "16",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/lfutof1780251618.jpg"
   },
   "299365": {
     "name": "Emam Ashour",
@@ -7017,11 +7080,12 @@
   },
   "301416": {
     "name": "Malik Tillman",
-    "club": "",
+    "club": "Bayer Leverkusen",
     "teamName": "United States",
     "teamAbbr": "USA",
     "position": "M",
-    "jersey": "17"
+    "jersey": "17",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/hebcen1631044913.jpg"
   },
   "301425": {
     "name": "Senne Lammens",
@@ -7441,11 +7505,12 @@
   },
   "306033": {
     "name": "Jaouen Hadjam",
-    "club": "",
+    "club": "Young Boys",
     "teamName": "Algeria",
     "teamAbbr": "ALG",
     "position": "D",
-    "jersey": "13"
+    "jersey": "13",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/us0ui21678357609.jpg"
   },
   "306256": {
     "name": "Ivan Basic",
@@ -7521,11 +7586,12 @@
   },
   "307750": {
     "name": "Ali Jasim",
-    "club": "",
+    "club": "Al-Najma Unaizah",
     "teamName": "Iraq",
     "teamAbbr": "IRQ",
     "position": "F",
-    "jersey": "17"
+    "jersey": "17",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/1z782i1780446475.jpg"
   },
   "307756": {
     "name": "Kevin Castaño",
@@ -7561,11 +7627,12 @@
   },
   "308449": {
     "name": "Emmanuel Agbadou",
-    "club": "",
+    "club": "Beşiktaş",
     "teamName": "Ivory Coast",
     "teamAbbr": "CIV",
     "position": "D",
-    "jersey": "20"
+    "jersey": "20",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/1qojn71674743693.jpg"
   },
   "308524": {
     "name": "Nicolas Jackson",
@@ -7625,11 +7692,12 @@
   },
   "309185": {
     "name": "Ange-Yoan Bonny",
-    "club": "",
+    "club": "Inter Milan",
     "teamName": "Ivory Coast",
     "teamAbbr": "CIV",
     "position": "F",
-    "jersey": "9"
+    "jersey": "9",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/zf08mq1718898087.jpg"
   },
   "309315": {
     "name": "Mohamed Manai",
@@ -7897,11 +7965,12 @@
   },
   "315384": {
     "name": "Mohamed Amoura",
-    "club": "",
+    "club": "Wolfsburg",
     "teamName": "Algeria",
     "teamAbbr": "ALG",
     "position": "F",
-    "jersey": "18"
+    "jersey": "18",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/h7s5iz1717950981.jpg"
   },
   "315523": {
     "name": "Musab Al-Juwayr",
@@ -8137,11 +8206,12 @@
   },
   "321221": {
     "name": "Youssef Amyn",
-    "club": "",
+    "club": "AEK Larnaca",
     "teamName": "Iraq",
     "teamAbbr": "IRQ",
     "position": "F",
-    "jersey": "7"
+    "jersey": "7",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/prr9521780440625.jpg"
   },
   "321484": {
     "name": "Mohammad Abu Hasheesh",
@@ -8265,11 +8335,12 @@
   },
   "323997": {
     "name": "Mohamed Koné",
-    "club": "",
+    "club": "Charleroi",
     "teamName": "Ivory Coast",
     "teamAbbr": "CIV",
     "position": "G",
-    "jersey": "16"
+    "jersey": "16",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/jcwy671767729807.jpg"
   },
   "324270": {
     "name": "Marco Pasalic",
@@ -8289,11 +8360,12 @@
   },
   "324711": {
     "name": "Melvin Mastil",
-    "club": "",
+    "club": "Stade Nyonnais",
     "teamName": "Algeria",
     "teamAbbr": "ALG",
     "position": "G",
-    "jersey": "1"
+    "jersey": "1",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/1o3nby1780252053.jpg"
   },
   "324930": {
     "name": "Gustaf Lagerbielke",
@@ -8345,11 +8417,12 @@
   },
   "326032": {
     "name": "Marko Farji",
-    "club": "",
+    "club": "Venezia",
     "teamName": "Iraq",
     "teamAbbr": "IRQ",
     "position": "M",
-    "jersey": "21"
+    "jersey": "21",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/7cnypv1780441522.jpg"
   },
   "326183": {
     "name": "Augustine Boakye",
@@ -8505,11 +8578,12 @@
   },
   "330579": {
     "name": "Ali Al-Hamadi",
-    "club": "",
+    "club": "Luton Town",
     "teamName": "Iraq",
     "teamAbbr": "IRQ",
     "position": "F",
-    "jersey": "9"
+    "jersey": "9",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/kwj85e1667753198.jpg"
   },
   "330618": {
     "name": "Owen Goodman",
@@ -8745,11 +8819,12 @@
   },
   "337306": {
     "name": "Farès Chaïbi",
-    "club": "",
+    "club": "Eintracht Frankfurt",
     "teamName": "Algeria",
     "teamAbbr": "ALG",
     "position": "M",
-    "jersey": "10"
+    "jersey": "10",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/if8k4w1678360127.jpg"
   },
   "337970": {
     "name": "Nico Paz",
@@ -8833,19 +8908,21 @@
   },
   "341706": {
     "name": "Adil Boulbina",
-    "club": "",
+    "club": "Al-Duhail",
     "teamName": "Algeria",
     "teamAbbr": "ALG",
     "position": "M",
-    "jersey": "20"
+    "jersey": "20",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/hz3nql1780251870.jpg"
   },
   "341711": {
     "name": "Anis Hadj Moussa",
-    "club": "",
+    "club": "Feyenoord",
     "teamName": "Algeria",
     "teamAbbr": "ALG",
     "position": "F",
-    "jersey": "11"
+    "jersey": "11",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/quqgoo1732695306.jpg"
   },
   "341720": {
     "name": "Yassine Titraoui",
@@ -8897,11 +8974,12 @@
   },
   "343964": {
     "name": "Ousmane Diomande",
-    "club": "",
+    "club": "Sporting CP",
     "teamName": "Ivory Coast",
     "teamAbbr": "CIV",
     "position": "D",
-    "jersey": "2"
+    "jersey": "2",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/qjifoy1705330133.jpg"
   },
   "344517": {
     "name": "Robin Risser",
@@ -8953,11 +9031,12 @@
   },
   "346186": {
     "name": "Nadhir Benbouali",
-    "club": "",
+    "club": "Győri ETO",
     "teamName": "Algeria",
     "teamAbbr": "ALG",
     "position": "F",
-    "jersey": "12"
+    "jersey": "12",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/jw2uvd1780251732.jpg"
   },
   "346208": {
     "name": "Keisuke Goto",
@@ -8977,11 +9056,12 @@
   },
   "346636": {
     "name": "Guela Doué",
-    "club": "",
+    "club": "Strasbourg",
     "teamName": "Ivory Coast",
     "teamAbbr": "CIV",
     "position": "D",
-    "jersey": "17"
+    "jersey": "17",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/vbphme1705663101.jpg"
   },
   "346649": {
     "name": "Ayoub Al-Oui",
@@ -9089,11 +9169,12 @@
   },
   "356536": {
     "name": "Farès Ghedjemis",
-    "club": "",
+    "club": "Frosinone",
     "teamName": "Algeria",
     "teamAbbr": "ALG",
     "position": "F",
-    "jersey": "25"
+    "jersey": "25",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/r1ozup1780251969.jpg"
   },
   "357030": {
     "name": "Kaishu Sano",
@@ -9193,11 +9274,12 @@
   },
   "359542": {
     "name": "Max Arfsten",
-    "club": "",
+    "club": "Columbus Crew",
     "teamName": "United States",
     "teamAbbr": "USA",
     "position": "M",
-    "jersey": "18"
+    "jersey": "18",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/5h0jko1688388866.jpg"
   },
   "359651": {
     "name": "Matias Fernandez-Pardo",
@@ -9249,11 +9331,12 @@
   },
   "361212": {
     "name": "Ibrahim Maza",
-    "club": "",
+    "club": "Bayer Leverkusen",
     "teamName": "Algeria",
     "teamAbbr": "ALG",
     "position": "M",
-    "jersey": "22"
+    "jersey": "22",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/7z9c2k1756315185.jpg"
   },
   "361692": {
     "name": "Mohammed Abu Al-Shamat",
@@ -9329,11 +9412,12 @@
   },
   "364590": {
     "name": "Rafik Belghali",
-    "club": "",
+    "club": "Hellas Verona",
     "teamName": "Algeria",
     "teamAbbr": "ALG",
     "position": "D",
-    "jersey": "17"
+    "jersey": "17",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/vfqhwg1759162273.jpg"
   },
   "364742": {
     "name": "Assane Diao",
@@ -9633,11 +9717,12 @@
   },
   "386989": {
     "name": "Christ Inao Oulaï",
-    "club": "",
+    "club": "Trabzonspor",
     "teamName": "Ivory Coast",
     "teamAbbr": "CIV",
     "position": "M",
-    "jersey": "26"
+    "jersey": "26",
+    "clubLogo": "https://r2.thesportsdb.com/images/media/player/thumb/cfj1k91779129722.jpg"
   },
   "386992": {
     "name": "Johan Manzambi",
