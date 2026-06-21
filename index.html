@@ -2665,7 +2665,7 @@ function openPlayerDetail(athleteId){
   body.innerHTML=`
     <button class="pl-back" onclick="switchMCTab('lineups')">‹ Back to Lineups</button>
     <div class="pl-hero">
-      <div class="pl-photo" id="plPhoto">${flag(teamInfo.abbr)}</div>
+      <div class="pl-photo" id="plPhoto"><img src="https://a.espncdn.com/i/headshots/soccer/players/full/${athleteId}.png" alt="${playerName}" onerror="this.parentElement.innerHTML='${flag(teamInfo.abbr)}'"></div>
       <div class="pl-meta">
         <div class="pl-pname">${playerName}</div>
         <div class="pl-psub">${[pos,teamInfo.name].filter(Boolean).join(' · ')}</div>
@@ -2683,28 +2683,36 @@ function openPlayerDetail(athleteId){
 async function fetchAndRenderPlayer(athleteId, playerName, teamInfo, ev){
   if(!playerCache[athleteId]){
     try{
-      const[profR,newsR]=await Promise.all([
+      const[profR,newsR,genR]=await Promise.all([
         fetch(`https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/athletes/${athleteId}`,{signal:AbortSignal.timeout(8000)}).catch(()=>null),
         fetch(`https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/athletes/${athleteId}/news`,{signal:AbortSignal.timeout(8000)}).catch(()=>null),
+        fetch(`https://site.api.espn.com/apis/site/v2/sports/soccer/athletes/${athleteId}`,{signal:AbortSignal.timeout(8000)}).catch(()=>null),
       ]);
       const prof=profR?.ok?await profR.json():{};
       const news=newsR?.ok?await newsR.json():{};
-      playerCache[athleteId]={prof,news};
-    }catch(e){playerCache[athleteId]={prof:{},news:{}};}
+      const gen=genR?.ok?await genR.json():{};
+      playerCache[athleteId]={prof,news,gen};
+    }catch(e){playerCache[athleteId]={prof:{},news:{},gen:{}};}
   }
-  const{prof,news}=playerCache[athleteId];
+  const{prof,news,gen}=playerCache[athleteId];
   const ath=prof?.athlete||{};
+  const genAth=gen?.athlete||{};
 
-  // Update photo with ESPN headshot if available
-  const hs=ath.headshot?.href;
-  if(hs){
-    const photoEl=document.getElementById('plPhoto');
-    if(photoEl) photoEl.innerHTML=`<img src="${hs}" alt="${playerName}" loading="lazy" onerror="this.parentElement.textContent='${flag(teamInfo.abbr)}'">`;
+  // Enrich _playerClubs with club from general ESPN endpoint (browser can reach it even if pipeline couldn't)
+  const pid=String(athleteId);
+  if(!_playerClubs[pid]?.club){
+    const t=genAth.team||genAth.teams?.[0]||{};
+    const club=t.displayName||t.name||'';
+    const clubLogo=t.logos?.[0]?.href||t.logo||'';
+    if(club){
+      if(_playerClubs[pid]){_playerClubs[pid].club=club;if(clubLogo)_playerClubs[pid].clubLogo=clubLogo;}
+      else _playerClubs[pid]={name:playerName,club,clubLogo,teamName:teamInfo.name,teamAbbr:teamInfo.abbr,position:'',jersey:''};
+    }
   }
 
   // Bio + tournament stats
   const profileEl=document.getElementById('plProfile');
-  if(profileEl) profileEl.innerHTML=renderPlayerProfile(ath);
+  if(profileEl) profileEl.innerHTML=renderPlayerProfile(ath,genAth);
 
   // News — combine athlete endpoint + match news, filter to articles mentioning this player
   const matchArticles=mcState?.data?.news?.articles||[];
@@ -2716,14 +2724,14 @@ async function fetchAndRenderPlayer(athleteId, playerName, teamInfo, ev){
   fetchPlayerHighlight(athleteId, playerName, ev);
 }
 
-function renderPlayerProfile(ath){
+function renderPlayerProfile(ath,genAth={}){
   const bio=[];
-  if(ath.age)            bio.push({k:'Age',v:String(ath.age)});
-  if(ath.displayHeight)  bio.push({k:'Height',v:ath.displayHeight});
-  if(ath.displayWeight)  bio.push({k:'Weight',v:ath.displayWeight});
-  const nat=ath.flag?.alt||ath.citizenship;
-  if(nat)                bio.push({k:'Nationality',v:nat});
-  const pid=String(ath.id||'');
+  if(ath.age||genAth.age) bio.push({k:'Age',v:String(ath.age||genAth.age)});
+  if(ath.displayHeight||genAth.displayHeight) bio.push({k:'Height',v:ath.displayHeight||genAth.displayHeight});
+  if(ath.displayWeight||genAth.displayWeight) bio.push({k:'Weight',v:ath.displayWeight||genAth.displayWeight});
+  const nat=ath.flag?.alt||ath.citizenship||genAth.flag?.alt||genAth.citizenship;
+  if(nat) bio.push({k:'Nationality',v:nat});
+  const pid=String(ath.id||genAth.id||'');
   const clubEntry=_playerClubs[pid];
   const club=clubEntry?.club||ath.team?.displayName||ath.team?.name||'';
   if(club){
@@ -2731,12 +2739,13 @@ function renderPlayerProfile(ath){
     const clubVal=logo?`<img src="${logo}" alt="" style="height:14px;vertical-align:middle;border-radius:2px;margin-right:5px;display:inline-block">${club}`:club;
     bio.push({k:'Club',v:clubVal});
   }
-  if(ath.dateOfBirth){
-    const d=new Date(ath.dateOfBirth);
+  const dob=ath.dateOfBirth||genAth.dateOfBirth;
+  if(dob){
+    const d=new Date(dob);
     bio.push({k:'Born',v:d.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})});
   }
 
-  const allStats=(ath.statistics||[]).flatMap(s=>s.splits?.categories||[]).flatMap(c=>c.stats||[]);
+  const allStats=[...(ath.statistics||[]),...(genAth.statistics||[])].flatMap(s=>s.splits?.categories||[]).flatMap(c=>c.stats||[]);
   const gv=name=>{const s=allStats.find(x=>x.name===name);return s?.displayValue??s?.value??null;};
   const KEYS=[['appearances','Apps'],['goals','Goals'],['assists','Assists'],['minutesPlayed','Minutes'],
     ['shots','Shots'],['shotsOnTarget','On Target'],['saves','Saves'],['cleanSheets','Clean Sheets'],
