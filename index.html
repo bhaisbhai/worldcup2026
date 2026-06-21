@@ -763,11 +763,12 @@ body{
   overflow:hidden;white-space:nowrap;text-overflow:ellipsis;
 }
 .recap-card.open .recap-hl{white-space:normal;padding-bottom:0}
-.recap-chev{
-  font-size:11px;color:rgba(0,255,135,.5);
-  transition:transform .2s cubic-bezier(.4,0,.2,1);flex-shrink:0;
+.recap-dismiss{
+  background:none;border:none;color:rgba(255,255,255,.2);font-size:13px;
+  cursor:pointer;padding:2px 6px;flex-shrink:0;line-height:1;
+  -webkit-tap-highlight-color:transparent;margin-left:2px;
 }
-.recap-card.open .recap-chev{transform:rotate(180deg)}
+.recap-dismiss:active{color:rgba(255,255,255,.6)}
 .recap-body{
   max-height:0;overflow:hidden;
   transition:max-height .3s cubic-bezier(.4,0,.2,1);
@@ -1700,29 +1701,41 @@ function fmtRecapDate(iso){
   return d.toLocaleDateString([],{weekday:'short',month:'short',day:'numeric'});
 }
 
+function dismissRecap(date, e){
+  e.stopPropagation();
+  localStorage.setItem('recap_dismissed', date);
+  const card = document.querySelector('.recap-card');
+  if(card) card.remove();
+}
+
 function renderSummary(container, dispDate){
   if(!_recapRows.length) return;
   const todayStr = new Date().toISOString().slice(0,10);
   const ds = dispDate ? dispDate.toISOString().slice(0,10) : todayStr;
-  // Exact match for this day; if on today and no recap yet, fall back to most recent
-  const row = _recapRows.find(r => r.date === ds) || (ds === todayStr ? _recapRows[0] : null);
+  const isToday = ds === todayStr;
+  // Exact match for this day; fall back to most recent completed day when on today's view
+  const row = _recapRows.find(r => r.date === ds) || (isToday ? _recapRows[0] : null);
   if(!row) return;
-  const label = row.date === todayStr ? 'Today' : fmtRecapDate(row.date);
+  // Don't show if user dismissed this recap today
+  if(isToday && localStorage.getItem('recap_dismissed') === row.date) return;
+  // Label: "Yesterday" when on today's view but showing prior day's recap
+  const isYesterday = isToday && row.date !== todayStr;
+  const label = isYesterday ? 'Yesterday' : (row.date === todayStr ? 'Today' : fmtRecapDate(row.date));
   const card = document.createElement('div');
   card.className = 'recap-card';
-  card.onclick = function(){ this.classList.toggle('open'); };
+  card.onclick = function(e){ if(!e.target.closest('.recap-dismiss')) this.classList.toggle('open'); };
   card.innerHTML =
     `<div class="recap-hdr">
       <span class="recap-pill">${label}</span>
       <span class="recap-hl">${row.headline||''}</span>
-      <span class="recap-chev">▾</span>
+      <button class="recap-dismiss" onclick="dismissRecap('${row.date}',event)" title="Dismiss">✕</button>
     </div>
     <div class="recap-body"><div class="recap-body-inner">
       ${row.theDrama?`<div class="recap-section"><div class="recap-section-lbl">The Drama</div><div class="recap-section-txt">${row.theDrama}</div></div>`:''}
       ${row.mustWatchHighlights?`<div class="recap-section"><div class="recap-section-lbl">Watch / Skip</div><div class="recap-section-txt">${row.mustWatchHighlights}</div></div>`:''}
       ${row.progressionNews?`<div class="recap-section"><div class="recap-section-lbl">Progression</div><div class="recap-section-txt">${row.progressionNews}</div></div>`:''}
     </div></div>`;
-  // Insert after the day-nav (first child), before match sections
+  // Insert after the day-nav, before match sections
   const nav = container.querySelector('#day-nav');
   if(nav && nav.nextSibling) container.insertBefore(card, nav.nextSibling);
   else container.append(card);
