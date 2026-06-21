@@ -289,23 +289,66 @@ async function main() {
     console.warn(`⚠️ No matches found in ESPN Scoreboard for date ${targetDate}.`);
   }
 
-  // 1b. Fetch live group standings so Gemini knows each team's actual points
+  // 1b. Fetch live group standings + compute per-team advancement status
   let standingsContext = '';
+  let advancementStatus = '';
   try {
     const standingsData = await fetchJSON('https://site.api.espn.com/apis/v2/sports/soccer/fifa.world/standings');
     const groups: string[] = [];
+    const statusLines: string[] = [];
+
     for (const child of standingsData.children || []) {
       const gName = child.name || '';
-      const rows = (child.standings?.entries || []).map((e: any) => {
+      const entries = (child.standings?.entries || []).map((e: any) => {
         const stats = e.stats || [];
         const get = (n: string) => stats.find((s: any) => s.name === n || s.shortDisplayName === n)?.value ?? 0;
-        return `  ${e.team?.abbreviation?.padEnd(4)} P${get('gamesPlayed')} W${get('wins')} D${get('ties')} L${get('losses')} GF${get('pointsFor')} GA${get('pointsAgainst')} Pts${get('points')}`;
-      });
+        return {
+          abbr: (e.team?.abbreviation || '').padEnd(4),
+          mp: get('gamesPlayed'),
+          w: get('wins'), d: get('ties'), l: get('losses'),
+          gf: get('pointsFor'), ga: get('pointsAgainst'),
+          pts: get('points'),
+          gd: get('pointsFor') - get('pointsAgainst'),
+        };
+      }).sort((a: any, b: any) => b.pts - a.pts || b.gd - a.gd);
+
+      // Standings table row
+      const rows = entries.map((t: any) =>
+        `  ${t.abbr} P${t.mp} W${t.w} D${t.d} L${t.l} GF${t.gf} GA${t.ga} Pts${t.pts}`
+      );
       if (rows.length) groups.push(`${gName}:\n${rows.join('\n')}`);
+
+      // Per-team advancement status (World Cup 2026: top 2 + 8 best 3rd-place teams advance)
+      // Conservative threshold: 4 pts gives a realistic shot at best-3rd qualification
+      const BEST_THIRD_MIN = 4;
+      statusLines.push(`${gName}:`);
+      entries.forEach((t: any, idx: number) => {
+        const gamesLeft = 3 - t.mp;
+        const maxPts = t.pts + gamesLeft * 3;
+        const pos = idx + 1;
+        const p2Pts = entries[1]?.pts ?? 0;
+
+        let status: string;
+        if (t.mp === 3) {
+          if (pos <= 2) status = 'QUALIFIED (top 2 confirmed)';
+          else if (pos === 3 && t.pts >= BEST_THIRD_MIN) status = `POSSIBLE BEST-3RD (${t.pts} pts – awaiting other groups)`;
+          else status = `ELIMINATED (${t.pts} pts after all 3 games)`;
+        } else if (maxPts < p2Pts && maxPts < BEST_THIRD_MIN) {
+          status = `ELIMINATED (max ${maxPts} pts possible – cannot reach top 2 or best-3rd threshold)`;
+        } else if (maxPts < p2Pts) {
+          status = `NEEDS POINTS (cannot reach top 2, best-3rd route only – max ${maxPts} pts possible)`;
+        } else {
+          status = `IN CONTENTION (can still finish top 2 – ${gamesLeft} game${gamesLeft !== 1 ? 's' : ''} left)`;
+        }
+        statusLines.push(`  ${t.abbr.trim()}: ${status}`);
+      });
+      statusLines.push('');
     }
+
     if (groups.length) {
       standingsContext = `GROUP STANDINGS (as of ${targetDate}):\n${groups.join('\n\n')}`;
-      console.log(`📊 Fetched standings for ${groups.length} groups`);
+      advancementStatus = `COMPUTED ADVANCEMENT STATUS (as of ${targetDate}):\n${statusLines.join('\n')}`;
+      console.log(`📊 Fetched standings and computed advancement status for ${groups.length} groups`);
     }
   } catch (err) {
     console.warn('⚠️ Could not fetch standings — progression notes will lack group context');
@@ -631,7 +674,14 @@ async function main() {
     const prompt = `
 You are analyzing World Cup 2026 matches for date ${targetDate}.
 
-${standingsContext ? standingsContext + '\n\nIMPORTANT: Use the standings above when assessing progression. A team is only ELIMINATED if they are mathematically unable to reach the top 2 (or the best 3rd-place spots). Do NOT call a team eliminated if they still have games to play and points to gain.\n' : ''}
+${standingsContext ? standingsContext + '\n' : ''}${advancementStatus ? advancementStatus + `
+ADVANCEMENT LANGUAGE RULES — YOU MUST FOLLOW THESE EXACTLY:
+- Status "ELIMINATED": you MAY say they are out, going home, booking flights.
+- Status "IN CONTENTION": say they are still in the hunt, have games to play, can qualify — do NOT imply they need a miracle or must win to survive.
+- Status "NEEDS POINTS": say they need a strong result to keep best-3rd hopes alive — do NOT say they're going home or must win outright to survive.
+- Status "POSSIBLE BEST-3RD": say they are waiting on other results — do NOT call them eliminated.
+- Status "QUALIFIED": they are through — celebrate or comment accordingly.
+VIOLATING THESE RULES (e.g. calling an IN CONTENTION or NEEDS POINTS team eliminated or saying they "must win or go home") is your single biggest failure mode. Do not do it.\n` : ''}
 MATCH DETAILS FOR TODAY (${targetDate}):
 ${dayMatchesList}
 
@@ -649,7 +699,7 @@ ${playersListStr}
 
 For each completed match:
 - "matches" key: Generate commentary under the match key (e.g. "NED-SWE") with editionTitle, snappySummary, talkingPoints, randomQuirk.
-- "teams" key: Generate updated tournament summary under the team code keys (e.g. "NED", "SWE") with headline, storySoFar, whatsNext, pubAmmo.
+- "teams" key: Generate updated tournament summary under the team code keys (e.g. "NED", "SWE") with headline, storySoFar, whatsNext, pubAmmo. For "whatsNext", you MUST reflect the team's COMPUTED ADVANCEMENT STATUS — do not say "must win or go home" for any team that is not status ELIMINATED.
 
 ${playersWhoPlayed.length > 0 ? `
 For the "playerVerdicts" key:
@@ -667,7 +717,7 @@ For the "day" key:
   - headline: A funny, clickbait headline summarizing the day's events.
   - theDrama: A short description of the main talking points, upsets, or funny moments.
   - mustWatchHighlights: Recommending which match was the must-watch, and warning about which matches were absolute sleepfests.
-  - progressionNews: Summarize who is progressing to the knockouts, who is booking flights home, or who is in danger.
+  - progressionNews: Summarize advancement based ONLY on the COMPUTED ADVANCEMENT STATUS above. Only use "going home" / "eliminated" language for teams whose computed status is ELIMINATED. For all others, describe their situation accurately (in contention, needs a result, waiting on other groups, etc.).
 - If matches on ${targetDate} are scheduled/upcoming (Status is STATUS_SCHEDULED), generate a **daily preview build-up** (do not mention final scores or results, as the games have not been played yet!):
   - headline: A hype-building, witty headline looking forward to the day's slate.
   - theDrama: A funny preview of the storylines and hype surrounding the day's matches.
