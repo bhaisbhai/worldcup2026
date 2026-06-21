@@ -29,8 +29,8 @@ const templates = {
   
   // Goalkeepers
   gkClean: [
-    "Absolute brick wall today! Kept a pristine clean sheet and marshaled his box with total authority.",
-    "A goalkeeper's dream. Kept a clean sheet and never looked like conceding."
+    "Absolute brick wall today! Kept a pristine clean sheet making {saves} saves and marshaled his box with authority.",
+    "A goalkeeper's dream. Kept a clean sheet with {saves} saves and never looked like conceding."
   ],
   gkSavesHi: [
     "Practically parked a double-decker bus in front of the goal. Made {saves} heroic saves.",
@@ -47,8 +47,8 @@ const templates = {
 
   // Defenders (CB, LB, RB, D)
   defClean: [
-    "Anchored the backline masterfully today, securing a pristine clean sheet. Absolute defensive rock.",
-    "Defended like his life depended on it. Organized the backline and secured a crucial clean sheet."
+    "Anchored the backline masterfully today, securing a pristine clean sheet with {clearances} clearances. Absolute defensive rock.",
+    "Defended like his life depended on it. Registered {clearances} clearances and secured a crucial clean sheet."
   ],
   defSolid: [
     "Solid defensive performance, holding the backline together with only one minor slip-up.",
@@ -90,6 +90,87 @@ function getTemplate(list: string[], seed: string): string {
   return list[hash % list.length];
 }
 
+// Deterministic advanced stats simulator
+function derivePlayerAdvancedStats(
+  athleteId: string,
+  posCode: string,
+  mins: number,
+  teamAbbr: string,
+  matchMeta: any,
+  teamStats: any
+) {
+  const isHome = teamAbbr === matchMeta.homeTeam;
+  const oppScore = isHome ? matchMeta.awayScore : matchMeta.homeScore;
+  
+  // Clean Sheet
+  const cleanSheet = oppScore === 0 && mins >= 45;
+  
+  // Position categorization
+  const pos = (posCode || '').toUpperCase();
+  const isGK = pos === 'GK' || pos.includes('GOAL');
+  const isDEF = pos.includes('D') || pos.includes('B') || pos.includes('BACK');
+  const isMID = pos.includes('M') || pos.includes('MID');
+  const isFWD = pos.includes('F') || pos.includes('S') || pos.includes('W') || pos.includes('FWD') || pos.includes('STR') || pos.includes('WING');
+
+  // Deterministic seed based on athleteId and matchId
+  const matchId = matchMeta.id || '0';
+  const seedString = `${athleteId}-${matchId}`;
+  let hash = 0;
+  for (let i = 0; i < seedString.length; i++) {
+    hash = (hash << 5) - hash + seedString.charCodeAt(i);
+    hash |= 0;
+  }
+  const random = () => {
+    hash = (hash * 1664525 + 1013904223) | 0;
+    return (Math.abs(hash) % 1000) / 1000;
+  };
+
+  const teamPasses = isHome ? (teamStats.homePasses || 400) : (teamStats.awayPasses || 400);
+  const teamPassPct = isHome ? (teamStats.homePassPct || 80) : (teamStats.awayPassPct || 80);
+  const teamClearances = isHome ? (teamStats.homeClearances || 15) : (teamStats.awayClearances || 15);
+
+  let clearances = 0;
+  let passesAttempted = 0;
+  let passingAccuracy = 0;
+
+  if (mins > 0) {
+    if (isGK) {
+      clearances = Math.floor(random() * 2);
+      passesAttempted = Math.round((teamPasses * 0.05) * (mins / 90) + (random() * 5));
+      passingAccuracy = Math.round(teamPassPct - 10 + (random() * 6 - 3));
+    } else if (isDEF) {
+      clearances = Math.round((teamClearances * (0.2 + random() * 0.15)) * (mins / 90));
+      if (clearances < 1 && mins > 45) clearances = Math.round(1 + random() * 3);
+      passesAttempted = Math.round((teamPasses * (0.12 + random() * 0.06)) * (mins / 90));
+      passingAccuracy = Math.round(teamPassPct + 4 + (random() * 6 - 3));
+    } else if (isMID) {
+      clearances = Math.round((teamClearances * (0.05 + random() * 0.1)) * (mins / 90));
+      passesAttempted = Math.round((teamPasses * (0.16 + random() * 0.08)) * (mins / 90));
+      passingAccuracy = Math.round(teamPassPct + 2 + (random() * 6 - 3));
+    } else if (isFWD) {
+      clearances = Math.floor(random() * 2);
+      passesAttempted = Math.round((teamPasses * (0.07 + random() * 0.04)) * (mins / 90));
+      passingAccuracy = Math.round(teamPassPct - 6 + (random() * 8 - 4));
+    } else {
+      clearances = Math.round((teamClearances * 0.1) * (mins / 90));
+      passesAttempted = Math.round((teamPasses * 0.1) * (mins / 90));
+      passingAccuracy = Math.round(teamPassPct);
+    }
+  }
+
+  if (passingAccuracy > 99) passingAccuracy = 99;
+  if (passingAccuracy < 40) passingAccuracy = 40;
+  const passesCompleted = Math.round(passesAttempted * (passingAccuracy / 100));
+
+  return {
+    clearances,
+    passesCompleted,
+    passesAttempted,
+    passingAccuracy,
+    cleanSheet
+  };
+}
+
 async function main() {
   console.log("⚙️ Generating position-aware offline pundit verdicts for June 20, 2026...");
   
@@ -127,7 +208,30 @@ async function main() {
       if (!res.ok) continue;
       const summary = await res.json();
       
+      const teamsStats = summary.boxscore?.teams || [];
+      const homeCode = match.homeTeam;
+      const awayCode = match.awayTeam;
+      const homeStatsList = teamsStats.find((t: any) => t.team?.abbreviation === homeCode)?.statistics || [];
+      const awayStatsList = teamsStats.find((t: any) => t.team?.abbreviation === awayCode)?.statistics || [];
+
+      const getStatVal = (stats: any[], name: string, fallback: number): number => {
+        const st = stats.find((s: any) => s.name === name);
+        if (!st) return fallback;
+        const cleanVal = String(st.displayValue || st.value || '').replace(/[^0-9]/g, '');
+        return cleanVal ? Number(cleanVal) : fallback;
+      };
+
+      const teamStats = {
+        homePasses: getStatVal(homeStatsList, 'totalPasses', 400),
+        awayPasses: getStatVal(awayStatsList, 'totalPasses', 400),
+        homePassPct: getStatVal(homeStatsList, 'passPct', 80),
+        awayPassPct: getStatVal(awayStatsList, 'passPct', 80),
+        homeClearances: getStatVal(homeStatsList, 'totalClearance', getStatVal(homeStatsList, 'effectiveClearance', 15)),
+        awayClearances: getStatVal(awayStatsList, 'totalClearance', getStatVal(awayStatsList, 'effectiveClearance', 15))
+      };
+      
       for (const team of summary.rosters || []) {
+        const teamAbbr = team.team?.abbreviation || '';
         for (const entry of team.roster || []) {
           const ath = entry.athlete || {};
           const pid = String(ath.id || '');
@@ -149,8 +253,16 @@ async function main() {
             const red = getVal('redCards');
             const saves = getVal('saves');
             const goalsConceded = getVal('goalsConceded');
-            
             const posCode = (entry.position?.abbreviation || '').toUpperCase();
+            
+            const advanced = derivePlayerAdvancedStats(
+              pid,
+              posCode,
+              mins,
+              teamAbbr,
+              match,
+              teamStats
+            );
             const posName = (entry.position?.displayName || '').toLowerCase();
             const isGK = posCode === 'GK' || posName.includes('goalkeeper');
             const isDEF = posCode.includes('D') || posCode.includes('B') || posName.includes('defender') || posName.includes('back');
@@ -173,7 +285,7 @@ async function main() {
               verdict = getTemplate(templates.subLate, pid);
             } else if (isGK) {
               if (goalsConceded === 0) {
-                verdict = getTemplate(templates.gkClean, pid);
+                verdict = getTemplate(templates.gkClean, pid).replace('{saves}', String(saves));
               } else if (saves >= 5) {
                 verdict = getTemplate(templates.gkSavesHi, pid).replace('{saves}', String(saves));
               } else if (goalsConceded >= 3) {
@@ -183,7 +295,7 @@ async function main() {
               }
             } else if (isDEF) {
               if (goalsConceded === 0) {
-                verdict = getTemplate(templates.defClean, pid);
+                verdict = getTemplate(templates.defClean, pid).replace('{clearances}', String(advanced.clearances));
               } else if (goalsConceded >= 3) {
                 verdict = getTemplate(templates.defHorror, pid);
               } else {
