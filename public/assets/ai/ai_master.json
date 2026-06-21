@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-21T12:46:35.396Z",
+  "lastUpdated": "2026-06-21T14:18:15.154Z",
   "teams": {
     "BIH": {
       "headline": "The Defensive Circus",
@@ -62,40 +62,40 @@
       "pubAmmo": "Did you know Turkey finished third in the 2002 World Cup, where Hakan Sükür scored the fastest goal in history (11 seconds)?"
     },
     "NED": {
-      "headline": "Dutch Masterclass: Oranje March On!",
-      "storySoFar": "The Netherlands put on a proper show today, dismantling Sweden with a five-star performance. They're looking like a force to be reckoned with, playing some truly expansive football.",
-      "whatsNext": "With a performance like that, they'll be strutting into their next fixture full of confidence. The knockouts are firmly in their sights, and who'd bet against them on this form?",
-      "pubAmmo": "The Netherlands scored five goals from only seven shots on target today. That's a conversion rate that would make any striker blush!"
+      "headline": "Dutch Masters Deliver a Five-Star Performance",
+      "storySoFar": "The Netherlands are looking rather comfortable at the top of Group F after that absolute demolition job. Seven goals scored and only three conceded in two games, they're playing some proper stuff.",
+      "whatsNext": "They've got Japan next, which should be a sterner test, but with this form, they'll fancy their chances of topping the group.",
+      "pubAmmo": "The Dutch have scored seven goals in two games. That's more than some teams manage in an entire tournament, isn't it?"
     },
     "SWE": {
-      "headline": "Sweden's Sinking Ship: Defensive Woes Exposed!",
-      "storySoFar": "Sweden's tournament hopes took a bit of a battering today, conceding five goals and looking completely out of sorts at the back. It was a proper defensive horror show.",
-      "whatsNext": "They'll need to go back to the drawing board, and quickly. If they don't tighten up at the back, they'll be booking their flights home quicker than you can say 'fika'.",
-      "pubAmmo": "Sweden picked up three yellow cards, more than any other team today, showing their frustration rather than their footballing prowess."
+      "headline": "Sweden's Defence Goes Missing in Action",
+      "storySoFar": "Well, that was a bit of a disaster, wasn't it? Sweden are now on three points, but that goal difference has taken a hammering. They're going to need to pull their socks up, and quickly.",
+      "whatsNext": "They're still in with a shout, but they'll need to regroup and hope for a better performance in their final group game. Maybe a bit of extra training on, you know, defending.",
+      "pubAmmo": "Sweden picked up three yellow cards in one match, suggesting a certain level of frustration, or perhaps just a lack of tactical nous."
     },
     "GER": {
-      "headline": "German Efficiency (Eventually): Comeback Kings!",
-      "storySoFar": "Germany showed some real character today, coming from behind to snatch a crucial victory. It wasn't always pretty, but they dug deep and found a way to win, which is what champions do, eh?",
-      "whatsNext": "That win will be a massive confidence booster. They'll be looking to build on this momentum and secure their spot in the next round. The machine is starting to purr!",
-      "pubAmmo": "Germany's Deniz Undav scored two goals after coming off the bench, proving that sometimes you just need to bring on a fresh pair of legs to get the job done."
+      "headline": "Germany's Late Show Keeps Them Perfect",
+      "storySoFar": "Two wins from two for Germany, and they're looking strong, if a little shaky at times. Nine goals scored is fantastic, but they can't afford to be giving teams a sniff like that.",
+      "whatsNext": "They've secured their spot in the knockouts, so they can put their feet up a bit, but they'll want to finish top of Group E to avoid any tricky draws.",
+      "pubAmmo": "Germany have scored nine goals in two matches, which is more than any other team in their group. Talk about bringing the firepower!"
     },
     "CIV": {
-      "headline": "Côte d'Ivoire's Heartbreak: So Close, Yet So Far!",
-      "storySoFar": "Côte d'Ivoire put up a valiant fight against Germany, even taking the lead, but ultimately couldn't hold on. A tough pill to swallow after a spirited performance.",
-      "whatsNext": "They'll be gutted after that, but they showed they can compete. They need to pick themselves up and go again, or their World Cup dream will be over before it's truly begun.",
-      "pubAmmo": "Côte d'Ivoire's goalkeeper, Yahia Fofana, made 5 saves, doing his best to keep Germany at bay. A proper shift between the sticks!"
+      "headline": "Côte d'Ivoire's Brave Effort Falls Short",
+      "storySoFar": "A valiant effort from Côte d'Ivoire, but ultimately they couldn't hold on against the Germans. They're still in second place in Group E, but they'll be kicking themselves for letting that lead slip.",
+      "whatsNext": "They've got Ecuador next, and that's a must-win game if they want to guarantee progression. It's all to play for, but they'll need to be sharper at both ends.",
+      "pubAmmo": "Côte d'Ivoire had 26 clearances against Germany, showing they were certainly under the cosh for large parts of the game."
     },
     "ECU": {
-      "headline": "Ecuador's Frustration: Shot-Happy, Goal-Shy!",
-      "storySoFar": "Ecuador dominated possession and peppered the Curaçao goal with shots, but couldn't find the back of the net. A truly frustrating day at the office, leaving them with just a point.",
-      "whatsNext": "They'll be kicking themselves after that. They need to find their shooting boots, and fast, or all that lovely possession will count for absolutely nothing. Back to basics, lads!",
-      "pubAmmo": "Ecuador had a whopping 27 shots against Curaçao, with 15 on target, but still managed to draw 0-0. Couldn't hit a cow's backside with a banjo, could they?"
+      "headline": "Ecuador's Shot-Shy Spectacle Ends in Frustration",
+      "storySoFar": "Ecuador will be absolutely fuming with that result. Dominating possession and shots but failing to score against Curaçao is just criminal. They're still on one point, and things are looking a bit grim.",
+      "whatsNext": "They face Côte d'Ivoire next in what is now a massive game. They simply have to win to have any hope of progressing, and they'll need to find their shooting boots.",
+      "pubAmmo": "Ecuador had 15 shots on target but scored zero goals. You could probably hit the broad side of a barn with that many attempts, couldn't you?"
     },
     "CUW": {
-      "headline": "Curaçao's Heroics: A Point is a Point!",
-      "storySoFar": "Curaçao pulled off a heroic defensive display, holding Ecuador to a goalless draw despite being under immense pressure. A proper smash-and-grab point, that!",
-      "whatsNext": "That point could be absolutely massive for them. They'll need to keep that defensive solidity, and maybe even nick a goal, if they want to cause a proper upset in this tournament.",
-      "pubAmmo": "Curaçao's Eloy Room made an astonishing 15 saves, single-handedly earning his team a valuable point. Give that man a medal!"
+      "headline": "Curaçao's Heroic Goalkeeper Earns a Point",
+      "storySoFar": "What a performance from Curaçao's keeper, Eloy Room! They managed to hold Ecuador to a draw, which is a massive result for them, even if they're still at the bottom of Group E.",
+      "whatsNext": "They're still mathematically in it, but they'll need a miracle in their final game. Still, a point against a stronger side is something to build on.",
+      "pubAmmo": "Curaçao's keeper made 15 saves today. That's not a goalkeeper, that's a brick wall with gloves on!"
     }
   },
   "matches": {
@@ -140,34 +140,34 @@
       "randomQuirk": "A Haitian defender asking Vinicius Jr to swap shirts during a water break in the 30th minute."
     },
     "NED-SWE": {
-      "editionTitle": "Dutch Delight: Oranje Run Riot in Houston!",
-      "snappySummary": "The Netherlands absolutely hammered Sweden with a dominant 5-1 performance, showcasing some proper liquid football and leaving the Swedes looking like they'd forgotten how to defend.",
+      "editionTitle": "Dutch Delight, Swedish Nightmare",
+      "snappySummary": "The Netherlands absolutely ran riot against Sweden, putting five past them in a performance that was more of a casual kickabout in the park for the Dutch.",
       "talkingPoints": [
-        "Brian Brobbey and Cody Gakpo both bagging a brace each? Talk about clinical finishing! Sweden's defence was more open than a motorway service station.",
-        "Sweden managed to rack up three yellow cards, clearly more interested in fouling than actually playing football. A bit of a scrappy affair from them, wasn't it?",
-        "Despite having more shots and shots on target than the Dutch, Sweden still conceded five. That's some Sunday League defending if I ever saw it!"
+        "Brian Brobbey and Cody Gakpo both bagging braces before the hour mark? Talk about liquid football, eh? Sweden's defence was more porous than a tea bag.",
+        "Sweden managed to pull one back, bless 'em, but conceding five goals and picking up three yellow cards suggests they spent more time fouling than playing.",
+        "The Dutch had fewer shots but more on target, showing clinical finishing, while Sweden's 16 shots for one goal is just a bit of a waste, isn't it?"
       ],
-      "randomQuirk": "Sweden had more shots (16) and more shots on target (8) than the Netherlands (10 shots, 7 on target), yet still shipped five goals. Efficiency, eh? Or perhaps just dreadful goalkeeping and defending."
+      "randomQuirk": "Sweden's keeper, Kristoffer Nordfeldt, made two saves, which is quite impressive considering he let in five. Must've been some absolute screamers flying past him!"
     },
     "GER-CIV": {
-      "editionTitle": "German Grits: Undav's Late Double Saves the Day!",
-      "snappySummary": "Germany pulled off a classic comeback, snatching a 2-1 victory against Côte d'Ivoire with two late goals from Deniz Undav after going a goal down. Squeaky bum time, but they got there!",
+      "editionTitle": "German Efficiency Prevails After Scare",
+      "snappySummary": "Germany left it late but managed to claw back a win against Côte d'Ivoire, proving that sometimes you just need to keep plugging away, even if it's not pretty.",
       "talkingPoints": [
-        "Franck Kessie gave Côte d'Ivoire the lead, making Germany look a bit sluggish in the first half. Clearly needed a stern talking to at halftime.",
-        "Deniz Undav, coming off the bench, turned into a walking cheat code, bagging two goals to secure the win. What an impact sub!",
-        "Germany dominated possession and shots, but it took them until the 68th minute to get on the scoreboard. A bit wasteful, but they got the job done in the end."
+        "Franck Kessie gave Côte d'Ivoire a shock lead, making Germany look a bit flustered for a while. You love to see it, don't you?",
+        "Deniz Undav, coming off the bench, clearly had his Weetabix this morning, bagging a brace including the winner in injury time. Super sub, that.",
+        "Germany dominated possession and shots, but needed a late, late show to avoid dropping points. Bit squeaky bum time for the home crowd, I imagine."
       ],
-      "randomQuirk": "Germany had nearly 60% possession and 16 shots, but only managed to break Côte d'Ivoire's resolve in the last 25 minutes. Talk about making hard work of it!"
+      "randomQuirk": "Germany had three substitutions at the 60-minute mark, clearly a tactical masterclass or a desperate plea for someone, anyone, to score!"
     },
     "ECU-CUW": {
-      "editionTitle": "The Great Wall of Curaçao: Ecuador Couldn't Hit a Barn Door!",
-      "snappySummary": "Ecuador and Curaçao played out a goalless draw, despite Ecuador having a staggering 27 shots and 74.6% possession. Curaçao's keeper was a brick wall, and Ecuador's finishing was... well, non-existent.",
+      "editionTitle": "The Goalless Gala of Missed Opportunities",
+      "snappySummary": "Ecuador and Curaçao played out a thrilling 0-0 draw, if by 'thrilling' you mean 'a match where both teams forgot where the goal was'.",
       "talkingPoints": [
-        "Ecuador had enough possession to build a small house and enough shots to start a small war, yet couldn't score a single goal. Absolutely bottled it in front of goal!",
-        "Curaçao picked up five yellow cards, clearly preferring to get stuck in rather than let Ecuador walk all over them. A proper combative performance!",
-        "Eloy Room in Curaçao's goal made an incredible 15 saves. He was practically playing on his own, a true hero for the island nation."
+        "Ecuador had 74.6% possession and a staggering 27 shots with 15 on target, yet couldn't find the net. That's not just bottling it, that's completely emptying the bottle and then smashing it.",
+        "Curaçao's keeper, Eloy Room, was an absolute brick wall, making 15 saves. He probably deserves a medal, or at least a very large cup of tea.",
+        "Five yellow cards for Curaçao tells you they were more interested in stopping play than actually playing. A bit of a cynical masterclass, if you ask me."
       ],
-      "randomQuirk": "Ecuador managed to register 15 shots on target from their 27 attempts, but still couldn't beat Curaçao's goalkeeper. Someone needs to practice their shooting, eh?"
+      "randomQuirk": "Curaçao managed zero corners despite their best efforts, proving that even when they got forward, they couldn't quite manage to threaten properly."
     }
   },
   "days": {
@@ -178,10 +178,10 @@
       "progressionNews": "USA and Brazil are safely through. Scotland are on the brink of booking their flights home, as is tradition for the Tartan Army."
     },
     "2026-06-20": {
-      "headline": "Goal-Fests and Goalless Grumbles: A Day of World Cup Wonders (and Woes)!",
-      "theDrama": "Today was a proper mixed bag! The Netherlands put on an absolute clinic, hammering Sweden 5-1 with some truly liquid football. Germany had to dig deep for a comeback win against a spirited Côte d'Ivoire, with Deniz Undav playing the hero. But the real drama (or lack thereof) was in the Ecuador vs. Curaçao game, a goalless draw where Ecuador couldn't hit a barn door despite 27 shots! Absolute scenes.",
-      "mustWatchHighlights": "If you're after goals and excitement, the Netherlands vs. Sweden match is an absolute must-watch. Pure attacking football! Germany's comeback against Côte d'Ivoire also had its moments. But for a masterclass in how *not* to score, or how to defend like your lives depend on it, the Ecuador vs. Curaçao highlights reel will be... interesting.",
-      "progressionNews": "The Netherlands are looking absolutely fantastic and will be eyeing the knockouts with serious intent. Germany's win keeps them firmly in contention, showing they've got the grit when it matters. Sweden and Côte d'Ivoire will be feeling the pressure, needing to bounce back quickly. As for Ecuador and Curaçao, that draw keeps them both in the fight, but Ecuador desperately needs to find their scoring boots or they'll be booking an early flight home."
+      "headline": "Dutch Demolition and German Grit Define a Goal-Filled Friday!",
+      "theDrama": "What a day of football! The Netherlands put on an absolute clinic, smashing five past a hapless Sweden, while Germany had to dig deep for a late, late winner against a spirited Côte d'Ivoire. And then there was Ecuador and Curaçao, who decided that goals were overrated, serving up a 0-0 despite Ecuador's best efforts to hit everything but the net.",
+      "mustWatchHighlights": "If you're after goals, the **Netherlands vs Sweden** match is your absolute must-watch – five goals from the Dutch, pure liquid football! For a bit of late drama and a cracking comeback, check out **Germany vs Côte d'Ivoire**. As for **Ecuador vs Curaçao**... well, if you like goalkeeping heroics and a masterclass in missing chances, you might find something there, but I'd probably give it a miss, wouldn't you?",
+      "progressionNews": "Germany have officially booked their ticket to the knockouts, looking rather formidable at the top of Group E. The Netherlands are also looking very comfortable in Group F, practically there themselves. Sweden will be sweating a bit after that thrashing, but still in the mix. Ecuador and Curaçao, however, are both in a bit of a pickle in Group E; Ecuador really needed those three points today, and Curaçao will need a miracle."
     },
     "2026-06-11": {
       "headline": "Red Cards Galore in Mexico and South Korea's Late Show!",
@@ -239,9 +239,9 @@
     }
   },
   "today_preview": {
-    "headline": "Tomorrow's Treat: European Giants, African Warriors, and a Kiwi Surprise!",
-    "theBigOnes": "Tomorrow looks like a cracker! Tunisia vs. Japan promises a tactical battle, while Spain vs. Saudi Arabia should see the Spanish trying to assert their dominance. Belgium vs. Iran could be a feisty affair, and Uruguay vs. Cape Verde will be a clash of styles. Keep an eye on New Zealand vs. Egypt for a potential dark horse moment!",
-    "playersToWatch": "We'll be looking to see if Spain's creative midfielders can unlock the Saudi defence, and how Belgium's star forwards fare against a resilient Iran. Keep an eye on the Japanese attackers, always tricky customers, and the Uruguayan flair. And who knows, a Kiwi might just pop up with a surprise!",
+    "headline": "Tomorrow's Treat: Group Stage Showdowns and Potential Upsets!",
+    "theBigOnes": "Tomorrow, we've got some cracking fixtures! Keep an eye on **Spain vs Saudi Arabia** – Spain will be looking to assert their dominance. Also, **Belgium vs Iran** could be a fiery affair, with both teams desperate for a win to get their campaigns going. And don't sleep on **Uruguay vs Cape Verde**, as both will fancy their chances of grabbing three points.",
+    "playersToWatch": "Look out for Spain's creative midfielders, they'll be pulling the strings against Saudi Arabia. In the Belgium game, watch for their star striker to try and break down a stubborn Iran defence. And for a potential dark horse, keep an eye on the attacking talent from Uruguay, they could cause some real problems.",
     "firstKickoffTime": "2026-06-21T04:00Z"
   },
   "espnMatches": {
@@ -2336,7 +2336,7 @@
         "awayScore": 1,
         "status": "STATUS_FULL_TIME",
         "stadium": "NRG Stadium",
-        "time": "06:00 PM",
+        "time": "05:00 PM",
         "stats": {
           "homePossession": "50.9%",
           "awayPossession": "49.1%",
@@ -2404,7 +2404,7 @@
         "awayScore": 1,
         "status": "STATUS_FULL_TIME",
         "stadium": "BMO Field",
-        "time": "09:00 PM",
+        "time": "08:00 PM",
         "stats": {
           "homePossession": "59.5%",
           "awayPossession": "40.5%",
@@ -2478,7 +2478,7 @@
         "awayScore": 0,
         "status": "STATUS_FULL_TIME",
         "stadium": "GEHA Field at Arrowhead Stadium",
-        "time": "01:00 AM",
+        "time": "12:00 AM",
         "stats": {
           "homePossession": "74.6%",
           "awayPossession": "25.4%",
