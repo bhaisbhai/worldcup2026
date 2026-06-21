@@ -9,7 +9,7 @@ module.exports = function createProxy(espnUrl) {
       });
       if (!r.ok) return res.status(r.status).json({ error: 'ESPN upstream error' });
       const data = await r.json();
-      res.setHeader('Cache-Control', 's-maxage=30, stale-while-revalidate=59');
+      res.setHeader('Cache-Control', 's-maxage=10, stale-while-revalidate=10');
       res.json(data);
     } catch (e) {
       res.status(502).json({ error: 'Upstream fetch failed' });
