@@ -810,9 +810,7 @@ body{
 .recap-section-txt{font-size:12px;color:rgba(255,255,255,.6);line-height:1.7}
 
 /* ── GOAL SCORERS STRIP ────────────────── */
-.mc-scorers{display:flex;justify-content:space-between;gap:6px;margin:6px 0 8px;min-height:0}
-.mc-scorers-h,.mc-scorers-a{font-size:10px;color:var(--t2);line-height:1.6;flex:1;white-space:pre-wrap}
-.mc-scorers-a{text-align:right}
+.mc-scorers-strip{font-size:10px;color:var(--t2);line-height:1.6;margin:4px 0 6px;text-align:center;white-space:normal}
 .mc-scorer-og{color:#ff7070}
 
 /* ── GOAL CELEBRATION ──────────────────── */
@@ -1362,25 +1360,17 @@ const YT_ICON = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2
 
 function renderScorers(goals){
   if(!goals || !goals.length) return '';
-  // Group by name, preserving order of first appearance
-  function group(list){
-    const map = new Map();
-    list.forEach(g => {
-      const k = g.name || 'OG';
-      if(!map.has(k)) map.set(k, { name: k, mins: [], og: g.og });
-      map.get(k).mins.push(g.min + (g.pen ? ' (p)' : ''));
-    });
-    return [...map.values()].map(e =>
-      `<span${e.og?' class="mc-scorer-og"':''}>${e.name} ${e.mins.join(', ')}</span>`
-    ).join('\n');
-  }
-  const h = group(goals.filter(g =>  g.isHome));
-  const a = group(goals.filter(g => !g.isHome));
-  if(!h && !a) return '';
-  return `<div class="mc-scorers">
-    <div class="mc-scorers-h">${h}</div>
-    <div class="mc-scorers-a">${a}</div>
-  </div>`;
+  const sorted = [...goals].sort((a,b)=> parseInt(a.min)||0 - (parseInt(b.min)||0));
+  const map = new Map();
+  sorted.forEach(g => {
+    const k = g.name || 'OG';
+    if(!map.has(k)) map.set(k, { name: k, mins: [], og: g.og });
+    map.get(k).mins.push(g.min + (g.pen ? ' (p)' : ''));
+  });
+  const html = [...map.values()].map(e =>
+    `<span${e.og?' class="mc-scorer-og"':''}>${e.name} ${e.mins.join(', ')}</span>`
+  ).join('  ·  ');
+  return `<div class="mc-scorers-strip">⚽ ${html}</div>`;
 }
 
 // ═══════════════════════════════════════════════════
