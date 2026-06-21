@@ -3126,19 +3126,19 @@ async function fetchGroupStandings(){
 }
 
 function updateKnockoutFromGroups(){
+  const placed = new Set();
   GROUPS_DATA.forEach(g => {
     const teams = (g.teams||[]).slice().sort((a,b) => b.pts-a.pts || b.gd-a.gd || b.gf-a.gf);
-    if(teams.length < 3) return;
-    const maxGames = 3;
-    const groupDone = teams.every(t => t.p >= maxGames);
-    const third = teams[2];
-    const thirdMaxPts = third.pts + Math.max(0, maxGames - third.p) * 3;
-
-    if(groupDone || teams[0].pts > thirdMaxPts){
+    if(teams.length < 2) return;
+    const groupDone = teams.every(t => t.p >= 3);
+    if(!groupDone) return;
+    if(teams[0] && !placed.has(teams[0].n)){
       fillKOSlot('1'+g.id, teams[0]);
+      placed.add(teams[0].n);
     }
-    if(groupDone && teams[1]){
+    if(teams[1] && !placed.has(teams[1].n)){
       fillKOSlot('2'+g.id, teams[1]);
+      placed.add(teams[1].n);
     }
   });
 }
