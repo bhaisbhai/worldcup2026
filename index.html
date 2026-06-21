@@ -88,6 +88,9 @@ body{
 }
 .tbtn.active{color:var(--text)}.tbtn.active::after{transform:scaleX(1)}
 .tbtn:hover:not(.active){color:#ccc}
+.tbtn-icon{padding:15px 16px;display:flex;align-items:center;justify-content:center}
+.tbtn-icon svg{transition:fill .2s,stroke .2s}
+.tbtn-icon.active svg{fill:var(--accent);stroke:var(--accent)}
 
 /* ── MAIN ───────────────────────────────────── */
 .main{max-width:1240px;margin:0 auto;padding:26px 22px}
@@ -887,7 +890,7 @@ body{
     <button class="tbtn" data-tab="groups">Groups</button>
     <button class="tbtn" data-tab="knockout">Knockout</button>
     <button class="tbtn" data-tab="leaderboard">Stats</button>
-    <button class="tbtn" data-tab="myteam" id="myteamTab">My Team</button>
+    <button class="tbtn tbtn-icon" data-tab="myteam" id="myteamTab" aria-label="My Team" title="My Team"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></button>
     <button class="tbtn" data-tab="rulebook">Rules</button>
   </nav>
 </div>
