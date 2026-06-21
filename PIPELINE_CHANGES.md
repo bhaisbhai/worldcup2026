@@ -4,6 +4,34 @@ This document lists every change made to the AI generation pipeline during this 
 
 ---
 
+## IMPORTANT — Scope of Changes
+
+**Gemini: you are only permitted to review and suggest changes to the following files:**
+
+```
+scripts/generate-ai-content.ts
+scripts/generate-retrospective-days.ts
+.github/workflows/overnight-ai-sync.yml
+data/recaps.json
+package.json          (only the "scripts" section, specifically pipeline:generate)
+```
+
+**DO NOT touch or suggest changes to any of the following:**
+
+```
+index.html            ← front-end SPA, completely separate concern
+api/recaps.js         ← Vercel serverless function, separate concern
+api/package.json      ← CommonJS scope fix, separate concern
+vercel.json           ← deployment config, separate concern
+public/               ← static assets, separate concern
+```
+
+The front-end (`index.html`) was fixed separately in this session and is working correctly. Any suggestion that involves modifying `index.html` should be ignored — it will break the live site and is out of scope for this review.
+
+Your job is exclusively to verify the pipeline logic: does `generate-ai-content.ts` correctly fetch ESPN data, call Gemini, and write outputs to the right paths? Does the workflow trigger and commit correctly? That is all.
+
+---
+
 ## 1. `scripts/generate-ai-content.ts`
 
 ### Change 1 — Model name
