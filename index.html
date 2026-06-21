@@ -979,18 +979,65 @@ body{
 //  FLAGS  (ESPN abbreviation → emoji)
 // ═══════════════════════════════════════════════════
 const FLAGS = {
-  // From ESPN API (confirmed)
-  FRA:'🇫🇷', SEN:'🇸🇳', NOR:'🇳🇴', IRQ:'🇮🇶', ARG:'🇦🇷', ALG:'🇩🇿',
-  // Common WC teams
-  RSA:'🇿🇦', CZE:'🇨🇿', SUI:'🇨🇭', BIH:'🇧🇦', CAN:'🇨🇦', QAT:'🇶🇦',
-  MEX:'🇲🇽', KOR:'🇰🇷', USA:'🇺🇸', ENG:'🏴󠁧󠁢󠁥󠁮󠁧󠁿', BRA:'🇧🇷', GER:'🇩🇪',
-  ESP:'🇪🇸', POR:'🇵🇹', JPN:'🇯🇵', AUS:'🇦🇺', NED:'🇳🇱', BEL:'🇧🇪',
-  URU:'🇺🇾', COL:'🇨🇴', CHI:'🇨🇱', ECU:'🇪🇨', PER:'🇵🇪', POL:'🇵🇱',
-  NGA:'🇳🇬', MAR:'🇲🇦', CRO:'🇭🇷', SRB:'🇷🇸', TUR:'🇹🇷', ITA:'🇮🇹',
-  DEN:'🇩🇰', CIV:'🇨🇮', PAR:'🇵🇾', IDN:'🇮🇩', VEN:'🇻🇪', KSA:'🇸🇦',
-  JAM:'🇯🇲', PAN:'🇵🇦', BOL:'🇧🇴', NZL:'🇳🇿', HON:'🇭🇳', GHA:'🇬🇭',
-  CMR:'🇨🇲', ALB:'🇦🇱', CHE:'🇨🇭', IRN:'🇮🇷', TUN:'🇹🇳', SWE:'🇸🇪',
-  CRC:'🇨🇷', ZAF:'🇿🇦', NOR:'🇳🇴'
+  // ── WC 2026 all 48 teams ─────────────────────────────
+  USA:'🇺🇸', JAM:'🇯🇲', PAN:'🇵🇦', BOL:'🇧🇴',          // Group A
+  MEX:'🇲🇽', ECU:'🇪🇨', CIV:'🇨🇮', NZL:'🇳🇿',          // Group B
+  BRA:'🇧🇷', PER:'🇵🇪', POL:'🇵🇱', NGA:'🇳🇬',          // Group C
+  SUI:'🇨🇭', MAR:'🇲🇦', BEL:'🇧🇪', URU:'🇺🇾',          // Group D
+  ESP:'🇪🇸', JPN:'🇯🇵', KOR:'🇰🇷', CRC:'🇨🇷',          // Group E
+  ENG:'🏴󠁧󠁢󠁥󠁮󠁧󠁿', COL:'🇨🇴', NED:'🇳🇱', TUN:'🇹🇳',   // Group F
+  GER:'🇩🇪', VEN:'🇻🇪', KSA:'🇸🇦', GHA:'🇬🇭',          // Group G
+  POR:'🇵🇹', CRO:'🇭🇷', RSA:'🇿🇦', HON:'🇭🇳',          // Group H
+  FRA:'🇫🇷', SEN:'🇸🇳', NOR:'🇳🇴', IRQ:'🇮🇶',          // Group I
+  ARG:'🇦🇷', ALG:'🇩🇿', AUS:'🇦🇺', CHI:'🇨🇱',          // Group J
+  DEN:'🇩🇰', CMR:'🇨🇲', PAR:'🇵🇾', IDN:'🇮🇩',          // Group K
+  ITA:'🇮🇹', SRB:'🇷🇸', CZE:'🇨🇿', IRN:'🇮🇷',          // Group L
+  // ── ESPN abbreviation aliases ──────────────────────
+  CHE:'🇨🇭', ZAF:'🇿🇦', CAN:'🇨🇦', QAT:'🇶🇦',
+  MEX:'🇲🇽', COL:'🇨🇴', NED:'🇳🇱', SUI:'🇨🇭',
+  // ── Europe ────────────────────────────────────────
+  SCO:'🏴󠁧󠁢󠁳󠁣󠁴󠁿', WAL:'🏴󠁧󠁢󠁷󠁬󠁳󠁿', NIR:'🇬🇧',
+  IRL:'🇮🇪', ISL:'🇮🇸', FIN:'🇫🇮', SWE:'🇸🇪',
+  AUT:'🇦🇹', GRE:'🇬🇷', HUN:'🇭🇺', ROU:'🇷🇴',
+  BUL:'🇧🇬', SVK:'🇸🇰', SVN:'🇸🇮', MKD:'🇲🇰',
+  MNE:'🇲🇪', BIH:'🇧🇦', ALB:'🇦🇱', TUR:'🇹🇷',
+  UKR:'🇺🇦', RUS:'🇷🇺', BLR:'🇧🇾', GEO:'🇬🇪',
+  AZE:'🇦🇿', ARM:'🇦🇲', CYP:'🇨🇾', MLT:'🇲🇹',
+  LUX:'🇱🇺', ISR:'🇮🇱', KAZ:'🇰🇿', LTU:'🇱🇹',
+  LAT:'🇱🇻', EST:'🇪🇪', MDA:'🇲🇩', FRO:'🇫🇴',
+  LIE:'🇱🇮', AND:'🇦🇩', SMR:'🇸🇲', GIB:'🇬🇮',
+  // ── Africa ────────────────────────────────────────
+  EGY:'🇪🇬', CPV:'🇨🇻', CUW:'🇨🇼',
+  KEN:'🇰🇪', ETH:'🇪🇹', UGA:'🇺🇬', RWA:'🇷🇼',
+  TAN:'🇹🇿', TZA:'🇹🇿', ZIM:'🇿🇼', ZAM:'🇿🇲',
+  ANG:'🇦🇴', MOZ:'🇲🇿', NAM:'🇳🇦', BOT:'🇧🇼',
+  MLI:'🇲🇱', BFA:'🇧🇫', LBR:'🇱🇷', GUI:'🇬🇳',
+  COD:'🇨🇩', DRC:'🇨🇩', CON:'🇨🇬', CGO:'🇨🇬',
+  GAB:'🇬🇦', CMR:'🇨🇲', EQG:'🇬🇶', SLE:'🇸🇱',
+  GMB:'🇬🇲', MRT:'🇲🇷', BEN:'🇧🇯', TOG:'🇹🇬',
+  LBA:'🇱🇾', SUD:'🇸🇩', SOM:'🇸🇴', ERI:'🇪🇷',
+  COM:'🇰🇲', MDG:'🇲🇬', MAW:'🇲🇼', BUR:'🇧🇮',
+  SWZ:'🇸🇿', LSO:'🇱🇸', DJI:'🇩🇯', CAP:'🇨🇻',
+  // ── Americas ──────────────────────────────────────
+  TRI:'🇹🇹', HAI:'🇭🇹', CUB:'🇨🇺', DOM:'🇩🇴',
+  GUA:'🇬🇹', SLV:'🇸🇻', NIC:'🇳🇮', BLZ:'🇧🇿',
+  GUY:'🇬🇾', SUR:'🇸🇷', TTO:'🇹🇹',
+  ANT:'🇦🇬', BAR:'🇧🇧', BRB:'🇧🇧', GRN:'🇬🇩',
+  SKN:'🇰🇳', DMA:'🇩🇲', LCA:'🇱🇨', VIN:'🇻🇨',
+  BER:'🇧🇲', CAY:'🇰🇾', VGB:'🇻🇬', PUR:'🇵🇷',
+  // ── Middle East / Asia ────────────────────────────
+  UAE:'🇦🇪', OMN:'🇴🇲', KUW:'🇰🇼', BHR:'🇧🇭',
+  LIB:'🇱🇧', SYR:'🇸🇾', JOR:'🇯🇴', PAL:'🇵🇸',
+  YEM:'🇾🇪', AFG:'🇦🇫', PAK:'🇵🇰', IND:'🇮🇳',
+  BAN:'🇧🇩', SRI:'🇱🇰', NEP:'🇳🇵', MDV:'🇲🇻',
+  CHN:'🇨🇳', PRK:'🇰🇵', MGL:'🇲🇳', MNG:'🇲🇳',
+  THA:'🇹🇭', VIE:'🇻🇳', MYA:'🇲🇲', MAS:'🇲🇾',
+  SIN:'🇸🇬', PHI:'🇵🇭', CAM:'🇰🇭', LAO:'🇱🇦',
+  TLS:'🇹🇱', BRN:'🇧🇳', TPE:'🇹🇼', HKG:'🇭🇰',
+  UZB:'🇺🇿', TJK:'🇹🇯', KGZ:'🇰🇬', TKM:'🇹🇲',
+  // ── Pacific ───────────────────────────────────────
+  FIJ:'🇫🇯', PNG:'🇵🇬', SOL:'🇸🇧', VAN:'🇻🇺',
+  SAM:'🇼🇸', NCL:'🇳🇨', TAH:'🇵🇫',
 };
 function flag(abbr){ return FLAGS[abbr] || '🏳️'; }
 
@@ -3063,7 +3110,15 @@ async function fetchAndRenderPlayer(athleteId, playerName, teamInfo, ev){
 
 function renderPlayerProfile(ath,genAth={},knownId=''){
   const bio=[];
-  if(ath.age||genAth.age) bio.push({k:'Age',v:String(ath.age||genAth.age)});
+  const dob=ath.dateOfBirth||genAth.dateOfBirth;
+  const directAge=ath.age||genAth.age;
+  // Calculate age from DOB when ESPN doesn't return it directly
+  const age=directAge||(dob?Math.floor((Date.now()-new Date(dob))/(365.25*24*3600*1000)):null);
+  if(age) bio.push({k:'Age',v:String(age)});
+  if(dob){
+    const d=new Date(dob);
+    bio.push({k:'Born',v:d.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})});
+  }
   if(ath.displayHeight||genAth.displayHeight) bio.push({k:'Height',v:ath.displayHeight||genAth.displayHeight});
   if(ath.displayWeight||genAth.displayWeight) bio.push({k:'Weight',v:ath.displayWeight||genAth.displayWeight});
   const pid=String(ath.id||genAth.id||knownId||'');
@@ -3080,11 +3135,6 @@ function renderPlayerProfile(ath,genAth={},knownId=''){
     const logo=clubEntry?.clubLogo||'';
     const clubVal=logo?`<img src="${logo}" alt="" style="height:14px;vertical-align:middle;border-radius:2px;margin-right:5px;display:inline-block">${club}`:club;
     bio.push({k:'Club',v:clubVal});
-  }
-  const dob=ath.dateOfBirth||genAth.dateOfBirth;
-  if(dob){
-    const d=new Date(dob);
-    bio.push({k:'Born',v:d.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})});
   }
 
   // Primary stats source: pre-built tournament stats file (aggregated from all match summaries)
