@@ -809,8 +809,12 @@ body{
 }
 .recap-section-txt{font-size:12px;color:rgba(255,255,255,.6);line-height:1.7}
 
-/* ── GOAL SCORERS STRIP ────────────────── */
-.mc-scorers-strip{font-size:10px;color:var(--t2);line-height:1.6;margin:4px 0 6px;text-align:center;white-space:normal}
+/* ── GOAL SCORERS ────────────────── */
+.mc-scorers{display:flex;align-items:flex-start;gap:8px;margin:2px 0 10px}
+.mc-scorers-h{flex:1;font-size:10px;color:var(--t2);line-height:1.7;text-align:center}
+.mc-scorers-a{flex:1;font-size:10px;color:var(--t2);line-height:1.7;text-align:center}
+.mc-scorers-gap{flex-shrink:0;width:56px}
+.mc-scorer-min{opacity:.7}
 .mc-scorer-og{color:#ff7070}
 
 /* ── GOAL CELEBRATION ──────────────────── */
@@ -1170,7 +1174,8 @@ function parseEvent(ev){
   const groupLabel = groupMatch ? `Group ${groupMatch[1]}` : groupNote;
 
   // Extract goal events from comp.details (available in scoreboard for completed matches)
-  const homeAbbr = home.team.abbreviation;
+  const homeTeamId   = home.team.id;
+  const homeTeamAbbr = home.team.abbreviation;
   const goals = (comp.details || [])
     .filter(d => {
       const t = (d.type?.text || d.type?.name || '').toLowerCase();
@@ -1182,7 +1187,8 @@ function parseEvent(ev){
       const raw = d.athletesInvolved?.[0];
       const name = raw?.shortName || raw?.displayName || (og ? 'OG' : '');
       const min  = d.clock?.displayValue || '';
-      const isHome = (d.team?.abbreviation || '') === homeAbbr;
+      const dt   = d.team;
+      const isHome = dt ? (dt.id === homeTeamId || dt.abbreviation === homeTeamAbbr) : false;
       return { name: og ? 'OG' : name, min, isHome, og, pen };
     });
 
@@ -1360,17 +1366,25 @@ const YT_ICON = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2
 
 function renderScorers(goals){
   if(!goals || !goals.length) return '';
-  const sorted = [...goals].sort((a,b)=> parseInt(a.min)||0 - (parseInt(b.min)||0));
-  const map = new Map();
-  sorted.forEach(g => {
-    const k = g.name || 'OG';
-    if(!map.has(k)) map.set(k, { name: k, mins: [], og: g.og });
-    map.get(k).mins.push(g.min + (g.pen ? ' (p)' : ''));
-  });
-  const html = [...map.values()].map(e =>
-    `<span${e.og?' class="mc-scorer-og"':''}>${e.name} ${e.mins.join(', ')}</span>`
-  ).join('  ·  ');
-  return `<div class="mc-scorers-strip">⚽ ${html}</div>`;
+  function group(list){
+    const map = new Map();
+    list.forEach(g => {
+      const k = g.name || 'OG';
+      if(!map.has(k)) map.set(k, { name: k, mins: [], og: g.og });
+      map.get(k).mins.push(g.min + (g.pen ? ' (p)' : ''));
+    });
+    return [...map.values()].map(e =>
+      `<div${e.og?' class="mc-scorer-og"':''}>${e.name} <span class="mc-scorer-min">${e.mins.join(', ')}</span></div>`
+    ).join('');
+  }
+  const h = group(goals.filter(g =>  g.isHome));
+  const a = group(goals.filter(g => !g.isHome));
+  if(!h && !a) return '';
+  return `<div class="mc-scorers">
+    <div class="mc-scorers-h">${h}</div>
+    <div class="mc-scorers-gap"></div>
+    <div class="mc-scorers-a">${a}</div>
+  </div>`;
 }
 
 // ═══════════════════════════════════════════════════
