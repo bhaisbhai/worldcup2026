@@ -1227,6 +1227,7 @@ const playerCache   = {}; // athleteId → {prof, news}
 const playerHlCache = {}; // athleteId → {videoId, title} | null | undefined
 const _plLookup     = {}; // athleteId → {entry, teamInfo} — populated by mcLineups()
 let   _playerClubs  = {}; // athleteId → {name, club, clubLogo} — from data/player-clubs.json
+let   _playerStats  = {}; // athleteId → {goals, assists, apps, ...} — from data/player-stats.json
 
 // One shared promise for the BBC catalog; fetched once per session, 2 pages = up to 100 videos
 let _bbcCatalogPromise = null;
@@ -1723,6 +1724,12 @@ async function fetchPlayerClubs(){
   try{
     const r=await fetch('/data/player-clubs.json',{signal:AbortSignal.timeout(5000)});
     if(r.ok) _playerClubs=await r.json();
+  }catch(e){}
+}
+async function fetchPlayerStats(){
+  try{
+    const r=await fetch('/data/player-stats.json',{signal:AbortSignal.timeout(5000)});
+    if(r.ok) _playerStats=await r.json();
   }catch(e){}
 }
 
@@ -2651,6 +2658,9 @@ function openPlayerDetail(athleteId){
   const playerName=a.displayName||a.fullName||'—';
   const jersey=entry.jersey||a.jersey||'';
   const pos=entry.position?.displayName||entry.position?.abbreviation||'';
+  // Roster data from ESPN summary includes headshot.href — use it when available
+  const rosterHs=a.headshot?.href||_playerStats[String(athleteId)]?.headshot||'';
+  const headshotUrl=rosterHs||`https://a.espncdn.com/i/headshots/soccer/players/full/${athleteId}.png`;
 
   if(mcCdInt){clearInterval(mcCdInt);mcCdInt=null;}
   document.querySelectorAll('.mc-tab-btn').forEach(b=>b.classList.remove('active'));
@@ -2665,7 +2675,7 @@ function openPlayerDetail(athleteId){
   body.innerHTML=`
     <button class="pl-back" onclick="switchMCTab('lineups')">‹ Back to Lineups</button>
     <div class="pl-hero">
-      <div class="pl-photo" id="plPhoto"><img src="https://a.espncdn.com/i/headshots/soccer/players/full/${athleteId}.png" alt="${playerName}" onerror="this.parentElement.innerHTML='${flag(teamInfo.abbr)}'"></div>
+      <div class="pl-photo" id="plPhoto"><img src="${headshotUrl}" alt="${playerName}" onerror="this.parentElement.innerHTML='${flag(teamInfo.abbr)}'"></div>
       <div class="pl-meta">
         <div class="pl-pname">${playerName}</div>
         <div class="pl-psub">${[pos,teamInfo.name].filter(Boolean).join(' · ')}</div>
@@ -2745,12 +2755,23 @@ function renderPlayerProfile(ath,genAth={}){
     bio.push({k:'Born',v:d.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})});
   }
 
-  const allStats=[...(ath.statistics||[]),...(genAth.statistics||[])].flatMap(s=>s.splits?.categories||[]).flatMap(c=>c.stats||[]);
-  const gv=name=>{const s=allStats.find(x=>x.name===name);return s?.displayValue??s?.value??null;};
-  const KEYS=[['appearances','Apps'],['goals','Goals'],['assists','Assists'],['minutesPlayed','Minutes'],
-    ['shots','Shots'],['shotsOnTarget','On Target'],['saves','Saves'],['cleanSheets','Clean Sheets'],
-    ['yellowCards','Yellow'],['redCards','Red']];
-  const tournStats=KEYS.map(([k,l])=>{const v=gv(k);return v!=null&&v!=='0'?{lbl:l,val:v}:null;}).filter(Boolean);
+  // Primary stats source: pre-built tournament stats file (aggregated from all match summaries)
+  const ps=_playerStats[pid];
+  let tournStats=[];
+  if(ps){
+    const PSMAP=[['appearances','Apps'],['goals','Goals'],['assists','Assists'],['minutesPlayed','Mins'],
+      ['shots','Shots'],['shotsOnTarget','On Target'],['saves','Saves'],
+      ['yellowCards','Yellow'],['redCards','Red']];
+    tournStats=PSMAP.map(([k,l])=>{const v=ps[k];return(v!=null&&v>0)?{lbl:l,val:String(v)}:null;}).filter(Boolean);
+  }
+  // Fallback: ESPN athlete endpoint statistics (often empty for WC context)
+  if(!tournStats.length){
+    const allStats=[...(ath.statistics||[]),...(genAth.statistics||[])].flatMap(s=>s.splits?.categories||[]).flatMap(c=>c.stats||[]);
+    const gv=name=>{const s=allStats.find(x=>x.name===name);return s?.displayValue??s?.value??null;};
+    const KEYS=[['appearances','Apps'],['goals','Goals'],['assists','Assists'],['minutesPlayed','Mins'],
+      ['shots','Shots'],['shotsOnTarget','On Target'],['saves','Saves'],['yellowCards','Yellow'],['redCards','Red']];
+    tournStats=KEYS.map(([k,l])=>{const v=gv(k);return v!=null&&v!=='0'?{lbl:l,val:v}:null;}).filter(Boolean);
+  }
 
   let h='';
   if(bio.length){
@@ -3778,6 +3799,7 @@ renderGroups();
 renderKnockout();
 updateKnockoutQualifiers();
 fetchPlayerClubs();
+fetchPlayerStats();
 fetchDailyRecaps().then(() => fetchMatches());
 fetchGroupStandings();
 fetchKnockoutData();
