@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-21T21:48:39.580Z",
+  "lastUpdated": "2026-06-21T22:03:39.142Z",
   "teams": {
     "BIH": {
       "headline": "The Defensive Circus",
@@ -99,39 +99,39 @@
     },
     "TUN": {
       "headline": "Tunisia's World Cup Dream Goes Up in Smoke",
-      "storySoFar": "Well, that was a bit of a damp squib, wasn't it? Two games, two losses, one goal scored, and a whopping nine conceded. They've been about as effective as a chocolate teapot in this tournament.",
-      "whatsNext": "Tunisia are officially eliminated from the competition. Time to pack their bags and book those early flights home, lads. Better luck next time!",
-      "pubAmmo": "Tunisia managed to concede four goals to Japan, which is roughly the same number of decent chances they created in the entire match."
+      "storySoFar": "Well, that's that then. Three games, zero points, one goal scored, and a whopping thirteen conceded. Tunisia's World Cup campaign was less a journey and more a quick trip to the local corner shop for a lottery ticket that didn't win.",
+      "whatsNext": "Tunisia is officially ELIMINATED. Time to pack the bags, book the flights, and perhaps consider a new tactical approach for next time.",
+      "pubAmmo": "Tunisia managed a grand total of 0 shots on target against Japan. That's what you call 'parking the bus, then forgetting where you parked the engine'."
     },
     "JPN": {
-      "headline": "Japan March On With Clinical Display",
-      "storySoFar": "The Samurai Blue are looking sharp, sitting pretty with four points from two games and a healthy goal difference. They've shown they can score goals and play some cracking football.",
-      "whatsNext": "Japan are still very much in the hunt for a top-two finish in Group F. They've got one more game to play and will be looking to secure their spot in the knockout stages.",
-      "pubAmmo": "Japan's Ayase Ueda bagged a brace against Tunisia, proving he's got more clinical finishing than a dodgy DIY enthusiast."
+      "headline": "Japan Cruises Through Group Stage with Style",
+      "storySoFar": "Japan has been nothing short of brilliant, securing their spot in the next round with a dominant performance today. Seven points from three games, ten goals scored, and a defence that looks tighter than a drum. Impressive stuff.",
+      "whatsNext": "Japan is QUALIFIED! They're through to the knockout stages, and on current form, they'll be fancying their chances against anyone.",
+      "pubAmmo": "Japan scored four goals from just five shots on target against Tunisia. That's efficiency, that is. Like a well-oiled machine, or a perfectly timed bullet train."
     },
     "ESP": {
-      "headline": "Spain's Masterclass Sends a Warning Shot",
-      "storySoFar": "Spain are looking like the real deal, topping Group H with four points and a goal difference that would make most teams blush. They're playing with confidence and flair.",
-      "whatsNext": "Spain are still very much in contention for a top-two finish in Group H. They've got one more game to play and will be aiming to cement their place in the next round.",
-      "pubAmmo": "Spain's Mikel Oyarzabal scored twice and assisted once against Saudi Arabia, making him a one-man wrecking crew for the opposition."
+      "headline": "Spain Books Knockout Spot with Effortless Victory",
+      "storySoFar": "Spain has been a joy to watch, playing some lovely football and securing their passage to the next round with another convincing win. Top of the group and looking utterly dominant.",
+      "whatsNext": "Spain is QUALIFIED! They've stamped their ticket to the knockout rounds and will be looking to continue their impressive run.",
+      "pubAmmo": "Spain recorded 67.1% possession against Saudi Arabia. They practically owned the ball, probably even asked it for rent money."
     },
     "KSA": {
-      "headline": "Saudi Arabia Humbled by Spanish Giants",
-      "storySoFar": "It's been a tough ride for Saudi Arabia, with one draw and one heavy defeat leaving them on just one point. They've shown glimpses, but consistency is proving elusive.",
-      "whatsNext": "Saudi Arabia are still in contention for a top-two finish in Group H, though they'll need a monumental effort in their final game. They've got one more chance to make something happen.",
-      "pubAmmo": "Saudi Arabia's Hassan Al-Tambakti scored an own goal against Spain, which is one way to get your name on the scoresheet, I suppose."
+      "headline": "Saudi Arabia's World Cup Journey Ends with a Whimper",
+      "storySoFar": "It's been a tough tournament for Saudi Arabia. One point from three games, a solitary goal, and a rather leaky defence. They gave it a go, but ultimately, they were outclassed.",
+      "whatsNext": "Saudi Arabia is officially ELIMINATED. The dream is over, and it's back to the drawing board for the Green Falcons.",
+      "pubAmmo": "Saudi Arabia's Hassan Al-Tambakti scored an own goal against Spain. A memorable moment, perhaps not for the reasons he'd hoped."
     },
     "BEL": {
-      "headline": "Belgium's Red Card Blight and Goal Drought",
-      "storySoFar": "Two games, two draws, and a solitary goal. The 'Golden Generation' are looking a bit rusty, struggling to convert possession into goals and picking up silly cards.",
-      "whatsNext": "Belgium are still in contention for a top-two finish in Group G. They've got one more game to play and will be desperate for a strong result to secure their progression.",
-      "pubAmmo": "Belgium had 23 shots against Iran but couldn't score, proving that sometimes, even with all the talent in the world, you still need someone to put the ball in the back of the net."
+      "headline": "Belgium Grinds Out a Draw, Secures Qualification",
+      "storySoFar": "It wasn't pretty, but Belgium got the job done. A goalless draw, a red card, and a spot in the knockouts secured. They'll need to tighten things up, but they're through, and that's what matters.",
+      "whatsNext": "Belgium is QUALIFIED! They've made it out of the group, though perhaps not in the most convincing fashion. Still, a win's a win, or a draw's a draw, when it gets you through.",
+      "pubAmmo": "Belgium had 23 shots against Iran but couldn't score. They were shooting for the moon, apparently, and missed the goal entirely."
     },
     "IRN": {
-      "headline": "Iran Dig Deep for Gritty Point Against Belgians",
-      "storySoFar": "Two draws from two games for Iran, showing they're a tough nut to crack. They might not be scoring many, but they're certainly not making it easy for anyone else.",
-      "whatsNext": "Iran are still in contention for a top-two finish in Group G. They've got one more game to play and will be looking to build on this resilient performance.",
-      "pubAmmo": "Iran's goalkeeper, Alireza Beiranvand, made 7 saves against Belgium, practically building a brick wall in front of his goal. Heroic stuff!"
+      "headline": "Iran Holds Strong, Qualifies for Knockouts",
+      "storySoFar": "Iran put in a solid defensive shift today, earning a hard-fought draw and, more importantly, securing their place in the next round. They've shown resilience and a knack for getting results when it counts.",
+      "whatsNext": "Iran is QUALIFIED! They've navigated the group stage and are now looking forward to the knockout rounds. A fantastic achievement!",
+      "pubAmmo": "Iran's goalkeeper, Alireza Beiranvand, made 7 saves against Belgium. Clearly, he was the busiest man on the pitch, earning his wages and then some."
     }
   },
   "matches": {
@@ -209,34 +209,34 @@
       "randomQuirk": "Curaçao's five yellow cards were almost as numerous as their shots on target (3). At least they were trying to make an impression, eh?"
     },
     "TUN-JPN": {
-      "editionTitle": "Samurai Blue Slice Through Hapless Eagles",
-      "snappySummary": "Japan put on a proper clinic against a Tunisia side that looked like they'd rather be anywhere else, securing a comfortable 4-0 victory and sending the North Africans packing.",
+      "editionTitle": "Samurai Blue Slice Through Hapless Carthage Eagles",
+      "snappySummary": "Japan put on a clinic, absolutely dismantling Tunisia with a four-goal masterclass, leaving the North Africans with nothing but pride to play for... and even that looked a bit bruised.",
       "talkingPoints": [
-        "Japan's clinical finishing was a joy to behold, turning chances into goals with ruthless efficiency.",
-        "Tunisia's defence was more 'Sunday League' than World Cup, offering about as much resistance as a wet paper bag.",
-        "Zero shots on target for Tunisia, which tells you everything you need to know about their attacking ambition, or lack thereof."
+        "Japan's attack was sharper than a sushi knife, bagging four goals from just five shots on target. Clinical doesn't even begin to cover it.",
+        "Tunisia, bless their cotton socks, managed a grand total of zero shots on target. You can't score if you don't hit the barn door, can you?",
+        "Ayase Ueda clearly had his Weetabix this morning, grabbing two goals and an assist. A proper handful for the Tunisian defence, or what was left of it."
       ],
-      "randomQuirk": "Tunisia managed a grand total of zero shots on target, proving that sometimes, just sometimes, having the ball isn't everything if you're not actually doing anything with it."
+      "randomQuirk": "Tunisia's passing accuracy was a rather generous 40%, which is roughly the same chance I have of understanding the offside rule after a few pints."
     },
     "ESP-KSA": {
-      "editionTitle": "Spanish Armada Sinks Saudi Ship with Ease",
-      "snappySummary": "Spain absolutely ran riot against Saudi Arabia, putting four past them without breaking a sweat. It was a training exercise, frankly, and the Saudis were the cones.",
+      "editionTitle": "Spain's Siesta of Goals: Saudi Arabia Gets a Reality Check",
+      "snappySummary": "Spain made light work of Saudi Arabia, strolling to a comfortable 4-0 victory. It was less a football match, more a training exercise with a few enthusiastic spectators.",
       "talkingPoints": [
-        "Mikel Oyarzabal was having an absolute field day, bagging two goals and an assist – a proper masterclass in attacking football.",
-        "Saudi Arabia's defence was about as organised as a jumble sale, culminating in a rather unfortunate own goal.",
-        "Spain's possession stats were off the charts, but more importantly, they actually did something with it, unlike some other teams we could mention."
+        "Lamine Yamal and Mikel Oyarzabal were having a casual kickabout in the park, both bagging goals and looking far too comfortable against the Saudi defence.",
+        "Saudi Arabia's Hassan Al-Tambakti decided to join the Spanish party, scoring an own goal. A true moment of generosity, that.",
+        "The Saudis picked up two yellow cards and managed just one shot on target. Clearly more interested in the physical side than actually troubling the keeper."
       ],
-      "randomQuirk": "Saudi Arabia's Hassan Al-Tambakti clearly wanted to get in on the goal-scoring action, even if it meant putting one past his own keeper. A real team player, that one."
+      "randomQuirk": "Spain's 67.1% possession meant Saudi Arabia spent most of the match chasing shadows, probably wondering if they'd left the gas on back home."
     },
     "BEL-IRN": {
-      "editionTitle": "Red Devils See Red, Draw Blank Against Resilient Iran",
-      "snappySummary": "Belgium huffed and puffed with 70% possession and 23 shots, but couldn't blow Iran's house down, settling for a goalless draw and a rather silly red card for Nathan Ngoy.",
+      "editionTitle": "Red Card Drama, Zero Goals: Belgium and Iran Share the Spoils (and a Card)",
+      "snappySummary": "A rather drab affair saw Belgium and Iran play out a goalless draw, though not without a bit of spice as Belgium's Nathan Ngoy decided to take an early bath with a red card.",
       "talkingPoints": [
-        "Belgium's finishing was utterly dreadful; they had enough chances to win three games but couldn't hit a barn door with a banjo.",
-        "Nathan Ngoy decided to take an early bath, leaving his teammates to toil with ten men. Not exactly 'liquid football', is it?",
-        "Iran defended like their lives depended on it, soaking up pressure and frustrating the Belgians to no end. A point well earned, even if it wasn't pretty."
+        "Belgium had 23 shots and 70% possession but couldn't find the back of the net. It's almost impressive how many chances they squandered, isn't it?",
+        "Nathan Ngoy's red card for Belgium added a bit of much-needed drama to an otherwise forgettable match. Always good to see a bit of passion, even if it's ill-advised.",
+        "Iran's keeper, Alireza Beiranvand, was kept busy, making 7 saves. Clearly, someone forgot to tell Belgium how to finish."
       ],
-      "randomQuirk": "Belgium had 23 shots but couldn't find the back of the net, proving that sometimes, quantity doesn't always lead to quality, especially when you're down to ten men and still trying to score."
+      "randomQuirk": "Iran's defence made a whopping 50 clearances, which suggests they spent most of the game just booting the ball as far away as possible. Effective, if not exactly liquid football."
     }
   },
   "days": {
@@ -301,16 +301,16 @@
       "progressionNews": "Canada and Switzerland have put themselves in prime position for the knockouts, while Qatar can start packing their bags after a disastrous display."
     },
     "2026-06-21": {
-      "headline": "Goals Galore (Mostly) and Red Card Drama as World Cup Heats Up!",
-      "theDrama": "Today was a day of two halves, wasn't it? Japan and Spain absolutely hammered their opponents, putting on a proper goal-scoring clinic. Then we had Belgium, who, despite all their huffing and puffing, couldn't score against Iran and even managed to get a man sent off. Classic stuff, really.",
-      "mustWatchHighlights": "If you're after goals and attacking football, then the Japan vs Tunisia and Spain vs Saudi Arabia matches are your go-to. Absolute liquid football from the winners. As for Belgium vs Iran... well, if you enjoy a good defensive stalemate and a bit of red card drama, then fill your boots. Otherwise, you might want to put your feet up and watch something else.",
-      "progressionNews": "Tunisia are officially packing their bags and heading home, bless 'em. Haiti are also eliminated, so they'll be joining them on the early flight. Everyone else, including Japan, Spain, Saudi Arabia, Belgium, and Iran, are still very much in contention for a spot in the next round, with crucial games still to play. It's all to play for!"
+      "headline": "Goals Galore for Some, Goalless Grinds for Others: A Day of Contrasts!",
+      "theDrama": "Today served up a mixed bag, didn't it? We had Japan and Spain absolutely tearing it up, putting on a goal-scoring clinic, while Belgium and Iran decided a nil-nil draw was the height of entertainment. And let's not forget Nathan Ngoy's early shower for Belgium – always a bit of spice when a red card comes out!",
+      "mustWatchHighlights": "If you're after goals and attacking football, Spain vs. Saudi Arabia and Tunisia vs. Japan are your go-to. Absolute liquid football from the winners. As for Belgium vs. Iran, well, if you enjoy a good tactical stalemate and a red card, then fill your boots. Otherwise, probably one to put your feet up and have a cuppa during.",
+      "progressionNews": "Right then, the big news! Japan, Spain, Iran, and Belgium have all QUALIFIED for the knockout stages – well done to them! On the flip side, Tunisia, Saudi Arabia, and Haiti are ELIMINATED and will be heading home. The rest of the teams across the groups are still very much IN CONTENTION, with plenty of football left to play to decide their fate."
     }
   },
   "today_preview": {
-    "headline": "Tomorrow's Treat: Big Guns Aim to Flex Muscles!",
-    "theBigOnes": "Tomorrow, we've got some absolute crackers lined up! Argentina vs Austria promises to be a proper heavyweight clash, while France vs Iraq will see the French looking to assert their dominance. Norway vs Senegal and Jordan vs Algeria round out a cracking day of football.",
-    "playersToWatch": "Keep an eye on the big names for Argentina and France; they'll be looking to put on a show. And for the underdogs, you'll want to see if anyone can pull off a shock result and grab the headlines. It's going to be absolute scenes!",
+    "headline": "Tomorrow's Tussles: Lions, Eagles, and Samurai on the Horizon!",
+    "theBigOnes": "Tomorrow looks like a cracker! We've got Argentina vs. Austria, which promises to be a proper midfield battle. Then there's France vs. Iraq, where the French will be looking to assert their dominance. And don't forget Norway vs. Senegal – that could be a real end-to-end affair!",
+    "playersToWatch": "Keep an eye on Messi for Argentina, obviously, he's a walking cheat code. For France, their main man up top will be looking to add to his tally. And in the Norway vs. Senegal game, look out for the big strikers on both sides; they'll be desperate to get on the scoresheet.",
     "firstKickoffTime": "2026-06-22T17:00Z"
   },
   "espnMatches": {
@@ -2825,12 +2825,12 @@
         "awayTeam": "CPV",
         "homeScore": 0,
         "awayScore": 0,
-        "status": "STATUS_SCHEDULED",
+        "status": "STATUS_FIRST_HALF",
         "stadium": "Hard Rock Stadium",
         "time": "10:00 PM",
         "stats": {
-          "homePossession": "0%",
-          "awayPossession": "0%",
+          "homePossession": "59.3%",
+          "awayPossession": "40.7%",
           "homeShots": 0,
           "awayShots": 0,
           "homeShotsOnTarget": 0,
@@ -2841,14 +2841,16 @@
           "awayYellowCards": 0,
           "homeRedCards": 0,
           "awayRedCards": 0,
-          "homePasses": 400,
-          "awayPasses": 400,
-          "homePassPct": 80,
-          "awayPassPct": 80,
-          "homeClearances": 15,
-          "awayClearances": 15
+          "homePasses": 16,
+          "awayPasses": 11,
+          "homePassPct": 8,
+          "awayPassPct": 7,
+          "homeClearances": 1,
+          "awayClearances": 0
         },
-        "events": []
+        "events": [
+          " [Kickoff] "
+        ]
       },
       {
         "id": "760452",
