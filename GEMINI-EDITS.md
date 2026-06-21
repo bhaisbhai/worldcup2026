@@ -7,6 +7,7 @@ This document tracks all the modifications made during this session to implement
 ## 1. Backend Data Pipeline Updates
 
 ### [scripts/generate-ai-content.ts](file:///Users/rajarjan/Documents/game%20buddy/scripts/generate-ai-content.ts)
+- **Model Migration:** Upgraded the AI model from `gemini-2.0-flash` to `gemini-2.5-flash` to bypass daily API quota exhaustion.
 - **ESM Support:** Imported `fileURLToPath` and defined `__filename` and `__dirname` globally to prevent `ReferenceError` crashes during ESM execution.
 - **Daily Previews:** Updated the execution check to run when `events.length > 0 || tomorrowEvents.length > 0`, allowing daily summary generation on scheduled days before games are played.
 - **Roster & Player Stats Extraction:** Added a loop inside the match completion block to inspect `summaryData.rosters` and pull starter/substitute players who logged minutes on the pitch.
@@ -15,7 +16,7 @@ This document tracks all the modifications made during this session to implement
 - **Prompts & Instructions:**
   - Updated the day summary prompt to generate a witty, pre-match build-up (Hype, Storylines, Matches to Watch, What's at Stake) for scheduled days and a post-match recap for completed days.
   - Added new prompt instructions for player verdicts to generate a short, witty, and sarcastic pundit verdict/roast based on their match performance, specifically citing the derived clearances, passing accuracy, clean sheets, and saves.
-- **Storage:** Merges the returned player verdicts with existing ones and saves the results in `data/player-verdicts.json`.
+- **Storage:** Merges the returned player verdicts with existing ones and saves the results in `data/player-verdicts.json`. Allows for fully dynamic Gemini-generated pundit verdicts grounded in realistic match statistics.
 
 ### [scripts/generate-retrospective-days.ts](file:///Users/rajarjan/Documents/game%20buddy/scripts/generate-retrospective-days.ts)
 - **ESM Support:** Defined ESM compatibility variables (`__dirname`, `__filename`) to fix runtime resolution errors.

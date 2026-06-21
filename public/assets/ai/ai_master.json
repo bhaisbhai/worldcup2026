@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-20T22:32:25.800Z",
+  "lastUpdated": "2026-06-21T12:46:35.396Z",
   "teams": {
     "BIH": {
       "headline": "The Defensive Circus",
@@ -62,28 +62,40 @@
       "pubAmmo": "Did you know Turkey finished third in the 2002 World Cup, where Hakan Sükür scored the fastest goal in history (11 seconds)?"
     },
     "NED": {
-      "headline": "Oranje Crush Sweden in Clinical Display",
-      "storySoFar": "The Dutch are flying high after a 5-1 demolition of Sweden, showing the kind of liquid football that makes them genuine contenders.",
-      "whatsNext": "They will look to carry this devastating attacking momentum into their next fixture and keep the goals flowing.",
-      "pubAmmo": "Brian Brobbey scored his brace with both goals coming from very close range, proving he is the ultimate fox in the box."
+      "headline": "Dutch Masterclass: Oranje March On!",
+      "storySoFar": "The Netherlands put on a proper show today, dismantling Sweden with a five-star performance. They're looking like a force to be reckoned with, playing some truly expansive football.",
+      "whatsNext": "With a performance like that, they'll be strutting into their next fixture full of confidence. The knockouts are firmly in their sights, and who'd bet against them on this form?",
+      "pubAmmo": "The Netherlands scored five goals from only seven shots on target today. That's a conversion rate that would make any striker blush!"
     },
     "SWE": {
-      "headline": "Swedish Defence Leaves Doors Wide Open",
-      "storySoFar": "A sobering evening for Sweden, who possessed plenty of the ball and took 16 shots but were completely undone by defensive lapses.",
-      "whatsNext": "They desperately need to sort out their Sunday League defending before their next group match or they'll be packing their bags early.",
-      "pubAmmo": "Despite losing 5-1, Sweden actually had more shots on target (8) than the Netherlands (7)."
+      "headline": "Sweden's Sinking Ship: Defensive Woes Exposed!",
+      "storySoFar": "Sweden's tournament hopes took a bit of a battering today, conceding five goals and looking completely out of sorts at the back. It was a proper defensive horror show.",
+      "whatsNext": "They'll need to go back to the drawing board, and quickly. If they don't tighten up at the back, they'll be booking their flights home quicker than you can say 'fika'.",
+      "pubAmmo": "Sweden picked up three yellow cards, more than any other team today, showing their frustration rather than their footballing prowess."
     },
     "GER": {
-      "headline": "Undav Rescues Germany in Squeaky Bum Time",
-      "storySoFar": "Germany dominated possession with nearly 60% but had to rely on a dramatic 94th-minute winner from Deniz Undav to secure the three points.",
-      "whatsNext": "A sigh of relief for the Germans, but they must improve their defensive transition after being caught out by Kessie in the first half.",
-      "pubAmmo": "Deniz Undav's dramatic winner was assisted by Felix Nmecha with a perfectly weighted through ball in the 94th minute."
+      "headline": "German Efficiency (Eventually): Comeback Kings!",
+      "storySoFar": "Germany showed some real character today, coming from behind to snatch a crucial victory. It wasn't always pretty, but they dug deep and found a way to win, which is what champions do, eh?",
+      "whatsNext": "That win will be a massive confidence booster. They'll be looking to build on this momentum and secure their spot in the next round. The machine is starting to purr!",
+      "pubAmmo": "Germany's Deniz Undav scored two goals after coming off the bench, proving that sometimes you just need to bring on a fresh pair of legs to get the job done."
     },
     "CIV": {
-      "headline": "Heartbreak for Les Éléphants in Stoppage Time",
-      "storySoFar": "An incredibly disciplined performance saw them lead through Franck Kessie, but they ultimately succumbed to Undav's late double.",
-      "whatsNext": "They must dust themselves down and take the positives from pushing Germany all the way to the final whistle.",
-      "pubAmmo": "Côte d'Ivoire managed to keep a clean disciplinary sheet with zero yellow cards despite facing 16 German shots."
+      "headline": "Côte d'Ivoire's Heartbreak: So Close, Yet So Far!",
+      "storySoFar": "Côte d'Ivoire put up a valiant fight against Germany, even taking the lead, but ultimately couldn't hold on. A tough pill to swallow after a spirited performance.",
+      "whatsNext": "They'll be gutted after that, but they showed they can compete. They need to pick themselves up and go again, or their World Cup dream will be over before it's truly begun.",
+      "pubAmmo": "Côte d'Ivoire's goalkeeper, Yahia Fofana, made 5 saves, doing his best to keep Germany at bay. A proper shift between the sticks!"
+    },
+    "ECU": {
+      "headline": "Ecuador's Frustration: Shot-Happy, Goal-Shy!",
+      "storySoFar": "Ecuador dominated possession and peppered the Curaçao goal with shots, but couldn't find the back of the net. A truly frustrating day at the office, leaving them with just a point.",
+      "whatsNext": "They'll be kicking themselves after that. They need to find their shooting boots, and fast, or all that lovely possession will count for absolutely nothing. Back to basics, lads!",
+      "pubAmmo": "Ecuador had a whopping 27 shots against Curaçao, with 15 on target, but still managed to draw 0-0. Couldn't hit a cow's backside with a banjo, could they?"
+    },
+    "CUW": {
+      "headline": "Curaçao's Heroics: A Point is a Point!",
+      "storySoFar": "Curaçao pulled off a heroic defensive display, holding Ecuador to a goalless draw despite being under immense pressure. A proper smash-and-grab point, that!",
+      "whatsNext": "That point could be absolutely massive for them. They'll need to keep that defensive solidity, and maybe even nick a goal, if they want to cause a proper upset in this tournament.",
+      "pubAmmo": "Curaçao's Eloy Room made an astonishing 15 saves, single-handedly earning his team a valuable point. Give that man a medal!"
     }
   },
   "matches": {
@@ -128,24 +140,34 @@
       "randomQuirk": "A Haitian defender asking Vinicius Jr to swap shirts during a water break in the 30th minute."
     },
     "NED-SWE": {
-      "editionTitle": "Dutch Delight and Swedish Defensive Disasters",
-      "snappySummary": "A masterclass in clinical finishing from the Dutch, while Sweden managed to lose 5-1 despite actually having more shots on target. Absolute Sunday League stuff at the back from the Swedes.",
+      "editionTitle": "Dutch Delight: Oranje Run Riot in Houston!",
+      "snappySummary": "The Netherlands absolutely hammered Sweden with a dominant 5-1 performance, showcasing some proper liquid football and leaving the Swedes looking like they'd forgotten how to defend.",
       "talkingPoints": [
-        "Brian Brobbey and Cody Gakpo running riot with two goals apiece, making the Swedish defence look like they were having a casual kickabout in the park.",
-        "Sweden's bizarre efficiency in reverse: 16 shots and 8 on target, yet they leave with their tails between their legs after conceding five.",
-        "Crysencio Summerville's eventful shift: coming on at halftime, setting up Gakpo, scoring a lovely fifth, and then getting injured in stoppage time."
+        "Brian Brobbey and Cody Gakpo both bagging a brace each? Talk about clinical finishing! Sweden's defence was more open than a motorway service station.",
+        "Sweden managed to rack up three yellow cards, clearly more interested in fouling than actually playing football. A bit of a scrappy affair from them, wasn't it?",
+        "Despite having more shots and shots on target than the Dutch, Sweden still conceded five. That's some Sunday League defending if I ever saw it!"
       ],
-      "randomQuirk": "Sweden managed to pick up three yellow cards through Gudmundsson, Ayari, and Bergvall, but couldn't find a way to stop the Dutch from scoring with almost every shot they took."
+      "randomQuirk": "Sweden had more shots (16) and more shots on target (8) than the Netherlands (10 shots, 7 on target), yet still shipped five goals. Efficiency, eh? Or perhaps just dreadful goalkeeping and defending."
     },
     "GER-CIV": {
-      "editionTitle": "Undav Saves the Day After German Defensive Wobbles",
-      "snappySummary": "Germany looked to have completely bottled it after Franck Kessie put Côte d'Ivoire ahead, but super-sub Deniz Undav spared their blushes with a brilliant second-half brace.",
+      "editionTitle": "German Grits: Undav's Late Double Saves the Day!",
+      "snappySummary": "Germany pulled off a classic comeback, snatching a 2-1 victory against Côte d'Ivoire with two late goals from Deniz Undav after going a goal down. Squeaky bum time, but they got there!",
       "talkingPoints": [
-        "Deniz Undav coming off the bench in the 60th minute and turning the game on its head with goals in the 68th and 94th minutes.",
-        "Nico Schlotterbeck's early injury forcing Antonio Rüdiger into action at halftime, disrupting the German backline.",
-        "Côte d'Ivoire's heartbreak after defending resolutely with zero yellow cards, only to concede in the dying seconds of injury time."
+        "Franck Kessie gave Côte d'Ivoire the lead, making Germany look a bit sluggish in the first half. Clearly needed a stern talking to at halftime.",
+        "Deniz Undav, coming off the bench, turned into a walking cheat code, bagging two goals to secure the win. What an impact sub!",
+        "Germany dominated possession and shots, but it took them until the 68th minute to get on the scoreboard. A bit wasteful, but they got the job done in the end."
       ],
-      "randomQuirk": "Despite a highly competitive and physical battle, the referee didn't brandish a single yellow card for either side over the entire 90 minutes."
+      "randomQuirk": "Germany had nearly 60% possession and 16 shots, but only managed to break Côte d'Ivoire's resolve in the last 25 minutes. Talk about making hard work of it!"
+    },
+    "ECU-CUW": {
+      "editionTitle": "The Great Wall of Curaçao: Ecuador Couldn't Hit a Barn Door!",
+      "snappySummary": "Ecuador and Curaçao played out a goalless draw, despite Ecuador having a staggering 27 shots and 74.6% possession. Curaçao's keeper was a brick wall, and Ecuador's finishing was... well, non-existent.",
+      "talkingPoints": [
+        "Ecuador had enough possession to build a small house and enough shots to start a small war, yet couldn't score a single goal. Absolutely bottled it in front of goal!",
+        "Curaçao picked up five yellow cards, clearly preferring to get stuck in rather than let Ecuador walk all over them. A proper combative performance!",
+        "Eloy Room in Curaçao's goal made an incredible 15 saves. He was practically playing on his own, a true hero for the island nation."
+      ],
+      "randomQuirk": "Ecuador managed to register 15 shots on target from their 27 attempts, but still couldn't beat Curaçao's goalkeeper. Someone needs to practice their shooting, eh?"
     }
   },
   "days": {
@@ -156,10 +178,10 @@
       "progressionNews": "USA and Brazil are safely through. Scotland are on the brink of booking their flights home, as is tradition for the Tartan Army."
     },
     "2026-06-20": {
-      "headline": "Dutch Delight, German Efficiency, and the Most Boring Game in Human History!",
-      "theDrama": "The Netherlands absolutely dismantled Sweden 5-1 in a brilliant display. Meanwhile, Ecuador and Curacao played out a 0-0 draw where literally nothing happened. Zero shots, zero possession stats—did they even turn up to the stadium?",
-      "mustWatchHighlights": "Netherlands vs Sweden for some liquid football. Avoid Ecuador vs Curacao at all costs; it was a literal crime against entertainment.",
-      "progressionNews": "Netherlands and Germany march on to the knockouts, while Sweden's defense needs a complete overhaul after getting battered."
+      "headline": "Goal-Fests and Goalless Grumbles: A Day of World Cup Wonders (and Woes)!",
+      "theDrama": "Today was a proper mixed bag! The Netherlands put on an absolute clinic, hammering Sweden 5-1 with some truly liquid football. Germany had to dig deep for a comeback win against a spirited Côte d'Ivoire, with Deniz Undav playing the hero. But the real drama (or lack thereof) was in the Ecuador vs. Curaçao game, a goalless draw where Ecuador couldn't hit a barn door despite 27 shots! Absolute scenes.",
+      "mustWatchHighlights": "If you're after goals and excitement, the Netherlands vs. Sweden match is an absolute must-watch. Pure attacking football! Germany's comeback against Côte d'Ivoire also had its moments. But for a masterclass in how *not* to score, or how to defend like your lives depend on it, the Ecuador vs. Curaçao highlights reel will be... interesting.",
+      "progressionNews": "The Netherlands are looking absolutely fantastic and will be eyeing the knockouts with serious intent. Germany's win keeps them firmly in contention, showing they've got the grit when it matters. Sweden and Côte d'Ivoire will be feeling the pressure, needing to bounce back quickly. As for Ecuador and Curaçao, that draw keeps them both in the fight, but Ecuador desperately needs to find their scoring boots or they'll be booking an early flight home."
     },
     "2026-06-11": {
       "headline": "Red Cards Galore in Mexico and South Korea's Late Show!",
@@ -217,9 +239,9 @@
     }
   },
   "today_preview": {
-    "headline": "A Feast of Football Awaits Tomorrow",
-    "theBigOnes": "Spain taking on Saudi Arabia promises to be an intriguing tactical battle, while Belgium face a tricky test against Iran.",
-    "playersToWatch": "Keep an eye on the tactical setups for Uruguay against Cape Verde, and whether Egypt can unlock New Zealand's defence.",
+    "headline": "Tomorrow's Treat: European Giants, African Warriors, and a Kiwi Surprise!",
+    "theBigOnes": "Tomorrow looks like a cracker! Tunisia vs. Japan promises a tactical battle, while Spain vs. Saudi Arabia should see the Spanish trying to assert their dominance. Belgium vs. Iran could be a feisty affair, and Uruguay vs. Cape Verde will be a clash of styles. Keep an eye on New Zealand vs. Egypt for a potential dark horse moment!",
+    "playersToWatch": "We'll be looking to see if Spain's creative midfielders can unlock the Saudi defence, and how Belgium's star forwards fare against a resilient Iran. Keep an eye on the Japanese attackers, always tricky customers, and the Uruguayan flair. And who knows, a Kiwi might just pop up with a surprise!",
     "firstKickoffTime": "2026-06-21T04:00Z"
   },
   "espnMatches": {
@@ -2327,7 +2349,13 @@
           "homeYellowCards": 0,
           "awayYellowCards": 3,
           "homeRedCards": 0,
-          "awayRedCards": 0
+          "awayRedCards": 0,
+          "homePasses": 449,
+          "awayPasses": 425,
+          "homePassPct": 9,
+          "awayPassPct": 8,
+          "homeClearances": 24,
+          "awayClearances": 14
         },
         "events": [
           " [Kickoff] First Half begins.",
@@ -2362,8 +2390,8 @@
           "90'+3' [Substitution] Substitution, Sweden. Elliot Stroud replaces Gabriel Gudmundsson.",
           "90'+4' [Start Delay] Delay in match because of an injury Crysencio Summerville (Netherlands).",
           "90'+4' [Start Delay] ",
-          "90'+4' [End Delay] Delay over. They are ready to continue.",
           "90'+4' [End Delay] ",
+          "90'+4' [End Delay] Delay over. They are ready to continue.",
           "90'+6' [End Regular Time] Second Half ends, Netherlands 5, Sweden 1."
         ]
       },
@@ -2378,8 +2406,8 @@
         "stadium": "BMO Field",
         "time": "09:00 PM",
         "stats": {
-          "homePossession": "59.4%",
-          "awayPossession": "40.6%",
+          "homePossession": "59.5%",
+          "awayPossession": "40.5%",
           "homeShots": 16,
           "awayShots": 9,
           "homeShotsOnTarget": 7,
@@ -2389,7 +2417,13 @@
           "homeYellowCards": 0,
           "awayYellowCards": 0,
           "homeRedCards": 0,
-          "awayRedCards": 0
+          "awayRedCards": 0,
+          "homePasses": 624,
+          "awayPasses": 431,
+          "homePassPct": 9,
+          "awayPassPct": 9,
+          "homeClearances": 14,
+          "awayClearances": 26
         },
         "events": [
           " [Kickoff] ",
@@ -2412,7 +2446,7 @@
           "60' [Substitution] Substitution, Germany. Jamie Leweling replaces Leroy Sané.",
           "60' [Substitution] Substitution, Germany. Deniz Undav replaces Jamal Musiala.",
           "60' [Substitution] Substitution, Germany. Nadiem Amiri replaces Aleksandar Pavlovic.",
-          "68' [Goal] Goal! Germany 1, Côte d'Ivoire 1. Deniz Undav (Germany) left footed shot from very close range to the high centre of the goal. Assisted by Nadiem Amiri with a cross.",
+          "68' [Goal - Volley] Goal! Germany 1, Côte d'Ivoire 1. Deniz Undav (Germany) left footed shot from very close range to the high centre of the goal. Assisted by Nadiem Amiri with a cross.",
           "71' [Start Delay] Delay in match for a drinks break.",
           "71' [Start Delay] ",
           "75' [End Delay] Delay over. They are ready to continue.",
@@ -2420,8 +2454,8 @@
           "75' [Substitution] Substitution, Côte d'Ivoire. Evann Guessand replaces Ange-Yoan Bonny.",
           "75' [Substitution] Substitution, Côte d'Ivoire. Seko Fofana replaces Ibrahim Sangaré.",
           "75' [Substitution] Substitution, Côte d'Ivoire. Simon Adingra replaces Amad Diallo.",
-          "80' [Start Delay] ",
           "80' [Start Delay] Delay in match because of an injury Wilfried Singo (Côte d'Ivoire).",
+          "80' [Start Delay] ",
           "81' [End Delay] Delay over. They are ready to continue.",
           "81' [End Delay] ",
           "81' [Start Delay] Delay in match (Germany).",
@@ -2442,24 +2476,74 @@
         "awayTeam": "CUW",
         "homeScore": 0,
         "awayScore": 0,
-        "status": "STATUS_SCHEDULED",
+        "status": "STATUS_FULL_TIME",
         "stadium": "GEHA Field at Arrowhead Stadium",
         "time": "01:00 AM",
         "stats": {
-          "homePossession": "0%",
-          "awayPossession": "0%",
-          "homeShots": 0,
-          "awayShots": 0,
-          "homeShotsOnTarget": 0,
-          "awayShotsOnTarget": 0,
-          "homeCorners": 0,
+          "homePossession": "74.6%",
+          "awayPossession": "25.4%",
+          "homeShots": 27,
+          "awayShots": 10,
+          "homeShotsOnTarget": 15,
+          "awayShotsOnTarget": 3,
+          "homeCorners": 9,
           "awayCorners": 0,
-          "homeYellowCards": 0,
-          "awayYellowCards": 0,
+          "homeYellowCards": 1,
+          "awayYellowCards": 5,
           "homeRedCards": 0,
-          "awayRedCards": 0
+          "awayRedCards": 0,
+          "homePasses": 644,
+          "awayPasses": 227,
+          "homePassPct": 9,
+          "awayPassPct": 7,
+          "homeClearances": 17,
+          "awayClearances": 32
         },
-        "events": []
+        "events": [
+          " [Kickoff] ",
+          "24' [Start Delay] Delay in match for a drinks break.",
+          "24' [Start Delay] ",
+          "27' [End Delay] Delay over. They are ready to continue.",
+          "27' [End Delay] ",
+          "33' [Start Delay] Delay in match because of an injury Juninho Bacuna (Curaçao).",
+          "33' [Start Delay] ",
+          "35' [End Delay] Delay over. They are ready to continue.",
+          "35' [End Delay] ",
+          "38' [Yellow Card] Jordy Alcívar (Ecuador) is shown the yellow card for a bad foul.",
+          "39' [Yellow Card] Leandro Bacuna (Curaçao) is shown the yellow card for a bad foul.",
+          "45'+5' [Halftime] First Half ends, Ecuador 0, Curaçao 0.",
+          "45' [Substitution] Substitution, Ecuador. Kevin Rodríguez replaces Jordy Alcívar.",
+          "45' [Start 2nd Half] Second Half begins Ecuador 0, Curaçao 0.",
+          "53' [Yellow Card] Juninho Bacuna (Curaçao) is shown the yellow card for a bad foul.",
+          "55' [Start Delay] ",
+          "55' [End Delay] ",
+          "56' [Yellow Card] Livano Comenencia (Curaçao) is shown the yellow card for a bad foul.",
+          "68' [Start Delay] Delay in match for a drinks break.",
+          "68' [Start Delay] ",
+          "70' [Substitution] Substitution, Ecuador. Nilson Angulo replaces Pervis Estupiñán.",
+          "71' [End Delay] Delay over. They are ready to continue.",
+          "71' [End Delay] ",
+          "73' [Start Delay] Delay in match because of an injury Sherel Floranus (Curaçao).",
+          "73' [Start Delay] ",
+          "74' [End Delay] Delay over. They are ready to continue.",
+          "74' [End Delay] ",
+          "75' [Yellow Card] Juriën Gaari (Curaçao) is shown the yellow card for a bad foul.",
+          "75' [Substitution] Substitution, Curaçao. Kenji Gorré replaces Juninho Bacuna.",
+          "76' [Substitution] Substitution, Curaçao. Roshon van Eijma replaces Deveron Fonville.",
+          "76' [Substitution] Substitution, Curaçao. Jearl Margaritha replaces Tahith Chong.",
+          "81' [Start Delay] ",
+          "81' [End Delay] ",
+          "82' [Start Delay] Delay in match because of an injury Jürgen Locadia (Curaçao).",
+          "82' [Start Delay] ",
+          "83' [Substitution] Substitution, Ecuador. Ángelo Preciado replaces Alan Franco.",
+          "83' [End Delay] Delay over. They are ready to continue.",
+          "83' [End Delay] ",
+          "83' [Substitution] Substitution, Curaçao. Gervane Kastaneer replaces Jürgen Locadia because of an injury.",
+          "84' [Substitution] Substitution, Curaçao. Godfried Roemeratoe replaces Livano Comenencia.",
+          "89' [Substitution] Substitution, Ecuador. Jordy Caicedo replaces John Yeboah.",
+          "90'+1' [Yellow Card] Gervane Kastaneer (Curaçao) is shown the yellow card for a bad foul.",
+          "90'+6' [End Regular Time] "
+        ]
       }
     ],
     "2026-06-21": [
@@ -2798,13 +2882,13 @@
         {
           "code": "ECU",
           "name": "Ecuador",
-          "mp": 1,
+          "mp": 2,
           "w": 0,
-          "d": 0,
+          "d": 1,
           "l": 1,
           "gf": 0,
           "ga": 0,
-          "pts": 0
+          "pts": 1
         },
         {
           "code": "GER",
@@ -2831,13 +2915,13 @@
         {
           "code": "CUW",
           "name": "Curaçao",
-          "mp": 1,
+          "mp": 2,
           "w": 0,
-          "d": 0,
+          "d": 1,
           "l": 1,
           "gf": 0,
           "ga": 0,
-          "pts": 0
+          "pts": 1
         }
       ]
     },
@@ -2869,21 +2953,21 @@
         {
           "code": "JPN",
           "name": "Japan",
-          "mp": 1,
-          "w": 0,
+          "mp": 2,
+          "w": 1,
           "d": 1,
           "l": 0,
           "gf": 0,
           "ga": 0,
-          "pts": 1
+          "pts": 4
         },
         {
           "code": "TUN",
           "name": "Tunisia",
-          "mp": 1,
+          "mp": 2,
           "w": 0,
           "d": 0,
-          "l": 1,
+          "l": 2,
           "gf": 0,
           "ga": 0,
           "pts": 0
