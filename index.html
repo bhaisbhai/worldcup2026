@@ -2722,7 +2722,7 @@ async function fetchAndRenderPlayer(athleteId, playerName, teamInfo, ev){
 
   // Bio + tournament stats
   const profileEl=document.getElementById('plProfile');
-  if(profileEl) profileEl.innerHTML=renderPlayerProfile(ath,genAth);
+  if(profileEl) profileEl.innerHTML=renderPlayerProfile(ath,genAth,pid);
 
   // News — combine athlete endpoint + match news, filter to articles mentioning this player
   const matchArticles=mcState?.data?.news?.articles||[];
@@ -2734,14 +2734,14 @@ async function fetchAndRenderPlayer(athleteId, playerName, teamInfo, ev){
   fetchPlayerHighlight(athleteId, playerName, ev);
 }
 
-function renderPlayerProfile(ath,genAth={}){
+function renderPlayerProfile(ath,genAth={},knownId=''){
   const bio=[];
   if(ath.age||genAth.age) bio.push({k:'Age',v:String(ath.age||genAth.age)});
   if(ath.displayHeight||genAth.displayHeight) bio.push({k:'Height',v:ath.displayHeight||genAth.displayHeight});
   if(ath.displayWeight||genAth.displayWeight) bio.push({k:'Weight',v:ath.displayWeight||genAth.displayWeight});
   const nat=ath.flag?.alt||ath.citizenship||genAth.flag?.alt||genAth.citizenship;
   if(nat) bio.push({k:'Nationality',v:nat});
-  const pid=String(ath.id||genAth.id||'');
+  const pid=String(ath.id||genAth.id||knownId||'');
   const clubEntry=_playerClubs[pid];
   const club=clubEntry?.club||ath.team?.displayName||ath.team?.name||'';
   if(club){
