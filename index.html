@@ -1798,6 +1798,17 @@ function onSearchInput(raw){
   }
 
   let h='';
+  if(teamHits.length){
+    h+=`<div class="srch-section-lbl">Countries</div>`;
+    h+=teamHits.map(t=>`<div class="srch-item" onclick="openTeamFromSearch('${t.name}')">
+      <span class="srch-item-flag">${t.flag}</span>
+      <div class="srch-item-info">
+        <div class="srch-item-name">${t.name}</div>
+        <div class="srch-item-sub">Group ${t.group} · FIFA World Cup 2026</div>
+      </div>
+      <span class="srch-arrow">›</span>
+    </div>`).join('');
+  }
   if(playerHits.length){
     h+=`<div class="srch-section-lbl">Players</div>`;
     h+=playerHits.map(p=>{
@@ -1815,17 +1826,6 @@ function onSearchInput(raw){
         <span class="srch-arrow">›</span>
       </div>`;
     }).join('');
-  }
-  if(teamHits.length){
-    h+=`<div class="srch-section-lbl">Countries</div>`;
-    h+=teamHits.map(t=>`<div class="srch-item" onclick="openTeamFromSearch('${t.name}')">
-      <span class="srch-item-flag">${t.flag}</span>
-      <div class="srch-item-info">
-        <div class="srch-item-name">${t.name}</div>
-        <div class="srch-item-sub">Group ${t.group} · FIFA World Cup 2026</div>
-      </div>
-      <span class="srch-arrow">›</span>
-    </div>`).join('');
   }
   document.getElementById('searchResults').innerHTML=h;
 }
