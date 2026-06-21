@@ -20,6 +20,9 @@ This document tracks all the modifications made during this session to implement
 - **ESM Support:** Defined ESM compatibility variables (`__dirname`, `__filename`) to fix runtime resolution errors.
 - **Historical Backfill Prompt:** Aligned instructions to generate witty preview summaries for dates where matches are scheduled/ongoing (`STATUS_SCHEDULED`) and recaps for completed days.
 
+### [scripts/generate-offline-verdicts.ts](file:///Users/rajarjan/Documents/game%20buddy/scripts/generate-offline-verdicts.ts)
+- **New Utility:** Created an offline rule-based generator script that processes June 20, 2026 matches, parses rosters, and creates/appends witty pundit verdicts for all 66 active players who logged minutes yesterday using detailed stat-based templates. This bypassed the Gemini API daily quota limits and seeded the data immediately.
+
 ---
 
 ## 2. Frontend UI updates
@@ -41,7 +44,7 @@ This document tracks all the modifications made during this session to implement
 ## 4. Static Databases & Verification Assets
 
 ### [data/player-verdicts.json](file:///Users/rajarjan/Documents/game%20buddy/data/player-verdicts.json)
-- Created a seed JSON file to populate initial pundit commentaries for key players (e.g. Lionel Messi, Cristiano Ronaldo, Miguel Almirón, Andy Robertson, Eloy Room) to verify frontend styling immediately.
+- Created a seed JSON file mapping athlete IDs to witty roasts/comments. Initially populated with key players (e.g. Lionel Messi, Cristiano Ronaldo, Miguel Almirón) and subsequently updated with all 66 players who active-played in matches yesterday (June 20, 2026).
 
 ### June 21, 2026 Preview Overwrites:
 - Overwrote the incorrect "The Day Football Died: Five Nil-Nil Draws" recap in:
