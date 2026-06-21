@@ -26,21 +26,59 @@ const templates = {
     "Collected a silly booking. Needs to teach his legs to tackle instead of swipe.",
     "Clumsy challenge that rightly earned him a yellow card. Playing with fire."
   ],
-  savesHi: [
+  
+  // Goalkeepers
+  gkClean: [
+    "Absolute brick wall today! Kept a pristine clean sheet and marshaled his box with total authority.",
+    "A goalkeeper's dream. Kept a clean sheet and never looked like conceding."
+  ],
+  gkSavesHi: [
     "Practically parked a double-decker bus in front of the goal. Made {saves} heroic saves.",
-    "Absolute brick wall today! Denied them time and time again with {saves} saves."
+    "Faced a proper onslaught but stood tall with {saves} saves today."
   ],
-  savesLo: [
-    "A solid shift between the sticks, making {saves} saves to keep things tidy.",
-    "Did what was asked of him, registering {saves} saves to preserve the scoreline."
+  gkConcededHi: [
+    "A miserable day between the sticks. Conceded {conceded} goals and looked completely exposed.",
+    "Spent more time fishing the ball out of his own net than making saves, conceding {conceded} goals."
   ],
-  cardio: [
+  gkDefault: [
+    "Made {saves} saves today but couldn't prevent conceding. A tough afternoon.",
+    "Did what he could between the sticks, registering {saves} saves in a busy match."
+  ],
+
+  // Defenders (CB, LB, RB, D)
+  defClean: [
+    "Anchored the backline masterfully today, securing a pristine clean sheet. Absolute defensive rock.",
+    "Defended like his life depended on it. Organized the backline and secured a crucial clean sheet."
+  ],
+  defSolid: [
+    "Solid defensive performance, holding the backline together with only one minor slip-up.",
+    "Anchored the defense effectively, keeping things tight and organized under pressure."
+  ],
+  defHorror: [
+    "Had an absolute horror show at the back as the defense was sliced open like cheap cheese. Sunday League defending.",
+    "Completely bottled it defensively today. Caught ball-watching way too many times."
+  ],
+
+  // Midfielders (M, CM, DM, AM, LM, RM)
+  midPlaymaker: [
+    "The puppet master in midfield today. Dictated the tempo and ran the show.",
+    "Pulling all the strings in the middle. Kept possession ticking over beautifully."
+  ],
+  midCardio: [
     "A quiet afternoon. Got some decent cardio in but did absolutely nothing to bother the stat sheet.",
-    "Sideways passing that would put a caffeine addict to sleep. Kept it excessively safe.",
-    "Ran around a lot, but did about as much useful work as a decorative teapot.",
-    "A decent shift, kept it simple, but won't be making the highlights reel anytime soon.",
-    "Put in the hard yards defensively but was practically invisible in the final third."
+    "Sideways passing that would put a caffeine addict to sleep. Kept it excessively safe."
   ],
+
+  // Forwards (F, ST, CF, LW, RW)
+  fwdQuiet: [
+    "Isolated and starved of service today. Looked like a lonely figure upfront.",
+    "Couldn't find his shooting boots. Kept quiet by the opposition's center-backs."
+  ],
+  fwdCardio: [
+    "Had a quiet afternoon upfront. Got his running in but failed to register a shot on target.",
+    "Spent 90 minutes chasing shadows. Needs to get more involved in the build-up play."
+  ],
+
   subLate: [
     "Subbed on late to run the clock down. Took home a match bonus for breathing the stadium air.",
     "Came on to get some grass on his boots. Barely had time to break a sweat."
@@ -53,7 +91,7 @@ function getTemplate(list: string[], seed: string): string {
 }
 
 async function main() {
-  console.log("⚙️ Generating offline pundit verdicts for June 20, 2026...");
+  console.log("⚙️ Generating position-aware offline pundit verdicts for June 20, 2026...");
   
   const masterPath = path.resolve(__dirname, '..', 'public', 'assets', 'ai', 'ai_master.json');
   if (!fs.existsSync(masterPath)) {
@@ -64,8 +102,6 @@ async function main() {
   const masterDB = JSON.parse(fs.readFileSync(masterPath, 'utf-8'));
   const targetDate = '2026-06-20';
   
-  // Roster stats are fetched from ESPN match summaries
-  // We can fetch the match summaries of June 20 to extract all rosters
   const matches = masterDB.espnMatches[targetDate] || [];
   if (matches.length === 0) {
     console.warn("⚠️ No matches found for June 20 in master JSON.");
@@ -105,14 +141,24 @@ async function main() {
 
           const mins = getVal('minutesPlayed');
           const starter = entry.starter === true;
+          
           if (starter || mins > 0) {
             const goals = getVal('totalGoals');
             const assists = getVal('goalAssists');
             const yellow = getVal('yellowCards');
             const red = getVal('redCards');
             const saves = getVal('saves');
+            const goalsConceded = getVal('goalsConceded');
             
+            const posCode = (entry.position?.abbreviation || '').toUpperCase();
+            const posName = (entry.position?.displayName || '').toLowerCase();
+            const isGK = posCode === 'GK' || posName.includes('goalkeeper');
+            const isDEF = posCode.includes('D') || posCode.includes('B') || posName.includes('defender') || posName.includes('back');
+            const isMID = posCode.includes('M') || posName.includes('midfield');
+            const isFWD = posCode.includes('F') || posCode.includes('S') || posCode.includes('W') || posName.includes('forward') || posName.includes('striker') || posName.includes('winger');
+
             let verdict = '';
+            
             if (red > 0) {
               verdict = getTemplate(templates.red, pid);
             } else if (goals > 1) {
@@ -121,16 +167,44 @@ async function main() {
               verdict = getTemplate(templates.goal, pid);
             } else if (assists > 0) {
               verdict = getTemplate(templates.assist, pid);
-            } else if (saves >= 4) {
-              verdict = getTemplate(templates.savesHi, pid).replace('{saves}', String(saves));
-            } else if (saves > 0) {
-              verdict = getTemplate(templates.savesLo, pid).replace('{saves}', String(saves));
             } else if (yellow > 0) {
               verdict = getTemplate(templates.yellow, pid);
             } else if (mins > 0 && mins < 20) {
               verdict = getTemplate(templates.subLate, pid);
+            } else if (isGK) {
+              if (goalsConceded === 0) {
+                verdict = getTemplate(templates.gkClean, pid);
+              } else if (saves >= 5) {
+                verdict = getTemplate(templates.gkSavesHi, pid).replace('{saves}', String(saves));
+              } else if (goalsConceded >= 3) {
+                verdict = getTemplate(templates.gkConcededHi, pid).replace('{conceded}', String(goalsConceded));
+              } else {
+                verdict = getTemplate(templates.gkDefault, pid).replace('{saves}', String(saves));
+              }
+            } else if (isDEF) {
+              if (goalsConceded === 0) {
+                verdict = getTemplate(templates.defClean, pid);
+              } else if (goalsConceded >= 3) {
+                verdict = getTemplate(templates.defHorror, pid);
+              } else {
+                verdict = getTemplate(templates.defSolid, pid);
+              }
+            } else if (isMID) {
+              const hash = pid.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+              if (hash % 2 === 0) {
+                verdict = getTemplate(templates.midPlaymaker, pid);
+              } else {
+                verdict = getTemplate(templates.midCardio, pid);
+              }
+            } else if (isFWD) {
+              const hash = pid.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+              if (hash % 2 === 0) {
+                verdict = getTemplate(templates.fwdQuiet, pid);
+              } else {
+                verdict = getTemplate(templates.fwdCardio, pid);
+              }
             } else {
-              verdict = getTemplate(templates.cardio, pid);
+              verdict = getTemplate(templates.midCardio, pid);
             }
 
             verdicts[pid] = verdict;
