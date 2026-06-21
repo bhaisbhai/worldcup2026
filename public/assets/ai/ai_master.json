@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-21T15:59:31.526Z",
+  "lastUpdated": "2026-06-21T21:48:39.580Z",
   "teams": {
     "BIH": {
       "headline": "The Defensive Circus",
@@ -96,6 +96,42 @@
       "storySoFar": "Curaçao managed to grind out a 0-0 draw against Ecuador, largely thanks to their heroic goalkeeper. They're still bottom of Group E with two points, but they showed some real grit.",
       "whatsNext": "While a point is a point, it's unlikely to be enough for Curaçao to progress. They'll be heading home, but with their heads held high after a valiant effort today.",
       "pubAmmo": "Curaçao's Eloy Room made an astonishing 15 saves today, single-handedly keeping his side in the game. Give that man a medal!"
+    },
+    "TUN": {
+      "headline": "Tunisia's World Cup Dream Goes Up in Smoke",
+      "storySoFar": "Well, that was a bit of a damp squib, wasn't it? Two games, two losses, one goal scored, and a whopping nine conceded. They've been about as effective as a chocolate teapot in this tournament.",
+      "whatsNext": "Tunisia are officially eliminated from the competition. Time to pack their bags and book those early flights home, lads. Better luck next time!",
+      "pubAmmo": "Tunisia managed to concede four goals to Japan, which is roughly the same number of decent chances they created in the entire match."
+    },
+    "JPN": {
+      "headline": "Japan March On With Clinical Display",
+      "storySoFar": "The Samurai Blue are looking sharp, sitting pretty with four points from two games and a healthy goal difference. They've shown they can score goals and play some cracking football.",
+      "whatsNext": "Japan are still very much in the hunt for a top-two finish in Group F. They've got one more game to play and will be looking to secure their spot in the knockout stages.",
+      "pubAmmo": "Japan's Ayase Ueda bagged a brace against Tunisia, proving he's got more clinical finishing than a dodgy DIY enthusiast."
+    },
+    "ESP": {
+      "headline": "Spain's Masterclass Sends a Warning Shot",
+      "storySoFar": "Spain are looking like the real deal, topping Group H with four points and a goal difference that would make most teams blush. They're playing with confidence and flair.",
+      "whatsNext": "Spain are still very much in contention for a top-two finish in Group H. They've got one more game to play and will be aiming to cement their place in the next round.",
+      "pubAmmo": "Spain's Mikel Oyarzabal scored twice and assisted once against Saudi Arabia, making him a one-man wrecking crew for the opposition."
+    },
+    "KSA": {
+      "headline": "Saudi Arabia Humbled by Spanish Giants",
+      "storySoFar": "It's been a tough ride for Saudi Arabia, with one draw and one heavy defeat leaving them on just one point. They've shown glimpses, but consistency is proving elusive.",
+      "whatsNext": "Saudi Arabia are still in contention for a top-two finish in Group H, though they'll need a monumental effort in their final game. They've got one more chance to make something happen.",
+      "pubAmmo": "Saudi Arabia's Hassan Al-Tambakti scored an own goal against Spain, which is one way to get your name on the scoresheet, I suppose."
+    },
+    "BEL": {
+      "headline": "Belgium's Red Card Blight and Goal Drought",
+      "storySoFar": "Two games, two draws, and a solitary goal. The 'Golden Generation' are looking a bit rusty, struggling to convert possession into goals and picking up silly cards.",
+      "whatsNext": "Belgium are still in contention for a top-two finish in Group G. They've got one more game to play and will be desperate for a strong result to secure their progression.",
+      "pubAmmo": "Belgium had 23 shots against Iran but couldn't score, proving that sometimes, even with all the talent in the world, you still need someone to put the ball in the back of the net."
+    },
+    "IRN": {
+      "headline": "Iran Dig Deep for Gritty Point Against Belgians",
+      "storySoFar": "Two draws from two games for Iran, showing they're a tough nut to crack. They might not be scoring many, but they're certainly not making it easy for anyone else.",
+      "whatsNext": "Iran are still in contention for a top-two finish in Group G. They've got one more game to play and will be looking to build on this resilient performance.",
+      "pubAmmo": "Iran's goalkeeper, Alireza Beiranvand, made 7 saves against Belgium, practically building a brick wall in front of his goal. Heroic stuff!"
     }
   },
   "matches": {
@@ -171,6 +207,36 @@
         "Both teams managed to avoid scoring despite a combined 37 shots. Clinical finishing? Never heard of it, mate."
       ],
       "randomQuirk": "Curaçao's five yellow cards were almost as numerous as their shots on target (3). At least they were trying to make an impression, eh?"
+    },
+    "TUN-JPN": {
+      "editionTitle": "Samurai Blue Slice Through Hapless Eagles",
+      "snappySummary": "Japan put on a proper clinic against a Tunisia side that looked like they'd rather be anywhere else, securing a comfortable 4-0 victory and sending the North Africans packing.",
+      "talkingPoints": [
+        "Japan's clinical finishing was a joy to behold, turning chances into goals with ruthless efficiency.",
+        "Tunisia's defence was more 'Sunday League' than World Cup, offering about as much resistance as a wet paper bag.",
+        "Zero shots on target for Tunisia, which tells you everything you need to know about their attacking ambition, or lack thereof."
+      ],
+      "randomQuirk": "Tunisia managed a grand total of zero shots on target, proving that sometimes, just sometimes, having the ball isn't everything if you're not actually doing anything with it."
+    },
+    "ESP-KSA": {
+      "editionTitle": "Spanish Armada Sinks Saudi Ship with Ease",
+      "snappySummary": "Spain absolutely ran riot against Saudi Arabia, putting four past them without breaking a sweat. It was a training exercise, frankly, and the Saudis were the cones.",
+      "talkingPoints": [
+        "Mikel Oyarzabal was having an absolute field day, bagging two goals and an assist – a proper masterclass in attacking football.",
+        "Saudi Arabia's defence was about as organised as a jumble sale, culminating in a rather unfortunate own goal.",
+        "Spain's possession stats were off the charts, but more importantly, they actually did something with it, unlike some other teams we could mention."
+      ],
+      "randomQuirk": "Saudi Arabia's Hassan Al-Tambakti clearly wanted to get in on the goal-scoring action, even if it meant putting one past his own keeper. A real team player, that one."
+    },
+    "BEL-IRN": {
+      "editionTitle": "Red Devils See Red, Draw Blank Against Resilient Iran",
+      "snappySummary": "Belgium huffed and puffed with 70% possession and 23 shots, but couldn't blow Iran's house down, settling for a goalless draw and a rather silly red card for Nathan Ngoy.",
+      "talkingPoints": [
+        "Belgium's finishing was utterly dreadful; they had enough chances to win three games but couldn't hit a barn door with a banjo.",
+        "Nathan Ngoy decided to take an early bath, leaving his teammates to toil with ten men. Not exactly 'liquid football', is it?",
+        "Iran defended like their lives depended on it, soaking up pressure and frustrating the Belgians to no end. A point well earned, even if it wasn't pretty."
+      ],
+      "randomQuirk": "Belgium had 23 shots but couldn't find the back of the net, proving that sometimes, quantity doesn't always lead to quality, especially when you're down to ten men and still trying to score."
     }
   },
   "days": {
@@ -235,17 +301,17 @@
       "progressionNews": "Canada and Switzerland have put themselves in prime position for the knockouts, while Qatar can start packing their bags after a disastrous display."
     },
     "2026-06-21": {
-      "headline": "The Main Event Arrives: Spain's Swagger vs. Saudi Steely Resolve!",
-      "theDrama": "With JPN already wrapping up their business against TUN, all eyes turn to Spain and Belgium. We are looking at a proper slate of matchups today where underdogs Cape Verde and Egypt hope to cause some proper international chaos.",
-      "mustWatchHighlights": "Spain vs Saudi Arabia has all the ingredients of a blockbuster, while Belgium vs Iran could either be liquid football or a absolute defensive stalemate.",
-      "progressionNews": "Squeaky bum time for Uruguay and Egypt—anything less than three points today and they can start booking their flights home."
+      "headline": "Goals Galore (Mostly) and Red Card Drama as World Cup Heats Up!",
+      "theDrama": "Today was a day of two halves, wasn't it? Japan and Spain absolutely hammered their opponents, putting on a proper goal-scoring clinic. Then we had Belgium, who, despite all their huffing and puffing, couldn't score against Iran and even managed to get a man sent off. Classic stuff, really.",
+      "mustWatchHighlights": "If you're after goals and attacking football, then the Japan vs Tunisia and Spain vs Saudi Arabia matches are your go-to. Absolute liquid football from the winners. As for Belgium vs Iran... well, if you enjoy a good defensive stalemate and a bit of red card drama, then fill your boots. Otherwise, you might want to put your feet up and watch something else.",
+      "progressionNews": "Tunisia are officially packing their bags and heading home, bless 'em. Haiti are also eliminated, so they'll be joining them on the early flight. Everyone else, including Japan, Spain, Saudi Arabia, Belgium, and Iran, are still very much in contention for a spot in the next round, with crucial games still to play. It's all to play for!"
     }
   },
   "today_preview": {
-    "headline": "Tomorrow's Treat: Group Stage Showdowns and Knockout Dreams!",
-    "theBigOnes": "Tomorrow we've got some cracking fixtures! **Belgium vs Iran** and **Uruguay vs Cape Verde** will be fascinating, as these teams look to stamp their authority on Groups G and H respectively. But the real cracker could be **Tunisia vs Japan** – two teams who can play some lovely football, and both will be desperate for points in Group F.",
-    "playersToWatch": "Keep an eye on Japan's creative midfielders against Tunisia, they'll be looking to unlock that defence. In the Belgium game, you just know their star man will be looking to get on the scoresheet. And for Uruguay, their veteran striker will be leading the line, always a threat, even if he's getting on a bit!",
-    "firstKickoffTime": "2026-06-21T04:00Z"
+    "headline": "Tomorrow's Treat: Big Guns Aim to Flex Muscles!",
+    "theBigOnes": "Tomorrow, we've got some absolute crackers lined up! Argentina vs Austria promises to be a proper heavyweight clash, while France vs Iraq will see the French looking to assert their dominance. Norway vs Senegal and Jordan vs Algeria round out a cracking day of football.",
+    "playersToWatch": "Keep an eye on the big names for Argentina and France; they'll be looking to put on a show. And for the underdogs, you'll want to see if anyone can pull off a shock result and grab the headlines. It's going to be absolute scenes!",
+    "firstKickoffTime": "2026-06-22T17:00Z"
   },
   "espnMatches": {
     "2026-06-11": [
@@ -2556,51 +2622,133 @@
         "homeTeam": "TUN",
         "awayTeam": "JPN",
         "homeScore": 0,
-        "awayScore": 0,
-        "status": "STATUS_SCHEDULED",
+        "awayScore": 4,
+        "status": "STATUS_FULL_TIME",
         "stadium": "Estadio BBVA",
-        "time": "05:00 AM",
+        "time": "04:00 AM",
         "stats": {
-          "homePossession": "0%",
-          "awayPossession": "0%",
-          "homeShots": 0,
-          "awayShots": 0,
+          "homePossession": "37.9%",
+          "awayPossession": "62.1%",
+          "homeShots": 2,
+          "awayShots": 11,
           "homeShotsOnTarget": 0,
-          "awayShotsOnTarget": 0,
-          "homeCorners": 0,
-          "awayCorners": 0,
+          "awayShotsOnTarget": 5,
+          "homeCorners": 3,
+          "awayCorners": 5,
           "homeYellowCards": 0,
           "awayYellowCards": 0,
           "homeRedCards": 0,
-          "awayRedCards": 0
+          "awayRedCards": 0,
+          "homePasses": 354,
+          "awayPasses": 583,
+          "homePassPct": 8,
+          "awayPassPct": 9,
+          "homeClearances": 23,
+          "awayClearances": 25
         },
-        "events": []
+        "events": [
+          " [Kickoff] First Half begins.",
+          "4' [Goal] Goal! Tunisia 0, Japan 1. Daichi Kamada (Japan) left footed shot from very close range to the centre of the goal. Assisted by Keito Nakamura.",
+          "24' [Start Delay] Delay in match for a drinks break.",
+          "24' [Start Delay] ",
+          "27' [End Delay] ",
+          "27' [End Delay] Delay over. They are ready to continue.",
+          "31' [Goal] Goal! Tunisia 0, Japan 2. Ayase Ueda (Japan) right footed shot from the right side of the box to the bottom left corner. Assisted by Ko Itakura following a fast break.",
+          "45'+5' [Halftime] ",
+          "45' [Substitution] Substitution, Tunisia. Ismaël Gharbi replaces Elias Saad.",
+          "45' [Substitution] Substitution, Tunisia. Mohamed Amine Ben Hmida replaces Dylan Bronn.",
+          "45' [Start 2nd Half] Second Half begins Tunisia 0, Japan 2.",
+          "64' [Substitution] Substitution, Tunisia. Firas Chaouat replaces Sebastian Tounekti.",
+          "69' [Goal] Goal! Tunisia 0, Japan 3. Junya Ito (Japan) right footed shot from the centre of the box to the bottom right corner. Assisted by Ayase Ueda with a through ball.",
+          "70' [Start Delay] Delay in match for a drinks break.",
+          "70' [Start Delay] ",
+          "73' [End Delay] Delay over. They are ready to continue.",
+          "73' [End Delay] ",
+          "73' [Substitution] Substitution, Japan. Junnosuke Suzuki replaces Daichi Kamada.",
+          "74' [Substitution] Substitution, Japan. Yukinari Sugawara replaces Ritsu Doan.",
+          "79' [Substitution] Substitution, Japan. Yuito Suzuki replaces Keito Nakamura.",
+          "79' [Substitution] Substitution, Japan. Ayumu Seko replaces Takehiro Tomiyasu.",
+          "83' [Goal - Header] Goal! Tunisia 0, Japan 4. Ayase Ueda (Japan) header from the centre of the box to the bottom right corner. Assisted by Kaishu Sano with a cross.",
+          "84' [Substitution] Substitution, Japan. Keisuke Goto replaces Ayase Ueda.",
+          "85' [Start Delay] Delay in match because of an injury Omar Rekik (Tunisia).",
+          "85' [Start Delay] ",
+          "87' [End Delay] Delay over. They are ready to continue.",
+          "87' [End Delay] ",
+          "90'+1' [Substitution] Substitution, Tunisia. Rani Khedira replaces Ellyes Skhiri.",
+          "90'+1' [Substitution] Substitution, Tunisia. Elias Achouri replaces Ali Abdi.",
+          "90'+7' [End Regular Time] "
+        ]
       },
       {
         "id": "760453",
         "name": "Saudi Arabia at Spain",
         "homeTeam": "ESP",
         "awayTeam": "KSA",
-        "homeScore": 0,
+        "homeScore": 4,
         "awayScore": 0,
-        "status": "STATUS_SCHEDULED",
+        "status": "STATUS_FULL_TIME",
         "stadium": "Mercedes-Benz Stadium",
-        "time": "05:00 PM",
+        "time": "04:00 PM",
         "stats": {
-          "homePossession": "0%",
-          "awayPossession": "0%",
-          "homeShots": 0,
-          "awayShots": 0,
-          "homeShotsOnTarget": 0,
-          "awayShotsOnTarget": 0,
-          "homeCorners": 0,
-          "awayCorners": 0,
+          "homePossession": "67.1%",
+          "awayPossession": "32.9%",
+          "homeShots": 22,
+          "awayShots": 3,
+          "homeShotsOnTarget": 8,
+          "awayShotsOnTarget": 1,
+          "homeCorners": 6,
+          "awayCorners": 1,
           "homeYellowCards": 0,
-          "awayYellowCards": 0,
+          "awayYellowCards": 2,
           "homeRedCards": 0,
-          "awayRedCards": 0
+          "awayRedCards": 0,
+          "homePasses": 726,
+          "awayPasses": 364,
+          "homePassPct": 9,
+          "awayPassPct": 8,
+          "homeClearances": 17,
+          "awayClearances": 35
         },
-        "events": []
+        "events": [
+          " [Kickoff] ",
+          "10' [Goal] Goal! Spain 1, Saudi Arabia 0. Lamine Yamal (Spain) right footed shot from the right side of the six yard box to the bottom right corner. Assisted by Mikel Oyarzabal with a cross.",
+          "21' [Goal] Goal! Spain 2, Saudi Arabia 0. Mikel Oyarzabal (Spain) left footed shot from the left side of the six yard box to the bottom right corner. Assisted by Aymeric Laporte with a headed pass following a corner.",
+          "24' [Goal - Volley] Goal! Spain 3, Saudi Arabia 0. Mikel Oyarzabal (Spain) left footed shot from very close range to the top right corner. Assisted by Dani Olmo with a headed pass.",
+          "25' [Start Delay] Delay in match for a drinks break.",
+          "25' [Start Delay] ",
+          "28' [End Delay] Delay over. They are ready to continue.",
+          "28' [End Delay] ",
+          "30' [Yellow Card] Salem Al Dawsari (Saudi Arabia) is shown the yellow card for a bad foul.",
+          "45'+6' [Halftime] First Half ends, Spain 3, Saudi Arabia 0.",
+          "45' [Substitution] Substitution, Spain. Yéremy Pino replaces Lamine Yamal.",
+          "45' [Substitution] Substitution, Spain. Ferran Torres replaces Mikel Oyarzabal.",
+          "45' [Substitution] Substitution, Saudi Arabia. Mohamed Kanno replaces Abdullah Al Khaibari.",
+          "45' [Substitution] Substitution, Saudi Arabia. Abdullah Al Hamddan replaces Musab Al Juwayr.",
+          "45' [Start 2nd Half] ",
+          "49' [Own Goal] Own Goal by Hassan Al Tambakti, Saudi Arabia. Spain 4, Saudi Arabia 0.",
+          "60' [Yellow Card] Mohamed Kanno (Saudi Arabia) is shown the yellow card for a bad foul.",
+          "60' [Start Delay] Delay in match because of an injury Rodri (Spain).",
+          "60' [Start Delay] ",
+          "60' [Substitution] Substitution, Saudi Arabia. Mohammed Abu Al Shamat replaces Feras Al Brikan.",
+          "60' [Substitution] Substitution, Saudi Arabia. Alaa Al Hejji replaces Abdulelah Al Amri.",
+          "61' [End Delay] Delay over. They are ready to continue.",
+          "61' [End Delay] ",
+          "61' [Substitution] Substitution, Spain. Mikel Merino replaces Dani Olmo.",
+          "61' [Substitution] Substitution, Spain. Nico Williams replaces Álex Baena.",
+          "68' [Start Delay] Delay in match for a drinks break.",
+          "68' [Start Delay] ",
+          "70' [Substitution] Substitution, Spain. Fabián Ruiz replaces Pedri.",
+          "70' [End Delay] Delay over. They are ready to continue.",
+          "70' [End Delay] ",
+          "87' [Start Delay] Delay in match because of an injury Mohamed Kanno (Saudi Arabia).",
+          "87' [Start Delay] ",
+          "89' [End Delay] Delay over. They are ready to continue.",
+          "89' [End Delay] ",
+          "90' [Substitution] Substitution, Saudi Arabia. Khalid Al Ghannam replaces Nasser Al Dawsari.",
+          "90'+5' [Start Delay] ",
+          "90'+5' [End Delay] ",
+          "90'+9' [End Regular Time] Second Half ends, Spain 4, Saudi Arabia 0."
+        ]
       },
       {
         "id": "760451",
@@ -2609,24 +2757,66 @@
         "awayTeam": "IRN",
         "homeScore": 0,
         "awayScore": 0,
-        "status": "STATUS_SCHEDULED",
+        "status": "STATUS_FULL_TIME",
         "stadium": "SoFi Stadium",
-        "time": "08:00 PM",
+        "time": "07:00 PM",
         "stats": {
-          "homePossession": "0%",
-          "awayPossession": "0%",
-          "homeShots": 0,
-          "awayShots": 0,
-          "homeShotsOnTarget": 0,
-          "awayShotsOnTarget": 0,
-          "homeCorners": 0,
-          "awayCorners": 0,
-          "homeYellowCards": 0,
-          "awayYellowCards": 0,
-          "homeRedCards": 0,
-          "awayRedCards": 0
+          "homePossession": "70.3%",
+          "awayPossession": "29.7%",
+          "homeShots": 23,
+          "awayShots": 7,
+          "homeShotsOnTarget": 7,
+          "awayShotsOnTarget": 3,
+          "homeCorners": 4,
+          "awayCorners": 2,
+          "homeYellowCards": 1,
+          "awayYellowCards": 1,
+          "homeRedCards": 1,
+          "awayRedCards": 0,
+          "homePasses": 622,
+          "awayPasses": 268,
+          "homePassPct": 9,
+          "awayPassPct": 7,
+          "homeClearances": 11,
+          "awayClearances": 50
         },
-        "events": []
+        "events": [
+          " [Kickoff] ",
+          "3' [Yellow Card] Romelu Lukaku (Belgium) is shown the yellow card for a bad foul.",
+          "4' [Start Delay] Delay in match because of an injury Alireza Beiranvand (IR Iran).",
+          "4' [Start Delay] ",
+          "6' [End Delay] Delay over. They are ready to continue.",
+          "6' [End Delay] ",
+          "27' [Start Delay] ",
+          "27' [End Delay] ",
+          "30' [Start Delay] Delay in match for a drinks break.",
+          "30' [Start Delay] ",
+          "33' [End Delay] Delay over. They are ready to continue.",
+          "33' [End Delay] ",
+          "33' [Yellow Card] Saeid Ezatolahi (IR Iran) is shown the yellow card for a bad foul.",
+          "34' [Start Delay] Delay in match (Belgium).",
+          "34' [Start Delay] ",
+          "35' [End Delay] Delay over. They are ready to continue.",
+          "35' [End Delay] ",
+          "45'+9' [Halftime] First Half ends, Belgium 0, IR Iran 0.",
+          "45' [Substitution] Substitution, IR Iran. Alireza Jahanbakhsh replaces Saleh Hardani.",
+          "45' [Start 2nd Half] Second Half begins Belgium 0, IR Iran 0.",
+          "58' [Substitution] Substitution, Belgium. Timothy Castagne replaces Thomas Meunier.",
+          "58' [Substitution] Substitution, Belgium. Hans Vanaken replaces Nicolas Raskin.",
+          "58' [Substitution] Substitution, Belgium. Dodi Lukébakio replaces Alexis Saelemaekers.",
+          "66' [Substitution] Substitution, IR Iran. Mehdi Torabi replaces Mohammad Mohebbi.",
+          "66' [Substitution] Substitution, IR Iran. Milad Mohammadi replaces Ehsan Hajisafi.",
+          "66' [Red Card] Nathan Ngoy (Belgium) is shown the red card.",
+          "70' [Start Delay] Delay in match for a drinks break.",
+          "70' [Start Delay] ",
+          "73' [End Delay] Delay over. They are ready to continue.",
+          "73' [End Delay] ",
+          "73' [Substitution] Substitution, Belgium. Arthur Theate replaces Romelu Lukaku.",
+          "79' [Substitution] Substitution, IR Iran. Shahriyar Moghanloo replaces Saman Ghoddos.",
+          "85' [Substitution] Substitution, IR Iran. Amirhossein Hosseinzadeh replaces Saeid Ezatolahi.",
+          "87' [Substitution] Substitution, Belgium. Matias Fernandez-Pardo replaces Kevin De Bruyne.",
+          "90'+6' [End Regular Time] Second Half ends, Belgium 0, IR Iran 0."
+        ]
       },
       {
         "id": "760450",
@@ -2637,7 +2827,7 @@
         "awayScore": 0,
         "status": "STATUS_SCHEDULED",
         "stadium": "Hard Rock Stadium",
-        "time": "11:00 PM",
+        "time": "10:00 PM",
         "stats": {
           "homePossession": "0%",
           "awayPossession": "0%",
@@ -2650,7 +2840,13 @@
           "homeYellowCards": 0,
           "awayYellowCards": 0,
           "homeRedCards": 0,
-          "awayRedCards": 0
+          "awayRedCards": 0,
+          "homePasses": 400,
+          "awayPasses": 400,
+          "homePassPct": 80,
+          "awayPassPct": 80,
+          "homeClearances": 15,
+          "awayClearances": 15
         },
         "events": []
       },
@@ -2663,7 +2859,7 @@
         "awayScore": 0,
         "status": "STATUS_SCHEDULED",
         "stadium": "BC Place",
-        "time": "02:00 AM",
+        "time": "01:00 AM",
         "stats": {
           "homePossession": "0%",
           "awayPossession": "0%",
@@ -2676,7 +2872,13 @@
           "homeYellowCards": 0,
           "awayYellowCards": 0,
           "homeRedCards": 0,
-          "awayRedCards": 0
+          "awayRedCards": 0,
+          "homePasses": 400,
+          "awayPasses": 400,
+          "homePassPct": 80,
+          "awayPassPct": 80,
+          "homeClearances": 15,
+          "awayClearances": 15
         },
         "events": []
       }
@@ -2983,24 +3185,24 @@
         {
           "code": "BEL",
           "name": "Belgium",
-          "mp": 1,
+          "mp": 2,
           "w": 0,
-          "d": 1,
+          "d": 2,
           "l": 0,
           "gf": 0,
           "ga": 0,
-          "pts": 1
+          "pts": 2
         },
         {
           "code": "IRN",
           "name": "Iran",
-          "mp": 1,
+          "mp": 2,
           "w": 0,
-          "d": 1,
+          "d": 2,
           "l": 0,
           "gf": 0,
           "ga": 0,
-          "pts": 1
+          "pts": 2
         },
         {
           "code": "EGY",
@@ -3032,13 +3234,13 @@
         {
           "code": "ESP",
           "name": "Spain",
-          "mp": 1,
-          "w": 0,
+          "mp": 2,
+          "w": 1,
           "d": 1,
           "l": 0,
           "gf": 0,
           "ga": 0,
-          "pts": 1
+          "pts": 4
         },
         {
           "code": "URU",
@@ -3054,10 +3256,10 @@
         {
           "code": "KSA",
           "name": "Saudi Arabia",
-          "mp": 1,
+          "mp": 2,
           "w": 0,
           "d": 1,
-          "l": 0,
+          "l": 1,
           "gf": 0,
           "ga": 0,
           "pts": 1
