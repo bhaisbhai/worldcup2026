@@ -33,7 +33,7 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/recaps.json public/assets/ai/ai_master.json public/assets/ai/csv/
+          git add data/recaps.json data/player-verdicts.json public/assets/ai/ai_master.json public/assets/ai/csv/
           if ! git diff-index --quiet HEAD; then
             git commit -m "chore: daily AI recap sync [skip ci]"
             git push origin main

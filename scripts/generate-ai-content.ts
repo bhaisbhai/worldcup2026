@@ -235,6 +235,7 @@ async function main() {
   const matchesCSVRows: string[][] = [];
   const teamsCSVRows: string[][] = [];
   const completedMatchesForRecap: any[] = [];
+  const playersWhoPlayed: any[] = [];
 
   // 3. Process matches and teams dynamically
   for (const event of events) {
@@ -320,6 +321,41 @@ async function main() {
     const isCompleted = event.status?.type?.completed === true || statusName === 'STATUS_FINAL' || statusName === 'STATUS_FULL_TIME';
     if (isCompleted) {
       completedMatchesForRecap.push(realMatchMeta);
+
+      if (summaryData.rosters) {
+        for (const team of summaryData.rosters || []) {
+          const teamAbbr = team.team?.abbreviation || '';
+          for (const entry of team.roster || []) {
+            const ath = entry.athlete || {};
+            const playerId = String(ath.id || '');
+            if (!playerId) continue;
+
+            const statsList: any[] = entry.stats || [];
+            const getVal = (name: string) => {
+              const s = statsList.find((x: any) => x.name === name);
+              return s ? (parseFloat(String(s.value)) || 0) : 0;
+            };
+
+            const mins = getVal('minutesPlayed');
+            if (entry.starter === true || mins > 0) {
+              playersWhoPlayed.push({
+                id: playerId,
+                name: ath.displayName || ath.fullName || 'Unknown Player',
+                team: teamAbbr,
+                stats: {
+                  goals: getVal('totalGoals'),
+                  assists: getVal('goalAssists'),
+                  shots: getVal('totalShots'),
+                  saves: getVal('saves'),
+                  yellowCards: getVal('yellowCards'),
+                  redCards: getVal('redCards'),
+                  minutesPlayed: mins
+                }
+              });
+            }
+          }
+        }
+      }
     }
   }
 
@@ -392,6 +428,11 @@ async function main() {
       }
     }
 
+    const playerVerdictsProperties: Record<string, any> = {};
+    for (const p of playersWhoPlayed) {
+      playerVerdictsProperties[p.id] = { type: "STRING" };
+    }
+
     const responseSchema: any = {
       type: "OBJECT",
       properties: {},
@@ -410,6 +451,15 @@ async function main() {
         required: Object.keys(teamsProperties)
       };
       responseSchema.required.push("matches", "teams");
+
+      if (playersWhoPlayed.length > 0) {
+        responseSchema.properties.playerVerdicts = {
+          type: "OBJECT",
+          properties: playerVerdictsProperties,
+          required: Object.keys(playerVerdictsProperties)
+        };
+        responseSchema.required.push("playerVerdicts");
+      }
     }
 
     if (events.length > 0) {
@@ -443,6 +493,10 @@ async function main() {
       `- Match: ${m.homeTeam} vs ${m.awayTeam} (Score: ${m.homeScore}-${m.awayScore}) [Status: ${m.status}], Stadium: ${m.stadium}`
     ).join('\n');
 
+    const playersListStr = playersWhoPlayed.map(p => 
+      `- ${p.name} (Team: ${p.team}, ID: ${p.id}): played ${p.stats.minutesPlayed} mins, Goals: ${p.stats.goals}, Assists: ${p.stats.assists}, Shots: ${p.stats.shots}, Saves: ${p.stats.saves}, Yellows: ${p.stats.yellowCards}, Reds: ${p.stats.redCards}`
+    ).join('\n');
+
     const prompt = `
 You are analyzing World Cup 2026 matches for date ${targetDate}.
 
@@ -456,11 +510,23 @@ ${completedMatchesForRecap.map(m => `
   Events Timeline: ${JSON.stringify(m.events)}
   Match Stats: ${JSON.stringify(m.stats)}
 `).join('\n')}
+
+PLAYERS WHO PLAYED TODAY AND THEIR STATS:
+${playersListStr}
 ` : ''}
 
 For each completed match:
 - "matches" key: Generate commentary under the match key (e.g. "NED-SWE") with editionTitle, snappySummary, talkingPoints, randomQuirk.
 - "teams" key: Generate updated tournament summary under the team code keys (e.g. "NED", "SWE") with headline, storySoFar, whatsNext, pubAmmo.
+
+${playersWhoPlayed.length > 0 ? `
+For the "playerVerdicts" key:
+- Generate a witty, short, one-sentence pundit verdict/roast for each player ID based on their stats today. Be extremely sarcastic, funny, or celebratory depending on how they performed. For example:
+  - If a player scored or assisted: praise them with witty pundit lines.
+  - If a player got a red card or a yellow: roast their lack of discipline.
+  - If a player had 0 goals/assists/shots despite playing 90 minutes: mock them for getting a cardio session in.
+  - If a goalkeeper made many saves: praise their heroic brick wall, or mock their defense.
+` : ''}
 
 For the "day" key:
 - If matches on ${targetDate} are completed (Status is STATUS_FINAL or STATUS_FULL_TIME), generate a **daily recap**:
@@ -549,6 +615,24 @@ Adhere strictly to your British pundit persona: sarcastic, self-deprecating, and
         recaps.sort((a: any, b: any) => a.date.localeCompare(b.date));
         fs.writeFileSync(recapsPath, JSON.stringify(recaps, null, 2), 'utf-8');
         console.log(`🎉 data/recaps.json updated with ${targetDate} recap.`);
+      }
+
+      // Parse player verdicts
+      if (response.playerVerdicts) {
+        const verdictsPath = path.resolve(__dirname, '..', 'data', 'player-verdicts.json');
+        let existingVerdicts: Record<string, string> = {};
+        if (fs.existsSync(verdictsPath)) {
+          try {
+            existingVerdicts = JSON.parse(fs.readFileSync(verdictsPath, 'utf-8'));
+          } catch {}
+        }
+        
+        for (const [id, verdict] of Object.entries(response.playerVerdicts)) {
+          existingVerdicts[id] = verdict as string;
+        }
+
+        fs.writeFileSync(verdictsPath, JSON.stringify(existingVerdicts, null, 2), 'utf-8');
+        console.log(`🎉 data/player-verdicts.json updated with ${Object.keys(response.playerVerdicts).length} player verdicts.`);
       }
 
       // Parse today_preview
