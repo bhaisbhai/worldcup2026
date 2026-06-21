@@ -740,21 +740,30 @@ body{
 }
 .rb-card.open .rb-detail{display:block}
 
-/* ── DAILY RECAPS ──────────────────────── */
-.recaps-wrap{margin:0 0 16px}
-.recaps-hd{font-size:11px;font-weight:700;color:var(--t2);letter-spacing:.6px;text-transform:uppercase;margin-bottom:8px}
-.recap-item{border-bottom:1px solid rgba(255,255,255,.06)}
-.recap-item:first-of-type{border-top:1px solid rgba(255,255,255,.06)}
-.recap-toggle{display:flex;align-items:center;gap:10px;padding:10px 0;cursor:pointer;-webkit-tap-highlight-color:transparent}
-.recap-toggle-date{font-size:11px;font-weight:600;color:var(--t2);min-width:42px;flex-shrink:0}
-.recap-toggle-hl{font-size:12px;color:var(--text);flex:1;line-height:1.35;padding-right:4px}
-.recap-chevron{font-size:10px;color:var(--t2);transition:transform .2s;flex-shrink:0}
-.recap-item.open .recap-chevron{transform:rotate(180deg)}
-.recap-body{display:none;padding:0 0 14px;border-top:1px solid rgba(255,255,255,.05)}
-.recap-item.open .recap-body{display:block}
+/* ── DAILY RECAP CARD ──────────────────── */
+.recap-card{
+  border:1px solid rgba(255,255,255,.07);border-left:2px solid var(--accent);
+  border-radius:10px;background:rgba(255,255,255,.02);
+  margin:0 0 14px;overflow:hidden;cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+.recap-hdr{display:flex;align-items:center;gap:10px;padding:10px 14px}
+.recap-pill{
+  font-size:9px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;
+  color:var(--accent);flex-shrink:0;
+}
+.recap-hl{
+  font-size:12px;color:var(--text);flex:1;line-height:1.35;
+  overflow:hidden;white-space:nowrap;text-overflow:ellipsis;
+}
+.recap-card.open .recap-hl{white-space:normal}
+.recap-chev{font-size:10px;color:var(--t3);transition:transform .2s;flex-shrink:0}
+.recap-card.open .recap-chev{transform:rotate(180deg)}
+.recap-body{display:none;padding:0 14px 14px;border-top:1px solid rgba(255,255,255,.05)}
+.recap-card.open .recap-body{display:block}
 .recap-section{margin-top:10px}
-.recap-section-lbl{font-size:10px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
-.recap-section-txt{font-size:12px;color:var(--t2);line-height:1.65}
+.recap-section-lbl{font-size:9px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+.recap-section-txt{font-size:12px;color:rgba(255,255,255,.65);line-height:1.7}
 
 /* ── GOAL SCORERS STRIP ────────────────── */
 .mc-scorers{display:flex;justify-content:space-between;gap:6px;margin:6px 0 8px;min-height:0}
@@ -1566,8 +1575,8 @@ function renderToday(events, dayDate, patch){
 
   renderDayNav(dispDate);
 
-  // Daily summary card (only on today's view)
-  if(!browseDate) renderSummary(wrap);
+  // Daily recap card — contextual to the viewed day
+  renderSummary(wrap, dispDate);
 
   if(events.length===0){
     wrap.append(el('div','empty','No matches scheduled · Use the arrows to browse other days'));
@@ -1672,32 +1681,32 @@ async function fetchDailyRecaps(){
 
 function fmtRecapDate(iso){
   const d = new Date(iso+'T12:00:00');
-  return d.toLocaleDateString([],{month:'short',day:'numeric'});
+  return d.toLocaleDateString([],{weekday:'short',month:'short',day:'numeric'});
 }
 
-function toggleRecap(el){
-  el.closest('.recap-item').classList.toggle('open');
-}
-
-function renderSummary(container){
+function renderSummary(container, dispDate){
   if(!_recapRows.length) return;
-  const wrap = document.createElement('div');
-  wrap.className = 'recaps-wrap';
-  wrap.innerHTML = `<div class="recaps-hd">📋 Daily Recaps</div>` +
-    _recapRows.map((row,i) => `
-      <div class="recap-item${i===0?' open':''}">
-        <div class="recap-toggle" onclick="toggleRecap(this)">
-          <span class="recap-toggle-date">${fmtRecapDate(row.date)}</span>
-          <span class="recap-toggle-hl">${row.headline||''}</span>
-          <span class="recap-chevron">▾</span>
-        </div>
-        <div class="recap-body">
-          ${row.theDrama?`<div class="recap-section"><div class="recap-section-lbl">The Drama</div><div class="recap-section-txt">${row.theDrama}</div></div>`:''}
-          ${row.mustWatchHighlights?`<div class="recap-section"><div class="recap-section-lbl">Watch / Skip</div><div class="recap-section-txt">${row.mustWatchHighlights}</div></div>`:''}
-          ${row.progressionNews?`<div class="recap-section"><div class="recap-section-lbl">Progression</div><div class="recap-section-txt">${row.progressionNews}</div></div>`:''}
-        </div>
-      </div>`).join('');
-  container.prepend(wrap);
+  const todayStr = new Date().toISOString().slice(0,10);
+  const ds = dispDate ? toDateStr(dispDate) : todayStr;
+  // Exact match for this day; if on today and no recap yet, fall back to most recent
+  const row = _recapRows.find(r => r.date === ds) || (ds === todayStr ? _recapRows[0] : null);
+  if(!row) return;
+  const label = row.date === todayStr ? 'Today' : fmtRecapDate(row.date);
+  const card = document.createElement('div');
+  card.className = 'recap-card';
+  card.onclick = function(){ this.classList.toggle('open'); };
+  card.innerHTML =
+    `<div class="recap-hdr">
+      <span class="recap-pill">${label}</span>
+      <span class="recap-hl">${row.headline||''}</span>
+      <span class="recap-chev">▾</span>
+    </div>
+    <div class="recap-body">
+      ${row.theDrama?`<div class="recap-section"><div class="recap-section-lbl">The Drama</div><div class="recap-section-txt">${row.theDrama}</div></div>`:''}
+      ${row.mustWatchHighlights?`<div class="recap-section"><div class="recap-section-lbl">Watch / Skip</div><div class="recap-section-txt">${row.mustWatchHighlights}</div></div>`:''}
+      ${row.progressionNews?`<div class="recap-section"><div class="recap-section-lbl">Progression</div><div class="recap-section-txt">${row.progressionNews}</div></div>`:''}
+    </div>`;
+  container.prepend(card);
 }
 
 async function fetchMatches(){
