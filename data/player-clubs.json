@@ -25,7 +25,7 @@
   },
   "22774": {
     "name": "Cristiano Ronaldo",
-    "club": "",
+    "club": "Al-Nassr",
     "teamName": "Portugal",
     "teamAbbr": "POR",
     "position": "F",
@@ -41,7 +41,7 @@
   },
   "45843": {
     "name": "Lionel Messi",
-    "club": "",
+    "club": "Inter Miami CF",
     "teamName": "Argentina",
     "teamAbbr": "ARG",
     "position": "F",
@@ -57,7 +57,7 @@
   },
   "76017": {
     "name": "Nico González",
-    "club": "",
+    "club": "Porto",
     "teamName": "Argentina",
     "teamAbbr": "ARG",
     "position": "F",
@@ -65,7 +65,7 @@
   },
   "76762": {
     "name": "Luka Modric",
-    "club": "",
+    "club": "Real Madrid",
     "teamName": "Croatia",
     "teamAbbr": "CRO",
     "position": "M",
@@ -105,7 +105,7 @@
   },
   "84774": {
     "name": "Manuel Neuer",
-    "club": "",
+    "club": "Bayern Munich",
     "teamName": "Germany",
     "teamAbbr": "GER",
     "position": "G",
@@ -299,7 +299,7 @@
   },
   "119289": {
     "name": "Nicolás Otamendi",
-    "club": "",
+    "club": "Al-Gharafa",
     "teamName": "Argentina",
     "teamAbbr": "ARG",
     "position": "D",
@@ -347,7 +347,7 @@
   },
   "124091": {
     "name": "Bruno Fernandes",
-    "club": "",
+    "club": "Manchester United",
     "teamName": "Portugal",
     "teamAbbr": "POR",
     "position": "M",
@@ -387,7 +387,7 @@
   },
   "127262": {
     "name": "Jordan Henderson",
-    "club": "",
+    "club": "Ajax",
     "teamName": "England",
     "teamAbbr": "ENG",
     "position": "M",
@@ -443,7 +443,7 @@
   },
   "132659": {
     "name": "Pascal Gross",
-    "club": "",
+    "club": "Brighton & Hove Albion",
     "teamName": "Germany",
     "teamAbbr": "GER",
     "position": "M",
@@ -451,7 +451,7 @@
   },
   "132948": {
     "name": "Neymar",
-    "club": "",
+    "club": "Al-Hilal",
     "teamName": "Brazil",
     "teamAbbr": "BRA",
     "position": "F",
@@ -483,7 +483,7 @@
   },
   "134283": {
     "name": "Thibaut Courtois",
-    "club": "",
+    "club": "Real Madrid",
     "teamName": "Belgium",
     "teamAbbr": "BEL",
     "position": "G",
@@ -491,7 +491,7 @@
   },
   "134947": {
     "name": "Kevin De Bruyne",
-    "club": "",
+    "club": "Manchester City",
     "teamName": "Belgium",
     "teamAbbr": "BEL",
     "position": "M",
@@ -555,7 +555,7 @@
   },
   "139437": {
     "name": "Romelu Lukaku",
-    "club": "",
+    "club": "Napoli",
     "teamName": "Belgium",
     "teamAbbr": "BEL",
     "position": "F",
@@ -563,7 +563,7 @@
   },
   "139520": {
     "name": "Andrej Kramaric",
-    "club": "",
+    "club": "Hoffenheim",
     "teamName": "Croatia",
     "teamAbbr": "CRO",
     "position": "F",
@@ -595,7 +595,7 @@
   },
   "142200": {
     "name": "Harry Kane",
-    "club": "",
+    "club": "Bayern Munich",
     "teamName": "England",
     "teamAbbr": "ENG",
     "position": "F",
@@ -619,7 +619,7 @@
   },
   "144517": {
     "name": "Idrissa Gueye",
-    "club": "",
+    "club": "Everton",
     "teamName": "Senegal",
     "teamAbbr": "SEN",
     "position": "M",
@@ -700,7 +700,7 @@
   },
   "149945": {
     "name": "Son Heung-Min",
-    "club": "",
+    "club": "Tottenham Hotspur",
     "teamName": "South Korea",
     "teamAbbr": "KOR",
     "position": "F",
@@ -716,7 +716,7 @@
   },
   "150312": {
     "name": "Kalidou Koulibaly",
-    "club": "",
+    "club": "Al-Hilal",
     "teamName": "Senegal",
     "teamAbbr": "SEN",
     "position": "D",
@@ -741,7 +741,7 @@
   },
   "152479": {
     "name": "Wataru Endo",
-    "club": "",
+    "club": "Liverpool",
     "teamName": "Japan",
     "teamAbbr": "JPN",
     "position": "M",
@@ -757,7 +757,7 @@
   },
   "153115": {
     "name": "Leandro Paredes",
-    "club": "",
+    "club": "AS Roma",
     "teamName": "Argentina",
     "teamAbbr": "ARG",
     "position": "M",
@@ -765,7 +765,7 @@
   },
   "154595": {
     "name": "Mateo Kovacic",
-    "club": "",
+    "club": "Manchester City",
     "teamName": "Croatia",
     "teamAbbr": "CRO",
     "position": "M",
@@ -813,7 +813,7 @@
   },
   "157688": {
     "name": "Kim Min-Jae",
-    "club": "",
+    "club": "Bayern Munich",
     "teamName": "South Korea",
     "teamAbbr": "KOR",
     "position": "D",
@@ -829,7 +829,7 @@
   },
   "157892": {
     "name": "Virgil van Dijk",
-    "club": "",
+    "club": "Liverpool",
     "teamName": "Netherlands",
     "teamAbbr": "NED",
     "position": "D",
@@ -837,7 +837,7 @@
   },
   "157974": {
     "name": "John Stones",
-    "club": "",
+    "club": "Manchester City",
     "teamName": "England",
     "teamAbbr": "ENG",
     "position": "D",
@@ -862,7 +862,7 @@
   },
   "159047": {
     "name": "Marquinhos",
-    "club": "",
+    "club": "Paris Saint-Germain",
     "teamName": "Brazil",
     "teamAbbr": "BRA",
     "position": "D",
@@ -886,7 +886,7 @@
   },
   "159248": {
     "name": "Nathan Aké",
-    "club": "",
+    "club": "Manchester City",
     "teamName": "Netherlands",
     "teamAbbr": "NED",
     "position": "D",
@@ -894,7 +894,7 @@
   },
   "159255": {
     "name": "Memphis Depay",
-    "club": "",
+    "club": "Corinthians",
     "teamName": "Netherlands",
     "teamAbbr": "NED",
     "position": "F",
@@ -902,7 +902,7 @@
   },
   "159317": {
     "name": "Aymeric Laporte",
-    "club": "",
+    "club": "Al-Nassr",
     "teamName": "Spain",
     "teamAbbr": "ESP",
     "position": "D",
@@ -918,7 +918,7 @@
   },
   "159443": {
     "name": "Jordan Pickford",
-    "club": "",
+    "club": "Everton",
     "teamName": "England",
     "teamAbbr": "ENG",
     "position": "G",
@@ -950,7 +950,7 @@
   },
   "160115": {
     "name": "Lucas Digne",
-    "club": "",
+    "club": "Aston Villa",
     "teamName": "France",
     "teamAbbr": "FRA",
     "position": "D",
@@ -966,7 +966,7 @@
   },
   "163850": {
     "name": "Salem Al-Dawsari",
-    "club": "",
+    "club": "Al-Hilal",
     "teamName": "Saudi Arabia",
     "teamAbbr": "KSA",
     "position": "M",
@@ -983,7 +983,7 @@
   },
   "164126": {
     "name": "Brice Samba",
-    "club": "",
+    "club": "Lens",
     "teamName": "France",
     "teamAbbr": "FRA",
     "position": "G",
@@ -1007,7 +1007,7 @@
   },
   "164826": {
     "name": "Nahuel Molina",
-    "club": "",
+    "club": "Atlético Madrid",
     "teamName": "Argentina",
     "teamAbbr": "ARG",
     "position": "D",
@@ -1047,7 +1047,7 @@
   },
   "166396": {
     "name": "Alejandro Grimaldo",
-    "club": "",
+    "club": "Bayern Munich",
     "teamName": "Spain",
     "teamAbbr": "ESP",
     "position": "D",
@@ -1063,7 +1063,7 @@
   },
   "167060": {
     "name": "Raúl Jiménez",
-    "club": "",
+    "club": "Fulham",
     "teamName": "Mexico",
     "teamAbbr": "MEX",
     "position": "F",
@@ -1104,7 +1104,7 @@
   },
   "169438": {
     "name": "Antonio Rüdiger",
-    "club": "",
+    "club": "Real Madrid",
     "teamName": "Germany",
     "teamAbbr": "GER",
     "position": "D",
@@ -1112,7 +1112,7 @@
   },
   "169797": {
     "name": "Sadio Mané",
-    "club": "",
+    "club": "Al-Nassr",
     "teamName": "Senegal",
     "teamAbbr": "SEN",
     "position": "F",
@@ -1192,7 +1192,7 @@
   },
   "173556": {
     "name": "N'Golo Kanté",
-    "club": "",
+    "club": "Al-Ittihad",
     "teamName": "France",
     "teamAbbr": "FRA",
     "position": "M",
@@ -1200,7 +1200,7 @@
   },
   "173666": {
     "name": "Casemiro",
-    "club": "",
+    "club": "Al-Nassr",
     "teamName": "Brazil",
     "teamAbbr": "BRA",
     "position": "M",
@@ -1208,7 +1208,7 @@
   },
   "173896": {
     "name": "Mohamed Salah",
-    "club": "",
+    "club": "Liverpool",
     "teamName": "Egypt",
     "teamAbbr": "EGY",
     "position": "F",
@@ -1232,7 +1232,7 @@
   },
   "174466": {
     "name": "Rodrigo De Paul",
-    "club": "",
+    "club": "Atlético Madrid",
     "teamName": "Argentina",
     "teamAbbr": "ARG",
     "position": "M",
@@ -1248,7 +1248,7 @@
   },
   "174550": {
     "name": "Leon Goretzka",
-    "club": "",
+    "club": "Bayern Munich",
     "teamName": "Germany",
     "teamAbbr": "GER",
     "position": "M",
@@ -1256,7 +1256,7 @@
   },
   "174980": {
     "name": "Leandro Trossard",
-    "club": "",
+    "club": "Arsenal",
     "teamName": "Belgium",
     "teamAbbr": "BEL",
     "position": "F",
@@ -1280,7 +1280,7 @@
   },
   "175149": {
     "name": "Yassine Bounou",
-    "club": "",
+    "club": "Sevilla",
     "teamName": "Morocco",
     "teamAbbr": "MAR",
     "position": "G",
@@ -1328,7 +1328,7 @@
   },
   "176203": {
     "name": "Adrien Rabiot",
-    "club": "",
+    "club": "Juventus",
     "teamName": "France",
     "teamAbbr": "FRA",
     "position": "M",
@@ -1344,7 +1344,7 @@
   },
   "176399": {
     "name": "João Cancelo",
-    "club": "",
+    "club": "Al-Qadsiah",
     "teamName": "Portugal",
     "teamAbbr": "POR",
     "position": "D",
@@ -1352,7 +1352,7 @@
   },
   "176948": {
     "name": "Ederson ",
-    "club": "",
+    "club": "Manchester City",
     "teamName": "Brazil",
     "teamAbbr": "BRA",
     "position": "G",
@@ -1474,7 +1474,7 @@
   },
   "180639": {
     "name": "Ivan Toney",
-    "club": "",
+    "club": "Al-Ahli",
     "teamName": "England",
     "teamAbbr": "ENG",
     "position": "F",
@@ -1676,7 +1676,7 @@
   },
   "188052": {
     "name": "Jonathan Tah",
-    "club": "",
+    "club": "Bayer Leverkusen",
     "teamName": "Germany",
     "teamAbbr": "GER",
     "position": "D",
@@ -1708,7 +1708,7 @@
   },
   "188230": {
     "name": "Alexander Sørloth",
-    "club": "",
+    "club": "Atlético Madrid",
     "teamName": "Norway",
     "teamAbbr": "NOR",
     "position": "F",
@@ -1750,7 +1750,7 @@
   },
   "189007": {
     "name": "Reece James",
-    "club": "",
+    "club": "Real Madrid",
     "teamName": "England",
     "teamAbbr": "ENG",
     "position": "D",
@@ -1758,7 +1758,7 @@
   },
   "189026": {
     "name": "Mike Maignan",
-    "club": "",
+    "club": "AC Milan",
     "teamName": "France",
     "teamAbbr": "FRA",
     "position": "G",
@@ -1766,7 +1766,7 @@
   },
   "189668": {
     "name": "Mario Pasalic",
-    "club": "",
+    "club": "Atalanta",
     "teamName": "Croatia",
     "teamAbbr": "CRO",
     "position": "M",
@@ -1782,7 +1782,7 @@
   },
   "189972": {
     "name": "Thomas Partey",
-    "club": "",
+    "club": "Arsenal",
     "teamName": "Ghana",
     "teamAbbr": "GHA",
     "position": "M",
@@ -1790,7 +1790,7 @@
   },
   "190161": {
     "name": "Joshua Kimmich",
-    "club": "",
+    "club": "Bayern Munich",
     "teamName": "Germany",
     "teamAbbr": "GER",
     "position": "M",
@@ -1862,7 +1862,7 @@
   },
   "193297": {
     "name": "Youri Tielemans",
-    "club": "",
+    "club": "Aston Villa",
     "teamName": "Belgium",
     "teamAbbr": "BEL",
     "position": "M",
@@ -1968,7 +1968,7 @@
   },
   "195226": {
     "name": "Sofyan Amrabat",
-    "club": "",
+    "club": "Fiorentina",
     "teamName": "Morocco",
     "teamAbbr": "MAR",
     "position": "M",
@@ -2040,7 +2040,7 @@
   },
   "196176": {
     "name": "David Raya",
-    "club": "",
+    "club": "Arsenal",
     "teamName": "Spain",
     "teamAbbr": "ESP",
     "position": "G",
@@ -2048,7 +2048,7 @@
   },
   "196200": {
     "name": "Lucas Hernández",
-    "club": "",
+    "club": "PSG",
     "teamName": "France",
     "teamAbbr": "FRA",
     "position": "D",
@@ -2064,7 +2064,7 @@
   },
   "196876": {
     "name": "Alisson Becker",
-    "club": "",
+    "club": "Liverpool",
     "teamName": "Brazil",
     "teamAbbr": "BRA",
     "position": "G",
@@ -2120,7 +2120,7 @@
   },
   "198138": {
     "name": "Dan Burn",
-    "club": "",
+    "club": "Newcastle United",
     "teamName": "England",
     "teamAbbr": "ENG",
     "position": "D",
@@ -2128,7 +2128,7 @@
   },
   "198825": {
     "name": "Ollie Watkins",
-    "club": "",
+    "club": "Aston Villa",
     "teamName": "England",
     "teamAbbr": "ENG",
     "position": "F",
@@ -2160,7 +2160,7 @@
   },
   "199833": {
     "name": "Bernardo Silva",
-    "club": "",
+    "club": "Manchester City",
     "teamName": "Portugal",
     "teamAbbr": "POR",
     "position": "M",
@@ -2216,7 +2216,7 @@
   },
   "202641": {
     "name": "Leroy Sané",
-    "club": "",
+    "club": "Bayern Munich",
     "teamName": "Germany",
     "teamAbbr": "GER",
     "position": "F",
@@ -2257,7 +2257,7 @@
   },
   "203669": {
     "name": "Martin Ødegaard",
-    "club": "",
+    "club": "Arsenal",
     "teamName": "Norway",
     "teamAbbr": "NOR",
     "position": "M",
@@ -2369,7 +2369,7 @@
   },
   "206474": {
     "name": "Marcos Llorente",
-    "club": "",
+    "club": "Atlético Madrid",
     "teamName": "Spain",
     "teamAbbr": "ESP",
     "position": "M",
@@ -2393,7 +2393,7 @@
   },
   "207343": {
     "name": "Giovani Lo Celso",
-    "club": "",
+    "club": "Villarreal",
     "teamName": "Argentina",
     "teamAbbr": "ARG",
     "position": "M",
@@ -2441,7 +2441,7 @@
   },
   "208128": {
     "name": "Rúben Neves",
-    "club": "",
+    "club": "Al-Qadsiah",
     "teamName": "Portugal",
     "teamAbbr": "POR",
     "position": "M",
@@ -2465,7 +2465,7 @@
   },
   "209581": {
     "name": "Mikel Merino",
-    "club": "",
+    "club": "Arsenal",
     "teamName": "Spain",
     "teamAbbr": "ESP",
     "position": "M",
@@ -2579,7 +2579,7 @@
   },
   "213248": {
     "name": "Denzel Dumfries",
-    "club": "",
+    "club": "Inter Milan",
     "teamName": "Netherlands",
     "teamAbbr": "NED",
     "position": "D",
@@ -2604,7 +2604,7 @@
   },
   "214412": {
     "name": "Iñaki Williams",
-    "club": "",
+    "club": "Athletic Club",
     "teamName": "Ghana",
     "teamAbbr": "GHA",
     "position": "F",
@@ -2620,7 +2620,7 @@
   },
   "214596": {
     "name": "Fabián Ruiz",
-    "club": "",
+    "club": "Paris Saint-Germain",
     "teamName": "Spain",
     "teamAbbr": "ESP",
     "position": "M",
@@ -2636,7 +2636,7 @@
   },
   "214689": {
     "name": "Pervis Estupiñán",
-    "club": "",
+    "club": "Brighton & Hove Albion",
     "teamName": "Ecuador",
     "teamAbbr": "ECU",
     "position": "D",
@@ -2676,7 +2676,7 @@
   },
   "215772": {
     "name": "Rodrigo Bentancur",
-    "club": "",
+    "club": "Juventus",
     "teamName": "Uruguay",
     "teamAbbr": "URU",
     "position": "M",
@@ -2749,7 +2749,7 @@
   },
   "217331": {
     "name": "Marcus Thuram",
-    "club": "",
+    "club": "Inter Milan",
     "teamName": "France",
     "teamAbbr": "FRA",
     "position": "F",
@@ -2765,7 +2765,7 @@
   },
   "218522": {
     "name": "Bruno Guimarães",
-    "club": "",
+    "club": "Newcastle United",
     "teamName": "Brazil",
     "teamAbbr": "BRA",
     "position": "M",
@@ -2797,7 +2797,7 @@
   },
   "219022": {
     "name": "Frenkie de Jong",
-    "club": "",
+    "club": "Barcelona",
     "teamName": "Netherlands",
     "teamAbbr": "NED",
     "position": "M",
@@ -2861,7 +2861,7 @@
   },
   "219362": {
     "name": "Daichi Kamada",
-    "club": "",
+    "club": "Galatasaray",
     "teamName": "Japan",
     "teamAbbr": "JPN",
     "position": "M",
@@ -2909,7 +2909,7 @@
   },
   "219627": {
     "name": "Ritsu Doan",
-    "club": "",
+    "club": "SC Freiburg",
     "teamName": "Japan",
     "teamAbbr": "JPN",
     "position": "M",
@@ -2917,7 +2917,7 @@
   },
   "219713": {
     "name": "Lautaro Martínez",
-    "club": "",
+    "club": "Inter Milan",
     "teamName": "Argentina",
     "teamAbbr": "ARG",
     "position": "F",
@@ -2959,7 +2959,7 @@
   },
   "220714": {
     "name": "Waldemar Anton",
-    "club": "",
+    "club": "Stuttgart",
     "teamName": "Germany",
     "teamAbbr": "GER",
     "position": "D",
@@ -2983,7 +2983,7 @@
   },
   "222375": {
     "name": "Unai Simón",
-    "club": "",
+    "club": "Athletic Club",
     "teamName": "Spain",
     "teamAbbr": "ESP",
     "position": "G",
@@ -3016,7 +3016,7 @@
   },
   "222670": {
     "name": "Nélson Semedo",
-    "club": "",
+    "club": "Barcelona",
     "teamName": "Portugal",
     "teamAbbr": "POR",
     "position": "D",
@@ -3033,7 +3033,7 @@
   },
   "222793": {
     "name": "Dayot Upamecano",
-    "club": "",
+    "club": "Bayern Munich",
     "teamName": "France",
     "teamAbbr": "FRA",
     "position": "D",
@@ -3187,7 +3187,7 @@
   },
   "227765": {
     "name": "Dani Olmo",
-    "club": "",
+    "club": "Barcelona",
     "teamName": "Spain",
     "teamAbbr": "ESP",
     "position": "M",
@@ -3195,7 +3195,7 @@
   },
   "227784": {
     "name": "Trevoh Chalobah",
-    "club": "",
+    "club": "Leicester City",
     "teamName": "England",
     "teamAbbr": "ENG",
     "position": "D",
@@ -3203,7 +3203,7 @@
   },
   "228262": {
     "name": "Gonzalo Montiel",
-    "club": "",
+    "club": "Sevilla",
     "teamName": "Argentina",
     "teamAbbr": "ARG",
     "position": "D",
@@ -3251,7 +3251,7 @@
   },
   "228393": {
     "name": "Exequiel Palacios",
-    "club": "",
+    "club": "Real Betis",
     "teamName": "Argentina",
     "teamAbbr": "ARG",
     "position": "M",
@@ -3324,7 +3324,7 @@
   },
   "229744": {
     "name": "Ousmane Dembélé",
-    "club": "",
+    "club": "Paris Saint-Germain",
     "teamName": "France",
     "teamAbbr": "FRA",
     "position": "F",
@@ -3364,7 +3364,7 @@
   },
   "230945": {
     "name": "Marcus Rashford",
-    "club": "",
+    "club": "Aston Villa",
     "teamName": "England",
     "teamAbbr": "ENG",
     "position": "F",
@@ -3380,7 +3380,7 @@
   },
   "231050": {
     "name": "Raphinha ",
-    "club": "",
+    "club": "Barcelona",
     "teamName": "Brazil",
     "teamAbbr": "BRA",
     "position": "F",
@@ -3412,7 +3412,7 @@
   },
   "231182": {
     "name": "Kai Havertz",
-    "club": "",
+    "club": "Arsenal",
     "teamName": "Germany",
     "teamAbbr": "GER",
     "position": "F",
@@ -3429,7 +3429,7 @@
   },
   "231388": {
     "name": "Kylian Mbappé",
-    "club": "",
+    "club": "Real Madrid",
     "teamName": "France",
     "teamAbbr": "FRA",
     "position": "F",
@@ -3445,7 +3445,7 @@
   },
   "231692": {
     "name": "Jules Koundé",
-    "club": "",
+    "club": "Barcelona",
     "teamName": "France",
     "teamAbbr": "FRA",
     "position": "D",
@@ -3461,7 +3461,7 @@
   },
   "231828": {
     "name": "Rodri ",
-    "club": "",
+    "club": "Manchester City",
     "teamName": "Spain",
     "teamAbbr": "ESP",
     "position": "M",
@@ -3469,7 +3469,7 @@
   },
   "231859": {
     "name": "Ezri Konsa",
-    "club": "",
+    "club": "Aston Villa",
     "teamName": "England",
     "teamAbbr": "ENG",
     "position": "D",
@@ -3501,7 +3501,7 @@
   },
   "233621": {
     "name": "Theo Hernández",
-    "club": "",
+    "club": "AC Milan",
     "teamName": "France",
     "teamAbbr": "FRA",
     "position": "D",
@@ -3509,7 +3509,7 @@
   },
   "233937": {
     "name": "Lisandro Martínez",
-    "club": "",
+    "club": "Manchester United",
     "teamName": "Argentina",
     "teamAbbr": "ARG",
     "position": "D",
@@ -3533,7 +3533,7 @@
   },
   "234715": {
     "name": "Lucas Paquetá",
-    "club": "",
+    "club": "West Ham United",
     "teamName": "Brazil",
     "teamAbbr": "BRA",
     "position": "M",
@@ -3541,7 +3541,7 @@
   },
   "234878": {
     "name": "Rúben Dias",
-    "club": "",
+    "club": "Manchester City",
     "teamName": "Portugal",
     "teamAbbr": "POR",
     "position": "D",
@@ -3606,7 +3606,7 @@
   },
   "235818": {
     "name": "Federico Valverde",
-    "club": "",
+    "club": "Real Madrid",
     "teamName": "Uruguay",
     "teamAbbr": "URU",
     "position": "M",
@@ -3622,7 +3622,7 @@
   },
   "236322": {
     "name": "Gabriel Magalhães",
-    "club": "",
+    "club": "Arsenal",
     "teamName": "Brazil",
     "teamAbbr": "BRA",
     "position": "D",
@@ -3678,7 +3678,7 @@
   },
   "237224": {
     "name": "Hwang Hee-Chan",
-    "club": "",
+    "club": "Crystal Palace",
     "teamName": "South Korea",
     "teamAbbr": "KOR",
     "position": "F",
@@ -3694,7 +3694,7 @@
   },
   "238004": {
     "name": "Takehiro Tomiyasu",
-    "club": "",
+    "club": "Arsenal",
     "teamName": "Japan",
     "teamAbbr": "JPN",
     "position": "D",
@@ -3734,7 +3734,7 @@
   },
   "238262": {
     "name": "Declan Rice",
-    "club": "",
+    "club": "Arsenal",
     "teamName": "England",
     "teamAbbr": "ENG",
     "position": "M",
@@ -3758,7 +3758,7 @@
   },
   "238362": {
     "name": "Édouard Mendy",
-    "club": "",
+    "club": "Al-Ahli",
     "teamName": "Senegal",
     "teamAbbr": "SEN",
     "position": "G",
@@ -3766,7 +3766,7 @@
   },
   "238472": {
     "name": "Elliot Anderson",
-    "club": "",
+    "club": "Nottingham Forest",
     "teamName": "England",
     "teamAbbr": "ENG",
     "position": "M",
@@ -3814,7 +3814,7 @@
   },
   "238902": {
     "name": "Diogo Dalot",
-    "club": "",
+    "club": "Manchester United",
     "teamName": "Portugal",
     "teamAbbr": "POR",
     "position": "D",
@@ -3822,7 +3822,7 @@
   },
   "238903": {
     "name": "Diogo Costa",
-    "club": "",
+    "club": "Porto",
     "teamName": "Portugal",
     "teamAbbr": "POR",
     "position": "G",
@@ -3846,7 +3846,7 @@
   },
   "239350": {
     "name": "Noussair Mazraoui",
-    "club": "",
+    "club": "Manchester United",
     "teamName": "Morocco",
     "teamAbbr": "MAR",
     "position": "D",
@@ -3878,7 +3878,7 @@
   },
   "240233": {
     "name": "Achraf Hakimi",
-    "club": "",
+    "club": "Paris Saint-Germain",
     "teamName": "Morocco",
     "teamAbbr": "MAR",
     "position": "D",
@@ -3934,7 +3934,7 @@
   },
   "241012": {
     "name": "Ismaïla Sarr",
-    "club": "",
+    "club": "Crystal Palace",
     "teamName": "Senegal",
     "teamAbbr": "SEN",
     "position": "F",
@@ -3983,7 +3983,7 @@
   },
   "241187": {
     "name": "Jean-Philippe Mateta",
-    "club": "",
+    "club": "Crystal Palace",
     "teamName": "France",
     "teamAbbr": "FRA",
     "position": "F",
@@ -4016,7 +4016,7 @@
   },
   "241468": {
     "name": "Manuel Ugarte",
-    "club": "",
+    "club": "Manchester United",
     "teamName": "Uruguay",
     "teamAbbr": "URU",
     "position": "M",
@@ -4024,7 +4024,7 @@
   },
   "241627": {
     "name": "Edson Álvarez",
-    "club": "",
+    "club": "West Ham United",
     "teamName": "Mexico",
     "teamAbbr": "MEX",
     "position": "M",
@@ -4146,7 +4146,7 @@
   },
   "246532": {
     "name": "Brahim Díaz",
-    "club": "",
+    "club": "AC Milan",
     "teamName": "Morocco",
     "teamAbbr": "MAR",
     "position": "M",
@@ -4162,7 +4162,7 @@
   },
   "247018": {
     "name": "Mohammed Al-Owais",
-    "club": "",
+    "club": "Al-Hilal",
     "teamName": "Saudi Arabia",
     "teamAbbr": "KSA",
     "position": "G",
@@ -4188,7 +4188,7 @@
   },
   "249299": {
     "name": "Alexis Mac Allister",
-    "club": "",
+    "club": "Liverpool",
     "teamName": "Argentina",
     "teamAbbr": "ARG",
     "position": "M",
@@ -4196,7 +4196,7 @@
   },
   "249524": {
     "name": "Cody Gakpo",
-    "club": "",
+    "club": "Liverpool",
     "teamName": "Netherlands",
     "teamAbbr": "NED",
     "position": "F",
@@ -4212,7 +4212,7 @@
   },
   "249548": {
     "name": "David Raum",
-    "club": "",
+    "club": "RB Leipzig",
     "teamName": "Germany",
     "teamAbbr": "GER",
     "position": "D",
@@ -4261,7 +4261,7 @@
   },
   "250465": {
     "name": "Pedri ",
-    "club": "",
+    "club": "Barcelona",
     "teamName": "Spain",
     "teamAbbr": "ESP",
     "position": "M",
@@ -4294,7 +4294,7 @@
   },
   "251400": {
     "name": "Eberechi Eze",
-    "club": "",
+    "club": "Crystal Palace",
     "teamName": "England",
     "teamAbbr": "ENG",
     "position": "M",
@@ -4310,7 +4310,7 @@
   },
   "251634": {
     "name": "Ibrahima Konaté",
-    "club": "",
+    "club": "Liverpool",
     "teamName": "France",
     "teamAbbr": "FRA",
     "position": "D",
@@ -4318,7 +4318,7 @@
   },
   "251889": {
     "name": "Nicolás de la Cruz",
-    "club": "",
+    "club": "Flamengo",
     "teamName": "Uruguay",
     "teamAbbr": "URU",
     "position": "M",
@@ -4350,7 +4350,7 @@
   },
   "252107": {
     "name": "Vinícius Júnior",
-    "club": "",
+    "club": "Real Madrid",
     "teamName": "Brazil",
     "teamAbbr": "BRA",
     "position": "F",
@@ -4406,7 +4406,7 @@
   },
   "253989": {
     "name": "Erling Haaland",
-    "club": "",
+    "club": "Manchester City",
     "teamName": "Norway",
     "teamAbbr": "NOR",
     "position": "F",
@@ -4495,7 +4495,7 @@
   },
   "256115": {
     "name": "Pedro Neto",
-    "club": "",
+    "club": "Chelsea",
     "teamName": "Portugal",
     "teamAbbr": "POR",
     "position": "F",
@@ -4519,7 +4519,7 @@
   },
   "256587": {
     "name": "Takefusa Kubo",
-    "club": "",
+    "club": "Real Sociedad",
     "teamName": "Japan",
     "teamAbbr": "JPN",
     "position": "F",
@@ -4593,7 +4593,7 @@
   },
   "257390": {
     "name": "Luis Díaz",
-    "club": "",
+    "club": "Liverpool",
     "teamName": "Colombia",
     "teamAbbr": "COL",
     "position": "F",
@@ -4649,7 +4649,7 @@
   },
   "258307": {
     "name": "Bremer",
-    "club": "",
+    "club": "Juventus",
     "teamName": "Brazil",
     "teamAbbr": "BRA",
     "position": "D",
@@ -4681,7 +4681,7 @@
   },
   "258917": {
     "name": "Rafael Leão",
-    "club": "",
+    "club": "AC Milan",
     "teamName": "Portugal",
     "teamAbbr": "POR",
     "position": "F",
@@ -4689,7 +4689,7 @@
   },
   "258968": {
     "name": "Teun Koopmeiners",
-    "club": "",
+    "club": "Juventus",
     "teamName": "Netherlands",
     "teamAbbr": "NED",
     "position": "M",
@@ -4747,7 +4747,7 @@
   },
   "259902": {
     "name": "Matheus Cunha",
-    "club": "",
+    "club": "Atlético Madrid",
     "teamName": "Brazil",
     "teamAbbr": "BRA",
     "position": "F",
@@ -4755,7 +4755,7 @@
   },
   "259910": {
     "name": "Marc Cucurella",
-    "club": "",
+    "club": "Chelsea",
     "teamName": "Spain",
     "teamAbbr": "ESP",
     "position": "D",
@@ -4811,7 +4811,7 @@
   },
   "260775": {
     "name": "Santiago Gimenez",
-    "club": "",
+    "club": "AC Milan",
     "teamName": "Mexico",
     "teamAbbr": "MEX",
     "position": "F",
@@ -4827,7 +4827,7 @@
   },
   "261328": {
     "name": "Tijjani Reijnders",
-    "club": "",
+    "club": "AC Milan",
     "teamName": "Netherlands",
     "teamAbbr": "NED",
     "position": "M",
@@ -4972,7 +4972,7 @@
   },
   "265653": {
     "name": "Morgan Rogers",
-    "club": "",
+    "club": "Aston Villa",
     "teamName": "England",
     "teamAbbr": "ENG",
     "position": "F",
@@ -4988,7 +4988,7 @@
   },
   "265869": {
     "name": "Ferran Torres",
-    "club": "",
+    "club": "Barcelona",
     "teamName": "Spain",
     "teamAbbr": "ESP",
     "position": "F",
@@ -5004,7 +5004,7 @@
   },
   "265907": {
     "name": "Marc Guéhi",
-    "club": "",
+    "club": "Crystal Palace",
     "teamName": "England",
     "teamAbbr": "ENG",
     "position": "D",
@@ -5028,7 +5028,7 @@
   },
   "265919": {
     "name": "Aurélien Tchouaméni",
-    "club": "",
+    "club": "Real Madrid",
     "teamName": "France",
     "teamAbbr": "FRA",
     "position": "M",
@@ -5190,7 +5190,7 @@
   },
   "267711": {
     "name": "Djed Spence",
-    "club": "",
+    "club": "Torino",
     "teamName": "England",
     "teamAbbr": "ENG",
     "position": "D",
@@ -5222,7 +5222,7 @@
   },
   "268533": {
     "name": "Pedro Porro",
-    "club": "",
+    "club": "Tottenham Hotspur",
     "teamName": "Spain",
     "teamAbbr": "ESP",
     "position": "D",
@@ -5238,7 +5238,7 @@
   },
   "268641": {
     "name": "Iliman Ndiaye",
-    "club": "",
+    "club": "Everton",
     "teamName": "Senegal",
     "teamAbbr": "SEN",
     "position": "F",
@@ -5246,7 +5246,7 @@
   },
   "268782": {
     "name": "Anthony Gordon",
-    "club": "",
+    "club": "Newcastle United",
     "teamName": "England",
     "teamAbbr": "ENG",
     "position": "F",
@@ -5295,7 +5295,7 @@
   },
   "269844": {
     "name": "Gabriel Martinelli",
-    "club": "",
+    "club": "Arsenal",
     "teamName": "Brazil",
     "teamAbbr": "BRA",
     "position": "F",
@@ -5367,7 +5367,7 @@
   },
   "270821": {
     "name": "Ronald Araújo",
-    "club": "",
+    "club": "Barcelona",
     "teamName": "Uruguay",
     "teamAbbr": "URU",
     "position": "D",
@@ -5399,7 +5399,7 @@
   },
   "271132": {
     "name": "Alexis Saelemaekers",
-    "club": "",
+    "club": "Bologna",
     "teamName": "Belgium",
     "teamAbbr": "BEL",
     "position": "F",
@@ -5447,7 +5447,7 @@
   },
   "271788": {
     "name": "Darwin Núñez",
-    "club": "",
+    "club": "Liverpool",
     "teamName": "Uruguay",
     "teamAbbr": "URU",
     "position": "F",
@@ -5546,7 +5546,7 @@
   },
   "273292": {
     "name": "Antoine Semenyo",
-    "club": "",
+    "club": "Bournemouth",
     "teamName": "Ghana",
     "teamAbbr": "GHA",
     "position": "F",
@@ -5562,7 +5562,7 @@
   },
   "273300": {
     "name": "Deniz Undav",
-    "club": "",
+    "club": "Stuttgart",
     "teamName": "Germany",
     "teamAbbr": "GER",
     "position": "F",
@@ -5626,7 +5626,7 @@
   },
   "274197": {
     "name": "Lee Kang-In",
-    "club": "",
+    "club": "Paris Saint-Germain",
     "teamName": "South Korea",
     "teamAbbr": "KOR",
     "position": "M",
@@ -5650,7 +5650,7 @@
   },
   "274277": {
     "name": "Ayase Ueda",
-    "club": "",
+    "club": "Feyenoord",
     "teamName": "Japan",
     "teamAbbr": "JPN",
     "position": "F",
@@ -5674,7 +5674,7 @@
   },
   "274632": {
     "name": "Ryan Gravenberch",
-    "club": "",
+    "club": "Liverpool",
     "teamName": "Netherlands",
     "teamAbbr": "NED",
     "position": "M",
@@ -5746,7 +5746,7 @@
   },
   "276350": {
     "name": "João Félix",
-    "club": "",
+    "club": "Atlético Madrid",
     "teamName": "Portugal",
     "teamAbbr": "POR",
     "position": "F",
@@ -5802,7 +5802,7 @@
   },
   "277128": {
     "name": "Petar Musa",
-    "club": "",
+    "club": "Fiorentina",
     "teamName": "Croatia",
     "teamAbbr": "CRO",
     "position": "F",
@@ -5810,7 +5810,7 @@
   },
   "277206": {
     "name": "Julián Álvarez",
-    "club": "",
+    "club": "Atlético Madrid",
     "teamName": "Argentina",
     "teamAbbr": "ARG",
     "position": "F",
@@ -5818,7 +5818,7 @@
   },
   "277208": {
     "name": "Thiago Almada",
-    "club": "",
+    "club": "Atlético de San Luis",
     "teamName": "Argentina",
     "teamAbbr": "ARG",
     "position": "M",
@@ -5850,7 +5850,7 @@
   },
   "277385": {
     "name": "William Saliba",
-    "club": "",
+    "club": "Arsenal",
     "teamName": "France",
     "teamAbbr": "FRA",
     "position": "D",
@@ -5882,7 +5882,7 @@
   },
   "280555": {
     "name": "Bukayo Saka",
-    "club": "",
+    "club": "Arsenal",
     "teamName": "England",
     "teamAbbr": "ENG",
     "position": "F",
@@ -5914,7 +5914,7 @@
   },
   "281122": {
     "name": "Felix Nmecha",
-    "club": "",
+    "club": "Wolfsburg",
     "teamName": "Germany",
     "teamAbbr": "GER",
     "position": "M",
@@ -5946,7 +5946,7 @@
   },
   "282186": {
     "name": "Mats Wieffer",
-    "club": "",
+    "club": "Feyenoord",
     "teamName": "Netherlands",
     "teamAbbr": "NED",
     "position": "M",
@@ -5954,7 +5954,7 @@
   },
   "282229": {
     "name": "Brian Brobbey",
-    "club": "",
+    "club": "Ajax",
     "teamName": "Netherlands",
     "teamAbbr": "NED",
     "position": "F",
@@ -6011,7 +6011,7 @@
   },
   "283672": {
     "name": "Jérémy Doku",
-    "club": "",
+    "club": "Manchester City",
     "teamName": "Belgium",
     "teamAbbr": "BEL",
     "position": "F",
@@ -6092,7 +6092,7 @@
   },
   "285450": {
     "name": "Enzo Fernández",
-    "club": "",
+    "club": "Chelsea",
     "teamName": "Argentina",
     "teamAbbr": "ARG",
     "position": "M",
@@ -6142,7 +6142,7 @@
   },
   "286011": {
     "name": "Saud Abdulhamid",
-    "club": "",
+    "club": "AS Roma",
     "teamName": "Saudi Arabia",
     "teamAbbr": "KSA",
     "position": "D",
@@ -6231,7 +6231,7 @@
   },
   "286828": {
     "name": "Nico Schlotterbeck",
-    "club": "",
+    "club": "Borussia Dortmund",
     "teamName": "Germany",
     "teamAbbr": "GER",
     "position": "D",
@@ -6239,7 +6239,7 @@
   },
   "286831": {
     "name": "Michael Olise",
-    "club": "",
+    "club": "Bayern Munich",
     "teamName": "France",
     "teamAbbr": "FRA",
     "position": "M",
@@ -6247,7 +6247,7 @@
   },
   "287005": {
     "name": "Willian Pacho",
-    "club": "",
+    "club": "Paris Saint-Germain",
     "teamName": "Ecuador",
     "teamAbbr": "ECU",
     "position": "D",
@@ -6296,7 +6296,7 @@
   },
   "287266": {
     "name": "Martín Zubimendi",
-    "club": "",
+    "club": "Liverpool",
     "teamName": "Spain",
     "teamAbbr": "ESP",
     "position": "M",
@@ -6385,7 +6385,7 @@
   },
   "288896": {
     "name": "Gonçalo Ramos",
-    "club": "",
+    "club": "PSG",
     "teamName": "Portugal",
     "teamAbbr": "POR",
     "position": "F",
@@ -6393,7 +6393,7 @@
   },
   "288897": {
     "name": "Vitinha ",
-    "club": "",
+    "club": "Paris Saint-Germain",
     "teamName": "Portugal",
     "teamAbbr": "POR",
     "position": "M",
@@ -6459,7 +6459,7 @@
   },
   "289877": {
     "name": "Moisés Caicedo",
-    "club": "",
+    "club": "Chelsea",
     "teamName": "Ecuador",
     "teamAbbr": "ECU",
     "position": "M",
@@ -6492,7 +6492,7 @@
   },
   "290232": {
     "name": "Angelo Stiller",
-    "club": "",
+    "club": "Stuttgart",
     "teamName": "Germany",
     "teamAbbr": "GER",
     "position": "M",
@@ -6525,7 +6525,7 @@
   },
   "290538": {
     "name": "Facundo Pellistri",
-    "club": "",
+    "club": "Manchester United",
     "teamName": "Uruguay",
     "teamAbbr": "URU",
     "position": "M",
@@ -6533,7 +6533,7 @@
   },
   "290591": {
     "name": "Nuno Mendes",
-    "club": "",
+    "club": "Paris Saint-Germain",
     "teamName": "Portugal",
     "teamAbbr": "POR",
     "position": "D",
@@ -6581,7 +6581,7 @@
   },
   "291281": {
     "name": "Jude Bellingham",
-    "club": "",
+    "club": "Real Madrid",
     "teamName": "England",
     "teamAbbr": "ENG",
     "position": "M",
@@ -6597,7 +6597,7 @@
   },
   "291552": {
     "name": "Azzedine Ounahi",
-    "club": "",
+    "club": "Marseille",
     "teamName": "Morocco",
     "teamAbbr": "MAR",
     "position": "M",
@@ -6613,7 +6613,7 @@
   },
   "291609": {
     "name": "Bart Verbruggen",
-    "club": "",
+    "club": "Brighton & Hove Albion",
     "teamName": "Netherlands",
     "teamAbbr": "NED",
     "position": "G",
@@ -6646,7 +6646,7 @@
   },
   "292062": {
     "name": "Piero Hincapié",
-    "club": "",
+    "club": "Bayer Leverkusen",
     "teamName": "Ecuador",
     "teamAbbr": "ECU",
     "position": "D",
@@ -6662,7 +6662,7 @@
   },
   "293236": {
     "name": "Noni Madueke",
-    "club": "",
+    "club": "Chelsea",
     "teamName": "England",
     "teamAbbr": "ENG",
     "position": "F",
@@ -6751,7 +6751,7 @@
   },
   "296319": {
     "name": "Charles De Ketelaere",
-    "club": "",
+    "club": "Atalanta",
     "teamName": "Belgium",
     "teamAbbr": "BEL",
     "position": "F",
@@ -6759,7 +6759,7 @@
   },
   "296512": {
     "name": "Micky van de Ven",
-    "club": "",
+    "club": "Tottenham Hotspur",
     "teamName": "Netherlands",
     "teamAbbr": "NED",
     "position": "D",
@@ -6855,7 +6855,7 @@
   },
   "297337": {
     "name": "Pape Matar Sarr",
-    "club": "",
+    "club": "Tottenham Hotspur",
     "teamName": "Senegal",
     "teamAbbr": "SEN",
     "position": "M",
@@ -6863,7 +6863,7 @@
   },
   "297362": {
     "name": "Joan García",
-    "club": "",
+    "club": "Real Sociedad",
     "teamName": "Spain",
     "teamAbbr": "ESP",
     "position": "G",
@@ -6871,7 +6871,7 @@
   },
   "297370": {
     "name": "Yéremy Pino",
-    "club": "",
+    "club": "Villarreal",
     "teamName": "Spain",
     "teamAbbr": "ESP",
     "position": "M",
@@ -6879,7 +6879,7 @@
   },
   "297373": {
     "name": "Álex Baena",
-    "club": "",
+    "club": "Real Betis",
     "teamName": "Spain",
     "teamAbbr": "ESP",
     "position": "M",
@@ -6951,7 +6951,7 @@
   },
   "298008": {
     "name": "Rayan Cherki",
-    "club": "",
+    "club": "Lyon",
     "teamName": "France",
     "teamAbbr": "FRA",
     "position": "M",
@@ -6967,7 +6967,7 @@
   },
   "298524": {
     "name": "Jarell Quansah",
-    "club": "",
+    "club": "Liverpool",
     "teamName": "England",
     "teamAbbr": "ENG",
     "position": "D",
@@ -7016,7 +7016,7 @@
   },
   "299910": {
     "name": "Josko Gvardiol",
-    "club": "",
+    "club": "Manchester City",
     "teamName": "Croatia",
     "teamAbbr": "CRO",
     "position": "D",
@@ -7040,7 +7040,7 @@
   },
   "300912": {
     "name": "Abde Ezzalzouli",
-    "club": "",
+    "club": "Espanyol",
     "teamName": "Morocco",
     "teamAbbr": "MAR",
     "position": "F",
@@ -7249,7 +7249,7 @@
   },
   "303444": {
     "name": "Malick Thiaw",
-    "club": "",
+    "club": "AC Milan",
     "teamName": "Germany",
     "teamAbbr": "GER",
     "position": "D",
@@ -7313,7 +7313,7 @@
   },
   "303748": {
     "name": "Florian Wirtz",
-    "club": "",
+    "club": "Bayer Leverkusen",
     "teamName": "Germany",
     "teamAbbr": "GER",
     "position": "M",
@@ -7321,7 +7321,7 @@
   },
   "303785": {
     "name": "Matheus Nunes",
-    "club": "",
+    "club": "Wolverhampton Wanderers",
     "teamName": "Portugal",
     "teamAbbr": "POR",
     "position": "M",
@@ -7337,7 +7337,7 @@
   },
   "303821": {
     "name": "Jamal Musiala",
-    "club": "",
+    "club": "Bayern Munich",
     "teamName": "Germany",
     "teamAbbr": "GER",
     "position": "M",
@@ -7393,7 +7393,7 @@
   },
   "304222": {
     "name": "Arthur Theate",
-    "club": "",
+    "club": "Rennes",
     "teamName": "Belgium",
     "teamAbbr": "BEL",
     "position": "D",
@@ -7441,7 +7441,7 @@
   },
   "304799": {
     "name": "Amadou Onana",
-    "club": "",
+    "club": "Aston Villa",
     "teamName": "Belgium",
     "teamAbbr": "BEL",
     "position": "M",
@@ -7562,7 +7562,7 @@
   },
   "307111": {
     "name": "Oscar Bobb",
-    "club": "",
+    "club": "Manchester City",
     "teamName": "Norway",
     "teamAbbr": "NOR",
     "position": "M",
@@ -7570,7 +7570,7 @@
   },
   "307118": {
     "name": "James Trafford",
-    "club": "",
+    "club": "Burnley",
     "teamName": "England",
     "teamAbbr": "ENG",
     "position": "G",
@@ -7636,7 +7636,7 @@
   },
   "308524": {
     "name": "Nicolas Jackson",
-    "club": "",
+    "club": "Chelsea",
     "teamName": "Senegal",
     "teamAbbr": "SEN",
     "position": "F",
@@ -7676,7 +7676,7 @@
   },
   "308947": {
     "name": "Malo Gusto",
-    "club": "",
+    "club": "Chelsea",
     "teamName": "France",
     "teamAbbr": "FRA",
     "position": "D",
@@ -7845,7 +7845,7 @@
   },
   "312146": {
     "name": "Nico Williams",
-    "club": "",
+    "club": "Athletic Club",
     "teamName": "Spain",
     "teamAbbr": "ESP",
     "position": "F",
@@ -7861,7 +7861,7 @@
   },
   "312659": {
     "name": "Francisco Conceição",
-    "club": "",
+    "club": "Juventus",
     "teamName": "Portugal",
     "teamAbbr": "POR",
     "position": "F",
@@ -7917,7 +7917,7 @@
   },
   "313415": {
     "name": "Andreas Schjelderup",
-    "club": "",
+    "club": "Benfica",
     "teamName": "Norway",
     "teamAbbr": "NOR",
     "position": "F",
@@ -8102,7 +8102,7 @@
   },
   "318680": {
     "name": "Fatawu Issahaku",
-    "club": "",
+    "club": "Leicester City",
     "teamName": "Ghana",
     "teamAbbr": "GHA",
     "position": "F",
@@ -8174,7 +8174,7 @@
   },
   "320760": {
     "name": "Valentín Barco",
-    "club": "",
+    "club": "Brighton & Hove Albion",
     "teamName": "Argentina",
     "teamAbbr": "ARG",
     "position": "M",
@@ -8303,7 +8303,7 @@
   },
   "323702": {
     "name": "Gavi ",
-    "club": "",
+    "club": "Barcelona",
     "teamName": "Spain",
     "teamAbbr": "ESP",
     "position": "M",
@@ -8319,7 +8319,7 @@
   },
   "323838": {
     "name": "Giuliano Simeone",
-    "club": "",
+    "club": "Atlético Madrid",
     "teamName": "Argentina",
     "teamAbbr": "ARG",
     "position": "F",
@@ -8450,7 +8450,7 @@
   },
   "328238": {
     "name": "Bradley Barcola",
-    "club": "",
+    "club": "Paris Saint-Germain",
     "teamName": "France",
     "teamAbbr": "FRA",
     "position": "F",
@@ -8482,7 +8482,7 @@
   },
   "328464": {
     "name": "Nico O'Reilly",
-    "club": "",
+    "club": "Manchester City",
     "teamName": "England",
     "teamAbbr": "ENG",
     "position": "D",
@@ -8490,7 +8490,7 @@
   },
   "328466": {
     "name": "Kobbie Mainoo",
-    "club": "",
+    "club": "Manchester United",
     "teamName": "England",
     "teamAbbr": "ENG",
     "position": "M",
@@ -8771,7 +8771,7 @@
   },
   "336388": {
     "name": "Désiré Doué",
-    "club": "",
+    "club": "Paris Saint-Germain",
     "teamName": "France",
     "teamAbbr": "FRA",
     "position": "F",
@@ -8787,7 +8787,7 @@
   },
   "336595": {
     "name": "Bilal El Khannouss",
-    "club": "",
+    "club": "RC Genk",
     "teamName": "Morocco",
     "teamAbbr": "MAR",
     "position": "M",
@@ -8795,7 +8795,7 @@
   },
   "336809": {
     "name": "Cucho Hernández",
-    "club": "",
+    "club": "Columbus Crew",
     "teamName": "Colombia",
     "teamAbbr": "COL",
     "position": "F",
@@ -8828,7 +8828,7 @@
   },
   "337970": {
     "name": "Nico Paz",
-    "club": "",
+    "club": "Como 1907",
     "teamName": "Argentina",
     "teamAbbr": "ARG",
     "position": "F",
@@ -8999,7 +8999,7 @@
   },
   "345581": {
     "name": "Warren Zaïre-Emery",
-    "club": "",
+    "club": "Paris Saint-Germain",
     "teamName": "France",
     "teamAbbr": "FRA",
     "position": "M",
@@ -9048,7 +9048,7 @@
   },
   "346612": {
     "name": "Endrick",
-    "club": "",
+    "club": "Real Madrid",
     "teamName": "Brazil",
     "teamAbbr": "BRA",
     "position": "F",
@@ -9121,7 +9121,7 @@
   },
   "353951": {
     "name": "Jorrel Hato",
-    "club": "",
+    "club": "Ajax",
     "teamName": "Netherlands",
     "teamAbbr": "NED",
     "position": "D",
@@ -9129,7 +9129,7 @@
   },
   "355061": {
     "name": "João Neves",
-    "club": "",
+    "club": "Benfica",
     "teamName": "Portugal",
     "teamAbbr": "POR",
     "position": "M",
@@ -9234,7 +9234,7 @@
   },
   "358746": {
     "name": "Kendry Páez",
-    "club": "",
+    "club": "Chelsea",
     "teamName": "Ecuador",
     "teamAbbr": "ECU",
     "position": "M",
@@ -9348,7 +9348,7 @@
   },
   "362150": {
     "name": "Lamine Yamal",
-    "club": "",
+    "club": "Barcelona",
     "teamName": "Spain",
     "teamAbbr": "ESP",
     "position": "F",
@@ -9525,7 +9525,7 @@
   },
   "368992": {
     "name": "Pau Cubarsí",
-    "club": "",
+    "club": "Barcelona",
     "teamName": "Spain",
     "teamAbbr": "ESP",
     "position": "D",
