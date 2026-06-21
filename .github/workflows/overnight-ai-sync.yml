@@ -3,7 +3,12 @@ name: Overnight AI Recap Generation
 on:
   schedule:
     - cron: '0 8 * * *'   # 08:00 UTC = 09:00 BST, after US West Coast late matches end
-  workflow_dispatch:        # Manual trigger for testing
+  workflow_dispatch:
+    inputs:
+      date:
+        description: 'Date to regenerate (YYYY-MM-DD). Leave blank to process yesterday.'
+        required: false
+        default: ''
 
 permissions:
   contents: write
@@ -27,7 +32,12 @@ jobs:
       - name: Run AI Pipeline
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: npm run pipeline:generate
+        run: |
+          if [ -n "${{ github.event.inputs.date }}" ]; then
+            npm run pipeline:generate -- --date=${{ github.event.inputs.date }}
+          else
+            npm run pipeline:generate
+          fi
 
       - name: Commit and Push
         run: |

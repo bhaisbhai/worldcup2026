@@ -289,6 +289,28 @@ async function main() {
     console.warn(`⚠️ No matches found in ESPN Scoreboard for date ${targetDate}.`);
   }
 
+  // 1b. Fetch live group standings so Gemini knows each team's actual points
+  let standingsContext = '';
+  try {
+    const standingsData = await fetchJSON('https://site.api.espn.com/apis/v2/sports/soccer/fifa.world/standings');
+    const groups: string[] = [];
+    for (const child of standingsData.children || []) {
+      const gName = child.name || '';
+      const rows = (child.standings?.entries || []).map((e: any) => {
+        const stats = e.stats || [];
+        const get = (n: string) => stats.find((s: any) => s.name === n || s.shortDisplayName === n)?.value ?? 0;
+        return `  ${e.team?.abbreviation?.padEnd(4)} P${get('gamesPlayed')} W${get('wins')} D${get('ties')} L${get('losses')} GF${get('pointsFor')} GA${get('pointsAgainst')} Pts${get('points')}`;
+      });
+      if (rows.length) groups.push(`${gName}:\n${rows.join('\n')}`);
+    }
+    if (groups.length) {
+      standingsContext = `GROUP STANDINGS (as of ${targetDate}):\n${groups.join('\n\n')}`;
+      console.log(`📊 Fetched standings for ${groups.length} groups`);
+    }
+  } catch (err) {
+    console.warn('⚠️ Could not fetch standings — progression notes will lack group context');
+  }
+
   // 2. Read existing master JSON database
   const masterPath = path.resolve(__dirname, '..', 'public', 'assets', 'ai', 'ai_master.json');
   let masterDB: any = { lastUpdated: '', teams: {}, matches: {}, days: {}, today_preview: {}, espnMatches: {}, espnStandings: [] };
@@ -609,6 +631,7 @@ async function main() {
     const prompt = `
 You are analyzing World Cup 2026 matches for date ${targetDate}.
 
+${standingsContext ? standingsContext + '\n\nIMPORTANT: Use the standings above when assessing progression. A team is only ELIMINATED if they are mathematically unable to reach the top 2 (or the best 3rd-place spots). Do NOT call a team eliminated if they still have games to play and points to gain.\n' : ''}
 MATCH DETAILS FOR TODAY (${targetDate}):
 ${dayMatchesList}
 
