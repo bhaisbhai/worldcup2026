@@ -550,6 +550,29 @@ body{
   .mc-form-row{flex-direction:column}
 }
 
+/* ── SEARCH ──────────────────────────────────── */
+.srch-btn{background:none;border:none;color:rgba(255,255,255,.45);padding:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;border-radius:8px;transition:color .15s;flex-shrink:0}
+.srch-btn:active{color:var(--accent)}
+.srch-overlay{position:fixed;inset:0;z-index:300;background:rgba(8,8,8,.98);display:flex;flex-direction:column}
+.srch-overlay.hidden{display:none}
+.srch-bar{display:flex;align-items:center;gap:10px;padding:0 16px;border-bottom:1px solid var(--border);height:66px;flex-shrink:0}
+.srch-icon{color:rgba(255,255,255,.35);flex-shrink:0}
+.srch-input{flex:1;background:none;border:none;outline:none;color:var(--text);font-size:16px;font-family:inherit}
+.srch-input::placeholder{color:rgba(255,255,255,.25)}
+.srch-close{background:none;border:none;color:rgba(255,255,255,.35);font-size:18px;cursor:pointer;padding:4px 6px;flex-shrink:0;line-height:1}
+.srch-results{flex:1;overflow-y:auto;padding-bottom:24px}
+.srch-section-lbl{font-size:9px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:rgba(255,255,255,.25);padding:14px 16px 5px}
+.srch-item{display:flex;align-items:center;gap:12px;padding:11px 16px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,.04);-webkit-tap-highlight-color:transparent}
+.srch-item:active{background:rgba(255,255,255,.04)}
+.srch-item-flag{font-size:24px;flex-shrink:0;width:32px;text-align:center}
+.srch-item-logo{width:32px;height:32px;object-fit:contain;flex-shrink:0;border-radius:3px}
+.srch-item-info{flex:1;min-width:0}
+.srch-item-name{font-size:14px;font-weight:600;color:var(--text)}
+.srch-item-sub{font-size:11px;color:rgba(255,255,255,.38);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.srch-arrow{color:rgba(255,255,255,.18);font-size:15px;flex-shrink:0}
+.srch-empty{text-align:center;color:rgba(255,255,255,.25);font-size:13px;padding:48px 24px;line-height:1.7}
+.srch-hint{text-align:center;color:rgba(255,255,255,.18);font-size:12px;padding:40px 24px;line-height:1.8}
+
 /* ── RESPONSIVE ─────────────────────────────── */
 @media(max-width:768px){
   .hdr-in{height:58px}.wordmark-name{font-size:15px}.clock{display:none}
@@ -822,7 +845,10 @@ body{
 <!-- HEADER -->
 <header class="hdr">
   <div class="hdr-in">
-    <div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <button class="srch-btn" onclick="openSearch()" aria-label="Search players and teams">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg>
+      </button>
       <div class="wordmark">
         <div class="wordmark-name">Game Buddy</div>
         <div class="wordmark-event">FIFA World Cup 2026</div>
@@ -837,6 +863,16 @@ body{
     </div>
   </div>
 </header>
+
+<!-- SEARCH OVERLAY -->
+<div id="searchOverlay" class="srch-overlay hidden">
+  <div class="srch-bar">
+    <svg class="srch-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg>
+    <input id="searchInput" class="srch-input" type="search" placeholder="Search players & teams…" oninput="onSearchInput(this.value)" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+    <button class="srch-close" onclick="closeSearch()">✕</button>
+  </div>
+  <div id="searchResults" class="srch-results"></div>
+</div>
 
 <!-- INSTALL BANNER -->
 <div class="install-banner" id="installBanner">
@@ -1689,6 +1725,115 @@ async function fetchPlayerClubs(){
     const r=await fetch('/data/player-clubs.json',{signal:AbortSignal.timeout(5000)});
     if(r.ok) _playerClubs=await r.json();
   }catch(e){}
+}
+
+/* ── SEARCH ─────────────────────────────────────────── */
+function openSearch(){
+  document.getElementById('searchOverlay').classList.remove('hidden');
+  const inp=document.getElementById('searchInput');
+  inp.value='';
+  document.getElementById('searchResults').innerHTML=`<div class="srch-hint">Search for a player or country<br><span style="font-size:10px;opacity:.6">e.g. "Bellingham", "Brazil", "Real Madrid"</span></div>`;
+  requestAnimationFrame(()=>inp.focus());
+  document.addEventListener('keydown',_srchEscHandler);
+}
+function closeSearch(){
+  document.getElementById('searchOverlay').classList.add('hidden');
+  document.removeEventListener('keydown',_srchEscHandler);
+}
+function _srchEscHandler(e){ if(e.key==='Escape') closeSearch(); }
+
+function onSearchInput(raw){
+  const q=raw.trim().toLowerCase();
+  if(q.length<2){
+    document.getElementById('searchResults').innerHTML=`<div class="srch-hint">Search for a player or country<br><span style="font-size:10px;opacity:.6">e.g. "Bellingham", "Brazil", "Real Madrid"</span></div>`;
+    return;
+  }
+
+  const playerHits=[];
+  for(const [id,d] of Object.entries(_playerClubs)){
+    const name=(d.name||'').toLowerCase();
+    const club=(d.club||'').toLowerCase();
+    const team=(d.teamName||'').toLowerCase();
+    if(name.includes(q)||club.includes(q)||team.includes(q)){
+      playerHits.push({id,...d});
+      if(playerHits.length>=8) break;
+    }
+  }
+
+  const teamHits=[];
+  for(const g of GROUPS_DATA){
+    for(const t of g.teams){
+      if(t.n.toLowerCase().includes(q)){
+        teamHits.push({name:t.n,flag:t.f,group:g.id});
+        if(teamHits.length>=4) break;
+      }
+    }
+    if(teamHits.length>=4) break;
+  }
+
+  if(!playerHits.length&&!teamHits.length){
+    document.getElementById('searchResults').innerHTML=`<div class="srch-empty">No results for "<strong>${raw.replace(/</g,'&lt;')}</strong>"<br><span style="font-size:11px">Try a player name, club, or country</span></div>`;
+    return;
+  }
+
+  let h='';
+  if(playerHits.length){
+    h+=`<div class="srch-section-lbl">Players</div>`;
+    h+=playerHits.map(p=>{
+      const teamFlag=flag(p.teamAbbr||'');
+      const pos=p.position?`<span style="color:var(--accent);margin-right:4px">${p.position}</span>`:'';
+      const sub=`${pos}${teamFlag} ${p.teamName||''}${p.club?` · ${p.club}`:''}`;
+      const logoHtml=p.clubLogo?`<img class="srch-item-logo" src="${p.clubLogo}" alt="" onerror="this.style.display='none'">`:`<span class="srch-item-flag">${teamFlag||'🏳️'}</span>`;
+      return`<div class="srch-item" onclick="openPlayerFromSearch('${p.id}')">
+        ${logoHtml}
+        <div class="srch-item-info">
+          <div class="srch-item-name">${p.name}</div>
+          <div class="srch-item-sub">${sub}</div>
+        </div>
+        <span class="srch-arrow">›</span>
+      </div>`;
+    }).join('');
+  }
+  if(teamHits.length){
+    h+=`<div class="srch-section-lbl">Countries</div>`;
+    h+=teamHits.map(t=>`<div class="srch-item" onclick="openTeamFromSearch('${t.name}')">
+      <span class="srch-item-flag">${t.flag}</span>
+      <div class="srch-item-info">
+        <div class="srch-item-name">${t.name}</div>
+        <div class="srch-item-sub">Group ${t.group} · FIFA World Cup 2026</div>
+      </div>
+      <span class="srch-arrow">›</span>
+    </div>`).join('');
+  }
+  document.getElementById('searchResults').innerHTML=h;
+}
+
+function openPlayerFromSearch(id){
+  const d=_playerClubs[id];
+  if(!d) return;
+  if(!_plLookup[id]){
+    _plLookup[id]={
+      entry:{
+        athlete:{id,displayName:d.name,fullName:d.name},
+        position:{displayName:d.position||'',abbreviation:d.position||''},
+        jersey:d.jersey||''
+      },
+      teamInfo:{name:d.teamName||'',abbr:d.teamAbbr||''}
+    };
+  }
+  $('mcModal').innerHTML=`<div class="mc-body" id="mcBody"></div>`;
+  $('modalBg').classList.add('open');
+  document.body.style.overflow='hidden';
+  closeSearch();
+  openPlayerDetail(id);
+  // Override back button to close modal (not go to lineups)
+  const btn=document.querySelector('#mcBody .pl-back');
+  if(btn){btn.textContent='✕ Close';btn.onclick=closeModal;}
+}
+
+function openTeamFromSearch(teamName){
+  closeSearch();
+  showTab('groups');
 }
 
 async function fetchDailyRecaps(){

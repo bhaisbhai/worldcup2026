@@ -30,7 +30,7 @@ async function main() {
   const teams: any[] = (teamsData.sports?.[0]?.leagues?.[0]?.teams || []).map((t: any) => t.team || t);
   console.log(`📋 Found ${teams.length} WC2026 teams`);
 
-  const playerClubs: Record<string, { name: string; club: string; clubLogo?: string }> = {};
+  const playerClubs: Record<string, { name: string; club: string; teamName: string; teamAbbr: string; position: string; jersey: string; clubLogo?: string }> = {};
 
   for (const team of teams) {
     const teamId = team.id;
@@ -52,11 +52,17 @@ async function main() {
         if (!id) continue;
 
         const name = ath.displayName || ath.fullName || '';
+        const position = ath.position?.abbreviation || ath.position?.displayName || entry.position?.abbreviation || '';
+        const jersey = String(ath.jersey || entry.jersey || '');
         const { club, clubLogo } = extractClub(entry);
 
         playerClubs[id] = {
           name,
           club,
+          teamName: team.displayName || team.name || '',
+          teamAbbr: team.abbreviation || '',
+          position,
+          jersey,
           ...(clubLogo ? { clubLogo } : {}),
         };
         if (club) found++;
@@ -81,10 +87,10 @@ async function main() {
         );
         const ath = profData.athlete || {};
         const { club, clubLogo } = extractClub(ath);
-        if (club) {
-          playerClubs[id].club = club;
-          if (clubLogo) playerClubs[id].clubLogo = clubLogo;
-        }
+        if (club) playerClubs[id].club = club;
+        if (clubLogo) playerClubs[id].clubLogo = clubLogo;
+        if (!playerClubs[id].position) playerClubs[id].position = ath.position?.abbreviation || '';
+        if (!playerClubs[id].jersey) playerClubs[id].jersey = String(ath.jersey || '');
         await sleep(200);
       } catch {
         // skip silently
