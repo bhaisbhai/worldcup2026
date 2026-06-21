@@ -3721,7 +3721,7 @@ async function fetchFavMatches(team){
           <span class="fav-match-team">${oppT.name}</span>
           ${isFt||isLive?`<span class="fav-match-gs${oppWin?' win':myWin?' loss':''}">${oppT.score}</span>`:''}
         </div>
-        <div class="fav-match-meta">${ev.group||''}${ev.venue?' · '+ev.venue:''} · ${localTime(ev.date)}</div>
+        <div class="fav-match-meta">${ev.date.toLocaleDateString([],{weekday:'short',month:'short',day:'numeric'})} · ${localTime(ev.date)}${ev.group?' · '+ev.group:''}${ev.venue?' · '+ev.venue:''}</div>
       </div>
       <span class="fav-pill ${statusLbl.toLowerCase()}">${statusLbl}</span>
     </div>`;
