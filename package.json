@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "script:backfill": "tsx scripts/backfill-master.ts",
     "pipeline:generate": "tsx scripts/generate-ai-content.ts",
-    "pipeline:retrospective-days": "tsx scripts/generate-retrospective-days.ts"
+    "pipeline:retrospective-days": "tsx scripts/generate-retrospective-days.ts",
+    "pipeline:clubs": "tsx scripts/generate-player-clubs.ts"
   },
   "dependencies": {
     "@google/genai": "latest",

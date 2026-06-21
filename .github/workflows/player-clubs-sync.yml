@@ -1,0 +1,40 @@
+name: Player Clubs Sync
+
+on:
+  workflow_dispatch:   # Trigger manually from GitHub Actions tab
+  schedule:
+    - cron: '0 6 * * 1'  # Weekly on Monday 06:00 UTC (catches squad changes)
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Generate Player Clubs
+        run: npm run pipeline:clubs
+
+      - name: Commit and Push
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/player-clubs.json
+          if ! git diff-index --quiet HEAD; then
+            git commit -m "chore: refresh player clubs lookup [skip ci]"
+            git push origin main
+          else
+            echo "No changes to commit."
+          fi

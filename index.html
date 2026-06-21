@@ -1191,6 +1191,7 @@ const hlCache = {};
 const playerCache   = {}; // athleteId → {prof, news}
 const playerHlCache = {}; // athleteId → {videoId, title} | null | undefined
 const _plLookup     = {}; // athleteId → {entry, teamInfo} — populated by mcLineups()
+let   _playerClubs  = {}; // athleteId → {name, club, clubLogo} — from data/player-clubs.json
 
 // One shared promise for the BBC catalog; fetched once per session, 2 pages = up to 100 videos
 let _bbcCatalogPromise = null;
@@ -1681,6 +1682,13 @@ function csvRow(line){
   }
   out.push(cur);
   return out;
+}
+
+async function fetchPlayerClubs(){
+  try{
+    const r=await fetch('/data/player-clubs.json',{signal:AbortSignal.timeout(5000)});
+    if(r.ok) _playerClubs=await r.json();
+  }catch(e){}
 }
 
 async function fetchDailyRecaps(){
@@ -2560,8 +2568,14 @@ function renderPlayerProfile(ath){
   if(ath.displayWeight)  bio.push({k:'Weight',v:ath.displayWeight});
   const nat=ath.flag?.alt||ath.citizenship;
   if(nat)                bio.push({k:'Nationality',v:nat});
-  const club=ath.team?.displayName||ath.team?.name;
-  if(club)               bio.push({k:'Club',v:club});
+  const pid=String(ath.id||'');
+  const clubEntry=_playerClubs[pid];
+  const club=clubEntry?.club||ath.team?.displayName||ath.team?.name||'';
+  if(club){
+    const logo=clubEntry?.clubLogo||'';
+    const clubVal=logo?`<img src="${logo}" alt="" style="height:14px;vertical-align:middle;border-radius:2px;margin-right:5px;display:inline-block">${club}`:club;
+    bio.push({k:'Club',v:clubVal});
+  }
   if(ath.dateOfBirth){
     const d=new Date(ath.dateOfBirth);
     bio.push({k:'Born',v:d.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})});
@@ -3599,6 +3613,7 @@ showSkeleton();
 renderGroups();
 renderKnockout();
 updateKnockoutQualifiers();
+fetchPlayerClubs();
 fetchDailyRecaps().then(() => fetchMatches());
 fetchGroupStandings();
 fetchKnockoutData();
