@@ -1,7 +1,11 @@
 import * as fs from 'fs';
 import * as path from 'path';
+import { fileURLToPath } from 'url';
 import { GoogleGenAI } from '@google/genai';
 import dotenv from 'dotenv';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 dotenv.config();
 
@@ -97,7 +101,7 @@ async function main() {
     if (matches.length === 0) continue;
 
     dailyMatchesDetails[date] = matches.map((m: any) => 
-      `- Match: ${m.homeTeam} vs ${m.awayTeam} (${m.homeScore}-${m.awayScore}), Stadium: ${m.stadium}, Stats: ${JSON.stringify(m.stats)}`
+      `- Match: ${m.homeTeam} vs ${m.awayTeam} (Score: ${m.homeScore}-${m.awayScore}) [Status: ${m.status}], Stadium: ${m.stadium}, Stats: ${JSON.stringify(m.stats)}`
     ).join('\n');
 
     properties[date] = {
@@ -119,7 +123,7 @@ async function main() {
   };
 
   const prompt = `
-You are analyzing World Cup 2026 match days. For each date, generate a daily recap.
+You are analyzing World Cup 2026 match days. For each date, generate a daily summary.
 
 MATCH DETAILS BY DATE:
 ${Object.entries(dailyMatchesDetails).map(([date, details]) => `
@@ -128,10 +132,16 @@ ${details}
 `).join('\n')}
 
 For each date key in the schema, provide:
-- headline: A funny, clickbait headline summarizing the day's events.
-- theDrama: A short description of the main talking points, upsets, or funny moments.
-- mustWatchHighlights: Recommending which match was the must-watch, and warning about which matches were absolute sleepfests.
-- progressionNews: Summarize who is progressing to the knockouts, who is booking flights home, or who is in danger.
+- If matches on that date are completed (Status is STATUS_FINAL or STATUS_FULL_TIME), generate a **daily recap**:
+  - headline: A funny, clickbait headline summarizing the day's events.
+  - theDrama: A short description of the main talking points, upsets, or funny moments.
+  - mustWatchHighlights: Recommending which match was the must-watch, and warning about which matches were absolute sleepfests.
+  - progressionNews: Summarize who is progressing to the knockouts, who is booking flights home, or who is in danger.
+- If matches on that date are scheduled/upcoming (Status is STATUS_SCHEDULED), generate a **daily preview build-up** (do not mention final scores or results, as the games have not been played yet!):
+  - headline: A hype-building, witty headline looking forward to the day's slate.
+  - theDrama: A funny preview of the storylines and hype surrounding the day's matches.
+  - mustWatchHighlights: Recommend which matches are the absolute must-watch blockbusters and which ones look like boring stalemates.
+  - progressionNews: What is at stake for the teams involved (e.g., who must win to survive).
 
 Adhere strictly to your British football pundit co-host persona: sarcastic, self-deprecating, and brutally honest. Ground every single claim in the matches and scores provided. Do not hallucinate or invent new matches.
 `;

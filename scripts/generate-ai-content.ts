@@ -1,7 +1,11 @@
 import * as fs from 'fs';
 import * as path from 'path';
+import { fileURLToPath } from 'url';
 import { GoogleGenAI } from '@google/genai';
 import dotenv from 'dotenv';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 dotenv.config();
 
@@ -352,8 +356,8 @@ async function main() {
   }
 
   // 5. Generate AI commentary & preview in ONE consolidated API call
-  if (completedMatchesForRecap.length > 0 || tomorrowEvents.length > 0) {
-    console.log(`🤖 Building consolidated Gemini analysis for ${completedMatchesForRecap.length} completed matches and tomorrow's preview...`);
+  if (events.length > 0 || tomorrowEvents.length > 0) {
+    console.log(`🤖 Building consolidated Gemini analysis: ${completedMatchesForRecap.length} completed matches, today's day summary, and tomorrow's preview...`);
 
     const matchesProperties: Record<string, any> = {};
     const teamsProperties: Record<string, any> = {};
@@ -405,6 +409,10 @@ async function main() {
         properties: teamsProperties,
         required: Object.keys(teamsProperties)
       };
+      responseSchema.required.push("matches", "teams");
+    }
+
+    if (events.length > 0) {
       responseSchema.properties.day = {
         type: "OBJECT",
         properties: {
@@ -415,7 +423,7 @@ async function main() {
         },
         required: ["headline", "theDrama", "mustWatchHighlights", "progressionNews"]
       };
-      responseSchema.required.push("matches", "teams", "day");
+      responseSchema.required.push("day");
     }
 
     if (tomorrowEvents.length > 0) {
@@ -431,23 +439,40 @@ async function main() {
       responseSchema.required.push("today_preview");
     }
 
+    const dayMatchesList = masterDB.espnMatches[targetDate].map((m: any) => 
+      `- Match: ${m.homeTeam} vs ${m.awayTeam} (Score: ${m.homeScore}-${m.awayScore}) [Status: ${m.status}], Stadium: ${m.stadium}`
+    ).join('\n');
+
     const prompt = `
 You are analyzing World Cup 2026 matches for date ${targetDate}.
 
+MATCH DETAILS FOR TODAY (${targetDate}):
+${dayMatchesList}
+
 ${completedMatchesForRecap.length > 0 ? `
-COMPLETED MATCHES TODAY:
+COMPLETED MATCH TIMELINES & STATS:
 ${completedMatchesForRecap.map(m => `
-- Match: ${m.homeTeam} vs ${m.awayTeam} (${m.homeScore} - ${m.awayScore})
-  Stadium: ${m.stadium}
+- Match: ${m.homeTeam} vs ${m.awayTeam}
   Events Timeline: ${JSON.stringify(m.events)}
   Match Stats: ${JSON.stringify(m.stats)}
 `).join('\n')}
+` : ''}
 
 For each completed match:
 - "matches" key: Generate commentary under the match key (e.g. "NED-SWE") with editionTitle, snappySummary, talkingPoints, randomQuirk.
 - "teams" key: Generate updated tournament summary under the team code keys (e.g. "NED", "SWE") with headline, storySoFar, whatsNext, pubAmmo.
-- "day" key: Generate a daily summary recap with headline, theDrama, mustWatchHighlights, progressionNews.
-` : ''}
+
+For the "day" key:
+- If matches on ${targetDate} are completed (Status is STATUS_FINAL or STATUS_FULL_TIME), generate a **daily recap**:
+  - headline: A funny, clickbait headline summarizing the day's events.
+  - theDrama: A short description of the main talking points, upsets, or funny moments.
+  - mustWatchHighlights: Recommending which match was the must-watch, and warning about which matches were absolute sleepfests.
+  - progressionNews: Summarize who is progressing to the knockouts, who is booking flights home, or who is in danger.
+- If matches on ${targetDate} are scheduled/upcoming (Status is STATUS_SCHEDULED), generate a **daily preview build-up** (do not mention final scores or results, as the games have not been played yet!):
+  - headline: A hype-building, witty headline looking forward to the day's slate.
+  - theDrama: A funny preview of the storylines and hype surrounding the day's matches.
+  - mustWatchHighlights: Recommend which matches are the absolute must-watch blockbusters and which ones look like boring stalemates.
+  - progressionNews: What is at stake for the teams involved (e.g., who must win to survive).
 
 ${tomorrowEvents.length > 0 ? `
 UPCOMING MATCHES TOMORROW:
@@ -456,7 +481,7 @@ ${tomorrowMatchesList}
 - "today_preview" key: Generate a preview for tomorrow's fixtures with headline, theBigOnes, playersToWatch.
 ` : ''}
 
-Adhere strictly to your British pundit persona: sarcastic, self-deprecating, and brutally honest. Keep all commentary grounded in the actual facts provided in the completed matches list.
+Adhere strictly to your British pundit persona: sarcastic, self-deprecating, and brutally honest. Keep all commentary grounded in the actual facts provided.
 `;
 
     try {
