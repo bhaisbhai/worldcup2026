@@ -2739,11 +2739,16 @@ function renderPlayerProfile(ath,genAth={},knownId=''){
   if(ath.age||genAth.age) bio.push({k:'Age',v:String(ath.age||genAth.age)});
   if(ath.displayHeight||genAth.displayHeight) bio.push({k:'Height',v:ath.displayHeight||genAth.displayHeight});
   if(ath.displayWeight||genAth.displayWeight) bio.push({k:'Weight',v:ath.displayWeight||genAth.displayWeight});
-  const nat=ath.flag?.alt||ath.citizenship||genAth.flag?.alt||genAth.citizenship;
-  if(nat) bio.push({k:'Nationality',v:nat});
   const pid=String(ath.id||genAth.id||knownId||'');
+  const ps=_playerStats[pid];
+  const nat=ath.flag?.alt||ath.citizenship||genAth.flag?.alt||genAth.citizenship
+    ||ps?.teamName||_playerClubs[pid]?.teamName||'';
+  if(nat) bio.push({k:'Country',v:nat});
   const clubEntry=_playerClubs[pid];
-  const club=clubEntry?.club||ath.team?.displayName||ath.team?.name||'';
+  const nationalTeamName=ps?.teamName||clubEntry?.teamName||'';
+  // Filter out national team name — ESPN returns it as primary team during WC
+  const rawClub=clubEntry?.club||ath.team?.displayName||ath.team?.name||'';
+  const club=(rawClub&&rawClub!==nationalTeamName)?rawClub:'';
   if(club){
     const logo=clubEntry?.clubLogo||'';
     const clubVal=logo?`<img src="${logo}" alt="" style="height:14px;vertical-align:middle;border-radius:2px;margin-right:5px;display:inline-block">${club}`:club;
@@ -2756,7 +2761,6 @@ function renderPlayerProfile(ath,genAth={},knownId=''){
   }
 
   // Primary stats source: pre-built tournament stats file (aggregated from all match summaries)
-  const ps=_playerStats[pid];
   let tournStats=[];
   if(ps){
     const PSMAP=[['appearances','Apps'],['goals','Goals'],['assists','Assists'],['minutesPlayed','Mins'],
