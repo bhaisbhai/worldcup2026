@@ -267,9 +267,15 @@ body{
 .gtbl tr:last-child td{border-bottom:none}
 .gtbl tr.lead td{background:rgba(0,255,135,.04)}
 .gtbl tr:hover td{background:rgba(255,255,255,.02)}
+.gtbl tr.g-clickable{cursor:pointer}
+.gtbl tr.g-clickable:hover td{background:rgba(255,255,255,.04)}
+.gtbl tr.g-clickable:hover .gname{color:var(--accent)}
 .gteam{display:flex;align-items:center;gap:7px}
 .gflag{font-size:16px}
-.gname{font-size:12px;font-weight:500}
+.gname{font-size:12px;font-weight:500;transition:color .12s}
+/* clickable team/player name links */
+.tname.t-link,.mc-tname.t-link{cursor:pointer;transition:color .12s}
+.tname.t-link:hover,.mc-tname.t-link:hover{color:var(--accent)}
 .gpos{font-size:10px;color:var(--t2);font-family:var(--mono);margin-right:2px}
 .gpts{font-weight:700;font-family:var(--mono)}.gpts.lead{color:var(--accent)}
 .ggd{font-family:var(--mono);font-size:12px}
@@ -648,14 +654,18 @@ body{
 .lb-box{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:10px}
 .lb-box-hd{padding:10px 16px;border-bottom:1px solid var(--border)}
 .lb-box-title{font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--t2)}
-.lb-row{display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid rgba(255,255,255,.03)}
+.lb-row{display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid rgba(255,255,255,.03);transition:background .12s}
 .lb-row:last-child{border-bottom:none}
+.lb-row.clickable{cursor:pointer}
+.lb-row.clickable:hover{background:rgba(255,255,255,.04)}
+.lb-row.clickable:hover .lb-name{color:var(--accent)}
 .lb-rank{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--t2);min-width:20px;text-align:center;flex-shrink:0}
 .lb-rank.gold{color:var(--gold)}
 .lb-flag{font-size:18px;flex-shrink:0}
 .lb-info{flex:1;min-width:0}
-.lb-name{font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.lb-team{font-size:10px;color:var(--t2);margin-top:2px}
+.lb-name{font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;transition:color .12s}
+.lb-team{font-size:10px;color:var(--t2);margin-top:2px;cursor:pointer;transition:color .12s}
+.lb-team:hover{color:var(--text)}
 .lb-val{font-size:20px;font-weight:800;font-family:var(--mono);min-width:24px;text-align:right;flex-shrink:0}
 .lb-val.g{color:var(--accent)}.lb-val.a{color:#64c8ff}.lb-val.y{color:var(--gold)}.lb-val.r{color:var(--red)}.lb-val.c{color:#a78bfa}
 .lb-2col{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -664,8 +674,9 @@ body{
 .watch-hd{font-size:9px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:var(--t2);margin:24px 0 6px}
 .watch-algo{font-size:10px;color:var(--t2);margin-bottom:12px;line-height:1.75;padding:9px 13px;background:rgba(255,255,255,.025);border-radius:8px;border:1px solid var(--border)}
 .watch-list{display:flex;flex-direction:column;gap:8px;margin-bottom:28px}
-.watch-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:12px;transition:border-color .15s}
-.watch-card:hover{border-color:#2a2a2a}
+.watch-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:12px;transition:border-color .15s,background .12s;cursor:pointer}
+.watch-card:hover{border-color:#2a2a2a;background:#131313}
+.watch-card:hover .watch-name{color:var(--accent)}
 .watch-pos{font-family:var(--mono);font-size:11px;font-weight:800;color:var(--t2);min-width:20px;text-align:center;flex-shrink:0}
 .watch-pos.top3{color:var(--gold)}
 .watch-flag{font-size:26px;flex-shrink:0;line-height:1}
@@ -734,6 +745,9 @@ body{
 .fav-gtbl td.tl{text-align:left;padding-left:14px}
 .fav-gtbl tr:last-child td{border-bottom:none}
 .fav-gtbl tr.me td{background:rgba(0,255,135,.04)}
+.fav-gtbl tr.g-clickable{cursor:pointer}
+.fav-gtbl tr.g-clickable:hover td{background:rgba(255,255,255,.04)}
+.fav-gtbl tr.g-clickable:hover .gname{color:var(--accent)}
 .fav-gtbl .gteam{display:flex;align-items:center;gap:7px}
 
 @media(max-width:768px){.tp-grid{grid-template-columns:repeat(auto-fill,minmax(80px,1fr))}}
@@ -1267,6 +1281,7 @@ const _plLookup     = {}; // athleteId → {entry, teamInfo} — populated by mc
 let   _playerClubs  = {}; // athleteId → {name, club, clubLogo} — from data/player-clubs.json
 let   _playerStats  = {}; // athleteId → {goals, assists, apps, ...} — from data/player-stats.json
 let   _playerVerdicts = {}; // athleteId → verdict string — from data/player-verdicts.json
+const _lbPlayerData = {}; // athleteId → {name, teamName, teamAbbr} — from leaderboard data
 
 // One shared promise for the BBC catalog; fetched once per session, 2 pages = up to 100 videos
 let _bbcCatalogPromise = null;
@@ -1474,12 +1489,12 @@ function buildCard(ev){
     <div class="mc-teams">
       <div class="tcol">
         <div class="tflag">${flag(ev.home.abbr)}</div>
-        <div class="tname${ev.home.winner?' winner':''}">${ev.home.name}</div>
+        <div class="tname t-link${ev.home.winner?' winner':''}" onclick="event.stopPropagation();openTeamPage('${esc(ev.home.name)}')">${ev.home.name}</div>
       </div>
       ${scHtml}
       <div class="tcol">
         <div class="tflag">${flag(ev.away.abbr)}</div>
-        <div class="tname${ev.away.winner?' winner':''}">${ev.away.name}</div>
+        <div class="tname t-link${ev.away.winner?' winner':''}" onclick="event.stopPropagation();openTeamPage('${esc(ev.away.name)}')">${ev.away.name}</div>
       </div>
     </div>
     ${(isLive||isFt) ? renderScorers(ev.goals) : ''}
@@ -1907,17 +1922,55 @@ function openPlayerFromSearch(id){
 
 function openTeamFromSearch(teamName){
   closeSearch();
+  openTeamPage(teamName);
+}
+
+function openTeamPage(teamName){
   let teamObj=null;
   for(const g of GROUPS_DATA){
     const t=g.teams.find(t=>t.n===teamName);
     if(t){teamObj={...t,group:g.id};break;}
   }
+  // Fallback: fuzzy match via ESPN display name
+  if(!teamObj){
+    for(const g of GROUPS_DATA){
+      const t=g.teams.find(t=>favTeamMatch(teamName,t.n));
+      if(t){teamObj={...t,group:g.id};break;}
+    }
+  }
   if(!teamObj) return;
+  closeModal();
   document.querySelectorAll('.tbtn').forEach(b=>b.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   document.querySelector('.tbtn[data-tab="myteam"]')?.classList.add('active');
   const sec=$('tab-myteam');
   if(sec){sec.classList.add('active');renderTeamPage(sec,teamObj);}
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function openPlayerById(id){
+  if(!id) return;
+  if(!_plLookup[id]){
+    const d=_playerClubs[id]||{};
+    const lb=_lbPlayerData[id]||{};
+    const name=d.name||lb.name||'';
+    const teamName=d.teamName||lb.teamName||'';
+    const teamAbbr=d.teamAbbr||lb.teamAbbr||'';
+    _plLookup[id]={
+      entry:{
+        athlete:{id,displayName:name,fullName:name},
+        position:{displayName:d.position||'',abbreviation:d.position||''},
+        jersey:d.jersey||''
+      },
+      teamInfo:{name:teamName,abbr:teamAbbr}
+    };
+  }
+  $('mcModal').innerHTML=`<div class="mc-body" id="mcBody"></div>`;
+  $('modalBg').classList.add('open');
+  document.body.style.overflow='hidden';
+  openPlayerDetail(id);
+  const btn=document.querySelector('#mcBody .pl-back');
+  if(btn){btn.textContent='✕ Close';btn.onclick=closeModal;}
 }
 
 async function fetchDailyRecaps(){
@@ -2085,7 +2138,7 @@ function renderGroups(){
           <th>P</th><th>W</th><th>D</th><th>L</th><th>GD</th><th>Pts</th>
         </tr></thead>
         <tbody>
-        ${g.teams.map((t,i)=>`<tr class="${i===0?'lead':''}">
+        ${g.teams.map((t,i)=>`<tr class="${i===0?'lead ':''} g-clickable" onclick="openTeamPage('${esc(t.n)}')" role="button">
           <td class="tl"><span class="gpos">${i+1}</span></td>
           <td class="tl"><div class="gteam"><span class="gflag">${t.f}</span><span class="gname">${t.n}</span></div></td>
           <td>${t.p}</td><td>${t.w}</td><td>${t.d}</td><td>${t.l}</td>
@@ -2321,12 +2374,12 @@ function renderMCHeader(ev){
       <div class="mc-teams-row">
         <div class="mc-team-col">
           <div class="mc-flag">${flag(ev.home.abbr)}</div>
-          <div class="mc-tname">${ev.home.name}</div>
+          <div class="mc-tname t-link" onclick="openTeamPage('${esc(ev.home.name)}')">${ev.home.name}</div>
         </div>
         <div class="mc-score-center">${scoreBlock}<div class="mc-spill ${pillCls}">${pillTxt}</div></div>
         <div class="mc-team-col">
           <div class="mc-flag">${flag(ev.away.abbr)}</div>
-          <div class="mc-tname">${ev.away.name}</div>
+          <div class="mc-tname t-link" onclick="openTeamPage('${esc(ev.away.name)}')">${ev.away.name}</div>
         </div>
       </div>
       ${ctxHtml ? `<div class="mc-ctx">${ctxHtml}</div>` : ''}
@@ -3395,7 +3448,7 @@ async function fetchLeaderboardData(){
       const abbr = athlete.team?.abbreviation||'';
       const name = athlete.displayName||'';
       const val  = parseFloat(entry.value??entry.displayValue)||0;
-      return {rank:idx+1,name,teamName:athlete.team?.displayName||'',abbr,
+      return {rank:idx+1,id:String(athlete.id||''),name,teamName:athlete.team?.displayName||'',abbr,
               f:FLAGS[abbr]||'🏳️',displayVal:entry.displayValue||String(val),val};
     }
 
@@ -3410,7 +3463,7 @@ async function fetchLeaderboardData(){
         tables[key] = leaders.slice(0,10);
         leaders.forEach(l => {
           const k = l.name+'||'+l.abbr;
-          if(!playerMap[k]) playerMap[k]={name:l.name,teamName:l.teamName,teamAbbr:l.abbr,f:l.f,
+          if(!playerMap[k]) playerMap[k]={id:l.id||'',name:l.name,teamName:l.teamName,teamAbbr:l.abbr,f:l.f,
             goals:0,assists:0,yellowCards:0,redCards:0,cleanSheets:0,teamPts:0};
           playerMap[k][cfg.statKey]=l.val;
         });
@@ -3500,15 +3553,20 @@ function lbStatBox(rows, valCls, title, limit=10){
   const syms = ['🥇','🥈','🥉'];
   const hd = title ? `<div class="lb-box-hd"><span class="lb-box-title">${title}</span></div>` : '';
   const body = rows.length
-    ? rows.map((p,i) => `<div class="lb-row">
-        <span class="lb-rank${i<3?' gold':''}">${i<3?syms[i]:i+1}</span>
-        <span class="lb-flag">${p.f}</span>
-        <div class="lb-info">
-          <div class="lb-name">${p.name}</div>
-          <div class="lb-team">${p.teamName}</div>
-        </div>
-        <span class="lb-val ${valCls}">${p.displayVal}</span>
-      </div>`).join('')
+    ? rows.map((p,i) => {
+        if(p.id) _lbPlayerData[p.id]={name:p.name,teamName:p.teamName,teamAbbr:p.abbr||''};
+        const hasId = !!p.id;
+        const teamEsc = esc(p.teamName||'');
+        return `<div class="lb-row${hasId?' clickable':''}"${hasId?` onclick="openPlayerById('${p.id}')"`:''}">
+          <span class="lb-rank${i<3?' gold':''}">${i<3?syms[i]:i+1}</span>
+          <span class="lb-flag">${p.f}</span>
+          <div class="lb-info">
+            <div class="lb-name">${p.name}</div>
+            <div class="lb-team"${teamEsc?` onclick="event.stopPropagation();openTeamPage('${teamEsc}')"`:''}>${p.teamName}</div>
+          </div>
+          <span class="lb-val ${valCls}">${p.displayVal}</span>
+        </div>`;
+      }).join('')
     : `<div class="lb-empty">No data yet — check back after matches complete.</div>`;
   return `<div class="lb-box">${hd}${body}</div>`;
 }
@@ -3541,12 +3599,16 @@ function renderLeaderboard(){
         if(p.cleanSheets) pills.push({c:'c', t:`${p.cleanSheets}CS`});
         if(p.yellowCards) pills.push({c:'d', t:`${p.yellowCards}🟨`});
         if(p.redCards)    pills.push({c:'d', t:`${p.redCards}🟥`});
-        return `<div class="watch-card">
+        if(p.id) _lbPlayerData[p.id]={name:p.name,teamName:p.teamName,teamAbbr:p.teamAbbr||''};
+        const cardClick = p.id ? `onclick="openPlayerById('${p.id}')"` : '';
+        const teamEsc2 = esc(p.teamName||'');
+        const teamClick = teamEsc2 ? `onclick="event.stopPropagation();openTeamPage('${teamEsc2}')"` : '';
+        return `<div class="watch-card" ${cardClick}>
           <span class="watch-pos${i<3?' top3':''}">${i<3?syms[i]:i+1}</span>
           <span class="watch-flag">${p.f}</span>
           <div class="watch-info">
             <div class="watch-name">${p.name}</div>
-            <div class="watch-team">${p.teamName}</div>
+            <div class="watch-team" ${teamClick} style="cursor:pointer">${p.teamName}</div>
             <div class="watch-pills">${pills.map(pl=>`<span class="watch-pill ${pl.c}">${pl.t}</span>`).join('')}</div>
           </div>
           <div class="watch-score">
@@ -3741,8 +3803,8 @@ function renderFavGroupTable(g, myTeam){
     </tr></thead>
     <tbody>${sorted.map(t=>{
       const me = t.n===myTeam.n;
-      return`<tr${me?' class="me"':''}>
-        <td class="tl"><div class="gteam"><span>${t.f}</span><span>${t.n}</span></div></td>
+      return`<tr class="${me?'me ':''} g-clickable" onclick="openTeamPage('${esc(t.n)}')" role="button">
+        <td class="tl"><div class="gteam"><span>${t.f}</span><span class="gname">${t.n}</span></div></td>
         <td>${t.p}</td><td>${t.w}</td><td>${t.d}</td><td>${t.l}</td>
         <td>${t.gf}</td><td>${t.ga}</td>
         <td style="color:${t.gd>=0?'var(--accent)':'#ff5555'}">${t.gd>0?'+':''}${t.gd}</td>
