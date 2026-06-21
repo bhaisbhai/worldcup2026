@@ -22,8 +22,9 @@ This document tracks all the modifications made during this session to implement
 - **Historical Backfill Prompt:** Aligned instructions to generate witty preview summaries for dates where matches are scheduled/ongoing (`STATUS_SCHEDULED`) and recaps for completed days.
 
 ### [scripts/generate-offline-verdicts.ts](file:///Users/rajarjan/Documents/game%20buddy/scripts/generate-offline-verdicts.ts)
-- **New Utility:** Created an offline rule-based generator script that processes June 20, 2026 matches, parses rosters, and creates/appends witty pundit verdicts for all 66 active players who logged minutes yesterday using detailed stat-based templates. This bypassed the Gemini API daily quota limits and seeded the data immediately.
+- **New Utility:** Created an offline rule-based generator script that processes June 20, 2026 matches, parses rosters, and creates/appends witty pundit verdicts for all 66 active players who logged minutes yesterday.
 - **Advanced Stats Integration:** Wired in the same `derivePlayerAdvancedStats` simulation engine to generate clean sheets, goalkeeper saves, and defensive clearances in offline verdicts.
+- **Template Expansion & Personalization:** Expanded the templates collection to feature 6 unique, highly varied templates for each position and condition (brace, goal, assist, red, yellow, gkClean, gkSavesHi, gkConcededHi, gkDefault, defClean, defSolid, defHorror, midPlaymaker, midCardio, fwdQuiet, fwdCardio, subLate). Implemented dynamic placeholder replacement for player names (`{name}`), teams (`{team}`), and statistics (clearances, saves, passes, goals, assists) to produce a completely unique, personalized commentary line for every player.
 
 ### [scripts/generate-player-stats.ts](file:///Users/rajarjan/Documents/game%20buddy/scripts/generate-player-stats.ts)
 - **Advanced Tournament Aggregation:** Added the `derivePlayerAdvancedStats` helper to calculate clearances, passes completed, passes attempted, and clean sheets per match, accumulating them in the global `data/player-stats.json` database.
