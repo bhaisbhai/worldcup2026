@@ -1221,7 +1221,8 @@ let lastEvents = [];
 let browseDate = null;   // null = today; Date object when browsing
 
 function toDateStr(d){ return d.toISOString().slice(0,10).replace(/-/g,''); }
-function todayStr(){ return toDateStr(new Date()); }
+function localDateStr(d){ return `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`; }
+function todayStr(){ return localDateStr(new Date()); }
 
 // ═══════════════════════════════════════════════════
 //  HELPERS
@@ -1688,8 +1689,8 @@ function renderToday(events, dayDate, patch){
 
   $('livePill').classList.toggle('hidden', live.length===0);
 
-  // Resolve the display date
-  const dispDate = browseDate || (dayDate ? new Date(dayDate+'T12:00:00') : new Date());
+  // Resolve the display date — use local new Date() when viewing today so timezone offsets don't shift the day label
+  const dispDate = browseDate || new Date();
 
   // --- patch mode: update existing cards without wiping the DOM ---
   if(patch){
@@ -2082,7 +2083,7 @@ async function fetchMatches(){
   setRefreshLabel('↻ Refreshing…', true);
   $('rfLabel').style.pointerEvents = 'none';
   const isPatch = lastEvents.length > 0 && !document.querySelector('.skel-grid');
-  const dateParam = browseDate ? '?dates='+toDateStr(browseDate) : '';
+  const dateParam = browseDate ? '?dates='+localDateStr(browseDate) : '';
   try {
     const r = await fetch(ESPN_URL+dateParam, { signal: AbortSignal.timeout(8000) });
     if(!r.ok) throw new Error(`${r.status}`);
