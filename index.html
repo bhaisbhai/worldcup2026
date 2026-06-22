@@ -2348,12 +2348,48 @@ function koSlotKey(label){
   return null;
 }
 
+function renderKODebugPanel(){
+  const panel = $('ko-debug-panel');
+  if(!panel) return;
+  const rows = GROUPS_DATA.flatMap(g => {
+    const teams = [...(g.teams||[])].sort((a,b)=>Number(b.pts??0)-Number(a.pts??0)||Number(b.gd??0)-Number(a.gd??0)||Number(b.gf??0)-Number(a.gf??0));
+    return teams.map((t,i) => {
+      const slot = i===0?'1'+g.id : i===1?'2'+g.id : '-';
+      const slotEl = document.querySelector(`#bracket [data-slot="${slot}"]`);
+      const slotFilled = !slotEl && slot!=='-' ? '✅ filled' : slotEl ? '⬜ empty' : '-';
+      return `<tr style="background:${t.clinched?'#1a3a1a':t.eliminated?'#3a1a1a':''}">
+        <td>${g.id}</td>
+        <td>${t.f} ${t.n}</td>
+        <td>${t.pts??'?'}</td>
+        <td>${t.gd??'?'}</td>
+        <td>${t.gf??'?'}</td>
+        <td>${t.p??'?'}</td>
+        <td style="color:${t.clinched?'#4f4':'#f44'}">${t.clinched?'✓':'✗'}</td>
+        <td style="font-size:9px;max-width:120px;overflow:hidden">${t.note||'—'}</td>
+        <td>${slot}</td>
+        <td>${slotFilled}</td>
+      </tr>`;
+    });
+  }).join('');
+  panel.innerHTML = `
+    <div style="font-size:11px;font-weight:700;margin-bottom:6px;color:var(--acc)">🔧 KO Debug — GROUPS_DATA after ESPN load</div>
+    <div style="overflow-x:auto">
+    <table style="font-size:10px;border-collapse:collapse;width:100%">
+      <thead><tr style="color:var(--t2)">
+        <th>G</th><th>Team</th><th>Pts</th><th>GD</th><th>GF</th><th>P</th><th>Clinched</th><th>ESPN note</th><th>Slot</th><th>DOM</th>
+      </tr></thead>
+      <tbody>${rows||'<tr><td colspan="10" style="color:var(--t2);padding:8px">Waiting for ESPN…</td></tr>'}</tbody>
+    </table>
+    </div>`;
+}
+
 function renderKnockout(){
   const sec = $('tab-knockout');
   sec.innerHTML = `
     <div class="ko-hd">Knockout Stage</div>
     <div class="ko-sub">Round of 32 · Round of 16 · Quarter-Finals · Semi-Finals · Final — MetLife Stadium, Jul 19</div>
-    <div class="bscroll"><div class="bracket" id="bracket"></div></div>`;
+    <div class="bscroll"><div class="bracket" id="bracket"></div></div>
+    <div id="ko-debug-panel" style="margin:16px;padding:12px;background:var(--card);border-radius:10px;border:1px solid var(--bdr)"></div>`;
   const b = $('bracket');
 
   function mkKOTeam(label){
@@ -3587,6 +3623,7 @@ function fillKOSlot(key, team, options={}){
 function refreshKnockoutBracket(){
   renderKnockout();
   updateKnockoutFromGroups();
+  renderKODebugPanel();
 }
 
 function updateKnockoutQualifiers(){ updateKnockoutFromGroups(); }
