@@ -1354,8 +1354,10 @@ window.initKeepyUppy = function() {
       submitScore(name, sc, combo, perf)
         .catch(() => {})
         .finally(() => {
-          lbLoading = false;
-          fetchLeaderboard(true);
+          setTimeout(() => {
+            lbLoading = false;
+            fetchLeaderboard(true);
+          }, 450);
         });
     };
     const doSkip = () => {
@@ -1368,8 +1370,10 @@ window.initKeepyUppy = function() {
       submitScore(selectedChar.name, sc, combo, perf)
         .catch(() => {})
         .finally(() => {
-          lbLoading = false;
-          fetchLeaderboard(true);
+          setTimeout(() => {
+            lbLoading = false;
+            fetchLeaderboard(true);
+          }, 450);
         });
     };
 
