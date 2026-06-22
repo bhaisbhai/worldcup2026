@@ -3413,6 +3413,73 @@ function mcNews(ev,data){
 }
 
 // ═══════════════════════════════════════════════════
+//  COMPUTE GROUP STANDINGS FROM SCOREBOARD RESULTS
+//  Primary source — uses the same endpoint as match
+//  cards, so it works whenever match data works.
+// ═══════════════════════════════════════════════════
+async function computeStandingsFromScoreboard(){
+  const now = new Date();
+  // Cover the full group stage window (Jun 11 – Jul 2) plus a few days' buffer
+  const dates = Array.from({length:25},(_,i)=>{
+    const d=new Date(now); d.setDate(d.getDate()-15+i); return localDateStr(d);
+  });
+
+  const seen = new Set();
+  const allEvents = [];
+  await Promise.all(dates.map(async ds=>{
+    try{
+      const r=await fetch(`${ESPN_URL}?dates=${ds}`,{signal:AbortSignal.timeout(7000)});
+      if(!r.ok) return;
+      const data=await r.json();
+      for(const raw of (data.events||[])){
+        if(seen.has(raw.id)) continue;
+        seen.add(raw.id);
+        try{ allEvents.push(parseEvent(raw)); }catch(e){}
+      }
+    }catch(e){}
+  }));
+
+  // groupCalc[gId][teamDisplayName] = {p,w,d,l,gf,ga}
+  const groupCalc = {};
+  for(const ev of allEvents){
+    if(ev.state!=='post') continue;
+    const gm = (ev.group||'').match(/Group\s+([A-L])/i);
+    if(!gm) continue;
+    const gId = gm[1].toUpperCase();
+    if(!groupCalc[gId]) groupCalc[gId]={};
+    const gc = groupCalc[gId];
+    const hn=ev.home.name, an=ev.away.name;
+    const hg=ev.home.score, ag=ev.away.score;
+    if(!gc[hn]) gc[hn]={p:0,w:0,d:0,l:0,gf:0,ga:0};
+    if(!gc[an]) gc[an]={p:0,w:0,d:0,l:0,gf:0,ga:0};
+    gc[hn].p++; gc[hn].gf+=hg; gc[hn].ga+=ag;
+    gc[an].p++; gc[an].gf+=ag; gc[an].ga+=hg;
+    if(hg>ag){gc[hn].w++;gc[an].l++;}
+    else if(hg<ag){gc[an].w++;gc[hn].l++;}
+    else{gc[hn].d++;gc[an].d++;}
+  }
+
+  let changed = false;
+  GROUPS_DATA.forEach(g=>{
+    const gc=groupCalc[g.id];
+    if(!gc) return;
+    g.teams.forEach(t=>{
+      const key=Object.keys(gc).find(k=>favTeamMatch(k,t.n)||favTeamMatch(t.n,k));
+      if(!key) return;
+      const r=gc[key];
+      t.p=r.p; t.w=r.w; t.d=r.d; t.l=r.l;
+      t.gf=r.gf; t.ga=r.ga; t.gd=r.gf-r.ga; t.pts=r.w*3+r.d;
+      changed=true;
+    });
+  });
+
+  if(changed){
+    renderGroups();
+    updateKnockoutQualifiers();
+  }
+}
+
+// ═══════════════════════════════════════════════════
 //  FETCH LIVE GROUP STANDINGS
 // ═══════════════════════════════════════════════════
 function getStat(stats, name){
@@ -4648,6 +4715,7 @@ fetchPlayerStats();
 fetchPlayerVerdicts();
 fetchDailyRecaps().then(() => fetchMatches());
 fetchGroupStandings();
+computeStandingsFromScoreboard();
 fetchKnockoutData();
 if(favTeam) renderMyTeam();
 setTimeout(observeCards, 200);
