@@ -1994,6 +1994,7 @@ async function fetchPlayerVerdicts(){
 let _gameLoaded = false;
 function openGame() {
   document.getElementById('gameOverlay').classList.remove('game-ov-hidden');
+  gtag('event', 'game_started');
   if (!_gameLoaded) {
     _gameLoaded = true;
     const s = document.createElement('script');
