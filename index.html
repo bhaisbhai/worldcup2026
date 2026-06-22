@@ -2214,6 +2214,7 @@ function openPlayerById(id){
 }
 
 async function fetchDailyRecaps(){
+  return; // disabled — recap quality under review
   try {
     const r = await fetch('/api/recaps', { signal: AbortSignal.timeout(5000) });
     if(r.ok){
