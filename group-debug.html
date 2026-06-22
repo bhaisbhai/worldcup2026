@@ -130,7 +130,10 @@ async function load() {
         teams.push({ gId, abbr, name, w, d, l, gf, ga, gd: gf-ga, pts, p: w+d+l, clinched, eliminated, bestEightAdvance, note: noteText });
       });
       // Sort
-      teams.sort((a,b) => Number(b.pts)-Number(a.pts) || Number(b.gd)-Number(a.gd) || Number(b.gf)-Number(a.gf));
+      teams.sort((a,b) =>
+        Number(b.pts)-Number(a.pts) || Number(b.gd)-Number(a.gd) || Number(b.gf)-Number(a.gf) ||
+        (b.clinched?1:0)-(a.clinched?1:0)
+      );
       groups.push({ gId, teams });
     });
 

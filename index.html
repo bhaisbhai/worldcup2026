@@ -3562,13 +3562,16 @@ async function fetchGroupStandings(){
 }
 
 function updateKnockoutFromGroups(){
-  // HARDCODED — only confirmed qualifiers shown until dynamic logic is verified at /group-debug
-  const CONFIRMED = [
-    { slot:'1A', n:'Mexico',        f:'🇲🇽' },
-    { slot:'1D', n:'United States', f:'🇺🇸' },
-    { slot:'1E', n:'Germany',       f:'🇩🇪' },
-  ];
-  CONFIRMED.forEach(({ slot, n, f }) => fillKOSlot(slot, { n, f }));
+  GROUPS_DATA.forEach(g => {
+    const teams = [...(g.teams||[])].sort((a,b) =>
+      Number(b.pts??0) - Number(a.pts??0)      ||
+      Number(b.gd??0)  - Number(a.gd??0)       ||
+      Number(b.gf??0)  - Number(a.gf??0)       ||
+      (b.clinched?1:0) - (a.clinched?1:0)      // tiebreak: clinched teams rank above Best-8
+    );
+    if(teams[0]?.clinched) fillKOSlot('1'+g.id, teams[0]);
+    if(teams[1]?.clinched) fillKOSlot('2'+g.id, teams[1]);
+  });
 }
 
 function fillKOSlot(key, team, options={}){
