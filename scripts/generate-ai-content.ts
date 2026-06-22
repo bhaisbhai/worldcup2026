@@ -53,7 +53,7 @@ async function callGemini(prompt: string, schema: any, retries = 10): Promise<an
     try {
       console.log(`🤖 Requesting Gemini (attempt ${attempt}/${retries})...`);
       const response = await ai.models.generateContent({
-        model: "gemini-2.0-flash",
+        model: "gemini-2.5-flash",
         contents: finalPrompt, // Pass the combined prompt here
         config: {
           responseMimeType: "application/json",
