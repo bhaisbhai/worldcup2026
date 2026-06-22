@@ -2016,7 +2016,7 @@ function openGame() {
   if (!_gameLoaded) {
     _gameLoaded = true;
     const s = document.createElement('script');
-    s.src = '/keepy-uppy.js';
+    s.src = '/keepy-uppy.js?v=' + Date.now();
     s.onload = () => window.initKeepyUppy?.();
     document.head.appendChild(s);
   }
