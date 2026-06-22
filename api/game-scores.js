@@ -1,10 +1,13 @@
 const KEY = 'kuking_leaderboard';
 
+const REDIS_URL = process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL;
+const REDIS_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN;
+
 async function redis(command, ...args) {
-  const res = await fetch(process.env.UPSTASH_REDIS_REST_URL, {
+  const res = await fetch(REDIS_URL, {
     method: 'POST',
     headers: {
-      Authorization: `Bearer ${process.env.UPSTASH_REDIS_REST_TOKEN}`,
+      Authorization: `Bearer ${REDIS_TOKEN}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify([command, ...args]),
@@ -14,10 +17,10 @@ async function redis(command, ...args) {
 }
 
 async function redisPipeline(commands) {
-  const res = await fetch(`${process.env.UPSTASH_REDIS_REST_URL}/pipeline`, {
+  const res = await fetch(`${REDIS_URL}/pipeline`, {
     method: 'POST',
     headers: {
-      Authorization: `Bearer ${process.env.UPSTASH_REDIS_REST_TOKEN}`,
+      Authorization: `Bearer ${REDIS_TOKEN}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(commands),
@@ -31,7 +34,7 @@ module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   if (req.method === 'OPTIONS') return res.status(200).end();
 
-  if (!process.env.UPSTASH_REDIS_REST_URL || !process.env.UPSTASH_REDIS_REST_TOKEN) {
+  if (!REDIS_URL || !REDIS_TOKEN) {
     return res.status(503).json({ error: 'Leaderboard not configured' });
   }
 
