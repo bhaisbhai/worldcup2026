@@ -54,7 +54,7 @@ async function callGemini(prompt: string, schema: any, retries = 10): Promise<an
         contents: prompt,
         config: {
           responseMimeType: "application/json",
-          responseSchema: schema,
+          // responseSchema: schema — removed; schema is enforced via prompt instead
           systemInstruction: punditSystemInstruction,
           temperature: 0.4,
         },
@@ -789,6 +789,46 @@ ${tomorrowMatchesList}
 ` : ''}
 
 Adhere strictly to your British pundit persona: sarcastic, self-deprecating, and brutally honest. Keep all commentary grounded in the actual facts provided.
+
+YOU MUST RETURN A RAW JSON OBJECT THAT MATCHES THIS EXACT SCHEMA SPECIFICATION. DO NOT INVENT DYNAMIC KEYS FOR MATCHES OR PLAYERS. USE ARRAYS.
+
+{
+  "matches": [
+    {
+      "matchKey": "string (e.g. TUN-JPN)",
+      "editionTitle": "string",
+      "snappySummary": "string",
+      "talkingPoints": ["string"],
+      "randomQuirk": "string"
+    }
+  ],
+  "teams": [
+    {
+      "teamCode": "string (e.g. TUN)",
+      "headline": "string",
+      "storySoFar": "string",
+      "whatsNext": "string",
+      "pubAmmo": "string"
+    }
+  ],
+  "playerVerdicts": [
+    {
+      "playerId": "string",
+      "verdict": "string"
+    }
+  ],
+  "day": {
+    "headline": "string",
+    "theDrama": "string",
+    "mustWatchHighlights": "string",
+    "progressionNews": "string"
+  },
+  "today_preview": {
+    "headline": "string",
+    "theBigOnes": "string",
+    "playersToWatch": "string"
+  }
+}
 `;
 
     try {
@@ -869,7 +909,7 @@ Adhere strictly to your British pundit persona: sarcastic, self-deprecating, and
         }
         
         for (const item of response.playerVerdicts as any[]) {
-          existingVerdicts[item.id] = item.verdict;
+          existingVerdicts[item.playerId] = item.verdict;
         }
 
         fs.writeFileSync(verdictsPath, JSON.stringify(existingVerdicts, null, 2), 'utf-8');
