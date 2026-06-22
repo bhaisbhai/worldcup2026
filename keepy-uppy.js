@@ -43,9 +43,17 @@ window.initKeepyUppy = function() {
   let daylightProgress = 0;
   let cloudTimer = 0;
 
+  let lbData = null;
+  let lbLoading = false;
+  let lbError = false;
+  let lbFetchedAt = 0;
+
   function loadData() {
-    const base = { best: 0, coins: 0 };
-    try { return { ...base, ...(JSON.parse(localStorage.getItem(storageKey)) || {}) }; }
+    const base = { best: 0, coins: 0, scores: [] };
+    try {
+      const saved = JSON.parse(localStorage.getItem(storageKey)) || {};
+      return { ...base, ...saved, scores: saved.scores || [] };
+    }
     catch (_) { return base; }
   }
 
@@ -69,7 +77,19 @@ window.initKeepyUppy = function() {
     earnedCoins = Math.max(1, Math.floor(score / 5) + perfects);
     data.coins += earnedCoins;
     if (score > oldBest) addFloatText('NEW BEST!', W / 2, 293, '#ffd43b');
+    const entry = { s: score, d: new Date().toLocaleDateString('en-GB', {day:'2-digit',month:'2-digit'}), c: bestRunCombo, p: perfects };
+    data.scores.push(entry);
+    data.scores.sort((a, b) => b.s - a.s);
+    if (data.scores.length > 10) data.scores.length = 10;
     saveData();
+    if (score > 0) {
+      lbFetchedAt = 0; // invalidate cache so leaderboard refreshes
+      fetch('/api/game-scores', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: selectedChar.name, score, combo: bestRunCombo, perfects }),
+      }).catch(() => {});
+    }
   }
 
   function tryKick() {
@@ -1264,7 +1284,56 @@ window.initKeepyUppy = function() {
       pixelText(`BEST: ${data.best}`, W/2-textWidth(`BEST: ${data.best}`,12)/2, 267, 12, '#ffd43b');
     addButton('PLAY', W/2-80, 290, 160, 48, () => { state = 'charselect'; });
     addButton('HOW TO PLAY', W/2-80, 350, 160, 48, () => { state = 'instructions'; });
-    pixelText(`COINS: ${data.coins}`, W/2-textWidth(`COINS: ${data.coins}`,10)/2, 420, 10, '#41f8ff');
+    addButton('LEADERBOARD', W/2-80, 410, 160, 40, () => { state = 'leaderboard'; fetchLeaderboard(); });
+    pixelText(`COINS: ${data.coins}`, W/2-textWidth(`COINS: ${data.coins}`,10)/2, 468, 10, '#41f8ff');
+  }
+
+  function fetchLeaderboard() {
+    if (lbLoading) return;
+    if (lbData && Date.now() - lbFetchedAt < 30000) return;
+    lbLoading = true;
+    lbError = false;
+    fetch('/api/game-scores')
+      .then(r => r.json())
+      .then(d => { lbData = d.scores || []; lbFetchedAt = Date.now(); lbLoading = false; })
+      .catch(() => { lbError = true; lbLoading = false; });
+  }
+
+  function drawLeaderboard() {
+    panel(13, 50, W - 26, 530);
+    pixelText('HIGH SCORES', W/2 - textWidth('HIGH SCORES', 18)/2, 100, 18, '#ffd43b');
+
+    if (lbLoading) {
+      pixelText('LOADING...', W/2 - textWidth('LOADING...', 14)/2, 300, 14, '#41f8ff');
+    } else if (lbError) {
+      pixelText('CONNECTION ERROR', W/2 - textWidth('CONNECTION ERROR', 11)/2, 290, 11, '#ff6b6b');
+      pixelText('CHECK BACK LATER', W/2 - textWidth('CHECK BACK LATER', 9)/2, 318, 9, '#94a3b8');
+    } else if (!lbData || lbData.length === 0) {
+      pixelText('NO SCORES YET', W/2 - textWidth('NO SCORES YET', 12)/2, 290, 12, '#94a3b8');
+      pixelText('BE THE FIRST TO PLAY!', W/2 - textWidth('BE THE FIRST TO PLAY!', 9)/2, 318, 9, '#64748b');
+    } else {
+      const podium = ['#ffd43b', '#c0c0c0', '#cd7f32'];
+      pixelText('RANK',  20,  122, 8, '#64748b');
+      pixelText('NAME',  50,  122, 8, '#64748b');
+      pixelText('SCORE', 155, 122, 8, '#64748b');
+      pixelText('CMB',   210, 122, 8, '#64748b');
+      pixelText('DATE',  265, 122, 8, '#64748b');
+      ctx.strokeStyle = '#1e3a5f'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(18, 127); ctx.lineTo(W - 18, 127); ctx.stroke();
+
+      lbData.forEach((entry, i) => {
+        const y = 148 + i * 34;
+        const col = podium[i] || '#dbeafe';
+        pixelText(`#${i + 1}`, 20, y, 11, col);
+        const nameStr = (entry.name || '???').slice(0, 9);
+        pixelText(nameStr, 50, y, 10, col);
+        pixelText(String(entry.score).padStart(3, '0'), 155, y, 13, col);
+        pixelText(`x${entry.combo}`, 210, y, 10, '#ff4fd8');
+        pixelText(entry.date || '', 265, y, 9, '#94a3b8');
+      });
+    }
+
+    addButton('BACK', W/2 - 70, 478, 140, 40, () => { state = 'menu'; });
   }
 
   function drawInstructions() {
@@ -1336,9 +1405,10 @@ window.initKeepyUppy = function() {
     pixelText(`PERFECTS  ${perfects}`,W/2-textWidth(`PERFECTS  ${perfects}`,12)/2,273,12,'#65ff7a');
     pixelText(`+${earnedCoins} COINS`,W/2-textWidth(`+${earnedCoins} COINS`,12)/2,305,12,'#41f8ff');
 
-    addButton('RETRY', 24,  357, 93, 40, () => resetGame());
-    addButton('SHARE', 133, 357, 93, 40, shareScore);
-    addButton('MENU',  242, 357, 93, 40, () => { state='menu'; });
+    addButton('RETRY',  24,  357, 148, 40, () => resetGame());
+    addButton('SHARE',  186, 357, 148, 40, shareScore);
+    addButton('SCORES', 24,  407, 148, 40, () => { state = 'leaderboard'; fetchLeaderboard(); });
+    addButton('MENU',   186, 407, 148, 40, () => { state = 'menu'; });
   }
 
   async function shareScore() {
