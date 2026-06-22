@@ -7,13 +7,14 @@
     { "src": "robots.txt", "use": "@vercel/static" },
     { "src": "sitemap.xml", "use": "@vercel/static" },
     { "src": "keepy-uppy.js", "use": "@vercel/static" },
-    { "src": "assets/**", "use": "@vercel/static" },
+    { "src": "public/assets/**", "use": "@vercel/static" },
     { "src": "data/**", "use": "@vercel/static" },
     { "src": "api/recaps.js", "use": "@vercel/node", "config": { "includeFiles": ["data/**"] } },
     { "src": "api/**/*.js", "use": "@vercel/node" }
   ],
   "routes": [
     { "src": "/api/(.*)", "dest": "/api/$1.js" },
+    { "src": "/assets/(.*)", "dest": "/public/assets/$1" },
     { "src": "/group-debug", "dest": "/group-debug.html" },
     { "src": "/debug-live", "dest": "/debug-live.html" },
     { "handle": "filesystem" },

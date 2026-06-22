@@ -1303,7 +1303,7 @@ window.initKeepyUppy = function() {
   }
 
   function submitScore(name, sc, combo, perf) {
-    fetch('/api/game-scores', {
+    return fetch('/api/game-scores', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name, score: sc, combo, perfects: perf }),
@@ -1314,6 +1314,7 @@ window.initKeepyUppy = function() {
     })
     .catch((err) => {
       console.error("Leaderboard submit failed:", err);
+      throw err;
     });
   }
 
@@ -1345,17 +1346,31 @@ window.initKeepyUppy = function() {
     const doSave = () => {
       _pendingScore = null;
       const name = inp.value.trim() || selectedChar.name;
-      submitScore(name, sc, combo, perf);
       div.remove();
       state = 'leaderboard';
-      fetchLeaderboard();
+      lbData = null;
+      lbLoading = true;
+      lbError = false;
+      submitScore(name, sc, combo, perf)
+        .catch(() => {})
+        .finally(() => {
+          lbLoading = false;
+          fetchLeaderboard(true);
+        });
     };
     const doSkip = () => {
       _pendingScore = null;
-      submitScore(selectedChar.name, sc, combo, perf);
       div.remove();
       state = 'leaderboard';
-      fetchLeaderboard();
+      lbData = null;
+      lbLoading = true;
+      lbError = false;
+      submitScore(selectedChar.name, sc, combo, perf)
+        .catch(() => {})
+        .finally(() => {
+          lbLoading = false;
+          fetchLeaderboard(true);
+        });
     };
 
     div.querySelector('#_gameNameSave').addEventListener('click', doSave);
@@ -1367,7 +1382,7 @@ window.initKeepyUppy = function() {
   }
 
   function _checkAndPromptName(sc, combo, perf) {
-    fetch('/api/game-scores')
+    fetch(`/api/game-scores?_cb=${Date.now()}`)
       .then(r => r.json())
       .then(d => {
         if (!_pendingScore) return; // user already navigated away, handled by _flushPendingScore
@@ -1392,12 +1407,12 @@ window.initKeepyUppy = function() {
       });
   }
 
-  function fetchLeaderboard() {
+  function fetchLeaderboard(force = false) {
     if (lbLoading) return;
-    if (lbData && Date.now() - lbFetchedAt < 30000) return;
+    if (!force && lbData && Date.now() - lbFetchedAt < 30000) return;
     lbLoading = true;
     lbError = false;
-    fetch('/api/game-scores')
+    fetch(`/api/game-scores?_cb=${Date.now()}`)
       .then(r => {
         if (!r.ok) throw new Error(`HTTP Error ${r.status}`);
         return r.json();

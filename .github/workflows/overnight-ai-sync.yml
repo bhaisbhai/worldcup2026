@@ -6,7 +6,7 @@ on:
       - main
   schedule:
     - cron: '0 8 * * *'   # 08:00 UTC = 09:00 BST, after US West Coast late matches end
-  workflow_dispatch:
+  workflow_dispatch:        # Trigger manually for testing
     inputs:
       date:
         description: 'Date to regenerate (YYYY-MM-DD). Leave blank to process yesterday.'
