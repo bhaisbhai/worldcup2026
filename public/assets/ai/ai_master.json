@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-22T21:24:03.556Z",
+  "lastUpdated": "2026-06-22T21:29:00.060Z",
   "teams": {
     "BIH": {
       "headline": "The Defensive Circus",
@@ -100,73 +100,73 @@
     },
     "TUN": {
       "teamCode": "TUN",
-      "headline": "Tunisia's World Cup Dream Goes Up in Smoke",
-      "storySoFar": "It's been a truly forgettable campaign for Tunisia, culminating in a 4-0 thrashing by Japan today. Zero shots on target in their final game tells you all you need to know about their attacking ambition.",
-      "whatsNext": "Well, they're officially eliminated, so it's back to the drawing board and perhaps a long, hard look in the mirror. Flights home are being booked as we speak.",
-      "pubAmmo": "Did you see Tunisia's attack? More invisible than a referee's common sense, managing a grand total of 0 shots on target today!"
+      "headline": "Tunisia's World Cup Dream Ends in a Whimper",
+      "storySoFar": "It's been a tough ride for Tunisia, managing just 1 goal and 13 conceded across their three group matches, culminating in today's 4-0 thrashing by Japan.",
+      "whatsNext": "Well, that's it for Tunisia. With 0 points after all three games, they are officially eliminated and can start booking their flights home.",
+      "pubAmmo": "Tunisia's campaign saw them concede a staggering 13 goals, which is less a defence and more a polite invitation for the opposition to score."
     },
     "JPN": {
       "teamCode": "JPN",
-      "headline": "Japan Marches On with Style and Clinical Finishing",
-      "storySoFar": "Japan have been nothing short of brilliant, topping their group with 7 points and a fantastic goal difference. Today's 4-0 victory over Tunisia was a masterclass in clinical finishing.",
-      "whatsNext": "They've qualified for the knockout stages, so it's time to put their feet up, enjoy the view, and prepare for the next challenge. The Samurai Blue are looking dangerous.",
-      "pubAmmo": "Japan are playing liquid football! Four goals today, and they've only conceded two all tournament. Proper stuff!"
+      "headline": "Japan Cruises Into Knockouts with Dominant Display",
+      "storySoFar": "Japan has been in fine form, securing 7 points from their three games, scoring 10 goals and only conceding 2, showing they mean business.",
+      "whatsNext": "Japan has officially qualified for the next round! They're through, so they can put their feet up and enjoy the rest of the group stage.",
+      "pubAmmo": "Japan's 10 goals scored is a proper statement of intent, proving they're not just here to make up the numbers."
     },
     "ESP": {
       "teamCode": "ESP",
-      "headline": "Spain's Samba Stars Shine Bright and Qualify Comfortably",
-      "storySoFar": "Spain have been absolutely dominant, securing top spot in their group with a resounding 4-0 win against Saudi Arabia. They've scored 8 goals and conceded none – a truly impressive record.",
-      "whatsNext": "Qualified and looking formidable, Spain will be eyeing the later stages of the tournament. They're through, and rightly so.",
-      "pubAmmo": "Spain are playing like they've got an extra man on the pitch! 8 goals scored, 0 conceded, and a comfortable qualification. Who's stopping them?"
+      "headline": "Spain's Samba Stars Secure Spot in Style",
+      "storySoFar": "Spain has been absolutely clinical, bagging 7 points from their three matches, scoring 8 goals and, impressively, conceding none.",
+      "whatsNext": "Spain has officially qualified for the next round! They're through, so they can put their feet up and enjoy the rest of the group stage.",
+      "pubAmmo": "Keeping a clean sheet across all three group games is a proper defensive masterclass from Spain. Not many teams can boast that!"
     },
     "KSA": {
       "teamCode": "KSA",
-      "headline": "Saudi Arabia's World Cup Journey Ends in Disappointment",
-      "storySoFar": "It's been a tough ride for Saudi Arabia, and today's 4-0 defeat to Spain, including an own goal, sealed their fate. They finish bottom of the group with just one point.",
-      "whatsNext": "They are officially eliminated. Time to pack their bags and reflect on what went wrong. Perhaps a bit more discipline and a lot less giving away yellow cards next time.",
-      "pubAmmo": "Saudi Arabia's defence was more open than a supermarket on Christmas Eve! An own goal and two yellow cards, a truly forgettable performance."
+      "headline": "Saudi Arabia's Journey Ends with a Thud",
+      "storySoFar": "Saudi Arabia struggled in their group, managing only 1 point and scoring just 1 goal while conceding 9 across their three games.",
+      "whatsNext": "With only 1 point after all three games, Saudi Arabia is officially eliminated from the World Cup. Time to pack their bags.",
+      "pubAmmo": "Saudi Arabia's campaign included an unfortunate own goal today, which is never ideal when you're already struggling to find the net."
     },
     "BEL": {
       "teamCode": "BEL",
-      "headline": "Golden Generation Fades Out with a Whimper and a Red Card",
-      "storySoFar": "Belgium's World Cup campaign has been a disaster, finishing with a goalless draw against Iran and a red card for Nathan Ngoy. Three draws and just one goal scored in three games is simply not good enough.",
-      "whatsNext": "They are officially eliminated. The 'Golden Generation' has well and truly tarnished its legacy. Time for some serious soul-searching back home.",
-      "pubAmmo": "Belgium had more shots (23) than goals (0) today! And a red card to boot. They've gone home, and frankly, they deserve it after that showing."
+      "headline": "Belgium's Golden Generation Fades Out",
+      "storySoFar": "A disappointing campaign for Belgium, finishing with 3 points from three draws, scoring only 1 goal and conceding 1. Today's 0-0 draw sealed their fate.",
+      "whatsNext": "Belgium is officially eliminated from the World Cup with 3 points after all three games. A truly underwhelming exit for the Red Devils.",
+      "pubAmmo": "Belgium managed 23 shots today against Iran, but couldn't score. You'd think with that many chances, someone would accidentally trip one in!"
     },
     "IRN": {
       "teamCode": "IRN",
-      "headline": "Iran Dig Deep to Secure Knockout Berth Against All Odds",
-      "storySoFar": "Iran showed incredible resilience today, holding Belgium to a 0-0 draw despite being under immense pressure. That vital point was enough to see them through to the next round.",
-      "whatsNext": "They've qualified! A fantastic achievement, proving that grit and determination can get you far. They'll be celebrating this one for a while.",
-      "pubAmmo": "Iran defended like their lives depended on it! And it paid off, they're through to the knockouts. Who'd have thought it?"
+      "headline": "Iran's Gritty Defence Secures Knockout Berth",
+      "storySoFar": "Iran has shown incredible resilience, drawing all three of their group matches and securing 3 points, scoring 2 goals and conceding 2.",
+      "whatsNext": "Iran has officially qualified for the next round! They're through, so they can put their feet up and enjoy the rest of the group stage.",
+      "pubAmmo": "Three draws and a qualification spot? Iran's proving that sometimes, not losing is just as good as winning, especially with a keeper like Beiranvand!"
     },
     "URU": {
       "teamCode": "URU",
-      "headline": "Uruguay Scrapes Through After Thrilling Draw",
-      "storySoFar": "Uruguay secured their qualification today, but not without a scare, drawing 2-2 with a spirited Cape Verde side. They showed character to come back from a goal down.",
-      "whatsNext": "They've qualified for the knockout stages. They'll need to tighten up at the back, but they're still in the hunt for the big prize.",
-      "pubAmmo": "Uruguay conceded a free-kick goal and then another, but still managed to qualify! Talk about making hard work of it."
+      "headline": "Uruguay Secures Qualification Despite Late Scare",
+      "storySoFar": "Uruguay finishes their group stage with 3 points from three draws, scoring 5 goals and conceding 5, enough to see them through.",
+      "whatsNext": "Uruguay has officially qualified for the next round! They're through, so they can put their feet up and enjoy the rest of the group stage.",
+      "pubAmmo": "Uruguay's group stage was a festival of draws, proving that consistency, even in stalemate, can get you through!"
     },
     "CPV": {
       "teamCode": "CPV",
-      "headline": "Cape Verde's Brave Run Ends in Valiant Draw",
-      "storySoFar": "Cape Verde fought valiantly today, securing a 2-2 draw against Uruguay, but it wasn't enough to keep their World Cup dream alive. They showed real heart and skill.",
-      "whatsNext": "They are officially eliminated. A fantastic effort, but ultimately, they're going home. They can hold their heads high, though.",
-      "pubAmmo": "Cape Verde scored two cracking goals against Uruguay, including a free-kick! They might be out, but they certainly left their mark."
+      "headline": "Cape Verde's Valiant Effort Falls Short",
+      "storySoFar": "Cape Verde finishes their group stage with 3 points from three draws, scoring 4 goals and conceding 4, but it wasn't quite enough.",
+      "whatsNext": "With 3 points after all three games, Cape Verde is officially eliminated from the World Cup. A valiant effort, but they're heading home.",
+      "pubAmmo": "Cape Verde scored a cracking free-kick today, showing they've got some proper quality, even if it didn't save their tournament."
     },
     "NZL": {
       "teamCode": "NZL",
-      "headline": "New Zealand's Brief Moment of Glory Fades Away",
-      "storySoFar": "New Zealand started brightly, taking the lead against Egypt, but ultimately couldn't hold on, losing 3-1. Their World Cup journey ends with just one point.",
-      "whatsNext": "They are officially eliminated. A tough pill to swallow, but they gave it a go. Time to start planning for the next one.",
-      "pubAmmo": "New Zealand scored first! And then remembered they were New Zealand. Three goals conceded and out. Bless 'em."
+      "headline": "New Zealand's World Cup Journey Comes to an End",
+      "storySoFar": "New Zealand battled hard but ultimately finished with 1 point from their three group matches, scoring 4 goals and conceding 8.",
+      "whatsNext": "With only 1 point after all three games, New Zealand is officially eliminated from the World Cup. Time to pack their bags.",
+      "pubAmmo": "New Zealand's Finn Surman scored a lovely header today, proving that even when you're going home, you can still have your moment in the sun."
     },
     "EGY": {
       "teamCode": "EGY",
-      "headline": "Egypt Rises to the Occasion, Led by Salah's Brilliance",
-      "storySoFar": "Egypt showed their class today, coming from behind to beat New Zealand 3-1. Mohamed Salah was instrumental, proving why he's a walking cheat code.",
-      "whatsNext": "They've qualified for the knockout stages! A strong performance today means they're through and looking good for the next round.",
-      "pubAmmo": "Salah with a goal and an assist today! The man's a magician. Egypt are through, and they'll be a tough nut to crack."
+      "headline": "Egypt Powers Through to the Knockouts",
+      "storySoFar": "Egypt has had a strong showing, securing 7 points from their three matches, scoring 7 goals and conceding 3, looking like a real threat.",
+      "whatsNext": "Egypt has officially qualified for the next round! They're through, so they can put their feet up and enjoy the rest of the group stage.",
+      "pubAmmo": "Mohamed Salah and Mostafa Zico both grabbing a goal and an assist today? That's what you call a dynamic duo, proper liquid football!"
     }
   },
   "matches": {
@@ -245,66 +245,58 @@
     },
     "TUN-JPN": {
       "matchKey": "TUN-JPN",
-      "editionTitle": "Japan's Clinical Masterclass Sends Tunisia Packing",
-      "snappySummary": "Japan put on a clinical display, dismantling Tunisia with four goals and securing their spot in the next round, while Tunisia offered absolutely nothing going forward.",
+      "editionTitle": "Samurai Blue Slice Through Tunisia",
+      "snappySummary": "Japan put on a clinic, dismantling Tunisia with four goals and securing their spot in the next round with absolute liquid football.",
       "talkingPoints": [
-        "Japan's attacking prowess, with four different goal scorers showing their depth.",
-        "Tunisia's complete lack of attacking threat, managing a grand total of 0 shots on target.",
-        "Japan's comfortable qualification to the knockout stages, looking like a real dark horse.",
-        "Tunisia's early exit from the tournament, a truly forgettable campaign."
+        "Japan's clinical finishing, turning 5 shots on target into 4 goals – talk about efficiency!",
+        "Tunisia's attack went missing, managing just 2 shots and none on target, a truly toothless display.",
+        "Ayase Ueda proving to be a proper menace, bagging two goals and an assist, a walking cheat code today."
       ],
-      "randomQuirk": "Tunisia managed a grand total of zero shots on target, proving that sometimes, you just turn up for the free drinks break and a bit of a runaround."
+      "randomQuirk": "Tunisia's passing accuracy was a reported 8%, which is frankly impressive for how little they actually passed the ball. Must've been a casual kickabout in the park for Japan."
     },
     "ESP-KSA": {
       "matchKey": "ESP-KSA",
-      "editionTitle": "Spain Cruises Past Hapless Saudi Arabia in Dominant Display",
-      "snappySummary": "Spain delivered a dominant performance, scoring four goals, including an own goal, to comfortably dispatch Saudi Arabia and book their place in the next round.",
+      "editionTitle": "Spain's Masterclass Sends Saudis Packing",
+      "snappySummary": "Spain delivered a dominant performance, cruising to a 4-0 victory over Saudi Arabia, who looked completely out of their depth.",
       "talkingPoints": [
-        "Spain's overwhelming possession (67.1%) and shot count (22 shots), showing complete control.",
-        "Mikel Oyarzabal's brace for Spain, a proper striker's performance.",
-        "Saudi Arabia's unfortunate own goal from Hassan Al-Tambakti, adding insult to injury.",
-        "Saudi Arabia's two yellow cards and general lack of discipline, reflecting their frustration.",
-        "Spain's confirmed qualification, looking formidable."
+        "Lamine Yamal and Mikel Oyarzabal were on fire, tearing through the Saudi defence with ease.",
+        "Saudi Arabia's Hassan Al-Tambakti decided to get in on the scoring action, unfortunately for his own side.",
+        "Spain's 67.1% possession and 22 shots to Saudi Arabia's 3 tells the whole story – a proper one-sided affair."
       ],
-      "randomQuirk": "Saudi Arabia's Hassan Al-Tambakti decided to get in on the scoring action, unfortunately for his own side, with a rather spectacular own goal."
+      "randomQuirk": "Saudi Arabia's goalkeeper, Mohammed Al-Owais, made 5 saves, which is a decent shift, but when you concede 4, it just feels like polishing a... well, you know."
     },
     "BEL-IRN": {
       "matchKey": "BEL-IRN",
-      "editionTitle": "Red Card Drama in Stale Stalemate as Belgium's Dream Dies",
-      "snappySummary": "Belgium and Iran played out a goalless draw, a result that sees Iran through but sends the ten-man Belgians packing after a rather forgettable performance.",
+      "editionTitle": "Red Devils Bottle It Against Resilient Iran",
+      "snappySummary": "Belgium, despite all their possession and shots, couldn't find the net and ended up drawing 0-0 with Iran, ultimately sending them home.",
       "talkingPoints": [
-        "Belgium's Nathan Ngoy receiving a red card, making a tough task even harder and sealing their fate.",
-        "Iran's resolute defending to secure a vital point, with Alireza Beiranvand making 7 saves.",
-        "Belgium's inability to convert 23 shots into a single goal, despite 70.1% possession.",
-        "Iran's qualification, proving that grit and a good keeper can get you far."
+        "Belgium had 70.1% possession and a whopping 23 shots, yet somehow managed to score precisely zero goals. Talk about bottling it!",
+        "Nathan Ngoy's red card for Belgium just summed up their frustrating day – a moment of madness when they needed composure.",
+        "Iran's Alireza Beiranvand was an absolute brick wall in goal, making 7 saves to keep the Red Devils at bay."
       ],
-      "randomQuirk": "Belgium managed a whopping 23 shots, with 7 on target, yet still couldn't find the back of the net. Perhaps they were aiming for the corner flags instead of the goal?"
+      "randomQuirk": "Belgium's Romelu Lukaku picked up a yellow card early on, perhaps for sheer frustration at his teammates' inability to hit a barn door."
     },
     "URU-CPV": {
       "matchKey": "URU-CPV",
-      "editionTitle": "Four-Goal Thriller Sees Uruguay Through, Cape Verde Bows Out Bravely",
-      "snappySummary": "Uruguay and Cape Verde shared the spoils in an entertaining 2-2 draw, with Uruguay securing their progression despite a spirited fight from the island nation.",
+      "editionTitle": "Uruguay and Cape Verde Share the Spoils in Thriller",
+      "snappySummary": "A proper end-to-end clash saw Uruguay and Cape Verde battle to a 2-2 draw, with both sides showing flashes of brilliance.",
       "talkingPoints": [
-        "Cape Verde taking an early lead from a free-kick, showing they weren't just there to make up the numbers.",
-        "Uruguay's quick response with two goals before halftime, showing their experience.",
-        "Cape Verde's Hélio Varela scoring a fantastic equaliser, a real moment of quality.",
-        "Uruguay's qualification confirmed, though they'll need to tighten up.",
-        "Cape Verde's elimination despite a valiant effort, they can hold their heads high."
+        "Cape Verde took the lead from a free-kick, showing they weren't just there to make up the numbers.",
+        "Uruguay fought back, with Maxi Araújo and Agustín Canobbio finding the net, but couldn't hold onto their lead.",
+        "Hélio Varela's goal from outside the box for Cape Verde was a real screamer, proving they've got some proper talent."
       ],
-      "randomQuirk": "Cape Verde's Kevin Pina scored a cracking free-kick, proving that sometimes, the underdog truly does have a bit of magic up their sleeve."
+      "randomQuirk": "Cape Verde made a staggering 48 clearances, which is less about solid defending and more about Uruguay's relentless (if not always accurate) attacking."
     },
     "NZL-EGY": {
       "matchKey": "NZL-EGY",
-      "editionTitle": "Salah Inspires Egyptian Comeback as New Zealand's Hopes Fade",
-      "snappySummary": "Egypt recovered from an early setback to comfortably beat New Zealand 3-1, with Mohamed Salah pulling the strings and securing Egypt's spot in the next round.",
+      "editionTitle": "Egypt Rallies to Send All Whites Home",
+      "snappySummary": "New Zealand took a shock lead, but Egypt's quality eventually shone through, with Salah leading the charge to a comfortable 3-1 victory.",
       "talkingPoints": [
-        "New Zealand's surprising early lead, giving their fans a brief moment of hope.",
-        "Egypt's strong second-half performance, showing their quality when it mattered.",
-        "Mohamed Salah's goal and assist, proving he's a walking cheat code.",
-        "Egypt's confirmed qualification, looking like a team that can go far.",
-        "New Zealand's elimination from the tournament, a tough lesson learned."
+        "New Zealand's Finn Surman gave them a glimmer of hope with an early header, but it wasn't to last.",
+        "Mohamed Salah, the walking cheat code, bagged a goal and an assist, reminding everyone why he's the main man.",
+        "Egypt's Mostafa Zico also had a cracking game, contributing a goal and an assist, proving there's more to their attack than just Salah."
       ],
-      "randomQuirk": "New Zealand's Finn Surman scored the opening goal, proving that even when you're going home, you can still have your moment in the sun."
+      "randomQuirk": "New Zealand's goalkeeper, Max Crocombe, made 4 saves, which is a decent effort, but when you're still picking the ball out of your net three times, you know the defence had a bit of a mare."
     }
   },
   "days": {
@@ -369,16 +361,16 @@
       "progressionNews": "Canada and Switzerland have put themselves in prime position for the knockouts, while Qatar can start packing their bags after a disastrous display."
     },
     "2026-06-21": {
-      "headline": "Chaos, Comebacks, and Confirmed Exits: A World Cup Whirlwind!",
-      "theDrama": "Today was a proper mixed bag of World Cup action! We saw Japan and Spain put on absolute masterclasses, while Belgium's 'Golden Generation' finally hit the buffers with a whimper and a red card. Uruguay and Cape Verde gave us a four-goal thriller, and Egypt showed their class with a comeback win. Plenty of goals, plenty of drama, and a few teams booking their early flights home!",
-      "mustWatchHighlights": "If you missed anything, make sure you catch the highlights of **Uruguay vs Cape Verde** – a proper end-to-end game with some cracking goals. As for the snooze-fest, **Belgium vs Iran** was a goalless affair that only a mother could love, especially with Belgium's red card and inability to score.",
-      "progressionNews": "Right, let's get down to brass tacks. **Japan, Spain, Egypt, Iran, and Uruguay** have all officially qualified for the knockout stages – congratulations to them! On the flip side, it's curtains for **Tunisia, Saudi Arabia, Belgium, Cape Verde, and New Zealand**, who are all officially eliminated and will be heading home. Haiti, from Group C, and Saudi Arabia from Group H, are also eliminated. For everyone else, the dream is still very much alive, with plenty of games left to play and points to fight for!"
+      "headline": "World Cup Shocks and Certainties: Belgium Bottles It, Japan and Spain Cruise!",
+      "theDrama": "Today was a day of stark contrasts! Japan and Spain put on masterclasses, securing their spots with ease, while Belgium, despite all their huffing and puffing, completely bottled it against Iran and are heading home. New Zealand also showed a glimmer of hope before Egypt's quality shone through, sending the All Whites packing. Plenty of goals, a few red cards, and some truly dire defending – classic World Cup, really!",
+      "mustWatchHighlights": "If you want pure dominance, Japan vs Tunisia (4-0) and Spain vs Saudi Arabia (4-0) were proper exhibitions. For a bit of end-to-end action, Uruguay vs Cape Verde (2-2) was a decent watch. But if you're after a masterclass in how *not* to score, Belgium vs Iran (0-0) is your go-to – a proper sleepfest for Belgium fans, but a heroic defensive display from Iran!",
+      "progressionNews": "The big news today is that **Japan**, **Egypt**, and **Spain** have all officially qualified for the knockout stages, joining the party with ease. Meanwhile, it's curtains for **Tunisia**, **Haiti**, **Belgium**, **New Zealand**, **Cape Verde**, and **Saudi Arabia**, who are all officially eliminated and can start planning their holidays. The rest of the teams are still very much in contention, with games left to play and everything to fight for in their respective groups."
     }
   },
   "today_preview": {
-    "headline": "Tomorrow's Showdown: Heavyweights Clash and Underdogs Dream!",
-    "theBigOnes": "Get ready for some absolute crackers tomorrow! **Argentina vs Austria** promises to be a tactical battle, with Messi and co. looking to cement their dominance. Then we've got **France vs Iraq**, where the French will be expected to put on a show. And don't forget **Norway vs Senegal** – that could be a proper physical encounter!",
-    "playersToWatch": "Keep an eye on the usual suspects, of course – **Lionel Messi** for Argentina, always a walking cheat code. For France, expect **Kylian Mbappé** to be tearing defences apart. And in the Norway vs Senegal game, look out for **Erling Haaland** to be banging in the goals for Norway, and perhaps a spirited performance from Senegal's key attackers.",
+    "headline": "Tomorrow's Showdown: Argentina, France, and Norway Eye Knockout Spots!",
+    "theBigOnes": "Tomorrow looks like a cracker! Argentina vs Austria promises some proper South American flair against a resilient European side. Then we've got France vs Iraq, where the French will be looking to stamp their authority. And don't sleep on Norway vs Senegal – that could be a proper physical battle!",
+    "playersToWatch": "Keep an eye on the usual suspects like Messi for Argentina, if he plays, and any of France's attacking talent. But also look out for some potential upsets – a few players will be desperate to make a name for themselves and keep their nations in the hunt!",
     "firstKickoffTime": "2026-06-22T17:00Z"
   },
   "espnMatches": {
