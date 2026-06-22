@@ -794,6 +794,7 @@ body{
 .tp2-info{flex:1;min-width:0}
 .tp2-name{font-size:20px;font-weight:800;letter-spacing:-.3px}
 .tp2-sub{font-size:11px;color:var(--t2);margin-top:3px}
+.tp2-record{font-size:11px;color:var(--t2);margin-top:3px;letter-spacing:.1px}
 .tp2-change{background:none;border:1px solid var(--border);color:var(--t2);font-size:10px;font-weight:600;padding:5px 12px;border-radius:20px;cursor:pointer;flex-shrink:0;transition:border-color .15s,color .15s}
 .tp2-change:hover{border-color:#444;color:var(--text)}
 /* spotlight card */
@@ -829,7 +830,7 @@ body{
 /* compact standings */
 .tp2-standings{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:14px}
 .tp2-stand-hdr{display:flex;align-items:center;padding:7px 12px;font-size:9px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--t2);border-bottom:1px solid rgba(255,255,255,.04)}
-.tp2-sh-name{flex:1}.tp2-sh-pts{width:28px;text-align:center}.tp2-sh-gd{width:32px;text-align:right}
+.tp2-sh-name{flex:1}.tp2-sh-p{width:20px;text-align:center}.tp2-sh-gd{width:30px;text-align:right}.tp2-sh-pts{width:26px;text-align:right}
 .tp2-stand-row{display:flex;align-items:center;padding:8px 12px;gap:7px;border-bottom:1px solid rgba(255,255,255,.025);cursor:pointer;transition:background .12s}
 .tp2-stand-row:last-child{border-bottom:none}
 .tp2-stand-row:hover{background:rgba(255,255,255,.03)}
@@ -839,8 +840,9 @@ body{
 .tp2-stand-flag{font-size:14px;flex-shrink:0}
 .tp2-stand-name{flex:1;font-size:12px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;transition:color .12s}
 .tp2-stand-you{font-size:8px;font-weight:700;color:var(--accent);letter-spacing:.4px;text-transform:uppercase;flex-shrink:0;min-width:20px}
-.tp2-stand-pts{font-size:12px;font-weight:700;font-family:var(--mono);width:28px;text-align:center;flex-shrink:0}
-.tp2-stand-gd{font-size:11px;font-family:var(--mono);width:32px;text-align:right;flex-shrink:0}
+.tp2-stand-p{font-size:11px;font-family:var(--mono);width:20px;text-align:center;flex-shrink:0;color:var(--t2)}
+.tp2-stand-pts{font-size:12px;font-weight:700;font-family:var(--mono);width:26px;text-align:right;flex-shrink:0}
+.tp2-stand-gd{font-size:11px;font-family:var(--mono);width:30px;text-align:right;flex-shrink:0}
 .tp2-stand-footer{padding:5px 12px;font-size:9px;color:var(--t3,#555);text-align:center;border-top:1px solid rgba(255,255,255,.03)}
 
 @media(max-width:768px){.tp-grid{grid-template-columns:repeat(auto-fill,minmax(80px,1fr))}}
@@ -3924,33 +3926,24 @@ function renderTeamPage(sec, team){
   const sorted  = gData ? [...gData.teams].sort((a,b)=>b.pts-a.pts||b.gd-a.gd||b.gf-a.gf) : [];
   const me      = sorted.find(t=>t.n===team.n) || team;
   const pos     = sorted.findIndex(t=>t.n===team.n)+1;
-  const gdColor = me.gd>0?'var(--accent)':me.gd<0?'#ff5555':'var(--text)';
+  const record  = `W ${me.w} · D ${me.d} · L ${me.l}`;
 
   sec.innerHTML = `
     <div class="tp2-hero">
       <div class="tp2-flag">${team.f}</div>
       <div class="tp2-info">
         <div class="tp2-name">${team.n}</div>
-        ${gData?`<div class="tp2-sub">Group ${gData.id}${pos?` · ${ordinal(pos)} place · ${me.pts} pts`:''}</div>`:''}
+        ${gData?`<div class="tp2-sub">Group ${gData.id}${pos?' · '+ordinal(pos)+' place':''}</div>
+        <div class="tp2-record">${record} · ${me.pts} pts</div>`:''}
       </div>
       <button class="tp2-change" onclick="favTeam=null;localStorage.removeItem('favTeam');renderMyTeam()">Change</button>
     </div>
 
-    <div id="tp2Spotlight"><div class="lineup-loading" style="margin:0 0 8px">Checking schedule…</div></div>
-
-    <div class="tp2-qs-strip">
-      <div class="tp2-qs-cell"><div class="tp2-qs-val" style="color:var(--accent)">${me.w}</div><div class="tp2-qs-lbl">Won</div></div>
-      <div class="tp2-qs-cell"><div class="tp2-qs-val" style="color:var(--gold)">${me.d}</div><div class="tp2-qs-lbl">Drawn</div></div>
-      <div class="tp2-qs-cell"><div class="tp2-qs-val" style="color:#ff5555">${me.l}</div><div class="tp2-qs-lbl">Lost</div></div>
-      <div class="tp2-qs-cell"><div class="tp2-qs-val">${me.gf}</div><div class="tp2-qs-lbl">GF</div></div>
-      <div class="tp2-qs-cell"><div class="tp2-qs-val">${me.ga}</div><div class="tp2-qs-lbl">GA</div></div>
-      <div class="tp2-qs-cell"><div class="tp2-qs-val" style="color:${gdColor}">${me.gd>0?'+':''}${me.gd}</div><div class="tp2-qs-lbl">GD</div></div>
-    </div>
+    <div id="tp2Spotlight"></div>
 
     ${gData ? renderCompactStandings(gData, team) : ''}
 
-    <div class="fav-sect">Tournament Stats</div>
-    <div id="favStats"><div class="lineup-loading">Loading…</div></div>
+    <div id="tp2StatsAnchor"></div>
 
     <div class="fav-sect">Squad</div>
     <div id="favSquad"></div>
@@ -3969,8 +3962,9 @@ function renderCompactStandings(g, myTeam){
   return `<div class="tp2-standings">
     <div class="tp2-stand-hdr">
       <span class="tp2-sh-name">Group ${g.id}</span>
-      <span class="tp2-sh-pts">Pts</span>
+      <span class="tp2-sh-p">P</span>
       <span class="tp2-sh-gd">GD</span>
+      <span class="tp2-sh-pts">Pts</span>
     </div>
     ${sorted.map((t,i)=>`
     <div class="tp2-stand-row${t.n===myTeam.n?' me':''}" onclick="openTeamPage('${esc(t.n)}')" role="button">
@@ -3978,8 +3972,9 @@ function renderCompactStandings(g, myTeam){
       <span class="tp2-stand-flag">${t.f}</span>
       <span class="tp2-stand-name">${t.n}</span>
       <span class="tp2-stand-you">${t.n===myTeam.n?'You':''}</span>
-      <span class="tp2-stand-pts">${t.pts}</span>
+      <span class="tp2-stand-p">${t.p}</span>
       <span class="tp2-stand-gd" style="color:${t.gd>0?'var(--accent)':t.gd<0?'#ff5555':'var(--t2)'}">${t.gd>0?'+':''}${t.gd}</span>
+      <span class="tp2-stand-pts">${t.pts}</span>
     </div>`).join('')}
     <div class="tp2-stand-footer">Top 2 advance · 8 best 3rd-place teams qualify</div>
   </div>`;
@@ -4012,10 +4007,7 @@ async function fetchMatchSpotlight(team){
 
   allMatches.sort((a,b)=>a.date-b.date);
 
-  if(!allMatches.length){
-    container.innerHTML='<div class="mc-news-empty" style="margin-bottom:8px">Schedule unavailable</div>';
-    return;
-  }
+  if(!allMatches.length){ container.innerHTML=''; return; }
 
   const live     = allMatches.find(ev=>ev.state==='in');
   const next     = allMatches.find(ev=>ev.state==='pre');
@@ -4289,9 +4281,6 @@ function statBar(label, valStr, pct, neg=false){
 }
 
 async function fetchTeamMatchStats(team){
-  const container = $('favStats');
-  if(!container) return;
-
   // Scan back 25 days to cover the full group stage
   const now = new Date();
   const dates = Array.from({length:25},(_,i)=>{
@@ -4314,27 +4303,15 @@ async function fetchTeamMatchStats(team){
     }catch(e){}
   }));
 
-  if(!completedMatches.length){
-    const el2=$('favStats');
-    if(el2) el2.innerHTML='<div class="mc-news-empty">No completed matches yet — check back after kick-off</div>';
-    return;
-  }
+  if(!completedMatches.length) return; // nothing to show — stay invisible
 
-  // Record & goals from match scores (always reliable)
-  let w=0,d=0,l=0,gf=0,ga=0;
-  for(const ev of completedMatches){
-    const isHome = favTeamMatch(ev.home.name,team.n);
-    const myS = parseInt(isHome?ev.home.score:ev.away.score)||0;
-    const opS = parseInt(isHome?ev.away.score:ev.home.score)||0;
-    gf+=myS; ga+=opS;
-    if(myS>opS) w++; else if(myS===opS) d++; else l++;
-  }
+  // Clean sheet count (not shown elsewhere)
   const cs = completedMatches.filter(ev=>{
     const isHome = favTeamMatch(ev.home.name,team.n);
     return (parseInt(isHome?ev.away.score:ev.home.score)||0)===0;
   }).length;
 
-  // Fetch summaries for boxscore stats (parallel, cap at 5)
+  // Fetch summaries for boxscore stats
   const acc = {poss:[],shots:[],onTgt:[],corners:[],fouls:[],passes:[]};
   await Promise.all(completedMatches.slice(0,5).map(async ev=>{
     try{
@@ -4368,43 +4345,40 @@ async function fetchTeamMatchStats(team){
   }));
 
   const avg = arr => arr.length ? arr.reduce((a,b)=>a+b,0)/arr.length : null;
-  const avgPoss = avg(acc.poss);
+  const avgPoss  = avg(acc.poss);
   const avgShots = avg(acc.shots);
   const avgOnTgt = avg(acc.onTgt);
   const avgCorners = avg(acc.corners);
   const avgFouls = avg(acc.fouls);
   const avgPasses = avg(acc.passes);
-  const n = completedMatches.length;
   const f1 = v => v!==null ? v.toFixed(1) : '—';
-
   const hasBoxscore = avgShots!==null||avgPoss!==null;
 
-  const el3=$('favStats');
-  if(!el3) return;
+  // Only inject the section when we have something meaningful to show
+  if(!hasBoxscore && cs===0) return;
 
-  el3.innerHTML = `
-    <div class="wdl-row">
-      <div class="wdl-seg w"><div class="wdl-num">${w}</div><div class="wdl-lbl">Won</div></div>
-      <div class="wdl-seg d"><div class="wdl-num">${d}</div><div class="wdl-lbl">Drawn</div></div>
-      <div class="wdl-seg l"><div class="wdl-num">${l}</div><div class="wdl-lbl">Lost</div></div>
-    </div>
-    <div class="tstat-grid">
-      <div class="tstat-card"><div class="tstat-val" style="color:var(--accent)">${gf}</div><div class="tstat-lbl">Goals For</div></div>
-      <div class="tstat-card"><div class="tstat-val" style="color:#ff5555">${ga}</div><div class="tstat-lbl">Goals Against</div></div>
-      <div class="tstat-card"><div class="tstat-val" style="color:var(--gold)">${cs}</div><div class="tstat-lbl">Clean Sheets</div></div>
-    </div>
-    ${hasBoxscore?`<div class="tstat-bars">
-      ${avgPoss!==null ? statBar('Possession',f1(avgPoss)+'%',avgPoss) : ''}
-      ${avgShots!==null ? statBar('Shots / game',f1(avgShots),(avgShots/20)*100) : ''}
-      ${avgOnTgt!==null&&avgShots ? statBar('On Target %',Math.round((avgOnTgt/(avgShots||1))*100)+'%',(avgOnTgt/(avgShots||1))*100) : ''}
-      ${avgPasses!==null ? statBar('Pass Accuracy',f1(avgPasses)+'%',avgPasses) : ''}
-      ${avgCorners!==null ? statBar('Corners / game',f1(avgCorners),(avgCorners/12)*100) : ''}
-      ${avgFouls!==null ? statBar('Fouls / game',f1(avgFouls),(avgFouls/20)*100,true) : ''}
-    </div>`:''}
-    <div class="tstat-gms">${n} match${n!==1?'es':''} played</div>`;
+  const anchor = $('tp2StatsAnchor');
+  if(!anchor) return;
+
+  anchor.innerHTML = `
+    <div class="fav-sect">Match Stats</div>
+    <div id="favStats">
+      ${cs>0?`<div class="tstat-grid" style="grid-template-columns:1fr 1fr;margin-bottom:10px">
+        <div class="tstat-card"><div class="tstat-val" style="color:var(--gold)">${cs}</div><div class="tstat-lbl">Clean Sheets</div></div>
+        ${avgShots!==null?`<div class="tstat-card"><div class="tstat-val">${f1(avgShots)}</div><div class="tstat-lbl">Shots / game</div></div>`:''}
+      </div>`:''}
+      ${hasBoxscore?`<div class="tstat-bars">
+        ${avgPoss!==null ? statBar('Possession',f1(avgPoss)+'%',avgPoss) : ''}
+        ${avgShots!==null ? statBar('Shots / game',f1(avgShots),(avgShots/20)*100) : ''}
+        ${avgOnTgt!==null&&avgShots ? statBar('On Target %',Math.round((avgOnTgt/(avgShots||1))*100)+'%',(avgOnTgt/(avgShots||1))*100) : ''}
+        ${avgPasses!==null ? statBar('Pass Accuracy',f1(avgPasses)+'%',avgPasses) : ''}
+        ${avgCorners!==null ? statBar('Corners / game',f1(avgCorners),(avgCorners/12)*100) : ''}
+        ${avgFouls!==null ? statBar('Fouls / game',f1(avgFouls),(avgFouls/20)*100,true) : ''}
+      </div>`:''}
+    </div>`;
 
   requestAnimationFrame(()=>requestAnimationFrame(()=>{
-    el3.querySelectorAll('.tstat-bar-fill').forEach(bar=>{ bar.style.width=bar.dataset.w; });
+    anchor.querySelectorAll('.tstat-bar-fill').forEach(bar=>{ bar.style.width=bar.dataset.w; });
   }));
 }
 
