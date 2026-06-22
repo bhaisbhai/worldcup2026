@@ -3507,7 +3507,7 @@ async function fetchGroupStandings(){
         const gf    = getStat(stats,'pointsFor');
         const ga    = getStat(stats,'pointsAgainst');
         const noteDesc = entry.note?.description || '';
-        const clinched = /clinch|advanc|qualif|round of 32/i.test(noteDesc);
+        const clinched = /advance to round of 32/i.test(noteDesc);
         const w = getStat(stats,'wins');
         const d = getStat(stats,'ties');
         const l = getStat(stats,'losses');
