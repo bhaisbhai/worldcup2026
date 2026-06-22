@@ -2331,6 +2331,7 @@ async function fetchMatches(){
   const hasLive = lastEvents.some(e => e.state === 'in');
   setRefreshLabel('↻ Refresh', false);
   $('rfLabel').style.pointerEvents = '';
+  if(hasLive) setTimeout(fetchMatches, 10000);
 }
 
 function showErr(){
@@ -2984,23 +2985,33 @@ function mcLiveTab(ev, data){
   let html = '';
 
   // Timeline — all significant events, most recent first
-  const plays = (data?.plays||[]).filter(p=>{
-    const t=(p.type?.text||'').toLowerCase();
-    return p.scoringPlay||t.includes('goal')||t.includes('yellow')||t.includes('red card')||t.includes('substitut')||t.includes('var')||t.includes('penalty');
+  // ESPN uses numeric type IDs: 35=goal, 40=yellow, 41=red, 45=substitution, 32=penalty, 31=var
+  const _allPlays = data?.plays || data?.playByPlay?.plays || data?.summary?.plays || [];
+  const _KEY_IDS = new Set([31,32,35,40,41,45]);
+  const plays = _allPlays.filter(p=>{
+    if(p.scoringPlay || p.shootoutPlay) return true;
+    const id = p.type?.id;
+    if(id && _KEY_IDS.has(Number(id))) return true;
+    const t = (p.type?.text||p.type?.name||'').toLowerCase();
+    return t.includes('goal')||t.includes('yellow')||t.includes('caution')||t.includes('booking')||
+           t.includes('red')||t.includes('card')||t.includes('substitut')||
+           t.includes('var')||t.includes('penalty')||t.includes('half')||t.includes('kick');
   }).slice().reverse();
 
   html += `<div class="live-tl-hdr">Timeline</div>`;
   if(plays.length){
     html += `<div class="live-tl">`;
     for(const p of plays){
-      const min = p.clock?.displayValue||'';
-      const typeText = (p.type?.text||'').toLowerCase();
+      const min = p.clock?.displayValue||p.period?.displayValue||'';
+      const typeText = (p.type?.text||p.type?.name||'').toLowerCase();
+      const typeId = Number(p.type?.id||0);
       const isHome = homeId ? p.team?.id===homeId : true;
       let icon='⚽', iconCls='goal';
-      if(typeText.includes('yellow')){ icon='🟨'; iconCls='yellow'; }
-      else if(typeText.includes('red')){ icon='🟥'; iconCls='red'; }
-      else if(typeText.includes('substitut')){ icon='↕'; iconCls='sub'; }
-      else if(typeText.includes('var')){ icon='VAR'; iconCls='var'; }
+      if(typeId===40||typeText.includes('yellow')||typeText.includes('caution')||typeText.includes('booking')){ icon='🟨'; iconCls='yellow'; }
+      else if(typeId===41||typeText.includes('red')||typeText.includes('second booking')){ icon='🟥'; iconCls='red'; }
+      else if(typeId===45||typeText.includes('substitut')){ icon='↕'; iconCls='sub'; }
+      else if(typeId===31||typeText.includes('var')){ icon='VAR'; iconCls='var'; }
+      else if(typeId===32||typeText.includes('penalty')){ icon='⚽🅿'; iconCls='goal'; }
       const scorer = p.participants?.find(pp=>pp.type==='scorer')?.athlete?.displayName||'';
       const subOn  = p.participants?.find(pp=>pp.type==='substitution_in')?.athlete?.displayName||'';
       const subOff = p.participants?.find(pp=>pp.type==='substitution_out')?.athlete?.displayName||'';
@@ -3048,7 +3059,7 @@ function mcLiveTab(ev, data){
     </div>`).join('');
   }
 
-  html+=`<div class="live-refresh"><span class="live-refresh-dot"></span>Updating every 30s</div>`;
+  html+=`<div class="live-refresh"><span class="live-refresh-dot"></span>Updating every 10s</div>`;
   return html;
 }
 
