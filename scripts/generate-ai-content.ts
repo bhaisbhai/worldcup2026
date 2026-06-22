@@ -33,6 +33,17 @@ Critical Grounding Guardrails (Anti-Hallucination):
 // Helper to wait/sleep
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
+// Zero-trust JSON parser — strips markdown fences the LLM sometimes wraps output in
+function safeParseJson(raw: string): any {
+  const stripped = raw.replace(/^```(?:json)?\s*/i, '').replace(/\s*```\s*$/i, '').trim();
+  try {
+    return JSON.parse(stripped);
+  } catch (err) {
+    console.error('❌ JSON parse failed. Raw LLM output was:\n', raw);
+    throw err;
+  }
+}
+
 // Call Gemini API with retries for 429 and 503 errors
 async function callGemini(prompt: string, schema: any, retries = 10): Promise<any> {
   for (let attempt = 1; attempt <= retries; attempt++) {
@@ -53,7 +64,7 @@ async function callGemini(prompt: string, schema: any, retries = 10): Promise<an
         throw new Error("Empty response from Gemini API");
       }
 
-      return JSON.parse(response.text);
+      return safeParseJson(response.text);
     } catch (error: any) {
       const errMsg = error.message || "";
       const is503 = errMsg.includes("503") || 
@@ -622,44 +633,6 @@ async function main() {
   if (events.length > 0 || tomorrowEvents.length > 0) {
     console.log(`🤖 Building consolidated Gemini analysis: ${completedMatchesForRecap.length} completed matches, today's day summary, and tomorrow's preview...`);
 
-    const matchesProperties: Record<string, any> = {};
-    const teamsProperties: Record<string, any> = {};
-
-    for (const match of completedMatchesForRecap) {
-      const key = `${match.homeTeam}-${match.awayTeam}`;
-      matchesProperties[key] = {
-        type: "OBJECT",
-        properties: {
-          editionTitle: { type: "STRING" },
-          snappySummary: { type: "STRING" },
-          talkingPoints: {
-            type: "ARRAY",
-            items: { type: "STRING" }
-          },
-          randomQuirk: { type: "STRING" }
-        },
-        required: ["editionTitle", "snappySummary", "talkingPoints", "randomQuirk"]
-      };
-
-      for (const code of [match.homeTeam, match.awayTeam]) {
-        teamsProperties[code] = {
-          type: "OBJECT",
-          properties: {
-            headline: { type: "STRING" },
-            storySoFar: { type: "STRING" },
-            whatsNext: { type: "STRING" },
-            pubAmmo: { type: "STRING" }
-          },
-          required: ["headline", "storySoFar", "whatsNext", "pubAmmo"]
-        };
-      }
-    }
-
-    const playerVerdictsProperties: Record<string, any> = {};
-    for (const p of playersWhoPlayed) {
-      playerVerdictsProperties[p.id] = { type: "STRING" };
-    }
-
     const responseSchema: any = {
       type: "OBJECT",
       properties: {},
@@ -668,22 +641,46 @@ async function main() {
 
     if (completedMatchesForRecap.length > 0) {
       responseSchema.properties.matches = {
-        type: "OBJECT",
-        properties: matchesProperties,
-        required: Object.keys(matchesProperties)
+        type: "ARRAY",
+        items: {
+          type: "OBJECT",
+          properties: {
+            matchKey: { type: "STRING" },
+            editionTitle: { type: "STRING" },
+            snappySummary: { type: "STRING" },
+            talkingPoints: { type: "ARRAY", items: { type: "STRING" } },
+            randomQuirk: { type: "STRING" }
+          },
+          required: ["matchKey", "editionTitle", "snappySummary", "talkingPoints", "randomQuirk"]
+        }
       };
       responseSchema.properties.teams = {
-        type: "OBJECT",
-        properties: teamsProperties,
-        required: Object.keys(teamsProperties)
+        type: "ARRAY",
+        items: {
+          type: "OBJECT",
+          properties: {
+            teamCode: { type: "STRING" },
+            headline: { type: "STRING" },
+            storySoFar: { type: "STRING" },
+            whatsNext: { type: "STRING" },
+            pubAmmo: { type: "STRING" }
+          },
+          required: ["teamCode", "headline", "storySoFar", "whatsNext", "pubAmmo"]
+        }
       };
       responseSchema.required.push("matches", "teams");
 
       if (playersWhoPlayed.length > 0) {
         responseSchema.properties.playerVerdicts = {
-          type: "OBJECT",
-          properties: playerVerdictsProperties,
-          required: Object.keys(playerVerdictsProperties)
+          type: "ARRAY",
+          items: {
+            type: "OBJECT",
+            properties: {
+              id: { type: "STRING" },
+              verdict: { type: "STRING" }
+            },
+            required: ["id", "verdict"]
+          }
         };
         responseSchema.required.push("playerVerdicts");
       }
@@ -758,12 +755,12 @@ ${playersListStr}
 ` : ''}
 
 For each completed match:
-- "matches" key: Generate commentary under the match key (e.g. "NED-SWE") with editionTitle, snappySummary, talkingPoints, randomQuirk.
-- "teams" key: Generate updated tournament summary under the team code keys (e.g. "NED", "SWE") with headline, storySoFar, whatsNext, pubAmmo. For "whatsNext", you MUST reflect the team's COMPUTED ADVANCEMENT STATUS — do not say "must win or go home" for any team that is not status ELIMINATED.
+- "matches" key: An ARRAY of objects, one per completed match. Each object must include matchKey (e.g. "NED-SWE"), editionTitle, snappySummary, talkingPoints (array of strings), randomQuirk.
+- "teams" key: An ARRAY of objects, one per team that played. Each object must include teamCode (e.g. "NED"), headline, storySoFar, whatsNext, pubAmmo. For "whatsNext", you MUST reflect the team's COMPUTED ADVANCEMENT STATUS — do not say "must win or go home" for any team that is not status ELIMINATED.
 
 ${playersWhoPlayed.length > 0 ? `
 For the "playerVerdicts" key:
-- Generate a witty, short, one-sentence pundit verdict/roast for each player ID based on their stats today. Be extremely sarcastic, funny, or celebratory depending on how they performed. For example:
+- An ARRAY of objects, one per player. Each object must have id (the player's ESPN ID as a string) and verdict (a witty, short, one-sentence pundit verdict/roast based on their stats). Be extremely sarcastic, funny, or celebratory depending on how they performed. For example:
   - If a player scored or assisted: praise them with witty pundit lines.
   - If a player got a red card or a yellow: roast their lack of discipline.
   - If a defender/outfield player had a high number of clearances (e.g. 5+ clearances) or exceptional passing accuracy (e.g. 95%): highlight/comment on their solid distribution or defensive work.
@@ -800,28 +797,28 @@ Adhere strictly to your British pundit persona: sarcastic, self-deprecating, and
 
       // Parse matches
       if (response.matches) {
-        for (const [key, matchAnalysis] of Object.entries(response.matches as Record<string, any>)) {
-          masterDB.matches[key] = matchAnalysis;
+        for (const item of response.matches as any[]) {
+          masterDB.matches[item.matchKey] = item;
           matchesCSVRows.push([
-            key,
-            matchAnalysis.editionTitle,
-            matchAnalysis.snappySummary,
-            matchAnalysis.talkingPoints.join(';'),
-            matchAnalysis.randomQuirk
+            item.matchKey,
+            item.editionTitle,
+            item.snappySummary,
+            item.talkingPoints.join(';'),
+            item.randomQuirk
           ]);
         }
       }
 
       // Parse teams
       if (response.teams) {
-        for (const [code, teamAnalysis] of Object.entries(response.teams as Record<string, any>)) {
-          masterDB.teams[code] = teamAnalysis;
+        for (const item of response.teams as any[]) {
+          masterDB.teams[item.teamCode] = item;
           teamsCSVRows.push([
-            code,
-            teamAnalysis.headline,
-            teamAnalysis.storySoFar,
-            teamAnalysis.whatsNext,
-            teamAnalysis.pubAmmo
+            item.teamCode,
+            item.headline,
+            item.storySoFar,
+            item.whatsNext,
+            item.pubAmmo
           ]);
         }
       }
@@ -871,12 +868,12 @@ Adhere strictly to your British pundit persona: sarcastic, self-deprecating, and
           } catch {}
         }
         
-        for (const [id, verdict] of Object.entries(response.playerVerdicts)) {
-          existingVerdicts[id] = verdict as string;
+        for (const item of response.playerVerdicts as any[]) {
+          existingVerdicts[item.id] = item.verdict;
         }
 
         fs.writeFileSync(verdictsPath, JSON.stringify(existingVerdicts, null, 2), 'utf-8');
-        console.log(`🎉 data/player-verdicts.json updated with ${Object.keys(response.playerVerdicts).length} player verdicts.`);
+        console.log(`🎉 data/player-verdicts.json updated with ${(response.playerVerdicts as any[]).length} player verdicts.`);
       }
 
       // Parse today_preview
