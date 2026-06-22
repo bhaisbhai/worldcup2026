@@ -59,7 +59,12 @@ window.initKeepyUppy = function() {
 
   function saveData() { localStorage.setItem(storageKey, JSON.stringify(data)); }
 
+  function dismissNamePrompt() {
+    document.getElementById('_gameNamePrompt')?.remove();
+  }
+
   function resetGame() {
+    dismissNamePrompt();
     state = 'playing';
     score = 0; streak = 0; bestRunCombo = 1; perfects = 0;
     level = 1; earnedCoins = 0; unlockedMessage = '';
@@ -83,12 +88,8 @@ window.initKeepyUppy = function() {
     if (data.scores.length > 10) data.scores.length = 10;
     saveData();
     if (score > 0) {
-      lbFetchedAt = 0; // invalidate cache so leaderboard refreshes
-      fetch('/api/game-scores', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: selectedChar.name, score, combo: bestRunCombo, perfects }),
-      }).catch(() => {});
+      lbFetchedAt = 0;
+      _checkAndPromptName(score, bestRunCombo, perfects);
     }
   }
 
@@ -330,6 +331,8 @@ window.initKeepyUppy = function() {
       drawCharSelect();
     } else if (state === 'instructions') {
       drawInstructions();
+    } else if (state === 'leaderboard') {
+      drawLeaderboard();
     } else {
       drawMenu();
     }
@@ -1288,6 +1291,73 @@ window.initKeepyUppy = function() {
     pixelText(`COINS: ${data.coins}`, W/2-textWidth(`COINS: ${data.coins}`,10)/2, 468, 10, '#41f8ff');
   }
 
+  function submitScore(name, sc, combo, perf) {
+    lbFetchedAt = 0;
+    fetch('/api/game-scores', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, score: sc, combo, perfects: perf }),
+    }).catch(() => {});
+  }
+
+  function showNameInput(sc, combo, perf) {
+    const existing = document.getElementById('_gameNamePrompt');
+    if (existing) existing.remove();
+
+    const div = document.createElement('div');
+    div.id = '_gameNamePrompt';
+    div.style.cssText = 'position:fixed;inset:0;z-index:600;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.65)';
+    div.innerHTML = `
+      <div style="background:#050716;border:2px solid #ffd43b;border-radius:12px;padding:28px 24px;text-align:center;max-width:300px;width:90%;font-family:ui-monospace,Menlo,Consolas,monospace">
+        <div style="color:#ffd43b;font-size:20px;font-weight:900;margin-bottom:4px">&#127942; TOP 5!</div>
+        <div style="color:#41f8ff;font-size:12px;font-weight:700;margin-bottom:4px">SCORE: ${sc}</div>
+        <div style="color:#94a3b8;font-size:11px;margin-bottom:18px">Enter your name for the leaderboard</div>
+        <input id="_gameNameInput" type="text" maxlength="12" placeholder="YOUR NAME" autocomplete="off" autocorrect="off" spellcheck="false"
+          style="background:#0b1029;color:#ffffff;border:1.5px solid #41f8ff;border-radius:6px;padding:10px 12px;font-size:16px;font-family:ui-monospace,Menlo,Consolas,monospace;font-weight:700;width:100%;box-sizing:border-box;text-align:center;text-transform:uppercase;outline:none;letter-spacing:2px;margin-bottom:14px">
+        <div style="display:flex;gap:8px">
+          <button id="_gameNameSave" style="flex:2;background:#1d4ed8;color:#ffffff;border:2px solid #ffd43b;border-radius:6px;padding:11px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;font-weight:900;cursor:pointer;letter-spacing:1px">SAVE SCORE</button>
+          <button id="_gameNameSkip" style="flex:1;background:#1e293b;color:#94a3b8;border:1.5px solid #334155;border-radius:6px;padding:11px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;font-weight:700;cursor:pointer">SKIP</button>
+        </div>
+      </div>`;
+    document.body.appendChild(div);
+
+    const inp = div.querySelector('#_gameNameInput');
+    inp.addEventListener('input', () => { inp.value = inp.value.toUpperCase().replace(/[^A-Z0-9 _-]/g, ''); });
+    setTimeout(() => inp.focus(), 80);
+
+    const doSave = () => {
+      const name = inp.value.trim() || selectedChar.name;
+      submitScore(name, sc, combo, perf);
+      div.remove();
+    };
+    const doSkip = () => {
+      submitScore(selectedChar.name, sc, combo, perf);
+      div.remove();
+    };
+
+    div.querySelector('#_gameNameSave').addEventListener('click', doSave);
+    div.querySelector('#_gameNameSkip').addEventListener('click', doSkip);
+    inp.addEventListener('keydown', e => {
+      if (e.key === 'Enter') doSave();
+      if (e.key === 'Escape') doSkip();
+    });
+  }
+
+  function _checkAndPromptName(sc, combo, perf) {
+    fetch('/api/game-scores')
+      .then(r => r.json())
+      .then(d => {
+        const scores = d.scores || [];
+        const qualifies = scores.length < 5 || sc > (scores[4]?.score ?? 0);
+        if (qualifies && state === 'gameover') {
+          setTimeout(() => { if (state === 'gameover') showNameInput(sc, combo, perf); }, 1000);
+        } else {
+          submitScore(selectedChar.name, sc, combo, perf);
+        }
+      })
+      .catch(() => submitScore(selectedChar.name, sc, combo, perf));
+  }
+
   function fetchLeaderboard() {
     if (lbLoading) return;
     if (lbData && Date.now() - lbFetchedAt < 30000) return;
@@ -1408,7 +1478,7 @@ window.initKeepyUppy = function() {
     addButton('RETRY',  24,  357, 148, 40, () => resetGame());
     addButton('SHARE',  186, 357, 148, 40, shareScore);
     addButton('SCORES', 24,  407, 148, 40, () => { state = 'leaderboard'; fetchLeaderboard(); });
-    addButton('MENU',   186, 407, 148, 40, () => { state = 'menu'; });
+    addButton('MENU',   186, 407, 148, 40, () => { dismissNamePrompt(); state = 'menu'; });
   }
 
   async function shareScore() {
@@ -1536,7 +1606,7 @@ window.initKeepyUppy = function() {
     if (e.code==='ArrowLeft' ||e.code==='KeyA')  keys.left=true;
     if (e.code==='ArrowRight'||e.code==='KeyD')  keys.right=true;
     if (e.code==='Enter'&&state==='menu')         state='charselect';
-    if (e.code==='Escape')                        state='menu';
+    if (e.code==='Escape')                        { dismissNamePrompt(); state='menu'; }
   });
   window.addEventListener('keyup', e => {
     if (e.code==='ArrowLeft' ||e.code==='KeyA')  keys.left=false;
