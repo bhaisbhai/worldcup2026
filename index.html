@@ -3482,8 +3482,12 @@ async function computeStandingsFromScoreboard(){
 //  FETCH LIVE GROUP STANDINGS
 // ═══════════════════════════════════════════════════
 function getStat(stats, name){
-  const s = stats.find(x => x.name===name || x.shortDisplayName===name);
-  return s ? (parseFloat(s.value)||0) : 0;
+  // Accept a single string or array of aliases; match name, abbreviation, displayName
+  const names = Array.isArray(name) ? name : [name];
+  const s = stats.find(x => names.some(n =>
+    x.name===n || x.abbreviation===n || x.displayName===n || x.shortDisplayName===n
+  ));
+  return s ? Number(s.value ?? s.displayValue ?? 0) : 0;
 }
 
 async function fetchGroupStandings(){
@@ -3499,25 +3503,27 @@ async function fetchGroupStandings(){
       if(!m) return;
       const gId = m[1].toUpperCase();
       groupMap[gId] = [];
-      (child.standings?.entries||[]).forEach(entry => {
+      (child.standings?.entries||[]).forEach((entry, ei) => {
         const stats = entry.stats || [];
+        // Log raw stat names once so we know exactly what ESPN sends
+        if(gId==='A' && ei===0) console.log('[ESPN raw stats for first entry]', entry.team?.displayName, stats.map(s=>({name:s.name,abbr:s.abbreviation,val:s.value})));
         const abbr  = entry.team?.abbreviation || '';
         const name  = entry.team?.displayName   || entry.team?.name || '';
-        const gf    = getStat(stats,'pointsFor');
-        const ga    = getStat(stats,'pointsAgainst');
+        const gf    = getStat(stats,['pointsFor','goalsFor','GF','gf']);
+        const ga    = getStat(stats,['pointsAgainst','goalsAgainst','GA','ga']);
+        const w     = getStat(stats,['wins','W','Wins']);
+        const d     = getStat(stats,['ties','draws','D','Draws','Ties']);
+        const l     = getStat(stats,['losses','L','Losses']);
+        const pts   = getStat(stats,['points','PTS','Points','pts']);
         const noteText = [
           entry.note?.description,
           entry.note?.shortDescription,
           entry.note?.displayValue,
           typeof entry.note === 'string' ? entry.note : ''
         ].filter(Boolean).join(' ');
-        const clinched        = /advance to round of 32/i.test(noteText);
-        const eliminated      = /eliminat/i.test(noteText);
+        const clinched         = /advance to round of 32/i.test(noteText);
+        const eliminated       = /eliminat/i.test(noteText);
         const bestEightAdvance = /best\s+8\s+advance/i.test(noteText);
-        console.log('[ESPN standings entry]', { team: name, note: entry.note, noteText, clinched, eliminated, bestEightAdvance });
-        const w = getStat(stats,'wins');
-        const d = getStat(stats,'ties');
-        const l = getStat(stats,'losses');
         groupMap[gId].push({
           n: name, abbr,
           f:   FLAGS[abbr] || '🏳️',
@@ -3525,7 +3531,7 @@ async function fetchGroupStandings(){
           w, d, l,
           gf, ga,
           gd:  gf - ga,
-          pts: getStat(stats,'points'),
+          pts,
           clinched,
           eliminated,
           bestEightAdvance,
@@ -3538,7 +3544,11 @@ async function fetchGroupStandings(){
 
     GROUPS_DATA.forEach(g => {
       if(groupMap[g.id] && groupMap[g.id].length){
-        g.teams = groupMap[g.id].sort((a,b) => b.pts-a.pts || b.gd-a.gd || b.gf-a.gf);
+        g.teams = groupMap[g.id].sort((a,b) =>
+          Number(b.pts??0)-Number(a.pts??0) ||
+          Number(b.gd??0)-Number(a.gd??0)  ||
+          Number(b.gf??0)-Number(a.gf??0)
+        );
       }
     });
     renderGroups();
@@ -3552,15 +3562,13 @@ async function fetchGroupStandings(){
 }
 
 function updateKnockoutFromGroups(){
-  GROUPS_DATA.forEach(g => {
-    const teams = (g.teams||[]).slice().sort((a,b) =>
-      (b.pts??0)-(a.pts??0) || (b.gd??0)-(a.gd??0) || (b.gf??0)-(a.gf??0)
-    );
-    console.log('[Group KO check]', g.id, teams.map(t=>({n:t.n, pts:t.pts, clinched:t.clinched, note:t.note})));
-    const groupComplete = teams.every(t => (t.p??0) >= 3);
-    if(teams[0]?.clinched) fillKOSlot('1'+g.id, teams[0], { projected: !groupComplete });
-    if(teams[1]?.clinched) fillKOSlot('2'+g.id, teams[1], { projected: !groupComplete });
-  });
+  // HARDCODED — only confirmed qualifiers shown until dynamic logic is verified
+  const CONFIRMED = [
+    { slot:'1A', n:'Mexico',        f:'🇲🇽' },
+    { slot:'1D', n:'United States', f:'🇺🇸' },
+    { slot:'1E', n:'Germany',       f:'🇩🇪' },
+  ];
+  CONFIRMED.forEach(({ slot, n, f }) => fillKOSlot(slot, { n, f }));
 }
 
 function fillKOSlot(key, team, options={}){
