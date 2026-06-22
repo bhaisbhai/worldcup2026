@@ -47,6 +47,7 @@ window.initKeepyUppy = function() {
   let lbLoading = false;
   let lbError = false;
   let lbFetchedAt = 0;
+  let _pendingScore = null;
 
   function loadData() {
     const base = { best: 0, coins: 0, scores: [] };
@@ -61,6 +62,15 @@ window.initKeepyUppy = function() {
 
   function dismissNamePrompt() {
     document.getElementById('_gameNamePrompt')?.remove();
+    _flushPendingScore();
+  }
+
+  function _flushPendingScore() {
+    if (_pendingScore) {
+      const { sc, combo, perf } = _pendingScore;
+      _pendingScore = null;
+      submitScore(selectedChar.name, sc, combo, perf);
+    }
   }
 
   function resetGame() {
@@ -89,6 +99,7 @@ window.initKeepyUppy = function() {
     saveData();
     if (score > 0) {
       lbFetchedAt = 0;
+      _pendingScore = { sc: score, combo: bestRunCombo, perf: perfects };
       _checkAndPromptName(score, bestRunCombo, perfects);
     }
   }
@@ -1326,11 +1337,13 @@ window.initKeepyUppy = function() {
     setTimeout(() => inp.focus(), 80);
 
     const doSave = () => {
+      _pendingScore = null;
       const name = inp.value.trim() || selectedChar.name;
       submitScore(name, sc, combo, perf);
       div.remove();
     };
     const doSkip = () => {
+      _pendingScore = null;
       submitScore(selectedChar.name, sc, combo, perf);
       div.remove();
     };
@@ -1347,15 +1360,26 @@ window.initKeepyUppy = function() {
     fetch('/api/game-scores')
       .then(r => r.json())
       .then(d => {
+        if (!_pendingScore) return; // user already navigated away, handled by _flushPendingScore
         const scores = d.scores || [];
         const qualifies = scores.length < 5 || sc > (scores[4]?.score ?? 0);
         if (qualifies && state === 'gameover') {
-          setTimeout(() => { if (state === 'gameover') showNameInput(sc, combo, perf); }, 1000);
+          setTimeout(() => {
+            if (state === 'gameover' && _pendingScore) {
+              _pendingScore = null; // showNameInput will handle submission
+              showNameInput(sc, combo, perf);
+            }
+            // if user left gameover, _flushPendingScore was already called by resetGame/MENU
+          }, 1000);
         } else {
+          _pendingScore = null;
           submitScore(selectedChar.name, sc, combo, perf);
         }
       })
-      .catch(() => submitScore(selectedChar.name, sc, combo, perf));
+      .catch(() => {
+        _pendingScore = null;
+        submitScore(selectedChar.name, sc, combo, perf);
+      });
   }
 
   function fetchLeaderboard() {

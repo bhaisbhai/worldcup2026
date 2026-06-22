@@ -47,7 +47,7 @@ module.exports = async function handler(req, res) {
           } catch (_) {}
         }
       }
-      res.setHeader('Cache-Control', 's-maxage=15, stale-while-revalidate=30');
+      res.setHeader('Cache-Control', 'no-store');
       return res.json({ scores });
     }
 
