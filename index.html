@@ -750,6 +750,38 @@ body{
 .fav-gtbl tr.g-clickable:hover .gname{color:var(--accent)}
 .fav-gtbl .gteam{display:flex;align-items:center;gap:7px}
 
+/* ── SQUAD ───────────────────────────────────────────────────────── */
+.squad-pos-group{margin-bottom:20px}
+.squad-pos-hdr{font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--t2);margin-bottom:8px}
+.squad-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:7px}
+.squad-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:9px 12px;display:flex;align-items:center;gap:9px;cursor:pointer;transition:border-color .15s,background .15s}
+.squad-card:hover{border-color:#333;background:rgba(255,255,255,.02)}
+.squad-card:hover .squad-name{color:var(--accent)}
+.squad-num{font-family:var(--mono);font-size:17px;font-weight:800;color:var(--accent);min-width:24px;text-align:center;flex-shrink:0;line-height:1}
+.squad-info{min-width:0}
+.squad-name{font-size:12px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;transition:color .15s}
+.squad-club{font-size:10px;color:var(--t2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:2px}
+
+/* ── TEAM STATS ──────────────────────────────────────────────────── */
+.wdl-row{display:flex;gap:8px;margin-bottom:12px}
+.wdl-seg{flex:1;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 10px;text-align:center}
+.wdl-num{font-size:30px;font-weight:800;font-family:var(--mono);line-height:1}
+.wdl-lbl{font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--t2);margin-top:4px}
+.wdl-seg.w .wdl-num{color:var(--accent)}.wdl-seg.d .wdl-num{color:var(--gold)}.wdl-seg.l .wdl-num{color:#ff5555}
+.tstat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.tstat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 10px;text-align:center}
+.tstat-val{font-size:28px;font-weight:800;font-family:var(--mono);line-height:1}
+.tstat-lbl{font-size:9px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--t2);margin-top:4px}
+.tstat-bars{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:6px}
+.tstat-bar-row{margin-bottom:12px}
+.tstat-bar-row:last-child{margin-bottom:0}
+.tstat-bar-lbl{display:flex;justify-content:space-between;font-size:11px;color:var(--t2);margin-bottom:5px}
+.tstat-bar-lbl strong{color:var(--text);font-weight:600}
+.tstat-bar-track{height:5px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden}
+.tstat-bar-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .7s cubic-bezier(.4,0,.2,1);width:0}
+.tstat-bar-fill.ga{background:#ff5555}
+.tstat-gms{font-size:10px;color:var(--t2);text-align:right;margin-top:4px}
+
 @media(max-width:768px){.tp-grid{grid-template-columns:repeat(auto-fill,minmax(80px,1fr))}}
 
 /* ── RULEBOOK ───────────────────────────────────── */
@@ -3836,6 +3868,10 @@ function renderTeamPage(sec, team){
       </div>
     </div>
     ${gData?`<div class="fav-sect">Group ${gData.id} Standings</div>${renderFavGroupTable(gData,team)}`:''}
+    <div class="fav-sect">Tournament Performance</div>
+    <div id="favStats"><div class="lineup-loading">Loading stats…</div></div>
+    <div class="fav-sect">Squad</div>
+    <div id="favSquad"><div class="lineup-loading">Loading squad…</div></div>
     <div class="fav-sect">Recent &amp; Upcoming</div>
     <div id="favMatches"><div class="lineup-loading">Checking schedule…</div></div>
     <div class="fav-sect">Latest News</div>
@@ -3843,6 +3879,11 @@ function renderTeamPage(sec, team){
 
   fetchFavMatches(team);
   fetchFavNews(team);
+  fetchTeamMatchStats(team);
+
+  // Squad renders synchronously from in-memory data
+  const squadEl = $('favSquad');
+  if (squadEl) renderTeamSquad(squadEl, team);
 }
 
 function renderFavGroupTable(g, myTeam){
@@ -3887,7 +3928,7 @@ async function fetchFavMatches(team){
   for(let d=-5;d<=5;d++){
     const dt = new Date(now);
     dt.setDate(now.getDate()+d);
-    dates.push(toDateStr(dt));
+    dates.push(localDateStr(dt));
   }
 
   const found = [];
@@ -3978,6 +4019,172 @@ async function fetchFavNews(team){
 
   const el2 = $('favNews');
   if(el2) el2.innerHTML='<div class="mc-news-empty">News will appear here on match days</div>';
+}
+
+// ── SQUAD ────────────────────────────────────────────────────────────
+function renderTeamSquad(container, team){
+  const squad = [];
+  for(const [id, d] of Object.entries(_playerClubs)){
+    if(favTeamMatch(d.teamName||'', team.n) || favTeamMatch(d.teamAbbr||'', team.n)){
+      squad.push({id, ...d});
+    }
+  }
+  if(!squad.length){
+    container.innerHTML = '<div class="mc-news-empty">Squad data coming soon</div>';
+    return;
+  }
+  const POS_ORDER = ['G','D','M','F'];
+  const POS_LABELS = {G:'Goalkeepers',D:'Defenders',M:'Midfielders',F:'Forwards'};
+  const groups = {};
+  for(const p of squad){
+    const pos = (p.position||'F').charAt(0).toUpperCase();
+    const key = POS_ORDER.includes(pos) ? pos : 'F';
+    (groups[key] = groups[key]||[]).push(p);
+  }
+  container.innerHTML = POS_ORDER.filter(pos => groups[pos]?.length).map(pos => {
+    const players = (groups[pos]||[]).sort((a,b)=>(parseInt(a.jersey)||99)-(parseInt(b.jersey)||99));
+    return `<div class="squad-pos-group">
+      <div class="squad-pos-hdr">${POS_LABELS[pos]} (${players.length})</div>
+      <div class="squad-grid">
+        ${players.map(p=>`<div class="squad-card" onclick="openPlayerById('${p.id}')">
+          <div class="squad-num">${p.jersey||'—'}</div>
+          <div class="squad-info">
+            <div class="squad-name">${esc(p.name)}</div>
+            ${p.club?`<div class="squad-club">${esc(p.club)}</div>`:''}
+          </div>
+        </div>`).join('')}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── TEAM MATCH STATS ─────────────────────────────────────────────────
+function statBar(label, valStr, pct, neg=false){
+  const w = Math.min(Math.max(pct||0,0),100).toFixed(1)+'%';
+  return `<div class="tstat-bar-row">
+    <div class="tstat-bar-lbl"><span>${label}</span><strong>${valStr}</strong></div>
+    <div class="tstat-bar-track"><div class="tstat-bar-fill${neg?' ga':''}" style="width:0" data-w="${w}"></div></div>
+  </div>`;
+}
+
+async function fetchTeamMatchStats(team){
+  const container = $('favStats');
+  if(!container) return;
+
+  // Scan back 25 days to cover the full group stage
+  const now = new Date();
+  const dates = Array.from({length:25},(_,i)=>{
+    const d = new Date(now); d.setDate(d.getDate()-i); return localDateStr(d);
+  });
+
+  const seen = new Set();
+  const completedMatches = [];
+  await Promise.all(dates.map(async ds=>{
+    try{
+      const r = await fetch(`${ESPN_URL}?dates=${ds}`,{signal:AbortSignal.timeout(7000)});
+      if(!r.ok) return;
+      const data = await r.json();
+      for(const ev of (data.events||[]).map(parseEvent)){
+        if(ev.state!=='post'||seen.has(ev.id)) continue;
+        if(favTeamMatch(ev.home.name,team.n)||favTeamMatch(ev.away.name,team.n)){
+          seen.add(ev.id); completedMatches.push(ev);
+        }
+      }
+    }catch(e){}
+  }));
+
+  if(!completedMatches.length){
+    const el2=$('favStats');
+    if(el2) el2.innerHTML='<div class="mc-news-empty">No completed matches yet — check back after kick-off</div>';
+    return;
+  }
+
+  // Record & goals from match scores (always reliable)
+  let w=0,d=0,l=0,gf=0,ga=0;
+  for(const ev of completedMatches){
+    const isHome = favTeamMatch(ev.home.name,team.n);
+    const myS = parseInt(isHome?ev.home.score:ev.away.score)||0;
+    const opS = parseInt(isHome?ev.away.score:ev.home.score)||0;
+    gf+=myS; ga+=opS;
+    if(myS>opS) w++; else if(myS===opS) d++; else l++;
+  }
+  const cs = completedMatches.filter(ev=>{
+    const isHome = favTeamMatch(ev.home.name,team.n);
+    return (parseInt(isHome?ev.away.score:ev.home.score)||0)===0;
+  }).length;
+
+  // Fetch summaries for boxscore stats (parallel, cap at 5)
+  const acc = {poss:[],shots:[],onTgt:[],corners:[],fouls:[],passes:[]};
+  await Promise.all(completedMatches.slice(0,5).map(async ev=>{
+    try{
+      const r = await fetch(`${ESPN_SUMMARY}?event=${ev.id}`,{signal:AbortSignal.timeout(8000)});
+      if(!r.ok) return;
+      const data = await r.json();
+      for(const ts of (data.boxscore?.teams||[])){
+        if(!favTeamMatch(ts.team?.displayName||'',team.n)&&!favTeamMatch(ts.team?.abbreviation||'',team.n)) continue;
+        const stats = ts.statistics||[];
+        const get = (...names) => {
+          for(const n of names){
+            const s=stats.find(x=>(x.name||'').toLowerCase()===n.toLowerCase()||(x.label||'').toLowerCase().replace(/\s+/g,'')===n.toLowerCase().replace(/\s+/g,''));
+            if(s){ const v=parseFloat(s.displayValue??s.value); if(!isNaN(v)) return v; }
+          }
+          return null;
+        };
+        const poss=get('possessionPct','possession','ballPossession');
+        const shots=get('totalShots','shots','shotAttempts');
+        const onTgt=get('shotsOnTarget','onTarget','targetedShots','shotsOnGoal');
+        const corn=get('cornerKicks','corners','corner');
+        const foul=get('fouls','foulsCommitted');
+        const pass=get('passAccuracy','passesAccuracy','passingAccuracy');
+        if(poss!==null) acc.poss.push(poss);
+        if(shots!==null) acc.shots.push(shots);
+        if(onTgt!==null) acc.onTgt.push(onTgt);
+        if(corn!==null) acc.corners.push(corn);
+        if(foul!==null) acc.fouls.push(foul);
+        if(pass!==null) acc.passes.push(pass);
+      }
+    }catch(e){}
+  }));
+
+  const avg = arr => arr.length ? arr.reduce((a,b)=>a+b,0)/arr.length : null;
+  const avgPoss = avg(acc.poss);
+  const avgShots = avg(acc.shots);
+  const avgOnTgt = avg(acc.onTgt);
+  const avgCorners = avg(acc.corners);
+  const avgFouls = avg(acc.fouls);
+  const avgPasses = avg(acc.passes);
+  const n = completedMatches.length;
+  const f1 = v => v!==null ? v.toFixed(1) : '—';
+
+  const hasBoxscore = avgShots!==null||avgPoss!==null;
+
+  const el3=$('favStats');
+  if(!el3) return;
+
+  el3.innerHTML = `
+    <div class="wdl-row">
+      <div class="wdl-seg w"><div class="wdl-num">${w}</div><div class="wdl-lbl">Won</div></div>
+      <div class="wdl-seg d"><div class="wdl-num">${d}</div><div class="wdl-lbl">Drawn</div></div>
+      <div class="wdl-seg l"><div class="wdl-num">${l}</div><div class="wdl-lbl">Lost</div></div>
+    </div>
+    <div class="tstat-grid">
+      <div class="tstat-card"><div class="tstat-val" style="color:var(--accent)">${gf}</div><div class="tstat-lbl">Goals For</div></div>
+      <div class="tstat-card"><div class="tstat-val" style="color:#ff5555">${ga}</div><div class="tstat-lbl">Goals Against</div></div>
+      <div class="tstat-card"><div class="tstat-val" style="color:var(--gold)">${cs}</div><div class="tstat-lbl">Clean Sheets</div></div>
+    </div>
+    ${hasBoxscore?`<div class="tstat-bars">
+      ${avgPoss!==null ? statBar('Possession',f1(avgPoss)+'%',avgPoss) : ''}
+      ${avgShots!==null ? statBar('Shots / game',f1(avgShots),(avgShots/20)*100) : ''}
+      ${avgOnTgt!==null&&avgShots ? statBar('On Target %',Math.round((avgOnTgt/(avgShots||1))*100)+'%',(avgOnTgt/(avgShots||1))*100) : ''}
+      ${avgPasses!==null ? statBar('Pass Accuracy',f1(avgPasses)+'%',avgPasses) : ''}
+      ${avgCorners!==null ? statBar('Corners / game',f1(avgCorners),(avgCorners/12)*100) : ''}
+      ${avgFouls!==null ? statBar('Fouls / game',f1(avgFouls),(avgFouls/20)*100,true) : ''}
+    </div>`:''}
+    <div class="tstat-gms">${n} match${n!==1?'es':''} played</div>`;
+
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    el3.querySelectorAll('.tstat-bar-fill').forEach(bar=>{ bar.style.width=bar.dataset.w; });
+  }));
 }
 
 // ═══════════════════════════════════════════════════
