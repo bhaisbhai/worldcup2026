@@ -664,8 +664,7 @@ body{
 .lb-flag{font-size:18px;flex-shrink:0}
 .lb-info{flex:1;min-width:0}
 .lb-name{font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;transition:color .12s}
-.lb-team{font-size:10px;color:var(--t2);margin-top:2px;cursor:pointer;transition:color .12s}
-.lb-team:hover{color:var(--text)}
+.lb-team{font-size:10px;color:var(--t2);margin-top:2px}
 .lb-val{font-size:20px;font-weight:800;font-family:var(--mono);min-width:24px;text-align:right;flex-shrink:0}
 .lb-val.g{color:var(--accent)}.lb-val.a{color:#64c8ff}.lb-val.y{color:var(--gold)}.lb-val.r{color:var(--red)}.lb-val.c{color:#a78bfa}
 .lb-2col{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -3751,7 +3750,7 @@ function lbStatBox(rows, valCls, title, limit=10){
           <span class="lb-flag">${p.f}</span>
           <div class="lb-info">
             <div class="lb-name">${p.name}</div>
-            <div class="lb-team"${teamEsc?` onclick="event.stopPropagation();openTeamPage('${teamEsc}')"`:''}>${p.teamName}</div>
+            <div class="lb-team">${p.teamName}</div>
           </div>
           <span class="lb-val ${valCls}">${p.displayVal}</span>
         </div>`;
@@ -3790,14 +3789,12 @@ function renderLeaderboard(){
         if(p.redCards)    pills.push({c:'d', t:`${p.redCards}🟥`});
         if(p.id) _lbPlayerData[p.id]={name:p.name,teamName:p.teamName,teamAbbr:p.teamAbbr||''};
         const cardClick = p.id ? `onclick="openPlayerById('${p.id}')"` : '';
-        const teamEsc2 = esc(p.teamName||'');
-        const teamClick = teamEsc2 ? `onclick="event.stopPropagation();openTeamPage('${teamEsc2}')"` : '';
         return `<div class="watch-card" ${cardClick}>
           <span class="watch-pos${i<3?' top3':''}">${i<3?syms[i]:i+1}</span>
           <span class="watch-flag">${p.f}</span>
           <div class="watch-info">
             <div class="watch-name">${p.name}</div>
-            <div class="watch-team" ${teamClick} style="cursor:pointer">${p.teamName}</div>
+            <div class="watch-team">${p.teamName}</div>
             <div class="watch-pills">${pills.map(pl=>`<span class="watch-pill ${pl.c}">${pl.t}</span>`).join('')}</div>
           </div>
           <div class="watch-score">
