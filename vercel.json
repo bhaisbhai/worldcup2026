@@ -3,6 +3,7 @@
   "builds": [
     { "src": "index.html", "use": "@vercel/static" },
     { "src": "group-debug.html", "use": "@vercel/static" },
+    { "src": "debug-live.html", "use": "@vercel/static" },
     { "src": "robots.txt", "use": "@vercel/static" },
     { "src": "sitemap.xml", "use": "@vercel/static" },
     { "src": "keepy-uppy.js", "use": "@vercel/static" },
@@ -14,6 +15,7 @@
   "routes": [
     { "src": "/api/(.*)", "dest": "/api/$1.js" },
     { "src": "/group-debug", "dest": "/group-debug.html" },
+    { "src": "/debug-live", "dest": "/debug-live.html" },
     { "handle": "filesystem" },
     { "src": "/(.*)", "dest": "/index.html" }
   ]

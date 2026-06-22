@@ -2697,7 +2697,7 @@ function switchMCTab(tabId){
         const b = document.getElementById('mcBody');
         if(b){ b.innerHTML=mcLiveTab(mcState.ev,freshData); requestAnimationFrame(()=>{ b.querySelectorAll('[data-w]').forEach(el=>{ el.style.width=el.dataset.w+'%'; }); }); }
       }
-    }, 30000);
+    }, 10000);
   } else if(tabId==='overview'){
     body.innerHTML = ev.state==='pre' ? mcPreOverview(ev,data) : mcMatchOverview(ev,data);
     requestAnimationFrame(()=>{ body.querySelectorAll('[data-w]').forEach(el=>{ el.style.width=el.dataset.w+'%'; }); });
@@ -4984,6 +4984,74 @@ function showGoalCelebration(ox, oy){
       setTimeout(()=>p.remove(), dur+delay+100);
     }
   });
+}
+
+// ═══════════════════════════════════════════════════
+//  DEBUG — fake live match at /?debug-live
+// ═══════════════════════════════════════════════════
+function openDebugLiveMatch(){
+  const mockEv = {
+    id:'debug-999', state:'in', isHT:false, displayClock:"67'",
+    detail:'Mon, June 22nd at 3:00 PM EDT', date:new Date(),
+    home:{name:'England',abbr:'ENG',score:1,winner:false},
+    away:{name:'Germany',abbr:'GER',score:1,winner:false},
+    venue:'MetLife Stadium', city:'East Rutherford',
+    group:'Group D', bcast:'ITV1',
+    goals:[
+      {name:'Bellingham',min:"23'",isHome:true,og:false,pen:false},
+      {name:'Müller',min:"58'",isHome:false,og:false,pen:false},
+    ]
+  };
+  const mockData = {
+    header:{competitions:[{competitors:[
+      {homeAway:'home',id:'h001',team:{id:'h001'}},
+      {homeAway:'away',id:'a002',team:{id:'a002'}},
+    ]}]},
+    plays:[
+      {scoringPlay:true,type:{text:'Goal'},clock:{displayValue:"23'"},team:{id:'h001'},
+       participants:[{type:'scorer',athlete:{displayName:'Jude Bellingham'}}],text:''},
+      {scoringPlay:false,type:{text:'Yellow Card'},clock:{displayValue:"41'"},team:{id:'a002'},
+       participants:[],text:'Thomas Müller'},
+      {scoringPlay:false,type:{text:'Substitution'},clock:{displayValue:"52'"},team:{id:'h001'},
+       participants:[
+         {type:'substitution_in',athlete:{displayName:'Marcus Rashford'}},
+         {type:'substitution_out',athlete:{displayName:'Phil Foden'}},
+       ],text:''},
+      {scoringPlay:true,type:{text:'Goal'},clock:{displayValue:"58'"},team:{id:'a002'},
+       participants:[{type:'scorer',athlete:{displayName:'Thomas Müller'}}],text:''},
+      {scoringPlay:false,type:{text:'Yellow Card'},clock:{displayValue:"63'"},team:{id:'h001'},
+       participants:[],text:'Declan Rice'},
+    ],
+    boxscore:{teams:[
+      {team:{id:'h001'},statistics:[
+        {name:'possessionPct',displayValue:'58'},{name:'totalShots',displayValue:'9'},
+        {name:'shotsOnTarget',displayValue:'4'},{name:'corners',displayValue:'5'},
+        {name:'fouls',displayValue:'8'},{name:'yellowCards',displayValue:'1'},
+        {name:'saves',displayValue:'2'},
+      ]},
+      {team:{id:'a002'},statistics:[
+        {name:'possessionPct',displayValue:'42'},{name:'totalShots',displayValue:'6'},
+        {name:'shotsOnTarget',displayValue:'3'},{name:'corners',displayValue:'3'},
+        {name:'fouls',displayValue:'11'},{name:'yellowCards',displayValue:'2'},
+        {name:'saves',displayValue:'3'},
+      ]},
+    ]}
+  };
+  if(mcCdInt){clearInterval(mcCdInt);mcCdInt=null;}
+  if(mcLiveInt){clearInterval(mcLiveInt);mcLiveInt=null;}
+  mcState={ev:mockEv,data:mockData};
+  mcCache['debug-999']=mockData;
+  $('mcModal').innerHTML=`<div id="mcHd"></div><div id="mcTabsBar"></div><div class="mc-body" id="mcBody"></div>`;
+  $('modalBg').classList.add('open');
+  document.body.style.overflow='hidden';
+  gtag('event','debug_live_opened');
+  renderMCHeader(mockEv);
+  buildMCTabs(mockEv);
+  switchMCTab('live');
+}
+
+if(new URLSearchParams(location.search).has('debug-live')){
+  setTimeout(openDebugLiveMatch, 300);
 }
 
 </script>
