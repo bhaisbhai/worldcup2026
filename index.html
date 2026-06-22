@@ -986,7 +986,7 @@ body{
 <!-- HEADER -->
 <header class="hdr">
   <div class="hdr-in">
-    <div class="wordmark">
+    <div class="wordmark" onclick="goHome()">
       <div class="wordmark-name">Game Buddy</div>
       <div class="wordmark-event">FIFA World Cup 2026</div>
     </div>
@@ -2403,6 +2403,14 @@ function renderKnockout(){
 // ═══════════════════════════════════════════════════
 //  TABS
 // ═══════════════════════════════════════════════════
+function goHome(){
+  document.querySelectorAll('.tbtn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelector('.tbtn[data-tab="today"]')?.classList.add('active');
+  document.getElementById('tab-today')?.classList.add('active');
+  goToDate(null);
+}
+
 document.querySelectorAll('.tbtn').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.tbtn').forEach(b=>b.classList.remove('active'));
