@@ -622,6 +622,8 @@ body{
 /* ── BRACKET MATCH INFO ─────────────────────────── */
 .bm-info{font-size:9px;color:var(--t2);padding:2px 8px 5px;letter-spacing:.2px;line-height:1.6;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .bt.lbl{color:var(--t2);font-size:10px}
+.bt.projected{opacity:.7}
+.ko-proj{font-size:9px;color:var(--t2);margin-left:auto;font-style:italic}
 
 /* ── INSTALL BANNER ─────────────────────────────── */
 .install-banner{
@@ -2335,8 +2337,6 @@ function renderGroups(){
       <div class="qualify-line"></div>`;
     grid.append(card);
   });
-  // Update knockout bracket whenever group data refreshes
-  updateKnockoutQualifiers();
 }
 
 // ═══════════════════════════════════════════════════
@@ -2398,7 +2398,6 @@ function renderKnockout(){
   b.append(mkKORound('Round of 16',    KO_DATA.right.r16));
   b.append(mkKORound('Round of 32',    KO_DATA.right.r32));
 
-  updateKnockoutFromGroups();
 }
 
 // ═══════════════════════════════════════════════════
@@ -2413,7 +2412,7 @@ document.querySelectorAll('.tbtn').forEach(btn => {
     if(btn.dataset.tab === 'leaderboard') renderLeaderboard();
     if(btn.dataset.tab === 'myteam') renderMyTeam();
     if(btn.dataset.tab === 'rulebook') renderRulebook();
-    if(btn.dataset.tab === 'knockout') renderKnockout();
+    if(btn.dataset.tab === 'knockout') refreshKnockoutBracket();
     setTimeout(observeCards, 40);
   });
 });
@@ -3475,7 +3474,7 @@ async function computeStandingsFromScoreboard(){
 
   if(changed){
     renderGroups();
-    renderKnockout(); // full rebuild — wipes any incorrectly-filled slots, then re-fills from current data
+    refreshKnockoutBracket();
   }
 }
 
@@ -3506,20 +3505,31 @@ async function fetchGroupStandings(){
         const name  = entry.team?.displayName   || entry.team?.name || '';
         const gf    = getStat(stats,'pointsFor');
         const ga    = getStat(stats,'pointsAgainst');
-        const noteDesc = entry.note?.description || '';
-        const clinched = /advance to round of 32/i.test(noteDesc);
+        const noteText = [
+          entry.note?.description,
+          entry.note?.shortDescription,
+          entry.note?.displayValue,
+          typeof entry.note === 'string' ? entry.note : ''
+        ].filter(Boolean).join(' ');
+        const clinched        = /advance to round of 32/i.test(noteText);
+        const eliminated      = /eliminat/i.test(noteText);
+        const bestEightAdvance = /best\s+8\s+advance/i.test(noteText);
+        console.log('[ESPN standings entry]', { team: name, note: entry.note, noteText, clinched, eliminated, bestEightAdvance });
         const w = getStat(stats,'wins');
         const d = getStat(stats,'ties');
         const l = getStat(stats,'losses');
         groupMap[gId].push({
           n: name, abbr,
           f:   FLAGS[abbr] || '🏳️',
-          p:   w + d + l,  // games played = wins + draws + losses (never inflated by scheduled games)
+          p:   w + d + l,
           w, d, l,
           gf, ga,
           gd:  gf - ga,
           pts: getStat(stats,'points'),
           clinched,
+          eliminated,
+          bestEightAdvance,
+          note: noteText,
         });
       });
     });
@@ -3533,38 +3543,42 @@ async function fetchGroupStandings(){
     });
     renderGroups();
     document.querySelectorAll('.gcard').forEach((c,i)=>setTimeout(()=>c.classList.add('vis'),i*30));
-    updateKnockoutQualifiers();
-  } catch(e){ /* keep static data */ }
+    console.table(GROUPS_DATA.flatMap(g => g.teams.map(t => ({
+      group: g.id, name: t.n, pts: t.pts, gd: t.gd, p: t.p,
+      clinched: t.clinched, eliminated: t.eliminated, note: t.note
+    }))));
+    refreshKnockoutBracket();
+  } catch(e){ console.error('[fetchGroupStandings error]', e); }
 }
 
 function updateKnockoutFromGroups(){
-  // Only fill slots when ESPN explicitly marks both top 2 as clinched/advanced.
-  // Never calculate from games-played — ESPN's own flag is the source of truth.
-  const placed = new Set();
   GROUPS_DATA.forEach(g => {
-    const teams = (g.teams||[]).slice().sort((a,b) => b.pts-a.pts || b.gd-a.gd || b.gf-a.gf);
-    if(teams.length < 2) return;
-    if(!teams[0]?.clinched || !teams[1]?.clinched) return;
-    if(!placed.has(teams[0].n)){
-      fillKOSlot('1'+g.id, teams[0]);
-      placed.add(teams[0].n);
-    }
-    if(!placed.has(teams[1].n)){
-      fillKOSlot('2'+g.id, teams[1]);
-      placed.add(teams[1].n);
-    }
+    const teams = (g.teams||[]).slice().sort((a,b) =>
+      (b.pts??0)-(a.pts??0) || (b.gd??0)-(a.gd??0) || (b.gf??0)-(a.gf??0)
+    );
+    console.log('[Group KO check]', g.id, teams.map(t=>({n:t.n, pts:t.pts, clinched:t.clinched, note:t.note})));
+    const groupComplete = teams.every(t => (t.p??0) >= 3);
+    if(teams[0]?.clinched) fillKOSlot('1'+g.id, teams[0], { projected: !groupComplete });
+    if(teams[1]?.clinched) fillKOSlot('2'+g.id, teams[1], { projected: !groupComplete });
   });
 }
 
-function fillKOSlot(key, team){
-  document.querySelectorAll(`#bracket [data-slot="${key}"]`).forEach(bt => {
-    bt.className = 'bt';
+function fillKOSlot(key, team, options={}){
+  const slots = document.querySelectorAll(`#bracket [data-slot="${key}"]`);
+  console.log('[KO fill attempt]', { key, team: team?.n, clinched: team?.clinched, projected: options.projected, slotsFound: slots.length });
+  if(!slots.length){ console.warn('[KO] No slot found for', key); return; }
+  slots.forEach(bt => {
+    bt.className = 'bt' + (options.projected ? ' projected' : '');
     delete bt.dataset.slot;
-    bt.innerHTML = `<span class="bf">${team.f}</span><span class="bn">${team.n}</span>`;
+    bt.innerHTML = `<span class="bf">${team.f}</span><span class="bn">${team.n}</span>${options.projected ? '<span class="ko-proj">Proj.</span>' : ''}`;
   });
 }
 
-// keep old name as alias for callers
+function refreshKnockoutBracket(){
+  renderKnockout();
+  updateKnockoutFromGroups();
+}
+
 function updateKnockoutQualifiers(){ updateKnockoutFromGroups(); }
 
 // ═══════════════════════════════════════════════════
@@ -4709,8 +4723,7 @@ function renderRulebook(){
 // ═══════════════════════════════════════════════════
 showSkeleton();
 renderGroups();
-renderKnockout();
-updateKnockoutQualifiers();
+refreshKnockoutBracket();
 fetchPlayerClubs();
 fetchPlayerStats();
 fetchPlayerVerdicts();
