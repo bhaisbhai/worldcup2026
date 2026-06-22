@@ -2331,7 +2331,7 @@ async function fetchMatches(){
   const hasLive = lastEvents.some(e => e.state === 'in');
   setRefreshLabel('↻ Refresh', false);
   $('rfLabel').style.pointerEvents = '';
-  if(hasLive) setTimeout(fetchMatches, 10000);
+  setTimeout(fetchMatches, hasLive ? 10000 : 30000);
 }
 
 function showErr(){
