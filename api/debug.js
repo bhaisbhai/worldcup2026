@@ -21,7 +21,7 @@ module.exports = async function(req, res) {
         }
       });
     });
-    results.standings_notes = { status: r.status, count: noteExamples.length, examples: noteExamples.slice(0, 20) };
+    results.standings_notes = { status: r.status, count: noteExamples.length, examples: noteExamples };
   } catch(e) {
     results.standings_notes = { error: String(e) };
   }
