@@ -2214,7 +2214,6 @@ function openPlayerById(id){
 }
 
 async function fetchDailyRecaps(){
-  return; // temporarily disabled — AI recap generation action is being fixed
   try {
     const r = await fetch('/api/recaps', { signal: AbortSignal.timeout(5000) });
     if(r.ok){
