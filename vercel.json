@@ -2,6 +2,7 @@
   "version": 2,
   "builds": [
     { "src": "index.html", "use": "@vercel/static" },
+    { "src": "group-debug.html", "use": "@vercel/static" },
     { "src": "keepy-uppy.js", "use": "@vercel/static" },
     { "src": "assets/**", "use": "@vercel/static" },
     { "src": "data/**", "use": "@vercel/static" },
@@ -10,6 +11,7 @@
   ],
   "routes": [
     { "src": "/api/(.*)", "dest": "/api/$1.js" },
+    { "src": "/group-debug", "dest": "/group-debug.html" },
     { "handle": "filesystem" },
     { "src": "/(.*)", "dest": "/index.html" }
   ]

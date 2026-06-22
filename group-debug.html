@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Group Debug — Game Buddy</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, sans-serif; background: #0d0d0d; color: #e0e0e0; padding: 16px; font-size: 13px; }
+  h1 { font-size: 16px; color: #fff; margin-bottom: 4px; }
+  .sub { color: #888; font-size: 11px; margin-bottom: 16px; }
+  .section { background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 10px; padding: 14px; margin-bottom: 16px; }
+  .section-title { font-size: 12px; font-weight: 700; color: #f90; margin-bottom: 10px; letter-spacing: .5px; text-transform: uppercase; }
+  table { border-collapse: collapse; width: 100%; font-size: 11px; }
+  th { color: #888; font-weight: 600; padding: 4px 6px; text-align: left; border-bottom: 1px solid #2a2a2a; white-space: nowrap; }
+  td { padding: 4px 6px; border-bottom: 1px solid #1e1e1e; vertical-align: middle; }
+  tr.clinched { background: #0d2b0d; }
+  tr.eliminated { background: #2b0d0d; }
+  tr.best8 { background: #1a1a2b; }
+  .ok { color: #4f4; font-weight: 700; }
+  .bad { color: #f44; font-weight: 700; }
+  .warn { color: #fa0; font-weight: 700; }
+  .tag { display: inline-block; font-size: 9px; padding: 1px 5px; border-radius: 4px; font-weight: 700; }
+  .tag-adv { background: #1a4a1a; color: #4f4; }
+  .tag-elim { background: #4a1a1a; color: #f44; }
+  .tag-b8 { background: #1a1a4a; color: #88f; }
+  .stat { font-family: monospace; }
+  .slot-key { font-family: monospace; color: #fa0; }
+  .slot-ok { color: #4f4; }
+  .slot-miss { color: #f44; }
+  #status { padding: 8px 12px; background: #111; border-radius: 6px; margin-bottom: 12px; font-size: 12px; color: #888; }
+  #raw-stats { font-family: monospace; font-size: 10px; color: #aaa; white-space: pre-wrap; word-break: break-all; max-height: 300px; overflow-y: auto; }
+  .btn { background: #222; border: 1px solid #333; color: #e0e0e0; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; margin-right: 8px; }
+  .btn:hover { background: #2a2a2a; }
+  .gid { font-weight: 700; color: #fa0; width: 20px; }
+  a { color: #fa0; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<h1>🔧 Group Debug</h1>
+<p class="sub">Diagnostic tool for knockout bracket population — <a href="/">← back to app</a></p>
+
+<div id="status">Loading ESPN standings…</div>
+<button class="btn" onclick="load()">↺ Refresh</button>
+<button class="btn" onclick="document.getElementById('raw-section').style.display = document.getElementById('raw-section').style.display==='none'?'block':'none'">Toggle raw stats</button>
+
+<div class="section" id="raw-section" style="display:none">
+  <div class="section-title">Raw ESPN stat keys (first entry in Group A)</div>
+  <div id="raw-stats">—</div>
+</div>
+
+<div class="section">
+  <div class="section-title">Standings — all 48 teams from ESPN</div>
+  <div style="overflow-x:auto">
+  <table id="standings-table">
+    <thead>
+      <tr>
+        <th>G</th><th>Team</th><th class="stat">Pts</th><th class="stat">W</th><th class="stat">D</th><th class="stat">L</th>
+        <th class="stat">GF</th><th class="stat">GA</th><th class="stat">GD</th><th class="stat">P</th>
+        <th>Note</th><th>Clinched?</th><th>Slot</th><th>DOM slot exists?</th>
+      </tr>
+    </thead>
+    <tbody id="standings-body"><tr><td colspan="14" style="color:#666;padding:12px">Loading…</td></tr></tbody>
+  </table>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Slot fill simulation</div>
+  <div id="slot-sim" style="color:#666">—</div>
+</div>
+
+<script>
+const STANDINGS_URL = '/api/standings';
+
+function getStat(stats, names) {
+  const s = stats.find(x => names.some(n =>
+    x.name===n || x.abbreviation===n || x.displayName===n || x.shortDisplayName===n
+  ));
+  return s ? Number(s.value ?? s.displayValue ?? 0) : 0;
+}
+
+function koSlotKey(label) {
+  const w = label.match(/^Winner ([A-L])$/);    if(w) return '1'+w[1];
+  const r = label.match(/^Runner-up ([A-L])$/); if(r) return '2'+r[1];
+  return null;
+}
+
+// All slot keys defined in KO_DATA bracket
+const ALL_SLOTS = ['A','B','C','D','E','F','G','H','I','J','K','L'].flatMap(g => ['1'+g,'2'+g]);
+
+async function load() {
+  document.getElementById('status').textContent = 'Fetching ESPN standings…';
+  try {
+    const r = await fetch(STANDINGS_URL);
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const data = await r.json();
+
+    const groups = [];
+    (data.children || []).forEach(child => {
+      const m = (child.name||'').match(/Group\s+([A-L])/i);
+      if (!m) return;
+      const gId = m[1].toUpperCase();
+      const teams = [];
+      (child.standings?.entries||[]).forEach((entry, ei) => {
+        const stats = entry.stats || [];
+        if (gId==='A' && ei===0) {
+          document.getElementById('raw-stats').textContent =
+            JSON.stringify(stats.map(s=>({name:s.name, abbr:s.abbreviation, displayName:s.displayName, value:s.value})), null, 2);
+        }
+        const abbr = entry.team?.abbreviation || '';
+        const name = entry.team?.displayName || entry.team?.name || '';
+        const flag = entry.team?.flag || '';
+        const w   = getStat(stats, ['wins','W','Wins']);
+        const d   = getStat(stats, ['ties','draws','D','Draws','Ties']);
+        const l   = getStat(stats, ['losses','L','Losses']);
+        const gf  = getStat(stats, ['pointsFor','goalsFor','GF','gf']);
+        const ga  = getStat(stats, ['pointsAgainst','goalsAgainst','GA','ga']);
+        const pts = getStat(stats, ['points','PTS','Points','pts']);
+        const noteText = [
+          entry.note?.description,
+          entry.note?.shortDescription,
+          entry.note?.displayValue,
+          typeof entry.note === 'string' ? entry.note : ''
+        ].filter(Boolean).join(' ');
+        const clinched         = /advance to round of 32/i.test(noteText);
+        const eliminated       = /eliminat/i.test(noteText);
+        const bestEightAdvance = /best\s+8\s+advance/i.test(noteText);
+        teams.push({ gId, abbr, name, w, d, l, gf, ga, gd: gf-ga, pts, p: w+d+l, clinched, eliminated, bestEightAdvance, note: noteText });
+      });
+      // Sort
+      teams.sort((a,b) => Number(b.pts)-Number(a.pts) || Number(b.gd)-Number(a.gd) || Number(b.gf)-Number(a.gf));
+      groups.push({ gId, teams });
+    });
+
+    groups.sort((a,b) => a.gId < b.gId ? -1 : 1);
+
+    // Render standings table
+    const tbody = document.getElementById('standings-body');
+    const rows = [];
+    groups.forEach(({gId, teams}) => {
+      teams.forEach((t, i) => {
+        const expectedSlot = i===0 ? '1'+gId : i===1 ? '2'+gId : '—';
+        const slotExists = expectedSlot !== '—' ? ALL_SLOTS.includes(expectedSlot) : false;
+        const cls = t.clinched ? 'clinched' : t.eliminated ? 'eliminated' : t.bestEightAdvance ? 'best8' : '';
+        const noteTag = t.clinched
+          ? `<span class="tag tag-adv">ADV</span>`
+          : t.eliminated
+            ? `<span class="tag tag-elim">ELIM</span>`
+            : t.bestEightAdvance
+              ? `<span class="tag tag-b8">B8</span>`
+              : '—';
+        const ptsOk  = typeof t.pts === 'number' && !isNaN(t.pts);
+        const gdOk   = typeof t.gd  === 'number' && !isNaN(t.gd);
+        const gfOk   = typeof t.gf  === 'number' && !isNaN(t.gf);
+        rows.push(`<tr class="${cls}">
+          <td class="gid">${gId}</td>
+          <td>${t.name}</td>
+          <td class="stat ${ptsOk?'ok':'bad'}">${t.pts}</td>
+          <td class="stat">${t.w}</td>
+          <td class="stat">${t.d}</td>
+          <td class="stat">${t.l}</td>
+          <td class="stat ${gfOk?'':'warn'}">${t.gf}</td>
+          <td class="stat">${t.ga}</td>
+          <td class="stat ${gdOk?'':'warn'}">${t.gd}</td>
+          <td class="stat">${t.p}</td>
+          <td>${noteTag} <span style="font-size:10px;color:#999">${t.note||'—'}</span></td>
+          <td>${t.clinched ? '<span class="ok">✓ YES</span>' : '<span class="bad">✗ NO</span>'}</td>
+          <td class="slot-key">${expectedSlot}</td>
+          <td>${expectedSlot==='—' ? '—' : slotExists ? '<span class="slot-ok">✓ in KO_DATA</span>' : '<span class="slot-miss">✗ missing</span>'}</td>
+        </tr>`);
+      });
+    });
+    tbody.innerHTML = rows.join('') || '<tr><td colspan="14" style="color:#f44;padding:8px">No data returned</td></tr>';
+
+    // Slot fill simulation
+    const willFill = [];
+    const wontFill = [];
+    groups.forEach(({gId, teams}) => {
+      if (teams[0]?.clinched) willFill.push({ slot:'1'+gId, name: teams[0].name });
+      else wontFill.push({ slot:'1'+gId, name: teams[0]?.name||'?' , reason: 'not clinched' });
+      if (teams[1]?.clinched) willFill.push({ slot:'2'+gId, name: teams[1].name });
+      else wontFill.push({ slot:'2'+gId, name: teams[1]?.name||'?', reason: 'not clinched' });
+    });
+
+    const simHtml = `
+      <div style="margin-bottom:10px">
+        <span class="ok">✓ Will fill (${willFill.length} slots):</span>
+        <span style="color:#ccc;margin-left:8px">${willFill.map(x=>`<span class="slot-key">${x.slot}</span> ${x.name}`).join(' · ') || 'none'}</span>
+      </div>
+      <div>
+        <span class="bad">✗ Won't fill (${wontFill.length} slots):</span>
+        <span style="color:#666;margin-left:8px">${wontFill.map(x=>`<span class="slot-key">${x.slot}</span> ${x.name}`).join(' · ') || 'none'}</span>
+      </div>`;
+    document.getElementById('slot-sim').innerHTML = simHtml;
+
+    const total = groups.reduce((s,g)=>s+g.teams.length,0);
+    document.getElementById('status').innerHTML =
+      `<span class="ok">✓</span> Loaded ${groups.length} groups, ${total} teams — ` +
+      `<span class="ok">${willFill.length} slots will fill</span>, ` +
+      `<span style="color:#888">${wontFill.length} stay TBD</span>`;
+
+  } catch(e) {
+    document.getElementById('status').innerHTML = `<span class="bad">✗ Error: ${e.message}</span>`;
+  }
+}
+
+load();
+</script>
+</body>
+</html>
