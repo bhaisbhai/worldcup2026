@@ -2413,7 +2413,7 @@ document.querySelectorAll('.tbtn').forEach(btn => {
     if(btn.dataset.tab === 'leaderboard') renderLeaderboard();
     if(btn.dataset.tab === 'myteam') renderMyTeam();
     if(btn.dataset.tab === 'rulebook') renderRulebook();
-    if(btn.dataset.tab === 'knockout') updateKnockoutQualifiers();
+    if(btn.dataset.tab === 'knockout') renderKnockout();
     setTimeout(observeCards, 40);
   });
 });
@@ -3475,7 +3475,7 @@ async function computeStandingsFromScoreboard(){
 
   if(changed){
     renderGroups();
-    updateKnockoutQualifiers();
+    renderKnockout(); // full rebuild — wipes any incorrectly-filled slots, then re-fills from current data
   }
 }
 
@@ -3507,13 +3507,14 @@ async function fetchGroupStandings(){
         const gf    = getStat(stats,'pointsFor');
         const ga    = getStat(stats,'pointsAgainst');
         const clinched = /advance|qualified/i.test(entry.note?.description || '');
+        const w = getStat(stats,'wins');
+        const d = getStat(stats,'ties');
+        const l = getStat(stats,'losses');
         groupMap[gId].push({
           n: name, abbr,
           f:   FLAGS[abbr] || '🏳️',
-          p:   getStat(stats,'gamesPlayed') || getStat(stats,'GP') || getStat(stats,'played') || getStat(stats,'matchesPlayed'),
-          w:   getStat(stats,'wins'),
-          d:   getStat(stats,'ties'),
-          l:   getStat(stats,'losses'),
+          p:   w + d + l,  // games played = wins + draws + losses (never inflated by scheduled games)
+          w, d, l,
           gf, ga,
           gd:  gf - ga,
           pts: getStat(stats,'points'),
