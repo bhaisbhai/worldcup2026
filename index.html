@@ -3521,7 +3521,8 @@ async function fetchGroupStandings(){
           entry.note?.displayValue,
           typeof entry.note === 'string' ? entry.note : ''
         ].filter(Boolean).join(' ');
-        const clinched         = /advance to round of 32/i.test(noteText);
+        const advancedStat     = getStat(stats, ['advanced','ADV','adv']);
+        const advancedOfficial = advancedStat === 1;           // source of truth: ESPN sets this to 1 only when mathematically clinched
         const eliminated       = /eliminat/i.test(noteText);
         const bestEightAdvance = /best\s+8\s+advance/i.test(noteText);
         groupMap[gId].push({
@@ -3532,7 +3533,7 @@ async function fetchGroupStandings(){
           gf, ga,
           gd:  gf - ga,
           pts,
-          clinched,
+          advancedOfficial,
           eliminated,
           bestEightAdvance,
           note: noteText,
@@ -3553,34 +3554,55 @@ async function fetchGroupStandings(){
     });
     renderGroups();
     document.querySelectorAll('.gcard').forEach((c,i)=>setTimeout(()=>c.classList.add('vis'),i*30));
+    const officialAdvancedTeams = GROUPS_DATA.flatMap(g => g.teams.filter(t => t.advancedOfficial));
+    console.log('[KO] Official advanced count:', officialAdvancedTeams.length, officialAdvancedTeams.map(t=>t.n));
     console.table(GROUPS_DATA.flatMap(g => g.teams.map(t => ({
       group: g.id, name: t.n, pts: t.pts, gd: t.gd, p: t.p,
-      clinched: t.clinched, eliminated: t.eliminated, note: t.note
+      advancedOfficial: t.advancedOfficial, eliminated: t.eliminated, note: t.note
     }))));
     refreshKnockoutBracket();
   } catch(e){ console.error('[fetchGroupStandings error]', e); }
 }
 
+function getDefaultSlotLabel(key){
+  const g = key.slice(1);  // e.g. "1A" → "A", "2B" → "B"
+  return key[0] === '1' ? `Winner ${g}` : `Runner-up ${g}`;
+}
+
+function clearKOSlot(key){
+  const slots = document.querySelectorAll(`#bracket [data-slot="${key}"]`);
+  slots.forEach(bt => {
+    bt.className = 'bt';
+    bt.innerHTML = `<span class="bn" style="color:#555">${getDefaultSlotLabel(key)}</span>`;
+  });
+}
+
+function clearAllKOSlots(){
+  const groups = ['A','B','C','D','E','F','G','H','I','J','K','L'];
+  groups.forEach(g => { clearKOSlot('1'+g); clearKOSlot('2'+g); });
+}
+
 function updateKnockoutFromGroups(){
+  clearAllKOSlots();
   GROUPS_DATA.forEach(g => {
     const teams = [...(g.teams||[])].sort((a,b) =>
-      Number(b.pts??0) - Number(a.pts??0)      ||
-      Number(b.gd??0)  - Number(a.gd??0)       ||
-      Number(b.gf??0)  - Number(a.gf??0)       ||
-      (b.clinched?1:0) - (a.clinched?1:0)      // tiebreak: clinched teams rank above Best-8
+      Number(b.pts??0) - Number(a.pts??0) ||
+      Number(b.gd??0)  - Number(a.gd??0) ||
+      Number(b.gf??0)  - Number(a.gf??0)
     );
-    if(teams[0]?.clinched) fillKOSlot('1'+g.id, teams[0]);
-    if(teams[1]?.clinched) fillKOSlot('2'+g.id, teams[1]);
+    // Only fill slots where ESPN's official "advanced" stat === 1 (mathematically clinched)
+    if(teams[0]?.advancedOfficial) fillKOSlot('1'+g.id, teams[0]);
+    if(teams[1]?.advancedOfficial) fillKOSlot('2'+g.id, teams[1]);
   });
 }
 
 function fillKOSlot(key, team, options={}){
   const slots = document.querySelectorAll(`#bracket [data-slot="${key}"]`);
-  console.log('[KO fill attempt]', { key, team: team?.n, clinched: team?.clinched, projected: options.projected, slotsFound: slots.length });
+  console.log('[KO fill]', { key, team: team?.n, advancedOfficial: team?.advancedOfficial, slotsFound: slots.length });
   if(!slots.length){ console.warn('[KO] No slot found for', key); return; }
   slots.forEach(bt => {
     bt.className = 'bt' + (options.projected ? ' projected' : '');
-    delete bt.dataset.slot;
+    // do NOT delete data-slot — slot must remain findable for future refreshes
     bt.innerHTML = `<span class="bf">${team.f}</span><span class="bn">${team.n}</span>${options.projected ? '<span class="ko-proj">Proj.</span>' : ''}`;
   });
 }
