@@ -46,15 +46,18 @@ function safeParseJson(raw: string): any {
 
 // Call Gemini API with retries for 429 and 503 errors
 async function callGemini(prompt: string, schema: any, retries = 10): Promise<any> {
+  // 1. Force the schema into the prompt text, bypassing the compiler
+  const finalPrompt = prompt + `\n\nYOU MUST RETURN ONLY VALID JSON MATCHING THIS EXACT STRUCTURE:\n${JSON.stringify(schema, null, 2)}`;
+
   for (let attempt = 1; attempt <= retries; attempt++) {
     try {
       console.log(`🤖 Requesting Gemini (attempt ${attempt}/${retries})...`);
       const response = await ai.models.generateContent({
         model: "gemini-2.0-flash",
-        contents: prompt,
+        contents: finalPrompt, // Pass the combined prompt here
         config: {
           responseMimeType: "application/json",
-          // responseSchema: schema — removed; schema is enforced via prompt instead
+          // 🚨 CRITICAL: responseSchema is completely removed from here 🚨
           systemInstruction: punditSystemInstruction,
           temperature: 0.4,
         },
@@ -64,18 +67,23 @@ async function callGemini(prompt: string, schema: any, retries = 10): Promise<an
         throw new Error("Empty response from Gemini API");
       }
 
-      return safeParseJson(response.text);
+      // 2. Zero-Trust JSON Parsing (Strips ```json blocks)
+      const rawText = response.text.trim();
+      const cleanText = rawText.replace(/^```json\n?/, '').replace(/```$/, '').trim();
+
+      return JSON.parse(cleanText);
+
     } catch (error: any) {
       const errMsg = error.message || "";
-      const is503 = errMsg.includes("503") || 
+      const is503 = errMsg.includes("503") ||
                     errMsg.toLowerCase().includes("service unavailable") ||
                     errMsg.toLowerCase().includes("overloaded");
-      const isRateLimit = errMsg.includes("429") || 
+      const isRateLimit = errMsg.includes("429") ||
                           errMsg.toLowerCase().includes("quota");
 
       if (attempt < retries) {
         if (is503) {
-          console.warn("⚠️ 503 Service Unavailable detected. Entering 30-second (30,000ms) cooldown block before retrying...");
+          console.warn("⚠️ 503 Service Unavailable detected. Entering 30-second cooldown...");
           await sleep(30000);
         } else if (isRateLimit) {
           console.warn("⚠️ 429 Rate Limit hit. Backing off for 60 seconds...");
@@ -86,7 +94,8 @@ async function callGemini(prompt: string, schema: any, retries = 10): Promise<an
         }
       } else {
         console.error("❌ Gemini API failed after max retries.");
-        throw error; // Propagate fatal errors on last attempt
+        console.error("RAW ERROR LOG:", error);
+        throw error;
       }
     }
   }
