@@ -43,8 +43,7 @@ body{
   max-width:1240px;margin:0 auto;padding:0 22px;
   display:flex;align-items:center;justify-content:space-between;height:66px;gap:12px;
 }
-.wordmark{line-height:1.1;cursor:pointer;user-select:none}
-.wordmark:hover .wordmark-name{color:var(--accent)}
+.wordmark{line-height:1.1}
 .wordmark-name{font-size:17px;font-weight:800;letter-spacing:-.4px;color:var(--text)}
 .wordmark-event{font-size:10px;font-weight:600;color:var(--accent);letter-spacing:.9px;text-transform:uppercase;margin-top:3px}
 .sub{font-size:10px;color:var(--t3);margin-top:3px;letter-spacing:.2px}
@@ -987,7 +986,7 @@ body{
 <!-- HEADER -->
 <header class="hdr">
   <div class="hdr-in">
-    <div class="wordmark" onclick="goHome()" role="button" aria-label="Home — back to today's matches">
+    <div class="wordmark">
       <div class="wordmark-name">Game Buddy</div>
       <div class="wordmark-event">FIFA World Cup 2026</div>
     </div>
@@ -2404,14 +2403,6 @@ function renderKnockout(){
 // ═══════════════════════════════════════════════════
 //  TABS
 // ═══════════════════════════════════════════════════
-function goHome(){
-  document.querySelectorAll('.tbtn').forEach(b => b.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.querySelector('.tbtn[data-tab="today"]')?.classList.add('active');
-  document.getElementById('tab-today')?.classList.add('active');
-  goToDate(null); // reset to today's date
-}
-
 document.querySelectorAll('.tbtn').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.tbtn').forEach(b=>b.classList.remove('active'));
