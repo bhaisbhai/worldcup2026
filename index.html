@@ -2149,6 +2149,7 @@ function openTeamPage(teamName){
 }
 
 function openTeamModal(teamObj){
+  gtag('event', 'team_opened', { team: teamObj.n });
   const gData  = GROUPS_DATA.find(g=>g.teams.some(t=>t.n===teamObj.n));
   const sorted = gData ? [...gData.teams].sort((a,b)=>b.pts-a.pts||b.gd-a.gd||b.gf-a.gf) : [];
   const me     = sorted.find(t=>t.n===teamObj.n) || teamObj;
@@ -2474,6 +2475,7 @@ document.querySelectorAll('.tbtn').forEach(btn => {
     if(btn.dataset.tab === 'rulebook') renderRulebook();
     if(btn.dataset.tab === 'knockout') refreshKnockoutBracket();
     setTimeout(observeCards, 40);
+    gtag('event', 'tab_switch', { tab: btn.dataset.tab });
   });
 });
 
@@ -2576,6 +2578,7 @@ function openMatchModal(ev){
     <div class="mc-body" id="mcBody"><div class="lineup-loading">Loading…</div></div>`;
   $('modalBg').classList.add('open');
   document.body.style.overflow = 'hidden';
+  gtag('event', 'match_opened', { match: `${ev.homeTeam||''} vs ${ev.awayTeam||(ev.name||'')}` });
   renderMCHeader(ev);
   fetchMCSummary(ev.id).then(data => {
     mcState.data = data;
@@ -3204,6 +3207,7 @@ function openPlayerDetail(athleteId){
   const {ev,data}=mcState||{};
   const a=entry.athlete||{};
   const playerName=a.displayName||a.fullName||'—';
+  gtag('event', 'player_opened', { player: playerName, athlete_id: String(athleteId) });
   const jersey=entry.jersey||a.jersey||'';
   const pos=entry.position?.displayName||entry.position?.abbreviation||'';
   // Roster data from ESPN summary includes headshot.href — use it when available
