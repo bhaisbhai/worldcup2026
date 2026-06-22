@@ -2690,7 +2690,11 @@ function switchMCTab(tabId){
     body.innerHTML = mcLiveTab(ev, data);
     requestAnimationFrame(()=>{ document.querySelectorAll('[data-w]').forEach(el=>{ el.style.width=el.dataset.w+'%'; }); });
     mcLiveInt = setInterval(async ()=>{
-      if(!mcState?.ev || mcState.ev.state!=='in'){ clearInterval(mcLiveInt); mcLiveInt=null; return; }
+      if(!mcState?.ev){ clearInterval(mcLiveInt); mcLiveInt=null; return; }
+      // Sync ev + header from background fetchMatches data so clock/score stay current
+      const freshEv = lastEvents.find(e => e.id === mcState.ev.id);
+      if(freshEv){ mcState.ev = freshEv; renderMCHeader(freshEv); }
+      if(mcState.ev.state!=='in'){ clearInterval(mcLiveInt); mcLiveInt=null; return; }
       delete mcCache[mcState.ev.id];
       const freshData = await fetchMCSummary(mcState.ev.id);
       mcState.data = freshData;
