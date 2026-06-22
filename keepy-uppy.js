@@ -1538,7 +1538,7 @@ window.initKeepyUppy = function() {
   }
 
   async function shareScore() {
-    const gameUrl = 'https://bhaisbhai.github.io/keepy-uppy-king/';
+    const gameUrl = 'https://www.game-buddy.co.uk/?play=true';
     const shareText = `I scored ${score} in Keepy-Uppy King! Can you beat me?`;
     const fullText = `${shareText} Play here: ${gameUrl}`;
     try {
