@@ -58,10 +58,14 @@
       <tr>
         <th>G</th><th>Team</th><th class="stat">Pts</th><th class="stat">W</th><th class="stat">D</th><th class="stat">L</th>
         <th class="stat">GF</th><th class="stat">GA</th><th class="stat">GD</th><th class="stat">P</th>
-        <th>Note</th><th>Clinched?</th><th>Slot</th><th>DOM slot exists?</th>
+        <th>ESPN note</th>
+        <th title="clinched via note.description">Note ✓?</th>
+        <th title="raw value of 'advanced' stat from entry.stats">adv stat</th>
+        <th title="clinched via advanced stat===1">Stat ✓?</th>
+        <th>Slot</th>
       </tr>
     </thead>
-    <tbody id="standings-body"><tr><td colspan="14" style="color:#666;padding:12px">Loading…</td></tr></tbody>
+    <tbody id="standings-body"><tr><td colspan="15" style="color:#666;padding:12px">Loading…</td></tr></tbody>
   </table>
   </div>
 </div>
@@ -124,10 +128,16 @@ async function load() {
           entry.note?.displayValue,
           typeof entry.note === 'string' ? entry.note : ''
         ].filter(Boolean).join(' ');
-        const clinched         = /advance to round of 32/i.test(noteText);
+        const advancedStat     = getStat(stats, ['advanced','Advanced','adv']);
+        const clinchStat       = getStat(stats, ['clinched','Clinched']);
+        const clinchedByNote   = /advance to round of 32/i.test(noteText);
+        const clinchedByStat   = advancedStat === 1;
         const eliminated       = /eliminat/i.test(noteText);
         const bestEightAdvance = /best\s+8\s+advance/i.test(noteText);
-        teams.push({ gId, abbr, name, w, d, l, gf, ga, gd: gf-ga, pts, p: w+d+l, clinched, eliminated, bestEightAdvance, note: noteText });
+        teams.push({ gId, abbr, name, w, d, l, gf, ga, gd: gf-ga, pts, p: w+d+l,
+          clinchedByNote, clinchedByStat, advancedStat, clinchStat,
+          eliminated, bestEightAdvance, note: noteText,
+          allStatKeys: stats.map(s => s.name).join(', ') });
       });
       // Sort
       teams.sort((a,b) =>
@@ -146,8 +156,8 @@ async function load() {
       teams.forEach((t, i) => {
         const expectedSlot = i===0 ? '1'+gId : i===1 ? '2'+gId : '—';
         const slotExists = expectedSlot !== '—' ? ALL_SLOTS.includes(expectedSlot) : false;
-        const cls = t.clinched ? 'clinched' : t.eliminated ? 'eliminated' : t.bestEightAdvance ? 'best8' : '';
-        const noteTag = t.clinched
+        const cls = t.clinchedByNote ? 'clinched' : t.eliminated ? 'eliminated' : t.bestEightAdvance ? 'best8' : '';
+        const noteTag = t.clinchedByNote
           ? `<span class="tag tag-adv">ADV</span>`
           : t.eliminated
             ? `<span class="tag tag-elim">ELIM</span>`
@@ -155,8 +165,7 @@ async function load() {
               ? `<span class="tag tag-b8">B8</span>`
               : '—';
         const ptsOk  = typeof t.pts === 'number' && !isNaN(t.pts);
-        const gdOk   = typeof t.gd  === 'number' && !isNaN(t.gd);
-        const gfOk   = typeof t.gf  === 'number' && !isNaN(t.gf);
+        const advDisagrees = t.clinchedByNote !== t.clinchedByStat;
         rows.push(`<tr class="${cls}">
           <td class="gid">${gId}</td>
           <td>${t.name}</td>
@@ -164,37 +173,50 @@ async function load() {
           <td class="stat">${t.w}</td>
           <td class="stat">${t.d}</td>
           <td class="stat">${t.l}</td>
-          <td class="stat ${gfOk?'':'warn'}">${t.gf}</td>
+          <td class="stat">${t.gf}</td>
           <td class="stat">${t.ga}</td>
-          <td class="stat ${gdOk?'':'warn'}">${t.gd}</td>
+          <td class="stat">${t.gd}</td>
           <td class="stat">${t.p}</td>
           <td>${noteTag} <span style="font-size:10px;color:#999">${t.note||'—'}</span></td>
-          <td>${t.clinched ? '<span class="ok">✓ YES</span>' : '<span class="bad">✗ NO</span>'}</td>
+          <td>${t.clinchedByNote ? '<span class="ok">✓</span>' : '<span class="bad">✗</span>'}</td>
+          <td class="stat" style="${advDisagrees?'background:#3a2a00':''}">${t.advancedStat}</td>
+          <td style="${advDisagrees?'background:#3a2a00':''}">${t.clinchedByStat ? '<span class="ok">✓</span>' : '<span class="bad">✗</span>'}${advDisagrees?' <span class="warn">⚠ DIFFERS</span>':''}</td>
           <td class="slot-key">${expectedSlot}</td>
-          <td>${expectedSlot==='—' ? '—' : slotExists ? '<span class="slot-ok">✓ in KO_DATA</span>' : '<span class="slot-miss">✗ missing</span>'}</td>
         </tr>`);
       });
     });
-    tbody.innerHTML = rows.join('') || '<tr><td colspan="14" style="color:#f44;padding:8px">No data returned</td></tr>';
+    tbody.innerHTML = rows.join('') || '<tr><td colspan="15" style="color:#f44;padding:8px">No data returned</td></tr>';
 
-    // Slot fill simulation
+    // Show all stat key names from Group A team 1
+    if (groups[0]?.teams[0]?.allStatKeys) {
+      document.getElementById('raw-stats').textContent =
+        'Stat keys for ' + groups[0].teams[0].name + ':\n' + groups[0].teams[0].allStatKeys.split(', ').map((k,i)=>`${i+1}. ${k}`).join('\n');
+    }
+
+    // Slot fill simulation — using STAT-based clinched
     const willFill = [];
     const wontFill = [];
     groups.forEach(({gId, teams}) => {
-      if (teams[0]?.clinched) willFill.push({ slot:'1'+gId, name: teams[0].name });
-      else wontFill.push({ slot:'1'+gId, name: teams[0]?.name||'?' , reason: 'not clinched' });
-      if (teams[1]?.clinched) willFill.push({ slot:'2'+gId, name: teams[1].name });
-      else wontFill.push({ slot:'2'+gId, name: teams[1]?.name||'?', reason: 'not clinched' });
+      if (teams[0]?.clinchedByStat) willFill.push({ slot:'1'+gId, name: teams[0].name, method:'stat' });
+      else if (teams[0]?.clinchedByNote) willFill.push({ slot:'1'+gId, name: teams[0].name, method:'note' });
+      else wontFill.push({ slot:'1'+gId, name: teams[0]?.name||'?' });
+      if (teams[1]?.clinchedByStat) willFill.push({ slot:'2'+gId, name: teams[1].name, method:'stat' });
+      else if (teams[1]?.clinchedByNote) willFill.push({ slot:'2'+gId, name: teams[1].name, method:'note' });
+      else wontFill.push({ slot:'2'+gId, name: teams[1]?.name||'?' });
     });
 
     const simHtml = `
       <div style="margin-bottom:10px">
-        <span class="ok">✓ Will fill (${willFill.length} slots):</span>
-        <span style="color:#ccc;margin-left:8px">${willFill.map(x=>`<span class="slot-key">${x.slot}</span> ${x.name}`).join(' · ') || 'none'}</span>
+        <span class="ok">✓ Will fill via stat (${willFill.filter(x=>x.method==='stat').length}):</span>
+        <span style="color:#4f4;margin-left:8px">${willFill.filter(x=>x.method==='stat').map(x=>`<span class="slot-key">${x.slot}</span> ${x.name}`).join(' · ')||'none'}</span>
       </div>
-      <div>
-        <span class="bad">✗ Won't fill (${wontFill.length} slots):</span>
-        <span style="color:#666;margin-left:8px">${wontFill.map(x=>`<span class="slot-key">${x.slot}</span> ${x.name}`).join(' · ') || 'none'}</span>
+      <div style="margin-top:6px">
+        <span class="warn">⚠ Will fill via note only (${willFill.filter(x=>x.method==='note').length}) — may be wrong:</span>
+        <span style="color:#fa0;margin-left:8px">${willFill.filter(x=>x.method==='note').map(x=>`<span class="slot-key">${x.slot}</span> ${x.name}`).join(' · ')||'none'}</span>
+      </div>
+      <div style="margin-top:6px">
+        <span class="bad">✗ Won't fill (${wontFill.length}):</span>
+        <span style="color:#666;margin-left:8px">${wontFill.map(x=>`<span class="slot-key">${x.slot}</span> ${x.name}`).join(' · ')||'none'}</span>
       </div>`;
     document.getElementById('slot-sim').innerHTML = simHtml;
 
