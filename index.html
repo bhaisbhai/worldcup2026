@@ -3506,7 +3506,8 @@ async function fetchGroupStandings(){
         const name  = entry.team?.displayName   || entry.team?.name || '';
         const gf    = getStat(stats,'pointsFor');
         const ga    = getStat(stats,'pointsAgainst');
-        const clinched = /advance|qualified/i.test(entry.note?.description || '');
+        const noteDesc = entry.note?.description || '';
+        const clinched = /clinch|advanc|qualif|round of 32/i.test(noteDesc);
         const w = getStat(stats,'wins');
         const d = getStat(stats,'ties');
         const l = getStat(stats,'losses');
@@ -3537,19 +3538,18 @@ async function fetchGroupStandings(){
 }
 
 function updateKnockoutFromGroups(){
+  // Only fill slots when ESPN explicitly marks both top 2 as clinched/advanced.
+  // Never calculate from games-played — ESPN's own flag is the source of truth.
   const placed = new Set();
   GROUPS_DATA.forEach(g => {
     const teams = (g.teams||[]).slice().sort((a,b) => b.pts-a.pts || b.gd-a.gd || b.gf-a.gf);
     if(teams.length < 2) return;
-    const groupDone = teams.every(t => t.p >= 3);
-    // Fallback: ESPN marks clinched teams with "advance"/"qualified" note
-    const top2Clinched = teams[0]?.clinched && teams[1]?.clinched;
-    if(!groupDone && !top2Clinched) return;
-    if(teams[0] && !placed.has(teams[0].n)){
+    if(!teams[0]?.clinched || !teams[1]?.clinched) return;
+    if(!placed.has(teams[0].n)){
       fillKOSlot('1'+g.id, teams[0]);
       placed.add(teams[0].n);
     }
-    if(teams[1] && !placed.has(teams[1].n)){
+    if(!placed.has(teams[1].n)){
       fillKOSlot('2'+g.id, teams[1]);
       placed.add(teams[1].n);
     }
@@ -4716,7 +4716,6 @@ fetchPlayerStats();
 fetchPlayerVerdicts();
 fetchDailyRecaps().then(() => fetchMatches());
 fetchGroupStandings();
-computeStandingsFromScoreboard();
 fetchKnockoutData();
 if(favTeam) renderMyTeam();
 setTimeout(observeCards, 200);
