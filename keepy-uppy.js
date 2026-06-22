@@ -1303,12 +1303,18 @@ window.initKeepyUppy = function() {
   }
 
   function submitScore(name, sc, combo, perf) {
-    lbFetchedAt = 0;
     fetch('/api/game-scores', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name, score: sc, combo, perfects: perf }),
-    }).catch(() => {});
+    })
+    .then(r => {
+      if (!r.ok) throw new Error(`HTTP Error ${r.status}`);
+      lbFetchedAt = 0;
+    })
+    .catch((err) => {
+      console.error("Leaderboard submit failed:", err);
+    });
   }
 
   function showNameInput(sc, combo, perf) {
@@ -1341,11 +1347,15 @@ window.initKeepyUppy = function() {
       const name = inp.value.trim() || selectedChar.name;
       submitScore(name, sc, combo, perf);
       div.remove();
+      state = 'leaderboard';
+      fetchLeaderboard();
     };
     const doSkip = () => {
       _pendingScore = null;
       submitScore(selectedChar.name, sc, combo, perf);
       div.remove();
+      state = 'leaderboard';
+      fetchLeaderboard();
     };
 
     div.querySelector('#_gameNameSave').addEventListener('click', doSave);
@@ -1388,7 +1398,10 @@ window.initKeepyUppy = function() {
     lbLoading = true;
     lbError = false;
     fetch('/api/game-scores')
-      .then(r => r.json())
+      .then(r => {
+        if (!r.ok) throw new Error(`HTTP Error ${r.status}`);
+        return r.json();
+      })
       .then(d => { lbData = d.scores || []; lbFetchedAt = Date.now(); lbLoading = false; })
       .catch(() => { lbError = true; lbLoading = false; });
   }

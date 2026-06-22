@@ -33,16 +33,6 @@ Critical Grounding Guardrails (Anti-Hallucination):
 // Helper to wait/sleep
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-// Zero-trust JSON parser — strips markdown fences the LLM sometimes wraps output in
-function safeParseJson(raw: string): any {
-  const stripped = raw.replace(/^```(?:json)?\s*/i, '').replace(/\s*```\s*$/i, '').trim();
-  try {
-    return JSON.parse(stripped);
-  } catch (err) {
-    console.error('❌ JSON parse failed. Raw LLM output was:\n', raw);
-    throw err;
-  }
-}
 
 // Call Gemini API with retries for 429 and 503 errors
 async function callGemini(prompt: string, schema: any, retries = 10): Promise<any> {

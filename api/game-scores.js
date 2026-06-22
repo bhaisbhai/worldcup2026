@@ -60,7 +60,7 @@ module.exports = async function handler(req, res) {
       const date = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit' });
       const member = JSON.stringify({ name, combo: combo || 0, perfects: perfects || 0, date });
       await redisPipeline([
-        ['ZADD', KEY, score, member],
+        ['ZADD', KEY, 'GT', score, member],
         ['ZREMRANGEBYRANK', KEY, 0, -501],
       ]);
       return res.json({ ok: true });
