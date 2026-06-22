@@ -2646,7 +2646,7 @@ function renderMCHeader(ev){
           <div class="mc-flag">${flag(ev.home.abbr)}</div>
           <div class="mc-tname t-link" onclick="openTeamPage('${esc(ev.home.name)}')">${ev.home.name}</div>
         </div>
-        <div class="mc-score-center">${scoreBlock}<div class="mc-spill ${pillCls}">${pillTxt}</div></div>
+        <div class="mc-score-center">${scoreBlock}<div class="mc-spill ${pillCls}"${isLive&&!ev.isHT?` data-clockid="${ev.id}"`:''}>${pillTxt}</div></div>
         <div class="mc-team-col">
           <div class="mc-flag">${flag(ev.away.abbr)}</div>
           <div class="mc-tname t-link" onclick="openTeamPage('${esc(ev.away.name)}')">${ev.away.name}</div>
@@ -2984,42 +2984,50 @@ function mcLiveTab(ev, data){
 
   let html = '';
 
-  // Timeline — all significant events, most recent first
-  // ESPN uses numeric type IDs: 35=goal, 40=yellow, 41=red, 45=substitution, 32=penalty, 31=var
+  // ── Timeline ────────────────────────────────────────
+  // Source 1: goals from ev.goals (always populated via scoreboard comp.details)
+  const goalItems = (ev.goals||[]).map(g => ({
+    min: g.min, icon: g.pen?'⚽🅿':'⚽', iconCls:'goal',
+    txt: g.og?`${g.name} (og)`:g.pen?`${g.name} (pen)`:g.name,
+    isHome: g.isHome,
+  }));
+
+  // Source 2: cards / subs from summary plays (supplement only; skip scoring plays already in goalItems)
   const _allPlays = data?.plays || data?.playByPlay?.plays || data?.summary?.plays || [];
-  const _KEY_IDS = new Set([31,32,35,40,41,45]);
-  const plays = _allPlays.filter(p=>{
-    if(p.scoringPlay || p.shootoutPlay) return true;
-    const id = p.type?.id;
-    if(id && _KEY_IDS.has(Number(id))) return true;
+  const _KEY_IDS = new Set([31,40,41,45]);
+  const playItems = _allPlays.filter(p=>{
+    if(p.scoringPlay || p.shootoutPlay) return false; // covered by goalItems
+    const id = Number(p.type?.id||0);
+    if(_KEY_IDS.has(id)) return true;
     const t = (p.type?.text||p.type?.name||'').toLowerCase();
-    return t.includes('goal')||t.includes('yellow')||t.includes('caution')||t.includes('booking')||
-           t.includes('red')||t.includes('card')||t.includes('substitut')||
-           t.includes('var')||t.includes('penalty')||t.includes('half')||t.includes('kick');
-  }).slice().reverse();
+    return t.includes('yellow')||t.includes('caution')||t.includes('booking')||
+           t.includes('red card')||t.includes('second booking')||t.includes('substitut')||t.includes('var');
+  }).map(p=>{
+    const typeId = Number(p.type?.id||0);
+    const t = (p.type?.text||p.type?.name||'').toLowerCase();
+    const isHome = homeId ? p.team?.id===homeId : true;
+    let icon='🟨', iconCls='yellow';
+    if(typeId===41||t.includes('red')||t.includes('second booking')){ icon='🟥'; iconCls='red'; }
+    else if(typeId===45||t.includes('substitut')){ icon='↕'; iconCls='sub'; }
+    else if(typeId===31||t.includes('var')){ icon='VAR'; iconCls='var'; }
+    const subOn  = p.participants?.find(pp=>pp.type==='substitution_in')?.athlete?.displayName||'';
+    const subOff = p.participants?.find(pp=>pp.type==='substitution_out')?.athlete?.displayName||'';
+    const txt = subOn?`${subOn} ↑  ${subOff} ↓`:(p.participants?.[0]?.athlete?.displayName||p.text||'');
+    return { min:p.clock?.displayValue||'', icon, iconCls, txt, isHome };
+  });
+
+  // Merge and sort newest first
+  const tlItems = [...goalItems, ...playItems]
+    .sort((a,b) => parseMinute(b.min) - parseMinute(a.min));
 
   html += `<div class="live-tl-hdr">Timeline</div>`;
-  if(plays.length){
+  if(tlItems.length){
     html += `<div class="live-tl">`;
-    for(const p of plays){
-      const min = p.clock?.displayValue||p.period?.displayValue||'';
-      const typeText = (p.type?.text||p.type?.name||'').toLowerCase();
-      const typeId = Number(p.type?.id||0);
-      const isHome = homeId ? p.team?.id===homeId : true;
-      let icon='⚽', iconCls='goal';
-      if(typeId===40||typeText.includes('yellow')||typeText.includes('caution')||typeText.includes('booking')){ icon='🟨'; iconCls='yellow'; }
-      else if(typeId===41||typeText.includes('red')||typeText.includes('second booking')){ icon='🟥'; iconCls='red'; }
-      else if(typeId===45||typeText.includes('substitut')){ icon='↕'; iconCls='sub'; }
-      else if(typeId===31||typeText.includes('var')){ icon='VAR'; iconCls='var'; }
-      else if(typeId===32||typeText.includes('penalty')){ icon='⚽🅿'; iconCls='goal'; }
-      const scorer = p.participants?.find(pp=>pp.type==='scorer')?.athlete?.displayName||'';
-      const subOn  = p.participants?.find(pp=>pp.type==='substitution_in')?.athlete?.displayName||'';
-      const subOff = p.participants?.find(pp=>pp.type==='substitution_out')?.athlete?.displayName||'';
-      const txt = scorer||(subOn?`${subOn} ↑  ${subOff} ↓`:(p.text||''));
-      html += `<div class="live-tl-row ${isHome?'is-home':'is-away'}">
-        <div class="live-tl-min">${min}</div>
-        <div class="live-tl-icon ${iconCls}">${icon}</div>
-        <div class="live-tl-txt">${txt}<span class="live-tl-team">${isHome?ev.home.abbr:ev.away.abbr}</span></div>
+    for(const item of tlItems){
+      html += `<div class="live-tl-row ${item.isHome?'is-home':'is-away'}">
+        <div class="live-tl-min">${item.min}</div>
+        <div class="live-tl-icon ${item.iconCls}">${item.icon}</div>
+        <div class="live-tl-txt">${item.txt}<span class="live-tl-team">${item.isHome?ev.home.abbr:ev.away.abbr}</span></div>
       </div>`;
     }
     html += `</div>`;
