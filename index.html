@@ -789,7 +789,8 @@ body{
 .squad-pill:hover:not(.active){border-color:#444;color:var(--text)}
 
 /* ── TEAM PAGE V2 ────────────────────────────────────────────────── */
-.tp2-hero{display:flex;align-items:center;gap:12px;padding-bottom:14px}
+.tp2-hero,.tm-hero{display:flex;align-items:center;gap:12px;padding-bottom:14px}
+.tm-hero{padding-right:44px}
 .tp2-flag{font-size:38px;line-height:1;flex-shrink:0}
 .tp2-info{flex:1;min-width:0}
 .tp2-name{font-size:20px;font-weight:800;letter-spacing:-.3px}
@@ -2074,7 +2075,6 @@ function openTeamPage(teamName){
     const t=g.teams.find(t=>t.n===teamName);
     if(t){teamObj={...t,group:g.id};break;}
   }
-  // Fallback: fuzzy match via ESPN display name
   if(!teamObj){
     for(const g of GROUPS_DATA){
       const t=g.teams.find(t=>favTeamMatch(teamName,t.n));
@@ -2082,13 +2082,56 @@ function openTeamPage(teamName){
     }
   }
   if(!teamObj) return;
-  closeModal();
-  document.querySelectorAll('.tbtn').forEach(b=>b.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  document.querySelector('.tbtn[data-tab="myteam"]')?.classList.add('active');
-  const sec=$('tab-myteam');
-  if(sec){sec.classList.add('active');renderTeamPage(sec,teamObj);}
-  window.scrollTo({top:0,behavior:'smooth'});
+  // Navigate to My Team tab if this is the user's favourite team
+  if(favTeam && favTeamMatch(teamName, favTeam.n)){
+    closeModal();
+    document.querySelectorAll('.tbtn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    document.querySelector('.tbtn[data-tab="myteam"]')?.classList.add('active');
+    const sec=$('tab-myteam');
+    if(sec){sec.classList.add('active');renderTeamPage(sec,teamObj);}
+    window.scrollTo({top:0,behavior:'smooth'});
+    return;
+  }
+  openTeamModal(teamObj);
+}
+
+function openTeamModal(teamObj){
+  const gData  = GROUPS_DATA.find(g=>g.teams.some(t=>t.n===teamObj.n));
+  const sorted = gData ? [...gData.teams].sort((a,b)=>b.pts-a.pts||b.gd-a.gd||b.gf-a.gf) : [];
+  const me     = sorted.find(t=>t.n===teamObj.n) || teamObj;
+  const pos    = sorted.findIndex(t=>t.n===teamObj.n)+1;
+  const record = `W ${me.w} · D ${me.d} · L ${me.l}`;
+
+  $('mcModal').innerHTML = `
+    <div class="mc-hdr" style="position:relative">
+      <div class="mc-close-wrap"><button class="modal-close" onclick="closeModal()">×</button></div>
+      <div class="tm-hero">
+        <div class="tp2-flag">${teamObj.f}</div>
+        <div class="tp2-info">
+          <div class="tp2-name">${teamObj.n}</div>
+          ${gData?`<div class="tp2-sub">Group ${gData.id}${pos?' · '+ordinal(pos)+' place':''}</div>
+          <div class="tp2-record">${record} · ${me.pts} pts</div>`:''}
+        </div>
+      </div>
+    </div>
+    <div class="mc-body" id="mcBody">
+      <div id="tm-spotlight"></div>
+      ${gData ? renderCompactStandings(gData, teamObj, favTeam) : ''}
+      <div id="tm-stats-anchor"></div>
+      <div class="fav-sect">Squad</div>
+      <div id="tm-squad"></div>
+      <div class="fav-sect">News</div>
+      <div id="tm-news"><div class="lineup-loading">Loading…</div></div>
+    </div>`;
+
+  $('modalBg').classList.add('open');
+  document.body.style.overflow = 'hidden';
+
+  fetchMatchSpotlight(teamObj, 'tm-spotlight');
+  fetchTeamMatchStats(teamObj, 'tm-stats-anchor', 'tm-stats');
+  fetchFavNews(teamObj, 'tm-news');
+  renderTeamSquad($('tm-squad'), teamObj);
 }
 
 function openPlayerById(id){
@@ -3941,7 +3984,7 @@ function renderTeamPage(sec, team){
 
     <div id="tp2Spotlight"></div>
 
-    ${gData ? renderCompactStandings(gData, team) : ''}
+    ${gData ? renderCompactStandings(gData, team, team) : ''}
 
     <div id="tp2StatsAnchor"></div>
 
@@ -3957,7 +4000,7 @@ function renderTeamPage(sec, team){
   renderTeamSquad($('favSquad'), team);
 }
 
-function renderCompactStandings(g, myTeam){
+function renderCompactStandings(g, viewedTeam, favTeam=null){
   const sorted = [...g.teams].sort((a,b)=>b.pts-a.pts||b.gd-a.gd||b.gf-a.gf);
   return `<div class="tp2-standings">
     <div class="tp2-stand-hdr">
@@ -3967,11 +4010,11 @@ function renderCompactStandings(g, myTeam){
       <span class="tp2-sh-pts">Pts</span>
     </div>
     ${sorted.map((t,i)=>`
-    <div class="tp2-stand-row${t.n===myTeam.n?' me':''}" onclick="openTeamPage('${esc(t.n)}')" role="button">
+    <div class="tp2-stand-row${t.n===viewedTeam.n?' me':''}" onclick="openTeamPage('${esc(t.n)}')" role="button">
       <span class="tp2-stand-pos">${i+1}</span>
       <span class="tp2-stand-flag">${t.f}</span>
       <span class="tp2-stand-name">${t.n}</span>
-      <span class="tp2-stand-you">${t.n===myTeam.n?'You':''}</span>
+      <span class="tp2-stand-you">${favTeam&&t.n===favTeam.n?'You':''}</span>
       <span class="tp2-stand-p">${t.p}</span>
       <span class="tp2-stand-gd" style="color:${t.gd>0?'var(--accent)':t.gd<0?'#ff5555':'var(--t2)'}">${t.gd>0?'+':''}${t.gd}</span>
       <span class="tp2-stand-pts">${t.pts}</span>
@@ -3980,8 +4023,8 @@ function renderCompactStandings(g, myTeam){
   </div>`;
 }
 
-async function fetchMatchSpotlight(team){
-  const container = $('tp2Spotlight');
+async function fetchMatchSpotlight(team, spotlightContainerId='tp2Spotlight'){
+  const container = $(spotlightContainerId);
   if(!container) return;
 
   const now = new Date();
@@ -4175,8 +4218,8 @@ async function fetchFavMatches(team){
   }).join('');
 }
 
-async function fetchFavNews(team){
-  const container = $('favNews');
+async function fetchFavNews(team, containerId='favNews'){
+  const container = $(containerId);
   if(!container) return;
 
   const teamEv = (lastEvents||[]).find(ev =>
@@ -4190,7 +4233,7 @@ async function fetchFavNews(team){
         const data = await r.json();
         const articles = data?.news?.articles||[];
         if(articles.length){
-          const el2 = $('favNews');
+          const el2 = $(containerId);
           if(!el2) return;
           el2.innerHTML = articles.slice(0,5).map(a=>{
             const url = a.links?.web?.href||'#';
@@ -4209,7 +4252,7 @@ async function fetchFavNews(team){
     }catch(e){}
   }
 
-  const el2 = $('favNews');
+  const el2 = $(containerId);
   if(el2) el2.innerHTML='<div class="mc-news-empty">News will appear here on match days</div>';
 }
 
@@ -4280,7 +4323,7 @@ function statBar(label, valStr, pct, neg=false){
   </div>`;
 }
 
-async function fetchTeamMatchStats(team){
+async function fetchTeamMatchStats(team, anchorId='tp2StatsAnchor', statsId='favStats'){
   // Scan back 25 days to cover the full group stage
   const now = new Date();
   const dates = Array.from({length:25},(_,i)=>{
@@ -4357,12 +4400,12 @@ async function fetchTeamMatchStats(team){
   // Only inject the section when we have something meaningful to show
   if(!hasBoxscore && cs===0) return;
 
-  const anchor = $('tp2StatsAnchor');
+  const anchor = $(anchorId);
   if(!anchor) return;
 
   anchor.innerHTML = `
     <div class="fav-sect">Match Stats</div>
-    <div id="favStats">
+    <div id="${statsId}">
       ${cs>0?`<div class="tstat-grid" style="grid-template-columns:1fr 1fr;margin-bottom:10px">
         <div class="tstat-card"><div class="tstat-val" style="color:var(--gold)">${cs}</div><div class="tstat-lbl">Clean Sheets</div></div>
         ${avgShots!==null?`<div class="tstat-card"><div class="tstat-val">${f1(avgShots)}</div><div class="tstat-lbl">Shots / game</div></div>`:''}
