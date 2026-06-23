@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-23T12:22:46.150Z",
+  "lastUpdated": "2026-06-23T18:11:12.536Z",
   "teams": {
     "BIH": {
       "headline": "Bosnia-Herzegovina: A Defensive Disasterclass",
@@ -160,58 +160,58 @@
     "ARG": {
       "teamCode": "ARG",
       "headline": "The Albiceleste juggernaut rolls on",
-      "storySoFar": "Two wins from two, looking like absolute title contenders.",
-      "whatsNext": "They are through to the next round, so they can put their feet up.",
-      "pubAmmo": "They've kept two clean sheets and have Messi. What more do you want?"
+      "storySoFar": "Two wins from two, looking every bit the tournament favourites.",
+      "whatsNext": "They are through to the next round, so they can put their feet up and scout the competition.",
+      "pubAmmo": "They've got Messi, and you don't. Simple as."
     },
     "AUT": {
       "teamCode": "AUT",
       "headline": "Austrian hopes hanging by a thread",
-      "storySoFar": "One win, one loss, and a lot of work to do.",
-      "whatsNext": "Still in the hunt for a top-two finish, plenty to play for.",
-      "pubAmmo": "They managed to hold their own for a bit, but the quality gap was clear."
+      "storySoFar": "A win and a loss, leaving them in the mix but needing to sharpen up.",
+      "whatsNext": "Still in the hunt for a top-two finish with one game left to play.",
+      "pubAmmo": "They've got the talent, but they need to stop playing like they've never met each other."
     },
     "FRA": {
       "teamCode": "FRA",
-      "headline": "France are simply too good",
-      "storySoFar": "Two games, two wins, and they've barely shifted out of second gear.",
-      "whatsNext": "They are through to the next round, absolute scenes.",
-      "pubAmmo": "They've scored six and conceded one. They are the team to beat."
+      "headline": "France are simply inevitable",
+      "storySoFar": "Two games, two wins, and they've barely broken a sweat.",
+      "whatsNext": "They are through to the next round, looking like the team to beat.",
+      "pubAmmo": "They're playing liquid football while everyone else is playing in the mud."
     },
     "IRQ": {
       "teamCode": "IRQ",
-      "headline": "Iraq's World Cup dream ends",
-      "storySoFar": "Two games, two losses, and a mountain of goals conceded.",
+      "headline": "Iraq's tournament nightmare continues",
+      "storySoFar": "Two games, two losses, and zero points to show for it.",
       "whatsNext": "They are eliminated and can start booking their flights home.",
-      "pubAmmo": "They didn't manage a single shot on target against France. That's a tough watch."
+      "pubAmmo": "They've managed one goal in two games—hardly the stuff of champions."
     },
     "NOR": {
       "teamCode": "NOR",
-      "headline": "Norway are the real deal",
-      "storySoFar": "Two wins from two, and Haaland is firing on all cylinders.",
-      "whatsNext": "They are through to the next round, job done.",
-      "pubAmmo": "They've scored seven goals in two games. Pure liquid football."
+      "headline": "Norway's Viking raid continues",
+      "storySoFar": "Two wins from two, and they're looking dangerous.",
+      "whatsNext": "They are through to the next round, and the rest of the tournament should be worried.",
+      "pubAmmo": "They've got Haaland, and he's basically a walking cheat code."
     },
     "SEN": {
       "teamCode": "SEN",
-      "headline": "Senegal's campaign in tatters",
-      "storySoFar": "Two games, two losses, and a leaky defense.",
-      "whatsNext": "They are eliminated and will be heading home early.",
-      "pubAmmo": "They showed some fight against Norway, but it was too little, too late."
+      "headline": "Senegal's dream turns to dust",
+      "storySoFar": "Two games, two losses, and a lot of 'what ifs'.",
+      "whatsNext": "They are eliminated and can start packing their bags.",
+      "pubAmmo": "They had the possession but lacked the killer instinct."
     },
     "JOR": {
       "teamCode": "JOR",
-      "headline": "Jordan's heartbreak in the desert",
-      "storySoFar": "Two games, two losses, and a tough exit.",
-      "whatsNext": "They are eliminated and can start packing their bags.",
-      "pubAmmo": "They led against Algeria but just couldn't hold the line."
+      "headline": "Jordan's brave effort falls short",
+      "storySoFar": "Two games, two losses, and they're out of the running.",
+      "whatsNext": "They are eliminated and can start looking forward to the flight home.",
+      "pubAmmo": "They fought hard, but heart doesn't win matches when you can't keep the ball."
     },
     "ALG": {
       "teamCode": "ALG",
       "headline": "Algeria keep the dream alive",
-      "storySoFar": "One win, one loss, and a vital three points today.",
-      "whatsNext": "Still in the hunt for a top-two finish, they've got a fighting chance.",
-      "pubAmmo": "They dominated possession and finally found the breakthrough."
+      "storySoFar": "One win and one loss, keeping them firmly in the mix.",
+      "whatsNext": "Still in the hunt for a top-two finish with one game left to play.",
+      "pubAmmo": "They've got the grit to grind out results when it matters most."
     },
     "CAN": {
       "headline": "Canada's Rollercoaster: From BMO Boredom to Qatar Carnage",
@@ -410,44 +410,48 @@
       "randomQuirk": "The match was so fragmented by delays that it felt like we spent more time watching the physios on the pitch than actual football, with stoppages occurring for injuries, drinks breaks, and even a mysterious delay just eight minutes into the kickoff."
     },
     "ARG-AUT": {
-      "editionTitle": "MESSI MAGIC AND A MEDICAL MARATHON AT THE AT&T",
-      "snappySummary": "Argentina cruised to a 2-0 victory over Austria, though the match felt more like a medical convention than a football game with all the injury delays. Messi, the walking cheat code, finally found his range after fluffing a penalty, bagging a brace to seal the deal. Austria looked like they were having a casual kickabout in the park, managing only one shot on target all night. A proper professional job from the Argentines, even if the constant stoppages made it feel like we were watching paint dry in the Texas heat.",
+      "matchKey": "ARG-AUT",
+      "editionTitle": "Messi Magic and Austrian Misery",
+      "snappySummary": "Argentina cruised to a 2-0 win while Austria looked like they were auditioning for a slapstick comedy.",
       "talkingPoints": [
-        "Lionel Messi missed a penalty in the 9th minute but redeemed himself with goals in the 38th and 90+5th minutes.",
-        "Argentina dominated the attacking threat with 12 shots compared to Austria's 6, while Austria failed to test the keeper more than once.",
-        "The match was plagued by constant interruptions, including multiple injury delays and two separate drinks breaks."
+        "Messi missing a penalty like he was trying to clear the stadium roof.",
+        "Austria's defense having the structural integrity of a wet digestive biscuit.",
+        "A laundry list of injuries that made the match feel more like a triage unit than a football game."
       ],
-      "randomQuirk": "The match featured so many injury-related delays that the players spent more time waiting for medical attention than they did playing a continuous flow of football."
+      "randomQuirk": "The match had more injury delays than actual shots on target from the Austrian side."
     },
     "FRA-IRQ": {
-      "editionTitle": "FRANCE TURN LINCOLN FINANCIAL FIELD INTO A TRAINING GROUND",
-      "snappySummary": "France strolled to a 3-0 victory like they were having a casual kickabout in the park. Kylian Mbappé was an absolute walking cheat code, bagging a brace, while Ousmane Dembélé added the third to put the game to bed. Iraq looked like they were chasing shadows all afternoon, managing zero shots on target and spending most of the match trying to figure out where the ball had gone. It was a proper bottle job from the visitors, who couldn't even muster a sniff of a goal against a French side that barely had to break a sweat.",
+      "matchKey": "FRA-IRQ",
+      "editionTitle": "Les Bleus Cruise Control",
+      "snappySummary": "France dismantled Iraq with the clinical efficiency of a surgeon, while Iraq barely managed to find the pitch.",
       "talkingPoints": [
-        "Kylian Mbappé dominated the show with two clinical finishes in the 14th and 54th minutes.",
-        "Iraq failed to register a single shot on target throughout the entire 90 minutes.",
-        "Amir Al Ammari picked up the only yellow card of the match just six minutes in for a rather desperate challenge."
+        "Mbappé scoring for fun while the Iraqi defense watched on in awe.",
+        "Iraq failing to register a single shot on target—absolute Sunday League stuff.",
+        "France looking like they could have played in their slippers."
       ],
-      "randomQuirk": "Iraq managed to concede three goals while only forcing the French goalkeeper to do absolutely nothing, as the visitors failed to land a single shot on target all match."
+      "randomQuirk": "Iraq managed 28 clearances, which is a polite way of saying they spent 90 minutes booting the ball into the stands."
     },
     "NOR-SEN": {
-      "editionTitle": "HAALAND HITS THE HEIGHTS AS NORWAY SURVIVE SENEGAL SCARE",
-      "snappySummary": "What a proper rollercoaster at the MetLife! Norway walked away with a 3-2 victory, but it was far from a stroll in the park. Erling Haaland was, as expected, a walking cheat code, bagging a brace that looked to put the game to bed. Senegal had more of the ball, but possession is nine-tenths of nothing if you can't defend against a counter-attack. Ismaïla Sarr tried his best to drag them back into it with two goals, but it was a case of too little, too late. A clean sheet for the disciplinary record too—not a single yellow card in sight, which is a miracle considering the amount of stop-start injury delays we had to endure.",
+      "matchKey": "NOR-SEN",
+      "editionTitle": "Haaland's High-Octane Thriller",
+      "snappySummary": "A proper end-to-end scrap that ended with Norway just about holding on against a spirited Senegal.",
       "talkingPoints": [
-        "Erling Haaland proved his class with two clinical finishes, while Marcus Pedersen opened the scoring just before the break.",
-        "Senegal dominated possession with 58.3% but struggled to convert that into efficiency, managing only 4 shots on target compared to Norway's 7.",
-        "The match was heavily disrupted by injury delays, including a forced substitution for Senegal goalkeeper Édouard Mendy in the 63rd minute."
+        "Haaland doing what he does best: bullying defenders and finding the net.",
+        "Senegal showing heart but ultimately lacking the composure to finish the job.",
+        "A defensive display from both sides that would make a Sunday League manager weep."
       ],
-      "randomQuirk": "Despite the high-scoring 3-2 thriller and constant injury stoppages, the referee didn't find a single reason to reach for a yellow or red card all afternoon."
+      "randomQuirk": "Senegal had more possession and shots but still walked away with nothing to show for it."
     },
     "JOR-ALG": {
-      "editionTitle": "ALGERIA SURVIVE THE JORDAN JOLT IN LEVI'S STADIUM DRAMA",
-      "snappySummary": "Jordan thought they were onto a classic smash-and-grab after Nizar Al Rashdan put them ahead, but Algeria eventually woke up from their slumber to turn it around. With a staggering 72% possession, Algeria finally made it count through Nadhir Benbouali and Amine Gouiri, leaving Jordan to rue what might have been. It was a proper bottle job for the underdogs in the end, as Algeria’s relentless corner count—ten of them!—finally broke the resistance to seal a 2-1 victory.",
+      "matchKey": "JOR-ALG",
+      "editionTitle": "Algeria's Late Rescue Act",
+      "snappySummary": "Jordan held their own for 80 minutes before Algeria finally remembered they were the favourites.",
       "talkingPoints": [
-        "Jordan managed to hold a lead for 33 minutes thanks to Nizar Al Rashdan's 36th-minute strike before the pressure finally told.",
-        "Algeria dominated the ball with 72.1% possession and forced 10 corners compared to Jordan's solitary one.",
-        "Nadhir Benbouali proved to be the super-sub, coming on at halftime and netting the equalizer in the 69th minute."
+        "Jordan's brave resistance crumbling under the weight of 10 corners conceded.",
+        "Algeria's 72% possession finally paying off in the dying embers.",
+        "A classic case of 'too little, too late' for the Jordanian dream."
       ],
-      "randomQuirk": "Algeria were so desperate to find a winner that they racked up 10 corners throughout the match, eventually finding the net from one of them to secure the 2-1 result."
+      "randomQuirk": "Algeria took 10 corners and only managed to score from one of them—talk about inefficient."
     },
     "MEX-RSA": {
       "editionTitle": "MEXICO CRUISE AS SOUTH AFRICA LOSE THE PLOT",
@@ -808,16 +812,16 @@
       "progressionNews": "Mexico, Canada, Switzerland, USA, Germany, and the Netherlands have officially qualified for the knockouts. Haiti, Türkiye, and Tunisia are officially out and can start booking their flights home. Bosnia-Herzegovina and Qatar need a strong result to keep their best-3rd hopes alive. Everyone else remains in the hunt and can still qualify."
     },
     "2026-06-22": {
-      "headline": "Argentina and France Cruise While Others Trip Over Their Own Shoelaces",
-      "theDrama": "Argentina looked like a walking cheat code against Austria, while France dismantled Iraq with the kind of clinical efficiency that makes you wonder if they were playing against traffic cones. Norway and Senegal served up a proper thriller, though the defending was more Sunday League than World Cup, and Algeria managed to scrape past Jordan in a game that won't be winning any awards for technical brilliance.",
-      "mustWatchHighlights": "Norway versus Senegal was the only game worth the price of admission if you enjoy pure, unadulterated chaos. As for the rest, France versus Iraq was a total snooze-fest; watching paint dry would have been a more tactical challenge for the French backline.",
-      "progressionNews": "France, Norway, Argentina, and Germany have officially qualified for the knockouts, so they can put their feet up. Meanwhile, Haiti, Türkiye, Tunisia, Senegal, Iraq, and Jordan are officially out and can start booking their flights home. Bosnia-Herzegovina and Qatar are in the hunt for a best-3rd slot and need points to keep their dreams alive, while everyone else remains in contention to fight another day."
+      "headline": "Messi and Mbappé Run Riot as the Tournament Heats Up",
+      "theDrama": "A day of absolute scenes as the big guns flexed their muscles, while the underdogs struggled to keep their heads above water.",
+      "mustWatchHighlights": "Norway vs Senegal was the only one that didn't put me to sleep; the rest were essentially training sessions for the giants.",
+      "progressionNews": "Argentina, France, and Norway have officially booked their spots in the next round. Meanwhile, Iraq, Senegal, and Jordan are officially eliminated and can start looking at flight prices."
     }
   },
   "today_preview": {
-    "headline": "The Battle for Survival: Tomorrow's High-Stakes Showdown",
-    "theBigOnes": "England vs Ghana is the one to watch, as both sides look to cement their place in the next round.",
-    "playersToWatch": "Keep an eye on the English midfield to see if they can finally click, and watch out for the Ghanaian counter-attack.",
+    "headline": "Tomorrow's Blockbusters: Can the Underdogs Bite Back?",
+    "theBigOnes": "England vs Ghana is the one to watch; let's see if the Three Lions can avoid a classic bottle job.",
+    "playersToWatch": "Keep an eye on the English midfield—if they don't turn up, it's going to be a long, painful afternoon.",
     "firstKickoffTime": "2026-06-23T17:00Z"
   },
   "espnMatches": {
@@ -3513,9 +3517,10 @@
           " [Kickoff] ",
           "4' [Start Delay] Delay in match because of an injury Lautaro Martínez (Argentina).",
           "4' [Start Delay] ",
-          "7' [End Delay] Delay over. They are ready to continue.",
-          "7' [End Delay] ",
+          "6' [End Delay] Delay over. They are ready to continue.",
+          "6' [End Delay] ",
           "7' [Start Delay] ",
+          "7' [End Delay] ",
           "9' [Penalty - Missed] Penalty missed. Lionel Messi (Argentina) left footed shot is close, but misses to the right.",
           "21' [Start Delay] Delay in match because of an injury Rodrigo De Paul (Argentina).",
           "21' [Start Delay] Delay in match (Austria).",
@@ -3661,7 +3666,7 @@
           "53' [Goal] Goal! Norway 2, Senegal 1. Ismaïla Sarr (Senegal) right footed shot from the centre of the box to the top right corner. Assisted by Sadio Mané.",
           "54' [Substitution] Substitution, Senegal. Ismail Jakobs replaces El Hadji Malick Diouf.",
           "54' [Substitution] Substitution, Senegal. Ibrahim Mbaye replaces Pape Gueye.",
-          "58' [Goal - Volley] Goal! Norway 3, Senegal 1. Erling Haaland (Norway) right footed shot from the centre of the box to the high centre of the goal. Assisted by Patrick Berg.",
+          "58' [Goal] Goal! Norway 3, Senegal 1. Erling Haaland (Norway) right footed shot from the centre of the box to the high centre of the goal. Assisted by Patrick Berg.",
           "59' [Start Delay] Delay in match because of an injury Édouard Mendy (Senegal).",
           "59' [Start Delay] ",
           "63' [End Delay] Delay over. They are ready to continue.",
@@ -3734,7 +3739,7 @@
           "76' [Substitution] Substitution, Jordan. Odeh Fakhoury replaces Mahmoud Al Mardi.",
           "77' [End Delay] Delay over. They are ready to continue.",
           "77' [End Delay] ",
-          "82' [Goal - Volley] Goal! Jordan 1, Algeria 2. Amine Gouiri (Algeria) right footed shot from very close range to the centre of the goal following a corner.",
+          "82' [Goal] Goal! Jordan 1, Algeria 2. Amine Gouiri (Algeria) right footed shot from very close range to the centre of the goal following a corner.",
           "84' [Substitution] Substitution, Jordan. Ali Azaizeh replaces Mousa Al Tamari.",
           "85' [Substitution] Substitution, Jordan. Mohammad Abu Hasheesh replaces Mohannad Abu Taha.",
           "85' [Substitution] Substitution, Algeria. Jaouen Hadjam replaces Rayan Aït-Nouri.",
