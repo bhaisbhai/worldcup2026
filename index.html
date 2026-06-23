@@ -3108,12 +3108,6 @@ function mcLineups(ev,data){
   const rosters=data?.rosters||[];
   if(!rosters.length) return`<div class="mc-lu-na">Lineups not yet confirmed</div>`;
 
-  const POS={
-    GK:0,G:0,
-    CB:1,CD:1,LB:1,RB:1,LWB:1,RWB:1,D:1,FB:1,LFB:1,RFB:1,WB:1,SW:1,DF:1,LD:1,RD:1,
-    CM:2,DM:2,AM:2,LM:2,RM:2,M:2,CDM:2,CAM:2,MF:2,DMF:2,AMF:2,
-    LW:3,RW:3,CF:3,ST:3,F:3,FW:3,ATT:3,SS:3,FO:3,W:3,WF:3,LF:3,RF:3
-  };
   const hR=rosters.find(r=>r.homeAway==='home')||rosters[0];
   const aR=rosters.find(r=>r.homeAway==='away')||rosters[1];
   const hTi={name:ev.home.name,abbr:ev.home.abbr};
@@ -3127,7 +3121,6 @@ function mcLineups(ev,data){
     const fStr=roster?.formation||'';
     const fLayers=fStr.split('-').map(Number).filter(n=>n>0);
     if(fLayers.length>=2){
-      // Use ESPN formation string to distribute players in roster order (GK first, then DEF→MID→FWD)
       const sorted=starters.some(e=>e.formationPlace!=null)
         ?[...starters].sort((a,b)=>(a.formationPlace||99)-(b.formationPlace||99))
         :starters;
@@ -3137,18 +3130,8 @@ function mcLineups(ev,data){
         const target=i===0?grp.DEF:i===fLayers.length-1?grp.FWD:grp.MID;
         for(let j=0;j<count&&idx<sorted.length;j++) target.push(sorted[idx++]);
       });
-    } else {
-      starters.forEach(e=>{
-        const abbr=e.position?.abbreviation;
-        const p=POS[abbr]??2;
-        [grp.GK,grp.DEF,grp.MID,grp.FWD][p]?.push(e);
-      });
     }
     return{grp,bench,formation:fStr};
-  }
-
-  function formStr(grp){
-    return[grp.DEF,grp.MID,grp.FWD].map(g=>g.length).filter(Boolean).join('-');
   }
 
   function xSpread(n){
@@ -3205,7 +3188,8 @@ function mcLineups(ev,data){
   }
 
   const h=buildGroups(hR), a=buildGroups(aR);
-  const hForm=h.formation||formStr(h.grp), aForm=a.formation||formStr(a.grp);
+  if(!h.formation||!a.formation) return`<div class="mc-lu-na">Formation data not available</div>`;
+  const hForm=h.formation, aForm=a.formation;
 
   return`
     <div class="fp-header">
