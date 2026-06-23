@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-23T10:59:22.215Z",
+  "lastUpdated": "2026-06-23T11:56:44.108Z",
   "teams": {
     "BIH": {
       "headline": "Bosnia-Herzegovina: A Defensive Disasterclass",
@@ -425,47 +425,51 @@
     },
     "ARG-AUT": {
       "matchKey": "ARG-AUT",
-      "editionTitle": "Messi's Mixed Bag Masterclass Secures Argentina's Spot",
-      "snappySummary": "Argentina secured their passage to the next round with a 2-0 victory over Austria, but not before Lionel Messi decided to keep everyone on their toes with a missed penalty before bagging a brace.",
+      "editionTitle": "Argentina vs. Austria: Messi's Masterclass",
+      "snappySummary": "Messi missed a penalty, then decided to score two anyway, because, well, he's Messi. Argentina cruised past Austria, who are now officially booking their flights home.",
       "talkingPoints": [
-        "Lionel Messi's penalty miss early on had us all wondering if he'd left his magic boots at home, only for him to then casually score two goals.",
-        "Austria's lone shot on target suggests they were more interested in admiring Argentina's play than actually troubling the keeper.",
-        "Plenty of stoppages for injuries and drinks breaks, making it feel less like a World Cup match and more like a leisurely Sunday kickabout."
+        "Lionel Messi, the cheeky blighter, missed a penalty early doors but still managed to bag a brace, proving he's still a walking cheat code.",
+        "Argentina dominated possession with 53.6% and had 12 shots, showing they were well in control, despite a few injury stoppages.",
+        "Austria managed a paltry 1 shot on target from 6 attempts, which isn't exactly going to win you any World Cups, is it?",
+        "Plenty of stoppages for injuries and drinks breaks, making it feel a bit like a casual kickabout in the park rather than a high-stakes World Cup tie."
       ],
-      "randomQuirk": "Lionel Messi, the man who usually can't miss, decided to give the Austrian keeper a bit of a break by sending his early penalty wide. Just to keep things interesting, I suppose."
+      "randomQuirk": "Messi missed a penalty in the 9th minute, then decided to score two goals later, just to show he can do whatever he fancies."
     },
     "FRA-IRQ": {
       "matchKey": "FRA-IRQ",
-      "editionTitle": "Mbappé and Dembélé Run Riot as France Cruise Through",
-      "snappySummary": "France breezed past Iraq with a comfortable 3-0 victory, with Kylian Mbappé grabbing a brace and Ousmane Dembélé adding another to send them through to the knockouts.",
+      "editionTitle": "France vs. Iraq: Mbappé's Stroll in the Park",
+      "snappySummary": "France, led by a rampant Mbappé, made light work of Iraq, who barely laid a glove on them. A comfortable win for the French, who are now safely through.",
       "talkingPoints": [
-        "France's 19 shots to Iraq's paltry 4, with zero on target for Iraq, tells you everything you need to know about the one-sided affair.",
-        "Michael Olise was pulling the strings beautifully, bagging two assists and making it all look far too easy.",
-        "Iraq's 28 clearances shows they were certainly busy, just not in the way they'd hoped, spending most of the match on the back foot."
+        "Kylian Mbappé was having a casual kickabout, bagging two goals and proving once again why he's one of the best.",
+        "France registered a whopping 19 shots with 5 on target, showing their attacking prowess, while Iraq managed zero shots on target from 4 attempts – not exactly a threat, were they?",
+        "Michael Olise grabbed two assists, pulling the strings nicely for the French attack.",
+        "Iraq's Amir Al Ammari picked up a yellow card for a bad foul, perhaps out of sheer frustration at being run ragged."
       ],
-      "randomQuirk": "Iraq managed to go the entire match without a single shot on target, proving that sometimes, just sometimes, defending can be a full-time job."
+      "randomQuirk": "Iraq's goalkeeper, Ahmed Basil, made 2 saves, but his outfield players couldn't muster a single shot on target, making his job a bit like trying to stop a tide with a colander."
     },
     "NOR-SEN": {
       "matchKey": "NOR-SEN",
-      "editionTitle": "Haaland's Heroics Secure Norway's Progress in Five-Goal Thriller",
-      "snappySummary": "Norway edged out Senegal in a five-goal thriller, winning 3-2 thanks to a brace from the unstoppable Erling Haaland, securing their passage to the next round.",
+      "editionTitle": "Norway vs. Senegal: Haaland Delivers, Senegal Head Home",
+      "snappySummary": "Erling Haaland scored another two goals, because of course he did, as Norway saw off Senegal in a surprisingly open game. Senegal's spirited effort wasn't enough, and they're now out.",
       "talkingPoints": [
-        "Erling Haaland, the walking cheat code, bagged two goals, making it look like he was having a casual kickabout in the park.",
-        "Senegal showed some fight with Ismaïla Sarr also grabbing two goals, making Norway work for every single point.",
-        "Senegal had more possession and more shots, but Norway were clinical when it mattered, which is the sign of a team that knows how to win."
+        "Erling Haaland, the walking cheat code, bagged another brace, proving he's absolutely lethal in front of goal.",
+        "Senegal showed some fight with Ismaïla Sarr scoring two goals, but their defence looked a bit like Sunday League defending at times.",
+        "Norway had less possession (41.7%) but were more clinical, with 7 shots on target from 13 attempts.",
+        "Senegal's goalkeeper Édouard Mendy had to be substituted due to injury, adding insult to injury for the eliminated side."
       ],
-      "randomQuirk": "Despite having nearly 60% possession and more shots, Senegal still managed to lose. Proof that sometimes, just having the ball isn't enough to actually do anything with it."
+      "randomQuirk": "Senegal had more possession (58.3%) and more shots (16) than Norway, yet still managed to lose, proving that sometimes, you just can't buy a win."
     },
     "JOR-ALG": {
       "matchKey": "JOR-ALG",
-      "editionTitle": "Algeria's Late Comeback Sinks Jordan and Seals Qualification",
-      "snappySummary": "Algeria snatched a dramatic 2-1 victory from Jordan with two late goals, turning the game on its head after going a goal down, and securing their qualification.",
+      "editionTitle": "Jordan vs. Algeria: Late Drama Sees Algeria Through",
+      "snappySummary": "Algeria left it late, coming from behind to snatch a win against Jordan, who had a sniff but ultimately bottled it. Algeria are through, Jordan are packing their bags.",
       "talkingPoints": [
-        "Jordan's early lead was a lovely bit of liquid football, but Algeria's relentless pressure eventually paid off with 72% possession and 10 corners.",
-        "Nadhir Benbouali and Amine Gouiri both scoring late goals from corners, showing Algeria's set-piece prowess when the chips were down.",
-        "Jordan's goalkeeper, Yazeed Abulaila, was absolutely heroic, making 6 saves to keep them in it for so long."
+        "Jordan took a surprising lead through Nizar Al Rashdan, giving their fans a moment of hope before Algeria turned the screw.",
+        "Algeria dominated possession with a whopping 72.1% and had 17 shots, showing their intent, even if it took them a while to convert.",
+        "Nadhir Benbouali and Amine Gouiri scored the crucial goals for Algeria, both coming from set-pieces or close-range finishes, showing a bit of grit.",
+        "Jordan's goalkeeper Yazeed Abulaila made 6 saves, trying his best to keep his side in it against the Algerian onslaught."
       ],
-      "randomQuirk": "Jordan, with a mere 27.9% possession, managed to score first. It's almost as if they thought the ball was radioactive and only wanted to touch it when absolutely necessary."
+      "randomQuirk": "Jordan managed to score with just 27.9% possession, proving that sometimes you just need to be clinical, even if it doesn't always last."
     }
   },
   "days": {
@@ -543,9 +547,9 @@
     }
   },
   "today_preview": {
-    "headline": "Tomorrow's Tea-Time Treats: England's Next Test & Portugal's Prowess!",
-    "theBigOnes": "Tomorrow promises some cracking encounters! England against Ghana is always going to be a fiery affair, with both teams looking to stamp their authority. And Portugal facing Uzbekistan will be one to watch, as Ronaldo and co. look to build on their start. Panama vs. Croatia and Colombia vs. DR Congo also have plenty at stake, so don't you dare miss them!",
-    "playersToWatch": "Keep an eye on England's main man, whoever that might be, to see if they can get on the scoresheet. For Portugal, all eyes will be on the usual suspects to see if they can produce some liquid football. And in the other games, expect some passionate performances as teams fight for every single point!",
+    "headline": "Tomorrow's Treat: England, Portugal, and Colombia Take Centre Stage!",
+    "theBigOnes": "Tomorrow looks like a cracker! Portugal vs. Uzbekistan could be a fascinating clash, but let's be honest, everyone's eyes will be on England vs. Ghana. Can the Three Lions roar again, or will Ghana cause a bit of a stir? Panama vs. Croatia and Colombia vs. DR Congo also promise some intriguing battles.",
+    "playersToWatch": "Keep an eye on England's main men, whoever they might be, to see if they can deliver the goods. For Portugal, you know who to watch, don't you? And in the other games, look out for any standout performers from Colombia and Croatia who could light up the tournament.",
     "firstKickoffTime": "2026-06-23T17:00Z"
   },
   "espnMatches": {
