@@ -48,6 +48,7 @@ window.initKeepyUppy = function() {
   let lbError = false;
   let lbFetchedAt = 0;
   let _pendingScore = null;
+  let lastSubmittedScore = null;
 
   function loadData() {
     const base = { best: 0, coins: 0, scores: [] };
@@ -75,6 +76,7 @@ window.initKeepyUppy = function() {
 
   function resetGame() {
     dismissNamePrompt();
+    lastSubmittedScore = null;
     state = 'playing';
     score = 0; streak = 0; bestRunCombo = 1; perfects = 0;
     level = 1; earnedCoins = 0; unlockedMessage = '';
@@ -1303,6 +1305,7 @@ window.initKeepyUppy = function() {
   }
 
   function submitScore(name, sc, combo, perf) {
+    lastSubmittedScore = { name, score: sc, combo, perfects: perf };
     return fetch('/api/game-scores', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -1449,17 +1452,39 @@ window.initKeepyUppy = function() {
 
       lbData.forEach((entry, i) => {
         const y = 148 + i * 34;
-        const col = podium[i] || '#dbeafe';
+
+        // Highlight matching row
+        const isLastSubmitted = lastSubmittedScore && 
+          entry.name === lastSubmittedScore.name && 
+          entry.score === lastSubmittedScore.score && 
+          entry.combo === lastSubmittedScore.combo;
+
+        if (isLastSubmitted) {
+          ctx.fillStyle = 'rgba(65, 248, 255, 0.16)';
+          ctx.fillRect(18, y - 19, W - 36, 28);
+          ctx.strokeStyle = '#41f8ff';
+          ctx.lineWidth = 1.5;
+          ctx.strokeRect(18, y - 19, W - 36, 28);
+        }
+
+        const col = isLastSubmitted ? '#41f8ff' : (podium[i] || '#dbeafe');
         pixelText(`#${i + 1}`, 20, y, 11, col);
         const nameStr = (entry.name || '???').slice(0, 9);
         pixelText(nameStr, 50, y, 10, col);
         pixelText(String(entry.score).padStart(3, '0'), 155, y, 13, col);
-        pixelText(`x${entry.combo}`, 210, y, 10, '#ff4fd8');
-        pixelText(entry.date || '', 265, y, 9, '#94a3b8');
+        pixelText(`x${entry.combo}`, 210, y, 10, isLastSubmitted ? '#41f8ff' : '#ff4fd8');
+        pixelText(entry.date || '', 265, y, 9, isLastSubmitted ? '#a5f3fc' : '#94a3b8');
       });
     }
 
-    addButton('BACK', W/2 - 70, 478, 140, 40, () => { state = 'menu'; });
+    const canShare = (lastSubmittedScore && lastSubmittedScore.score > 0) || (data.best > 0);
+    if (canShare) {
+      const shareVal = lastSubmittedScore ? lastSubmittedScore.score : data.best;
+      addButton('BACK', W/2 - 145, 478, 135, 40, () => { state = 'menu'; });
+      addButton('SHARE', W/2 + 10, 478, 135, 40, () => { shareScore(shareVal); });
+    } else {
+      addButton('BACK', W/2 - 70, 478, 140, 40, () => { state = 'menu'; });
+    }
   }
 
   function drawInstructions() {
@@ -1537,9 +1562,10 @@ window.initKeepyUppy = function() {
     addButton('MENU',   186, 407, 148, 40, () => { dismissNamePrompt(); state = 'menu'; });
   }
 
-  async function shareScore() {
+  async function shareScore(customScore) {
+    const sVal = (typeof customScore === 'number') ? customScore : score;
     const gameUrl = 'https://www.game-buddy.co.uk/?play=true';
-    const shareText = `I scored ${score} in Keepy-Uppy King! Can you beat me?`;
+    const shareText = `I scored ${sVal} in Keepy-Uppy King! Can you beat me?`;
     const fullText = `${shareText} Play here: ${gameUrl}`;
     try {
       if (navigator.share) {
