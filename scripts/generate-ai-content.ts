@@ -43,13 +43,13 @@ async function callGemini(prompt: string, schema: any, retries = 10): Promise<an
     try {
       console.log(`🤖 Requesting Gemini (attempt ${attempt}/${retries})...`);
       const response = await ai.models.generateContent({
-        model: "gemini-2.5-flash",
+        model: "gemini-3.1-flash-lite",
         contents: finalPrompt, // Pass the combined prompt here
         config: {
           responseMimeType: "application/json",
           // 🚨 CRITICAL: responseSchema is completely removed from here 🚨
           systemInstruction: punditSystemInstruction,
-          temperature: 0.4,
+          temperature: 0.1,
         },
       });
 
@@ -801,6 +801,12 @@ ${tomorrowMatchesList}
 
 - "today_preview" key: Generate a preview for tomorrow's fixtures with headline, theBigOnes, playersToWatch.
 ` : ''}
+
+CRITICAL GROUNDING RULES:
+1. ONLY discuss matches, events, and opponents explicitly listed in the MATCH DETAILS and COMPLETED MATCH TIMELINES for today (${targetDate}). Do NOT invent other matches, scores, goalscorers, or opponents.
+2. Rely 100% on the COMPUTED ADVANCEMENT STATUS for progressionNews and teams' whatsNext fields. Do not say any team is qualified or eliminated if their status is "IN CONTENTION" or "NEEDS POINTS".
+3. For teams' "storySoFar" field, only summarize matches that have actually been played by them in the database so far. Do not invent any additional fixtures.
+4. Do not mention penalty shootouts unless they are explicitly recorded in the match events timeline.
 
 Adhere strictly to your British pundit persona: sarcastic, self-deprecating, and brutally honest. Keep all commentary grounded in the actual facts provided.
 

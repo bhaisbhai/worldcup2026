@@ -29,13 +29,13 @@ async function callGemini(prompt: string, schema: any, retries = 10): Promise<an
     try {
       console.log(`🤖 Requesting Gemini (attempt ${attempt}/${retries})...`);
       const response = await ai.models.generateContent({
-        model: "gemini-2.5-flash",
+        model: "gemini-3.1-flash-lite",
         contents: prompt,
         config: {
           responseMimeType: "application/json",
           responseSchema: schema,
           systemInstruction: punditSystemInstruction,
-          temperature: 0.4,
+          temperature: 0.1,
         },
       });
 
@@ -312,43 +312,36 @@ async function main() {
 
   console.log(`📅 Found ${dates.length} match days to analyze: ${dates.join(', ')}`);
 
-  const dailyMatchesDetails: Record<string, string> = {};
-  const dailyStandings: Record<string, string> = {};
-  const dailyAdvancement: Record<string, string> = {};
-  const properties: Record<string, any> = {};
+  masterDB.days = masterDB.days || {};
+  const daysCSVRows: string[][] = [];
+
+  const schema = {
+    type: "OBJECT",
+    properties: {
+      headline: { type: "STRING" },
+      theDrama: { type: "STRING" },
+      mustWatchHighlights: { type: "STRING" },
+      progressionNews: { type: "STRING" }
+    },
+    required: ["headline", "theDrama", "mustWatchHighlights", "progressionNews"]
+  };
 
   for (const date of dates) {
     const matches = espnMatches[date] || [];
     if (matches.length === 0) continue;
 
-    dailyMatchesDetails[date] = matches.map((m: any) => 
+    console.log(`\n🤖 Processing date retrospective summary for: ${date}...`);
+
+    const dailyMatchesStr = matches.map((m: any) => 
       `- Match: ${m.homeTeam} vs ${m.awayTeam} (Score: ${m.homeScore}-${m.awayScore}) [Status: ${m.status}], Stadium: ${m.stadium}, Stats: ${JSON.stringify(m.stats)}`
     ).join('\n');
 
     const computed = computeStandingsAndStatus(masterDB, date);
-    dailyStandings[date] = `GROUP STANDINGS (after this date's matches, ${date}):\n${computed.standingsContext}`;
-    dailyAdvancement[date] = `COMPUTED ADVANCEMENT STATUS (after this date's matches, ${date}):\n${computed.advancementStatus}`;
+    const standingsContext = `GROUP STANDINGS (after this date's matches, ${date}):\n${computed.standingsContext}`;
+    const advancementStatus = `COMPUTED ADVANCEMENT STATUS (after this date's matches, ${date}):\n${computed.advancementStatus}`;
 
-    properties[date] = {
-      type: "OBJECT",
-      properties: {
-        headline: { type: "STRING" },
-        theDrama: { type: "STRING" },
-        mustWatchHighlights: { type: "STRING" },
-        progressionNews: { type: "STRING" }
-      },
-      required: ["headline", "theDrama", "mustWatchHighlights", "progressionNews"]
-    };
-  }
-
-  const responseSchema = {
-    type: "OBJECT",
-    properties,
-    required: Object.keys(properties)
-  };
-
-  const prompt = `
-You are analyzing World Cup 2026 match days. For each date, generate a daily summary.
+    const prompt = `
+You are analyzing World Cup 2026 match days. Generate a daily summary for the date: ${date}.
 
 WORLD CUP 2026 FORMAT (critical for progression commentary):
 - 48 teams in 12 groups of 4. Top 2 from each group qualify automatically (24 teams total).
@@ -356,57 +349,50 @@ WORLD CUP 2026 FORMAT (critical for progression commentary):
 - A team finishing 3rd with 4+ points has a realistic shot; 3 points is borderline; 2 points or fewer is almost certainly out.
 - DO NOT say a 3rd-place team "might go home" or is eliminated unless their COMPUTED STATUS is explicitly ELIMINATED.
 
-ADVANCEMENT LANGUAGE RULES — YOU MUST FOLLOW THESE EXACTLY for "progressionNews" under each date:
+ADVANCEMENT LANGUAGE RULES — YOU MUST FOLLOW THESE EXACTLY for "progressionNews":
 - Status "ELIMINATED": you MAY say they are out, going home, booking flights.
 - Status "IN CONTENTION": say they are still in the hunt, have games to play, can qualify — do NOT imply they need a miracle or must win to survive.
 - Status "NEEDS POINTS": say they need a strong result to keep best-3rd hopes alive — do NOT say they're going home or must win outright to survive.
 - Status "POSSIBLE BEST-3RD": say they are in the running for a best-3rd slot, waiting on other groups — do NOT call them eliminated or suggest they need to win to survive.
 - Status "QUALIFIED": they are through — celebrate or comment accordingly.
-THE STANDINGS PROVIDED FOR EACH DATE ALREADY INCLUDE THAT DATE'S MATCH RESULTS. Trust the COMPUTED ADVANCEMENT STATUS exactly.
+THE STANDINGS PROVIDED FOR THE DATE ALREADY INCLUDE THAT DATE'S MATCH RESULTS. Trust the COMPUTED ADVANCEMENT STATUS exactly.
 VIOLATING THESE RULES (e.g. calling an IN CONTENTION or NEEDS POINTS team eliminated or saying they "must win or go home") is your single biggest failure mode. Do not do it.
 
-MATCH DETAILS, STANDINGS & ADVANCEMENT BY DATE:
-${Object.keys(dailyMatchesDetails).map(date => `
-DATE: ${date}
-${dailyMatchesDetails[date]}
+MATCH DETAILS, STANDINGS & ADVANCEMENT FOR ${date}:
+${dailyMatchesStr}
 
-${dailyStandings[date]}
+${standingsContext}
 
-${dailyAdvancement[date]}
-`).join('\n\n')}
+${advancementStatus}
 
-For each date key in the schema, provide:
-- If matches on that date are completed (Status is STATUS_FINAL or STATUS_FULL_TIME), generate a **daily recap**:
-  - headline: A funny, clickbait headline summarizing the day's events.
-  - theDrama: A short description of the main talking points, upsets, or funny moments.
-  - mustWatchHighlights: Recommending which match was the must-watch, and warning about which matches were absolute sleepfests.
-  - progressionNews: Summarize who is progressing to the knockouts, who is booking flights home, or who is in danger. You MUST base this summary ONLY on the computed Group Advancement Status provided for that day. Do NOT assume, speculate, or hallucinate team progression/elimination that is not explicitly confirmed or supported by the Group Advancement Status.
-- If matches on that date are scheduled/upcoming (Status is STATUS_SCHEDULED), generate a **daily preview build-up** (do not mention final scores or results, as the games have not been played yet!):
-  - headline: A hype-building, witty headline looking forward to the day's slate.
-  - theDrama: A funny preview of the storylines and hype surrounding the day's matches.
-  - mustWatchHighlights: Recommend which matches are the absolute must-watch blockbusters and which ones look like boring stalemates.
-  - progressionNews: What is at stake for the teams involved (e.g., who must win to survive).
+Generate a JSON object containing:
+- headline: A funny, clickbait headline summarizing the day's events.
+- theDrama: A short description of the main talking points, upsets, or funny moments.
+- mustWatchHighlights: Recommending which match was the must-watch, and warning about which matches were absolute sleepfests.
+- progressionNews: Summarize who is progressing to the knockouts, who is booking flights home, or who is in danger. You MUST base this summary ONLY on the computed Group Advancement Status provided for that day. Do NOT assume, speculate, or hallucinate team progression/elimination that is not explicitly confirmed or supported by the Group Advancement Status.
+
+If matches on this date are completed (Status is STATUS_FINAL or STATUS_FULL_TIME), generate a **daily recap**.
+If matches on this date are scheduled/upcoming (Status is STATUS_SCHEDULED), generate a **daily preview build-up** (do not mention final scores or results, as the games have not been played yet!).
+
+CRITICAL GROUNDING RULES:
+1. ONLY discuss matches and opponents explicitly listed in the MATCH DETAILS for this date. Do NOT invent other opponents or matches.
+2. Rely 100% on the COMPUTED ADVANCEMENT STATUS for progressionNews. Do not assume any team is qualified or eliminated if their status is "IN CONTENTION" or "NEEDS POINTS".
+3. Check the dates of the matches. Do not mention events from other dates.
 
 Adhere strictly to your British football pundit co-host persona: sarcastic, self-deprecating, and brutally honest. Ground every single claim in the matches and scores provided. Do not hallucinate or invent new matches.
 `;
 
-  console.log("🤖 Requesting consolidated daily recaps from Gemini...");
-  const response = await callGemini(prompt, responseSchema);
-  console.log("✅ Consolidated summaries generated successfully.");
-
-  // Save to master JSON
-  masterDB.days = masterDB.days || {};
-  const daysCSVRows: string[][] = [];
-
-  for (const date of Object.keys(response)) {
-    masterDB.days[date] = response[date];
+    const response = await callGemini(prompt, schema);
+    masterDB.days[date] = response;
     daysCSVRows.push([
       date,
-      response[date].headline,
-      response[date].theDrama,
-      response[date].mustWatchHighlights,
-      response[date].progressionNews
+      response.headline,
+      response.theDrama,
+      response.mustWatchHighlights,
+      response.progressionNews
     ]);
+
+    await sleep(2000); // 2s delay between API calls to respect rate limits
   }
 
   // Write JSON
