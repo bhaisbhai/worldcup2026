@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-23T08:03:37.089Z",
+  "lastUpdated": "2026-06-23T10:59:22.215Z",
   "teams": {
     "BIH": {
       "headline": "The Defensive Circus",
@@ -170,59 +170,59 @@
     },
     "ARG": {
       "teamCode": "ARG",
-      "headline": "Messi's Magic Secures Argentina's Spot!",
-      "storySoFar": "Two wins from two, looking dominant and clinical, with their main man delivering when it counts.",
-      "whatsNext": "QUALIFIED. They're through to the knockout stages, time to put their feet up and plan for the next round!",
-      "pubAmmo": "Messi missed a penalty, then scored two. He's just showing off, isn't he? Absolute scenes!"
+      "headline": "Argentina through, but Messi's penalty miss gave us all a fright!",
+      "storySoFar": "Two wins from two, top of Group J, and looking rather comfortable. They're doing exactly what's expected of them, which is always a bit boring, isn't it?",
+      "whatsNext": "Argentina have officially qualified for the next round. Time to put their feet up and enjoy the show, or at least try not to get any more unnecessary yellow cards.",
+      "pubAmmo": "Messi missed a penalty! Yes, you heard that right. Even the GOAT has his off days, though he quickly made up for it. Still, imagine the banter in the dressing room."
     },
     "AUT": {
       "teamCode": "AUT",
-      "headline": "Austria's World Cup Dream Dangles by a Thread!",
-      "storySoFar": "One win and two losses leaves them on three points, a tough group to navigate.",
-      "whatsNext": "ELIMINATED. Looks like they'll be booking their flights home. Three points just isn't enough in this format, is it?",
-      "pubAmmo": "They had more clearances (35) than Argentina (15) – tells you who was doing most of the defending!"
+      "headline": "Austria's World Cup dream ends with a whimper against Argentina.",
+      "storySoFar": "It's been a tough ride for Austria, managing only one win in a group that proved a bit too strong for them. Today's loss sealed their fate.",
+      "whatsNext": "Austria are eliminated from the competition. Time to book those flights home, lads. Better luck next time, eh?",
+      "pubAmmo": "They only managed one shot on target against Argentina. One! You'd get more shots on target in a Sunday League match after a few too many pints."
     },
     "FRA": {
       "teamCode": "FRA",
-      "headline": "French Flair Secures Knockout Berth!",
-      "storySoFar": "Three wins from three, top of the group, looking unstoppable and playing some liquid football.",
-      "whatsNext": "QUALIFIED. They've absolutely flown through the group stage, job done and dusted!",
-      "pubAmmo": "Mbappé scored two and still got subbed off. Manager probably just wanted to give him a rest, the poor lad."
+      "headline": "France cruise into the knockouts, Mbappé still scoring for fun.",
+      "storySoFar": "Three games, three wins, nine goals scored, and looking utterly dominant. They're making this World Cup business look far too easy.",
+      "whatsNext": "France have qualified for the next round. They'll be looking to maintain this blistering form and send a message to the rest of the competition.",
+      "pubAmmo": "Kylian Mbappé just keeps on scoring. It's almost unfair, isn't it? He's a walking highlight reel, and Iraq certainly felt the full force of it."
     },
     "IRQ": {
       "teamCode": "IRQ",
-      "headline": "Iraq's World Cup Dream Crumbles!",
-      "storySoFar": "Three losses, zero points. A tough campaign where they struggled to make an impact.",
-      "whatsNext": "ELIMINATED. Well, that's it then. Time to pack the bags, lads, it was a valiant effort but not enough.",
-      "pubAmmo": "They had more clearances than France (28 vs 9), which is usually a sign you're under the cosh, isn't it?"
+      "headline": "Iraq bow out without a whimper, failing to register a single shot on target.",
+      "storySoFar": "Three losses and zero points. It's been a World Cup to forget for Iraq, who struggled to make any impact whatsoever.",
+      "whatsNext": "Iraq are eliminated from the competition. They'll be heading home with plenty to ponder, especially how to get a shot on target.",
+      "pubAmmo": "Zero shots on target in a World Cup match. That's not just bad, that's 'did they even bring a football?' bad. A truly forgettable performance."
     },
     "NOR": {
       "teamCode": "NOR",
-      "headline": "Haaland's Heroics Send Norway Through!",
-      "storySoFar": "Three wins from three, top of the group, looking strong and clinical when it matters.",
-      "whatsNext": "QUALIFIED. They're safely through, can't argue with that! Haaland's done the business.",
-      "pubAmmo": "Haaland's two goals saved them from a real squeaky bum time finish against Senegal!"
+      "headline": "Haaland powers Norway into the next round after a nervy win.",
+      "storySoFar": "Three wins from three, ten goals scored, and a perfect record. They've shown they're not just a one-man team, but having Haaland certainly helps!",
+      "whatsNext": "Norway have qualified for the next round. They'll be buzzing after securing their spot and will be looking to carry this momentum forward.",
+      "pubAmmo": "Haaland scored two goals, because of course he did. The man's a machine, and he's dragging Norway through this tournament almost single-handedly."
     },
     "SEN": {
       "teamCode": "SEN",
-      "headline": "Senegal's World Cup Hopes Dashed!",
-      "storySoFar": "Three losses, zero points. A disappointing campaign where they couldn't convert possession into results.",
-      "whatsNext": "ELIMINATED. Absolutely gutted for them, but zero points after three games means it's an early exit.",
-      "pubAmmo": "They had almost 60% possession but still lost. Possession for possession's sake, eh?"
+      "headline": "Senegal's World Cup journey ends despite Sarr's best efforts.",
+      "storySoFar": "Three losses, zero points. It's been a tough group for Senegal, and despite showing flashes of brilliance, they just couldn't get over the line.",
+      "whatsNext": "Senegal are eliminated from the competition. A disappointing end to their campaign, but they can hold their heads high for at least trying to make a game of it.",
+      "pubAmmo": "They had more possession and more shots than Norway, but still lost. It's the classic 'all bark, no bite' scenario, isn't it?"
     },
     "JOR": {
       "teamCode": "JOR",
-      "headline": "Jordan's Journey Ends in Heartbreak!",
-      "storySoFar": "Three losses, zero points. A tough group and a difficult World Cup campaign.",
-      "whatsNext": "ELIMINATED. That's the end of the road for Jordan, sadly. They gave it a go, but it wasn't enough.",
-      "pubAmmo": "They had one corner to Algeria's ten, and still managed to concede from two of them! You hate to see it."
+      "headline": "Jordan's brave fight ends as Algeria snatch late victory.",
+      "storySoFar": "Three losses, zero points. They showed some spirit today, but ultimately, the quality of their opponents was just too much.",
+      "whatsNext": "Jordan are eliminated from the competition. They gave it a go, but alas, it wasn't enough to keep their World Cup dream alive.",
+      "pubAmmo": "Their goalkeeper made 6 saves, which tells you everything about how much pressure they were under. He earned his dinner tonight, the rest of them... less so."
     },
     "ALG": {
       "teamCode": "ALG",
-      "headline": "Algeria Stage Comeback to Secure Qualification!",
-      "storySoFar": "Two wins and one loss, showing resilience to come back and secure second place in the group.",
-      "whatsNext": "QUALIFIED. They've done enough to get themselves through to the knockouts, well played!",
-      "pubAmmo": "Conceded first but still won. Shows a bit of character, doesn't it? Proper fighting spirit."
+      "headline": "Algeria stage late comeback to secure qualification in dramatic fashion.",
+      "storySoFar": "Two wins and a loss, finishing second in Group J. They've shown resilience and a knack for scoring when it matters, which is always a good sign.",
+      "whatsNext": "Algeria have qualified for the next round. They'll be buzzing after that comeback and will be looking to build on this momentum.",
+      "pubAmmo": "Coming back from a goal down with two late goals? That's the kind of drama we love to see! They certainly know how to make 'squeaky bum time' even squeakier."
     }
   },
   "matches": {
@@ -360,47 +360,47 @@
     },
     "ARG-AUT": {
       "matchKey": "ARG-AUT",
-      "editionTitle": "World Cup 2026 Group J",
-      "snappySummary": "Messi masterclass, despite an early penalty miss, secures Argentina's qualification with a comfortable 2-0 win over Austria.",
+      "editionTitle": "Messi's Mixed Bag Masterclass Secures Argentina's Spot",
+      "snappySummary": "Argentina secured their passage to the next round with a 2-0 victory over Austria, but not before Lionel Messi decided to keep everyone on their toes with a missed penalty before bagging a brace.",
       "talkingPoints": [
-        "Lionel Messi missed an early penalty, only to bag a brace later – just showing off, isn't he?",
-        "Austria battled hard, managing a decent share of possession, but only registered one shot on target.",
-        "Multiple injury and drinks breaks made for a rather stop-start affair, disrupting any real flow."
+        "Lionel Messi's penalty miss early on had us all wondering if he'd left his magic boots at home, only for him to then casually score two goals.",
+        "Austria's lone shot on target suggests they were more interested in admiring Argentina's play than actually troubling the keeper.",
+        "Plenty of stoppages for injuries and drinks breaks, making it feel less like a World Cup match and more like a leisurely Sunday kickabout."
       ],
-      "randomQuirk": "Argentina had two injury delays and a drinks break in the first half alone, making it feel more like a casual kickabout in the park than a World Cup match."
+      "randomQuirk": "Lionel Messi, the man who usually can't miss, decided to give the Austrian keeper a bit of a break by sending his early penalty wide. Just to keep things interesting, I suppose."
     },
     "FRA-IRQ": {
       "matchKey": "FRA-IRQ",
-      "editionTitle": "World Cup 2026 Group I",
-      "snappySummary": "Clinical France, led by a Kylian Mbappé double, effortlessly dispatches Iraq 3-0 to secure their spot in the knockouts.",
+      "editionTitle": "Mbappé and Dembélé Run Riot as France Cruise Through",
+      "snappySummary": "France breezed past Iraq with a comfortable 3-0 victory, with Kylian Mbappé grabbing a brace and Ousmane Dembélé adding another to send them through to the knockouts.",
       "talkingPoints": [
-        "Kylian Mbappé was in scintillating form, bagging two goals and proving once again he's a walking cheat code.",
-        "Iraq struggled to lay a glove on France, failing to register a single shot on target throughout the entire match.",
-        "Ousmane Dembélé contributed a goal and an assist, showcasing France's embarrassment of riches in attack."
+        "France's 19 shots to Iraq's paltry 4, with zero on target for Iraq, tells you everything you need to know about the one-sided affair.",
+        "Michael Olise was pulling the strings beautifully, bagging two assists and making it all look far too easy.",
+        "Iraq's 28 clearances shows they were certainly busy, just not in the way they'd hoped, spending most of the match on the back foot."
       ],
-      "randomQuirk": "Iraq's goalkeeper, Ahmed Basil, made two saves but still conceded three, which pretty much sums up their thankless task against the French juggernaut."
+      "randomQuirk": "Iraq managed to go the entire match without a single shot on target, proving that sometimes, just sometimes, defending can be a full-time job."
     },
     "NOR-SEN": {
       "matchKey": "NOR-SEN",
-      "editionTitle": "World Cup 2026 Group I",
-      "snappySummary": "Erling Haaland's double helps Norway edge out Senegal in a five-goal thriller, securing their qualification for the next round.",
+      "editionTitle": "Haaland's Heroics Secure Norway's Progress in Five-Goal Thriller",
+      "snappySummary": "Norway edged out Senegal in a five-goal thriller, winning 3-2 thanks to a brace from the unstoppable Erling Haaland, securing their passage to the next round.",
       "talkingPoints": [
-        "Erling Haaland did what Erling Haaland does, scoring two crucial goals to propel Norway to victory.",
-        "Senegal showed real fight, with Ismaïla Sarr bagging a brace, but their late comeback wasn't enough.",
-        "Norway had less possession but were more clinical, with seven shots on target compared to Senegal's four from more attempts."
+        "Erling Haaland, the walking cheat code, bagged two goals, making it look like he was having a casual kickabout in the park.",
+        "Senegal showed some fight with Ismaïla Sarr also grabbing two goals, making Norway work for every single point.",
+        "Senegal had more possession and more shots, but Norway were clinical when it mattered, which is the sign of a team that knows how to win."
       ],
-      "randomQuirk": "Senegal had almost 60% possession and 16 shots, but still couldn't get the job done against a more efficient Norwegian side – possession for possession's sake, eh?"
+      "randomQuirk": "Despite having nearly 60% possession and more shots, Senegal still managed to lose. Proof that sometimes, just having the ball isn't enough to actually do anything with it."
     },
     "JOR-ALG": {
       "matchKey": "JOR-ALG",
-      "editionTitle": "World Cup 2026 Group J",
-      "snappySummary": "Algeria stages a comeback from a goal down to beat Jordan 2-1, securing their place in the knockout stages.",
+      "editionTitle": "Algeria's Late Comeback Sinks Jordan and Seals Qualification",
+      "snappySummary": "Algeria snatched a dramatic 2-1 victory from Jordan with two late goals, turning the game on its head after going a goal down, and securing their qualification.",
       "talkingPoints": [
-        "Jordan took a surprising lead despite having only 27.9% possession, a proper smash-and-grab attempt.",
-        "Algeria's two goals both came from corners, showing they eventually made their dominance count from set-pieces.",
-        "Riyad Mahrez delivered a crucial assist, proving his quality when it mattered most for Algeria."
+        "Jordan's early lead was a lovely bit of liquid football, but Algeria's relentless pressure eventually paid off with 72% possession and 10 corners.",
+        "Nadhir Benbouali and Amine Gouiri both scoring late goals from corners, showing Algeria's set-piece prowess when the chips were down.",
+        "Jordan's goalkeeper, Yazeed Abulaila, was absolutely heroic, making 6 saves to keep them in it for so long."
       ],
-      "randomQuirk": "Jordan had just one corner to Algeria's ten, yet managed to concede both goals from Algeria's set-pieces – a bit of Sunday League defending, that."
+      "randomQuirk": "Jordan, with a mere 27.9% possession, managed to score first. It's almost as if they thought the ball was radioactive and only wanted to touch it when absolutely necessary."
     }
   },
   "days": {
@@ -471,16 +471,16 @@
       "progressionNews": "Well, the dust has settled on a few groups! Japan, Spain, Egypt, and Iran have all QUALIFIED, doing the business and securing their spots in the knockouts. On the flip side, Tunisia, Saudi Arabia, Belgium, Cape Verde, and New Zealand are all ELIMINATED and will be heading home. Haiti and Turkey are also out. Plenty of other teams are still IN CONTENTION, with everything to play for in their final group games. Squeaky bum time for some!"
     },
     "2026-06-22": {
-      "headline": "Messi, Mbappé, Haaland – The Usual Suspects Deliver as Four Teams Book Their Tickets!",
-      "theDrama": "Today was all about the big guns flexing their muscles! Messi and Mbappé both bagged braces, while Haaland added another two to his tally, ensuring their nations cruised into the knockouts. We saw some spirited fights, particularly from Jordan and Senegal, but ultimately, the quality shone through.",
-      "mustWatchHighlights": "Norway vs Senegal was the pick of the bunch, a five-goal thriller with some proper end-to-end stuff. Argentina vs Austria had Messi magic, but France vs Iraq was a bit of a training session, and Jordan vs Algeria was a comeback, but perhaps not one for the purists.",
-      "progressionNews": "Argentina, France, Norway, and Algeria have all punched their tickets to the knockout stages – job done, lads! On the flip side, Haiti, Tunisia, Senegal, Iraq, Jordan, and Austria are all ELIMINATED. For the rest, the hunt continues, with plenty of teams still in contention for those top two spots or a best third-place finish."
+      "headline": "Messi's Penalty Ponderings, Haaland's Heroics & Late Algerian Drama!",
+      "theDrama": "Today was a proper mixed bag, wasn't it? We had Messi missing a penalty (yes, you read that right!) before bagging a brace, Haaland doing what Haaland does best with another two goals, and Algeria pulling off a dramatic late comeback. Senegal and Jordan put up a fight, but ultimately, the big guns prevailed. Plenty of injury stoppages and drinks breaks too, making some matches feel like they were played in slow motion!",
+      "mustWatchHighlights": "If you missed Norway vs. Senegal, you missed a five-goal thriller with Haaland and Sarr both bagging braces – absolute scenes! Jordan vs. Algeria also had a cracking late comeback. As for the sleepfests? Iraq's performance against France, with zero shots on target, was about as exciting as watching paint dry.",
+      "progressionNews": "Well, the big news is that France, Norway, Argentina, and Algeria have all officially qualified for the next round, so they can put their feet up! On the flip side, Haiti, Tunisia, Senegal, Iraq, Austria, and Jordan are all eliminated and will be booking their flights home. The rest of the teams are still very much in contention, with everything to play for in their final group games. Squeaky bum time for many, I reckon!"
     }
   },
   "today_preview": {
-    "headline": "England and Portugal in Action – Will the Big Boys Deliver or Bottle It?",
-    "theBigOnes": "England vs Ghana is the one everyone's got their eyes on, can Southgate's men keep up the momentum? Portugal vs Uzbekistan also promises some fireworks, with Ronaldo always a threat to light up the pitch. Panama vs Croatia and Colombia vs Congo DR round out a busy day.",
-    "playersToWatch": "Keep an eye on England's main man, whoever that is this week, and of course, Cristiano Ronaldo for Portugal – he's still got it, hasn't he? We'll also be watching for any dark horses to emerge from the other fixtures.",
+    "headline": "Tomorrow's Tea-Time Treats: England's Next Test & Portugal's Prowess!",
+    "theBigOnes": "Tomorrow promises some cracking encounters! England against Ghana is always going to be a fiery affair, with both teams looking to stamp their authority. And Portugal facing Uzbekistan will be one to watch, as Ronaldo and co. look to build on their start. Panama vs. Croatia and Colombia vs. DR Congo also have plenty at stake, so don't you dare miss them!",
+    "playersToWatch": "Keep an eye on England's main man, whoever that might be, to see if they can get on the scoresheet. For Portugal, all eyes will be on the usual suspects to see if they can produce some liquid football. And in the other games, expect some passionate performances as teams fight for every single point!",
     "firstKickoffTime": "2026-06-23T17:00Z"
   },
   "espnMatches": {
