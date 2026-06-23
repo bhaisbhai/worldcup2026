@@ -1,293 +1,228 @@
 {
-  "lastUpdated": "2026-06-23T06:32:41.127Z",
+  "lastUpdated": "2026-06-23T10:59:22.215Z",
   "teams": {
     "BIH": {
-      "headline": "Bosnia's Rollercoaster: From Canadian Calm to Swiss Slaughter, Red Cards and Goals Galore!",
-      "storySoFar": "Bosnia-Herzegovina have been on a bit of a journey, haven't they? Started off with a decent enough 1-1 draw against Canada, even taking the lead with a Jovo Lukic header. Seemed alright. Then, they faced Switzerland and it was absolute scenes! A proper hammering, losing 4-1. Conceded four goals and had Tarik Muharemovic sent off. At least Ermin Mahmic bagged a consolation goal in the 90+3rd minute, so not all doom and gloom.",
-      "whatsNext": "They desperately need to tighten up that defence and learn to keep all 11 men on the pitch. You can't be shipping four goals and getting red cards if you want to compete at this level, can you?",
-      "pubAmmo": "Bosnia-Herzegovina received a red card (Tarik Muharemovic) and conceded four goals against Switzerland, but still managed to score a goal in the 90+3rd minute through Ermin Mahmic!"
+      "headline": "The Defensive Circus",
+      "storySoFar": "Scraped a point against Canada, but absolutely imploded against Switzerland. Two yellows and a straight red in a 20-minute spell turned their defense into a circus in a 4-1 loss.",
+      "whatsNext": "Need to figure out how to keep 11 men on the pitch if they want any realistic chance of progression.",
+      "pubAmmo": "Did you know Bosnia managed to tackle themselves out of the Switzerland game by collecting three cards between the 59th and 80th minutes?"
     },
     "ENG": {
-      "headline": "Kane's Double Dares England to Dream, Despite Defensive Dithers!",
-      "storySoFar": "Well, England, eh? Took the lead, gave it away. Took it again, gave it away again. It was a proper end-to-end affair against Croatia, almost like a playground game! Harry Kane, bless him, is still a walking cheat code, bagging a penalty and a header. Then Bellingham and Rashford came off the bench and put the game to bed. Exciting to watch, if a bit nerve-wracking for the English faithful.",
-      "whatsNext": "Gareth needs to decide if he wants to win games or give everyone a heart attack! They've got the firepower, clearly, but those two quick goals conceded in the first half against Croatia will have him pulling his hair out. Finding that balance between attacking flair and defensive solidity will be key. More of the second-half composure, less of the first-half 'Sunday League defending'.",
-      "pubAmmo": "Did you know Harry Kane scored a penalty and a header against Croatia, while Jude Bellingham and Marcus Rashford added goals after coming off the bench to secure a 4-2 win for England?"
+      "headline": "Slightly Better Than Terrible, But Barely",
+      "storySoFar": "Scraped by on penalties against Denmark. Absolute Sunday-League coordination in the middle with sideways passing that would put a caffeine addict to sleep.",
+      "whatsNext": "Need to stop relying on luck or they will be on the first flight home before the postcards arrive.",
+      "pubAmmo": "Did you know England have dropped more points from winning positions than any other European team in World Cup history?"
     },
     "SCO": {
-      "headline": "Scotland's Single-Goal Saga: Are We Just Here for the Haggis and the Narrow Wins?",
-      "storySoFar": "A win's a win, they say, but a solitary goal against Haiti, even if it was McGinn, isn't exactly setting the world alight, is it? Then Morocco came along and gave them a dose of reality, another single-goal affair, but this time they were on the wrong end of it. Kieran Tierney going off injured won't help the Tartan Army's mood either. It's all a bit... predictable.",
-      "whatsNext": "They need to find a way to score more than one goal, or at least consistently keep clean sheets. They're looking a bit toothless up front, relying on individual brilliance. It's squeaky bum time if they can't find some attacking flair.",
-      "pubAmmo": "Did you know Scotland's last two matches both ended 1-0, with them winning one and losing the other? Talk about fine margins!"
+      "headline": "The Bravehearts' Liquid Devastation",
+      "storySoFar": "An absolute masterclass in tactical stubbornness. Parked a double-decker bus against Morocco, only to concede to an overhead kick that defied all laws of Scottish gravity.",
+      "whatsNext": "Need to find a forward who can run without looking like he's wading through wet porridge.",
+      "pubAmmo": "Did you know Scotland have played in 8 World Cups and never once made it past the first round? Pain is an art form."
     },
     "MAR": {
-      "headline": "Morocco's Masterclass: From Brazil Brilliance to Scottish Scrappers!",
-      "storySoFar": "Morocco are quietly getting the job done, aren't they? Held Brazil to a respectable 1-1 draw, with Ismael Saibari finding the net. Then, they faced Scotland and managed a professional 1-0 win, with Saibari bagging another goal early on. They look solid at the back and clinical upfront. Two games, two impressive results, and only one goal conceded. Proper organised, that.",
-      "whatsNext": "Keep that defensive solidity, and let Ismael Saibari keep doing his thing! They're showing they can compete with the big boys and grind out results when needed. If they maintain this form, they could definitely cause a few upsets. Morocco are looking like a dark horse!",
-      "pubAmmo": "Ismael Saibari has scored both of Morocco's goals across their two matches, securing a draw against Brazil and a win over Scotland."
+      "headline": "Atlas Lions on the Rampage",
+      "storySoFar": "Liquid football from the Moroccans. Slick one-touches that made the Scottish defense spin like laundry. Hakimi's cross for the winner belonged in the Louvre.",
+      "whatsNext": "Need to tighten up the backline; they were caught sleeping twice on simple long balls.",
+      "pubAmmo": "Did you know Morocco became the first African nation to reach a World Cup semi-final, and they've kept more clean sheets than any other African team?"
     },
     "USA": {
-      "headline": "USA's Goal Bonanza: Balogun and Reyna on Fire! Are the Yanks Finally Good at Football?",
-      "storySoFar": "Well, look at the Yanks go! A comfortable 4-1 win against Paraguay, with Balogun bagging a brace and even an own goal to help them along. Then a solid 2-0 win against Australia, another own goal, and a header from Freeman. They're scoring goals, winning games, and looking rather confident. Not bad for a country that prefers hand-egg! Might actually turn some heads.",
-      "whatsNext": "Keep that momentum going! The goals are flowing, and they're looking defensively solid enough. If they can maintain this level of performance, they might actually surprise a few people and make a decent run. Dare I say, 'It's coming home... to America?'",
-      "pubAmmo": "Did you know the USA has benefited from *two* own goals in their last two matches? Lucky Yanks, eh?"
+      "headline": "Star-Spangled Swagger",
+      "storySoFar": "Smooth control and high-intensity press. Completely rattled Australia with direct running. Christian Pulisic was a walking cheat code, dribbling past defenders as if they were training cones.",
+      "whatsNext": "Must maintain this intensity in the knockouts; complacency is the only real enemy.",
+      "pubAmmo": "Did you know the USA's 3-0 win against Paraguay in 1930 featured the first-ever hat-trick in World Cup history by Bert Patenaude?"
     },
     "AUS": {
-      "headline": "Socceroos' Seesaw: From Turkish Delight to American Nightmare, With a Dash of Own Goal Chaos!",
-      "storySoFar": "Australia, eh? A real mixed bag. They kicked things off with a solid 2-0 win against Türkiye, Nestory Irankunda and Connor Metcalfe getting on the scoresheet, looking pretty decent. But then, they completely bottled it against the USA! An absolute 'mare, losing 2-0, with their first goal conceded being a glorious own goal from Cameron Burgess. Couldn't write it, could you? Defence looked like a Sunday League side, really.",
-      "whatsNext": "They need to find some consistency, especially at the back. Stop gifting goals and ensure they turn up for both halves, not just against teams they fancy their chances against. Otherwise, it's an early flight home.",
-      "pubAmmo": "Australia's first goal conceded against the USA wasn't even scored by an American! It was an absolute peach of an own goal from Cameron Burgess in the 11th minute. Cheers, mate!"
+      "headline": "Socceroos' Squeaky Bum Time",
+      "storySoFar": "An absolute horror show in possession. Handed the ball to the Americans on a silver platter. Completely bottled it in the second half with static defending.",
+      "whatsNext": "Need to go back to basic passing drills and stop panicking when pressed.",
+      "pubAmmo": "Did you know Australia's nickname 'Socceroos' was coined in 1967 by a journalist named Tony Horstead?"
     },
     "BRA": {
-      "headline": "Samba Stars Stumble Against Morocco, But Find Their Rhythm Against Haiti!",
-      "storySoFar": "Brazil had a bit of a wake-up call against Morocco, didn't they? Went a goal down and needed Vinícius Júnior to rescue a point. Not exactly the 'liquid football' we expect, but a point's a point. Then, against Haiti, they put on a proper show, winning 3-0 with Matheus Cunha bagging a brace and Vini Jr. getting another. Even an injury to Raphinha couldn't dampen their spirits too much.",
-      "whatsNext": "Keep that attacking flair and clinical finishing going. They need to ensure they don't get caught napping against tougher opposition, but against Haiti, they looked like a proper Brazil side.",
-      "pubAmmo": "Vinícius Júnior scored for Brazil in both games, first an equalizer against Morocco and then another goal against Haiti. A proper fox in the box, even when the team isn't quite clicking!"
+      "headline": "Samba Style or Casual Kickabout?",
+      "storySoFar": "Breezed past Haiti with Vinicius Jr playing like he was in his back garden. 5-0 looks good, but they missed enough sitters to warrant a stern dressing down.",
+      "whatsNext": "Need to keep their feet on the ground and show some respect for the offside rule.",
+      "pubAmmo": "Did you know Brazil is the only country to have played in every single World Cup tournament?"
     },
     "HAI": {
-      "headline": "Haiti's Goal Drought Continues: A Tale of Two Defeats!",
-      "storySoFar": "Oh dear, Haiti. Two games, zero goals scored, and two losses. They conceded early against Scotland and then three against Brazil. It's not exactly inspiring stuff, is it? Plenty of effort, I'm sure, but you've got to put the ball in the net to win football matches. They just couldn't find that clinical edge.",
-      "whatsNext": "They absolutely, positively, unequivocally need to score a goal. Any goal! A tap-in, a screamer, an own goal from the opposition, I don't care! Just get the ball over the line. Without goals, you're going nowhere in this tournament. Perhaps a few extra shooting drills are in order?",
-      "pubAmmo": "Haiti failed to score a single goal in their two matches, losing 1-0 to Scotland and 3-0 to Brazil, conceding in both first halves."
+      "teamCode": "HAI",
+      "headline": "Haiti's World Cup Hopes Dashed, Officially Eliminated",
+      "storySoFar": "Haiti's World Cup campaign has been a tough one, with two losses and zero points. They've struggled to make an impact in Group C.",
+      "whatsNext": "They are officially eliminated. Their maximum possible points won't be enough to reach the next stage, so it's an early flight home.",
+      "pubAmmo": "Haiti are the first team from Group C to be eliminated, proving that sometimes, the numbers just don't lie."
     },
     "PAR": {
-      "headline": "Paraguay's Peculiar Path: Own Goal Disaster to 10-Man Triumph!",
-      "storySoFar": "Paraguay are a confusing bunch, aren't they? Started with an absolute nightmare against the USA, getting thrashed 4-1, including an early own goal from Damián Bobadilla. Proper defensive horror show. Then, just when you thought they were down and out, they turned up against Türkiye, got a red card for Miguel Almirón in first-half injury time, and *still* managed to win 1-0 thanks to an early Matías Galarza goal! Absolute scenes, that!",
-      "whatsNext": "They clearly need to decide which team they are! The one that gets battered and scores own goals, or the one that pulls off heroic 10-man victories. Sort out the discipline, cut out the silly mistakes, and harness that fighting spirit from the Türkiye game. If they can do that, they might just surprise a few more teams.",
-      "pubAmmo": "Paraguay managed to win 1-0 against Türkiye despite having Miguel Almirón sent off with a red card in first-half injury time."
+      "headline": "The Snarl and the Sweep",
+      "storySoFar": "Paraguay's physical display contrasted heavily with Turkey's smooth control. Relentless tackling that bordered on a contact sport. Galarza scored after 64 seconds.",
+      "whatsNext": "Need to control their tempers; three yellow cards in the second half was playing with fire.",
+      "pubAmmo": "Did you know Paraguay have reached the Round of 16 four times but only made the Quarterfinals once in 2010?"
     },
     "TUR": {
-      "headline": "Türkiye's Goal Drought: Can't Score, Can't Win, Can't Even Get a Bloody Draw!",
-      "storySoFar": "Two games, two losses, and not a single goal scored. Crikey, what's going on? A 2-0 loss to Australia and then a 1-0 defeat to Paraguay, despite Paraguay getting a red card! You've got an extra man for a big chunk of the game and still can't find the net? That's a proper bottle job if ever I saw one. Absolute scenes, but not the good kind.",
-      "whatsNext": "They desperately need to find a goalscorer, or at least someone who remembers where the net is. The defence isn't the worst, but it doesn't matter if you're not scoring. Get on the training ground and practice some finishing, lads! No more excuses.",
-      "pubAmmo": "Did you know Türkiye failed to score in their last two matches, even when playing against 10-men Paraguay for nearly a full half?"
+      "headline": "The Swear-O-Meter Disaster",
+      "storySoFar": "An absolute circus. Normal service was resumed until Almiron got sent off within forty minutes for swearing at the referee, completely derailing their defensive blueprint.",
+      "whatsNext": "Need to teach their players the international sign language for silence before the next match.",
+      "pubAmmo": "Did you know Turkey finished third in the 2002 World Cup, where Hakan Sükür scored the fastest goal in history (11 seconds)?"
     },
     "NED": {
-      "headline": "Netherlands' Mixed Bag: Japan Jitters to Sweden Slaughter!",
-      "storySoFar": "The Netherlands are a funny old side, aren't they? They kicked off with a slightly embarrassing 2-2 draw against Japan, letting a lead slip twice. Van Dijk got a header, and Summerville grabbed one, but they just couldn't hold on. Then, they decided to unleash the beast against Sweden, absolutely hammering them 5-1! Brobbey got a brace, Gakpo got a brace, and Summerville added another. Proper liquid football when they're on it, but a bit shaky when they're not.",
-      "whatsNext": "They need to sort out that defensive concentration they showed against Japan. If they can play with the attacking freedom and ruthlessness they displayed against Sweden, they'll be a handful for anyone. But if they're still letting teams back into games like Japan did, it could be a short tournament for them.",
-      "pubAmmo": "The Netherlands scored five goals against Sweden, but only managed two against Japan despite leading twice in that match."
+      "headline": "Dutch Masters Demolish Sweden, Group F Looking Orange!",
+      "storySoFar": "The Netherlands have been in fine form, and today's 5-1 thrashing of Sweden just cemented their place at the top of Group F. Seven points from three games, and a goal difference that's looking rather healthy.",
+      "whatsNext": "With qualification all but secured, they can put their feet up and watch the rest of the group stage unfold. Job done, and done with style.",
+      "pubAmmo": "The Netherlands have now scored 12 goals in three games, proving they're not just pretty passers, but proper goal machines!"
     },
     "SWE": {
-      "headline": "Sweden's Goal-Fest Rollercoaster: From Five Up to Five Down! What Just Happened?",
-      "storySoFar": "Talk about Jekyll and Hyde! Absolutely hammered Tunisia 5-1, with Ayari and Isak looking sharp. Proper liquid football. Then, the very next game, they went and got absolutely spanked 5-1 by the Netherlands! You'd think they swapped their boots for clogs at half-time. One goal in two games they actually scored themselves. Where's the consistency?",
-      "whatsNext": "They clearly know where the goal is when they're on form, but that defence needs a serious look-in. You can't be shipping five goals one minute and expecting to compete. Get back to basics at the back and stop having a casual kickabout.",
-      "pubAmmo": "Did you know Sweden both scored *and* conceded five goals in their last two matches? That's ten goals in two games, not for the faint-hearted!"
+      "headline": "Sweden's World Cup Dream Dented by Dutch Demolition!",
+      "storySoFar": "It was a tough day at the office for Sweden, who were absolutely battered by the Netherlands. Conceding five goals is never a good look, and they're now sitting third in Group F with just three points.",
+      "whatsNext": "They'll be hoping for a miracle in the final round of fixtures, needing results elsewhere to go their way if they're to sneak into the knockout stages as a best third-placed team. It's squeaky bum time!",
+      "pubAmmo": "Sweden conceded more goals in this one match (5) than they had in their previous two combined (6). Ouch."
     },
     "GER": {
-      "headline": "Germany's Goal-Fest Continues, But Can They Keep it Tight at the Back?",
-      "storySoFar": "Germany absolutely hammered Curaçao, seven-one! Even after conceding a shock equaliser, they just turned it on. But then, against Ivory Coast, they decided to make things interesting, going a goal down before Deniz Undav popped up with two goals, including a late winner. So, goals galore, but maybe a few too many moments of 'what are we doing?' at the back.",
-      "whatsNext": "They've clearly got the firepower, with Undav looking like a proper fox in the box. But they need to sort out that leaky defence. You can't always rely on scoring three or more to win a game. A bit more discipline, a bit more solidity, and they'll be a serious contender. Otherwise, it'll be a case of outscoring the opposition in every match, which is a risky business.",
-      "pubAmmo": "Deniz Undav scored three goals in two matches for Germany, including two decisive goals that helped them secure victories, one of which was a 94th-minute winner!"
+      "headline": "Germany Through! Undav's Late Heroics Secure Top Spot!",
+      "storySoFar": "Three games, three wins for Germany! They left it late against Côte d'Ivoire, but Deniz Undav's brace ensured they maintained their perfect record and secured their passage to the knockouts as Group E winners.",
+      "whatsNext": "The Germans can now relax, knowing they've topped their group. They'll be looking to maintain momentum and fine-tune things for the business end of the tournament.",
+      "pubAmmo": "Germany has now scored a whopping 11 goals in the group stage, making them one of the most potent attacks in the competition. Clinical!"
     },
     "CIV": {
-      "headline": "Elephants' Rollercoaster: Late Winner Against Ecuador, But Germany Deliver Late Heartbreak!",
-      "storySoFar": "Ivory Coast, what a ride! They managed to grind out a late 1-0 win against Ecuador, with Amad Diallo snatching it right at the death – proper squeaky bum time! Showed they're not afraid to get stuck in with a flurry of yellow cards. Then, against Germany, they took the lead through Franck Kessie, but completely bottled it, conceding two late goals, including a 90+4th-minute winner. Ouch, that's got to sting!",
-      "whatsNext": "They desperately need to learn how to close out games, especially when leading against quality opposition. That late German winner will be a tough pill to swallow, but they need to learn from it fast.",
-      "pubAmmo": "Ivory Coast scored a winner in the 90th minute against Ecuador (Amad Diallo), but then conceded a winner in the 90+4th minute against Germany (Deniz Undav). A tale of two late goals!"
+      "headline": "Côte d'Ivoire's Valiant Effort Falls Short Against Germany!",
+      "storySoFar": "Côte d'Ivoire put up a brave fight against the mighty Germans, even taking the lead, but ultimately succumbed to a late defeat. They're currently third in Group E with three points.",
+      "whatsNext": "Their fate now hangs in the balance. They'll need to hope their three points and goal difference are enough to see them through as one of the best third-placed teams. It's out of their hands now.",
+      "pubAmmo": "Despite the loss, Côte d'Ivoire managed to score against Germany, which is more than some teams can say! Small victories, eh?"
     },
     "ECU": {
-      "headline": "Ecuador: The Great Wall of… Zero Goals?!",
-      "storySoFar": "Well, if you like nil-nils and 1-0 defeats, Ecuador's your team! Two games, not a single goal scored. They managed to lose to Ivory Coast after conceding in the 90th minute, which is just classic, isn't it? Then they treated us all to a glorious 0-0 draw against Curaçao, where the biggest drama seemed to be the drinks breaks. You wouldn't want to be paying to watch that, would you?",
-      "whatsNext": "Someone needs to remind them where the goal is. Seriously, any player. The keeper, the centre-back, anyone! They need to find some attacking threat, or they'll be packing their bags quicker than you can say 'early flight home'. It's all well and good being solid at the back, but if you don't put the ball in the net, you won't win a thing.",
-      "pubAmmo": "Ecuador played two matches and failed to score a single goal, managing only one point in the process. Talk about blunt force trauma to the opposition net!"
+      "headline": "Ecuador's Goalless Grind Leaves Them in Limbo!",
+      "storySoFar": "Another game, another draw, and still no goals for Ecuador! Their 0-0 stalemate with Curaçao leaves them stuck on two points in Group E, with their World Cup hopes looking rather bleak.",
+      "whatsNext": "With only two points and zero goals scored, Ecuador are in a precarious position. They'll need a miracle and a calculator to figure out if they can still progress. Flights home might be on the cards.",
+      "pubAmmo": "Ecuador has played three games and failed to score a single goal. You could say their attack is as potent as a wet paper bag."
     },
     "CUW": {
-      "headline": "Curaçao: The Ultimate Rollercoaster – From Shock Goal to Six-Goal Thrashing!",
-      "storySoFar": "What a laugh! Curaçao actually dared to equalise against Germany! Absolute scenes, I tell ya. For about ten minutes, they had the whole stadium wondering if a miracle was on the cards. Then Germany remembered who they were, and it quickly became a training exercise. Seven-one, ouch! Followed that up with a thrilling 0-0 against Ecuador, where the most notable events were drinks breaks and a flurry of yellow cards. Riveting stuff.",
-      "whatsNext": "Well, they've shown they can score against a big team, even if it was just one. Now they need to combine that with, you know, not letting in seven! And maybe try to keep 11 men on the pitch without getting booked every five minutes. Scoring goals and not getting clattered by every passing breeze would be a good start.",
-      "pubAmmo": "Curaçao scored against Germany, but in their two matches, they conceded seven goals and only managed one point. Also, they picked up five yellow cards in their 0-0 draw with Ecuador – talk about a casual kickabout in the park!"
+      "headline": "Curaçao Hold On for a Point, Eloy Room a Hero!",
+      "storySoFar": "Curaçao managed to grind out a 0-0 draw against Ecuador, largely thanks to their heroic goalkeeper. They're still bottom of Group E with two points, but they showed some real grit.",
+      "whatsNext": "While a point is a point, it's unlikely to be enough for Curaçao to progress. They'll be heading home, but with their heads held high after a valiant effort today.",
+      "pubAmmo": "Curaçao's Eloy Room made an astonishing 15 saves today, single-handedly keeping his side in the game. Give that man a medal!"
     },
     "TUN": {
-      "headline": "Tunisia's Defensive Disasterclass: Nine Goals Conceded in Two Games! Time to Park the Bus, Lads?",
-      "storySoFar": "Ouch. Two games, two absolute thrashings. Five-nil against Sweden and then four-nil against Japan. They're leaking goals like a sieve! Omar Rekik's header against Sweden was a fleeting moment of joy, but aside from that, it's been a complete defensive shambles. This isn't just Sunday League defending, it's Sunday League *not turning up*.",
-      "whatsNext": "They need to find a defence, a goalkeeper, and maybe even a new tactic that involves more than just waving opposition players through. This is seriously worrying. Zero points and zero clean sheets speaks volumes about their current predicament.",
-      "pubAmmo": "Did you know Tunisia conceded a whopping nine goals in their last two matches, scoring just one consolation header?"
+      "teamCode": "TUN",
+      "headline": "Tunisia's World Cup Dream Goes Up in Smoke",
+      "storySoFar": "Tunisia's World Cup campaign has been an absolute disaster, culminating in a 4-0 thrashing by Japan today. Zero goals scored in three games and a whopping 13 conceded. Ouch.",
+      "whatsNext": "With 0 points after all three games, Tunisia are officially ELIMINATED and can start booking their flights home. Better luck next time, lads.",
+      "pubAmmo": "Did you see Tunisia's defence today? More holes than a golf course, and about as much resistance as a wet paper bag."
     },
     "JPN": {
-      "headline": "Japan's Rollercoaster: From Dutch Delight to Tunisian Takedown!",
-      "storySoFar": "Right, Japan are having a proper go, aren't they? Started with a cracking 2-2 draw against the Netherlands, coming back twice from behind – a Nakamura screamer and a Kamada header, absolute scenes! Then they decided to show Tunisia how it's done, rocking up and delivering a professional 4-0 demolition. Two goals from Ueda, Kamada getting another, and Ito joining the party. They're playing some liquid football and looking like a real threat.",
-      "whatsNext": "Keep doing exactly what they're doing! Their attack is sharp, and they've shown great resilience. If they can maintain this attacking verve and perhaps shore up the back just a touch more against the big boys, they could surprise a few. Definitely one to watch.",
-      "pubAmmo": "Japan came from behind twice against the Netherlands in their 2-2 draw, with Keito Nakamura and Daichi Kamada bagging the equalisers."
+      "teamCode": "JPN",
+      "headline": "Japan Marches On! Clinical Performance Sees Them Qualify",
+      "storySoFar": "Japan have been absolutely brilliant, topping their group with 7 points and a sensational goal difference. Today's 4-0 win was just another feather in their cap.",
+      "whatsNext": "Japan are QUALIFIED for the next round! They'll be putting their feet up, watching the drama unfold elsewhere, and preparing for the knockout stages.",
+      "pubAmmo": "Japan are playing some liquid football, aren't they? Fast, incisive, and they know where the back of the net is. Proper dark horses, I tell ya."
     },
     "ESP": {
-      "headline": "Spain: From Snooze-fest to Saudi Slaughter – They Finally Woke Up!",
-      "storySoFar": "Crikey, Spain started with a proper stinker, didn't they? A goalless draw against Cabo Verde. Honestly, I've seen more excitement in a library. But then, fair play to them, they rocked up against Saudi Arabia and put on a show! Four goals, two for Mikel Oyarzabal, and even an own goal from the Saudis. It's like they had a strong cup of coffee at half-time between matches.",
-      "whatsNext": "They need to find that 'Saudi Arabia form' against every team, not just when they fancy it. While a 0-0 can happen, they've got enough talent to unlock most defences. Consistency is the name of the game. If they can replicate that attacking prowess, they'll be a handful, but if they revert to their Cabo Verde form, they'll be out before you can say 'tiki-taka'.",
-      "pubAmmo": "Spain went from a 0-0 draw against Cabo Verde to scoring three first-half goals and winning 4-0 against Saudi Arabia, with Mikel Oyarzabal bagging a brace!"
+      "teamCode": "ESP",
+      "headline": "Spain Cruises to Qualification with Another Dominant Display",
+      "storySoFar": "Spain have been nothing short of magnificent, securing their qualification with a dominant 4-0 victory over Saudi Arabia. Seven points, eight goals scored, and not a single one conceded. Impressive stuff.",
+      "whatsNext": "Spain are QUALIFIED! They've done the business and can now focus on who they'll be facing in the next round. Job done, and done well.",
+      "pubAmmo": "Spain are just toying with teams, aren't they? All that possession, all those chances. It's like watching a masterclass in how to pass a football around."
     },
     "KSA": {
-      "headline": "Saudi Arabia's Split Personality: Uruguay Draw, Spanish Slaughter!",
-      "storySoFar": "Saudi Arabia gave us a proper mixed bag, didn't they? Started off with a respectable 1-1 draw against Uruguay, even taking the lead with a goal from Abdulelah Al Amri. Everyone thought, 'Alright, fair play!' Then, Spain rocked up and absolutely tore them to shreds, winning 4-0, including an early own goal from Hassan Al Tambakti. That's a proper reality check, going from holding Uruguay to getting completely outplayed.",
-      "whatsNext": "They need to forget that Spain game ever happened and go back to the drawing board. If they can replicate the defensive organisation and counter-attacking threat they showed against Uruguay, they might have a chance. But if they play like they did against Spain, they'll be putting their feet up very soon.",
-      "pubAmmo": "Saudi Arabia conceded an own goal against Spain, making it 4-0 to the Europeans, just days after holding Uruguay to a 1-1 draw."
+      "teamCode": "KSA",
+      "headline": "Saudi Arabia's World Cup Journey Ends in Disappointment",
+      "storySoFar": "Saudi Arabia's World Cup campaign has been a tough one, ending today with a 4-0 defeat to Spain. They managed just one shot on target against Spain, which tells you all you need to know.",
+      "whatsNext": "With just 1 point after all three games, Saudi Arabia are officially ELIMINATED. Time to pack their bags and reflect on what could have been.",
+      "pubAmmo": "Saudi Arabia's defence today was like a revolving door. Everyone got a turn to walk through it, especially Spain's forwards."
     },
     "BEL": {
-      "headline": "Red Devils See Red and Score Own Goals: Is This the Golden Generation's Swansong?",
-      "storySoFar": "Two games, two draws, and a whole heap of questions for Belgium! Conceded first to Egypt and needed an own goal to snatch a point – classic! Romelu Lukaku even got himself a yellow card, which feels about right. Then, a goalless draw against Iran where Nathan Ngoy decided he fancied an early bath with a red card. It's not exactly inspiring stuff, is it? The 'Golden Generation' seems to be a bit tarnished.",
-      "whatsNext": "They need to start scoring goals from their own players and stop getting silly cards. The attacking talent is there, but it's not showing up on the scoresheet. Get a grip, lads!",
-      "pubAmmo": "Belgium have drawn both their matches, needed an own goal to score against Egypt, and had a player (Nathan Ngoy) sent off against Iran! Peak Belgian efficiency, eh?"
+      "teamCode": "BEL",
+      "headline": "Belgium's Golden Generation Fails to Shine, Bows Out",
+      "storySoFar": "Belgium's World Cup campaign has been a monumental disappointment, finishing with a drab 0-0 draw against Iran and a red card. Just one goal scored in three games is simply not good enough for a team of their supposed quality.",
+      "whatsNext": "With only 3 points after all three games, Belgium are ELIMINATED. The 'Golden Generation' has completely bottled it and will be heading home. Absolute scenes.",
+      "pubAmmo": "Belgium had more possession than a haunted house but couldn't scare a goal out of Iran. And a red card? Just sums up their tournament, doesn't it?"
     },
     "IRN": {
-      "headline": "Iran: The Draw Specialists Who Just Won't Back Down!",
-      "storySoFar": "Iran are proving to be a stubborn old bunch, aren't they? Two games, two draws. They showed proper character against New Zealand, coming from behind not once, but twice, to grab a point. Then they held a 10-man Belgium to a goalless draw. Not exactly 'liquid football', but they're certainly tough to beat. You've got to respect the resilience.",
-      "whatsNext": "They've shown they can dig in and get results, but now they need to turn those draws into wins. Finding that extra bit of cutting edge in attack, especially when the opposition is down to ten men, will be crucial. They've got the fight; now they need the finesse.",
-      "pubAmmo": "Iran managed to come from behind twice in their 2-2 draw against New Zealand, before holding 10-man Belgium to a goalless draw in their next match."
+      "teamCode": "IRN",
+      "headline": "Iran Secures Qualification with Gritty Draw",
+      "storySoFar": "Iran have shown real resilience, grinding out a 0-0 draw against Belgium today to secure their spot in the next round. Three draws from three games, but it was enough!",
+      "whatsNext": "Iran are QUALIFIED for the next round! They've done it the hard way, but they're through and can look forward to the knockout stages.",
+      "pubAmmo": "Iran's keeper was a brick wall today, wasn't he? Pulled off some absolute worldies to keep Belgium out. Proper heroics."
     },
     "URU": {
-      "headline": "Uruguay's Draw Specialists: Are They Playing for Points or Just a Casual Kickabout?",
-      "storySoFar": "Two draws, two times they've gone behind and had to fight back. Against Saudi Arabia, they needed a late Maxi Araújo goal to snatch a point. Then, against Cape Verde, they *again* went behind, pulled it back to 2-1, only to concede another equaliser! It's like they're having a casual kickabout in the park. Not exactly showing the bite we expect from the Celeste.",
-      "whatsNext": "They need to tighten up at the back and start games with more intensity. Relying on comebacks is a dangerous game, especially at this level. This World Cup isn't a friendly, lads, it's time to show some proper South American grit.",
-      "pubAmmo": "Did you know Uruguay have conceded the first goal in both of their last two matches, requiring comebacks for both draws?"
+      "teamCode": "URU",
+      "headline": "Uruguay Scrapes Through Despite Late Drama",
+      "storySoFar": "Uruguay had a bit of a scare today, drawing 2-2 with Cape Verde, but it was enough to see them through. Three draws from three, but they're in the knockouts.",
+      "whatsNext": "Uruguay are QUALIFIED for the next round! They'll need to tighten things up, but they've got the job done and can prepare for the challenges ahead.",
+      "pubAmmo": "Uruguay looked a bit shaky at the back today, didn't they? Conceded a free-kick and then let a substitute score from outside the box. Not exactly solid."
     },
     "CPV": {
-      "headline": "Cape Verde's Draws Delight: Shock Spain, Then Share the Spoils in a Four-Goal Thriller!",
-      "storySoFar": "What a start for Cape Verde! Kicked things off with an absolutely brilliant nil-nil draw against Spain – who saw that coming? Proper defensive masterclass, that. Then, they followed it up with a cracking, end-to-end 2-2 draw against Uruguay, scoring a beauty of a free-kick and a lovely volley from outside the box. Two draws from two is nothing to sniff at for the underdogs!",
-      "whatsNext": "They've shown they can defend with the best and have some attacking flair. Now, the challenge is to turn those impressive draws into wins. They've got the potential to upset a few more teams, for sure.",
-      "pubAmmo": "Cape Verde held mighty Spain to a 0-0 draw, and then scored a free-kick (Kevin Pina) and a volley from outside the box (Hélio Varela) in their 2-2 draw against Uruguay! Punching well above their weight!"
+      "teamCode": "CPV",
+      "headline": "Cape Verde's Valiant Fight Ends in Elimination",
+      "storySoFar": "Cape Verde put up a brave fight today, earning a 2-2 draw against Uruguay, but it wasn't enough to keep their World Cup dream alive. They showed spirit, but the points just weren't there.",
+      "whatsNext": "With 3 points after all three games, Cape Verde are ELIMINATED. They gave it a good go, but it's time to head home. Chin up, lads.",
+      "pubAmmo": "Cape Verde scored a cracking free-kick and had a super sub come on to score. They might be out, but they certainly didn't go quietly!"
     },
     "NZL": {
-      "headline": "New Zealand's Near Misses: The All Whites' Rollercoaster Ride!",
-      "storySoFar": "New Zealand, bless 'em, are giving it a go! Started with a decent 2-2 draw against Iran, with Elijah Just bagging both goals. Proper fox in the box, that lad! But then, against Egypt, they went and pulled a proper bottle job. Took the lead with a Finn Surman header, only to concede three unanswered goals and lose 3-1. Just can't seem to hold onto a lead, can they?",
-      "whatsNext": "They need to find some consistency, especially at the back. Scoring goals isn't their biggest problem, but keeping them out is proving tricky. If they can tighten up defensively and hold their nerve when ahead, they might just surprise someone. Otherwise, it's back to the rugby pitch for them!",
-      "pubAmmo": "New Zealand scored the opening goal against Egypt through Finn Surman but then conceded three goals to lose the match 3-1."
+      "teamCode": "NZL",
+      "headline": "New Zealand's World Cup Adventure Comes to an End",
+      "storySoFar": "New Zealand gave it their all, even taking an early lead against Egypt, but ultimately fell to a 3-1 defeat. One point from three games means their journey is over.",
+      "whatsNext": "With just 1 point after all three games, New Zealand are ELIMINATED. They showed some fight, but it wasn't enough. Time to start planning for the next one.",
+      "pubAmmo": "New Zealand scored a header from a corner, which is always nice to see. Shame they couldn't hold onto the lead, eh?"
     },
     "EGY": {
-      "headline": "Salah & Co. Find Their Groove, Despite a Bit of Self-Sabotage!",
-      "storySoFar": "Egypt started with a bit of a mixed bag, drawing with Belgium after one of their own defenders decided to score for the opposition! Classic. But then, they showed some proper grit, coming from a goal down against New Zealand to bag a comfortable win. Mohamed Salah, as expected, was pulling the strings, getting a goal and an assist. So, not all doom and gloom, then.",
-      "whatsNext": "Keep Mo Salah fit and happy, that's the main thing. If he's firing, they've got a chance. They'll want to cut out those little defensive lapses, like the own goal, because against better opposition, those are going to be properly punished. More of the comeback spirit, less of the 'helping hand' to the opposition.",
-      "pubAmmo": "Egypt conceded an own goal against Belgium but still managed to salvage a 1-1 draw, before Mohamed Salah contributed to two goals (one goal, one assist) in their win over New Zealand."
+      "teamCode": "EGY",
+      "headline": "Egypt Powers Through to the Knockouts",
+      "storySoFar": "Egypt showed their class today, coming from behind to beat New Zealand 3-1 and secure their spot in the next round. Seven points from three games, a solid performance.",
+      "whatsNext": "Egypt are QUALIFIED for the next round! They've navigated the group stage with confidence and will be looking to make a deep run in the tournament.",
+      "pubAmmo": "Mohamed Salah is just a different gravy, isn't he? Scores, assists, makes everything tick. A proper walking cheat code for Egypt."
     },
     "ARG": {
-      "headline": "Messi's Magical Touch: Argentina Cruise with the Little Genius Still a Walking Cheat Code!",
-      "storySoFar": "Right, Argentina. Business as usual, really. Two games, two wins, five goals scored, zero conceded. Lionel Messi is still proving he's absolutely ridiculous, bagging a hat-trick against Algeria – they just couldn't lay a glove on him! Then, he notched another two against Austria, even managing to miss a penalty in that one, just to keep things interesting. They look a well-oiled machine, if a bit reliant on the main man.",
-      "whatsNext": "Keep Messi fit and firing, and perhaps try to get a few more goals from the other lads so they don't have to solely rely on the GOAT. But honestly, if Messi keeps this up, who cares?",
-      "pubAmmo": "Messi scored five goals in two games for Argentina, including a hat-trick against Algeria! Oh, and he also missed a penalty against Austria. Just showing he's human, sometimes!"
+      "teamCode": "ARG",
+      "headline": "Argentina through, but Messi's penalty miss gave us all a fright!",
+      "storySoFar": "Two wins from two, top of Group J, and looking rather comfortable. They're doing exactly what's expected of them, which is always a bit boring, isn't it?",
+      "whatsNext": "Argentina have officially qualified for the next round. Time to put their feet up and enjoy the show, or at least try not to get any more unnecessary yellow cards.",
+      "pubAmmo": "Messi missed a penalty! Yes, you heard that right. Even the GOAT has his off days, though he quickly made up for it. Still, imagine the banter in the dressing room."
     },
     "AUT": {
-      "headline": "Alaba's Army Fall to Messi Magic After Jordan Jitters!",
-      "storySoFar": "Austria had a bit of a stroll against Jordan, winning 3-1, though it did include an own goal and a ridiculously late penalty. So, not exactly 'liquid football' from open play, was it? Then, they came up against the big boys, Argentina, and were promptly dispatched 2-0, with Messi doing what Messi does best. They didn't disgrace themselves, but they certainly didn't look like they were going to score either.",
-      "whatsNext": "They need to find some genuine attacking threat against top-tier opposition. Relying on own goals and 90th-minute penalties isn't going to cut it when the stakes are high.",
-      "pubAmmo": "In their 3-1 win against Jordan, one of Austria's goals was an own goal from Jordan's Yazan Al Arab, and Marko Arnautovic sealed it with a penalty in the 90+12th minute. Talk about cutting it fine!"
+      "teamCode": "AUT",
+      "headline": "Austria's World Cup dream ends with a whimper against Argentina.",
+      "storySoFar": "It's been a tough ride for Austria, managing only one win in a group that proved a bit too strong for them. Today's loss sealed their fate.",
+      "whatsNext": "Austria are eliminated from the competition. Time to book those flights home, lads. Better luck next time, eh?",
+      "pubAmmo": "They only managed one shot on target against Argentina. One! You'd get more shots on target in a Sunday League match after a few too many pints."
     },
     "FRA": {
-      "headline": "Mbappé's Magic Leads France to Two Dominant Wins!",
-      "storySoFar": "France, as expected, are looking like a proper machine, aren't they? Two games, two wins, six goals scored. Kylian Mbappé is just a walking cheat code, bagging four goals himself! They looked comfortable against both Senegal and Iraq, even if Senegal did grab a consolation right at the death. No real squeaky bum time for the French, just pure, unadulterated liquid football.",
-      "whatsNext": "Keep Mbappé fit, frankly! He's the main man, and if he's firing, France are a massive threat. They'll want to ensure they don't get complacent, especially if they're letting teams grab late goals. But overall, they're looking strong and certainly one of the favourites to go deep into the tournament.",
-      "pubAmmo": "Kylian Mbappé scored four goals in just two matches for France, helping them to two commanding victories where they scored exactly three goals in each game."
+      "teamCode": "FRA",
+      "headline": "France cruise into the knockouts, Mbappé still scoring for fun.",
+      "storySoFar": "Three games, three wins, nine goals scored, and looking utterly dominant. They're making this World Cup business look far too easy.",
+      "whatsNext": "France have qualified for the next round. They'll be looking to maintain this blistering form and send a message to the rest of the competition.",
+      "pubAmmo": "Kylian Mbappé just keeps on scoring. It's almost unfair, isn't it? He's a walking highlight reel, and Iraq certainly felt the full force of it."
     },
     "IRQ": {
-      "headline": "Iraq's Tour de Force: How to Lose Graciously (and Score an Own Goal!)",
-      "storySoFar": "Well, Iraq have certainly made an impression, if 'impression' means 'being utterly outclassed'. They got thoroughly spanked 4-1 by Norway, with Haaland having a casual kickabout in the park against their defence, and then topped it off with an absolute howler of an own goal from Aymen Hussein right at the death. Just when you thought it couldn't get worse, France turned up and gave them a good old 3-0 thrashing. Zero points, one goal scored, seven conceded, and one of those goals against them was their own doing. Proper Sunday League defending, that.",
-      "whatsNext": "Frankly, they need to remember which end is which and try not to score for the opposition. They'll be looking to tighten things up at the back, because right now, they're more open than a supermarket on Christmas Eve. Any points would be an absolute bonus, though a clean sheet might require a minor miracle.",
-      "pubAmmo": "Did you know Aymen Hussein's own goal against Norway meant he scored for both teams in that match? Quite the collector's item, that!"
+      "teamCode": "IRQ",
+      "headline": "Iraq bow out without a whimper, failing to register a single shot on target.",
+      "storySoFar": "Three losses and zero points. It's been a World Cup to forget for Iraq, who struggled to make any impact whatsoever.",
+      "whatsNext": "Iraq are eliminated from the competition. They'll be heading home with plenty to ponder, especially how to get a shot on target.",
+      "pubAmmo": "Zero shots on target in a World Cup match. That's not just bad, that's 'did they even bring a football?' bad. A truly forgettable performance."
     },
     "NOR": {
-      "headline": "Norway's Haaland Show: The Walking Cheat Code Delivers!",
-      "storySoFar": "Right, Norway are basically the Erling Haaland show, and what a show it is! They walloped Iraq 4-1, with Haaland bagging a brace. Then, against Senegal, he only went and scored another two, leading them to a 3-2 victory! The man's an absolute walking cheat code. Marcus Pedersen even chipped in with a goal against Senegal too. They're winning games, even if the defence lets in a couple now and then.",
-      "whatsNext": "Keep feeding Haaland! Seriously, he's carrying them, but others are chipping in. If they can continue to unlock defences and Haaland keeps doing what he does, they'll be a serious problem for any team. The defence might need a bit of a pep talk, mind you, as conceding against Iraq and twice against Senegal isn't exactly rock solid.",
-      "pubAmmo": "Erling Haaland scored four goals across Norway's two matches, bagging a brace against Iraq and another brace against Senegal."
+      "teamCode": "NOR",
+      "headline": "Haaland powers Norway into the next round after a nervy win.",
+      "storySoFar": "Three wins from three, ten goals scored, and a perfect record. They've shown they're not just a one-man team, but having Haaland certainly helps!",
+      "whatsNext": "Norway have qualified for the next round. They'll be buzzing after securing their spot and will be looking to carry this momentum forward.",
+      "pubAmmo": "Haaland scored two goals, because of course he did. The man's a machine, and he's dragging Norway through this tournament almost single-handedly."
     },
     "SEN": {
-      "headline": "Senegal: Almost There, But Mbappé and Haaland Had Other Plans!",
-      "storySoFar": "Well, they certainly picked some tough opponents, didn't they? Giving France a good run for their money for 65 minutes before Mbappé decided to turn into a walking cheat code and bag two goals. Then Haaland did the same for Norway, scoring two in their 3-2 loss. Ismaïla Sarr is doing his best, a proper fox in the box, but it's not enough to stop the world-class talent when the defence is a bit porous.",
-      "whatsNext": "They're showing flashes of brilliance, especially in attack, but their defence needs to tighten up against the big boys. They can't keep letting top strikers waltz through and score. Time to put some proper tackles in and get organised at the back.",
-      "pubAmmo": "Did you know Senegal conceded two goals to Kylian Mbappé and two goals to Erling Haaland in their last two matches? Not exactly easy going, eh!"
+      "teamCode": "SEN",
+      "headline": "Senegal's World Cup journey ends despite Sarr's best efforts.",
+      "storySoFar": "Three losses, zero points. It's been a tough group for Senegal, and despite showing flashes of brilliance, they just couldn't get over the line.",
+      "whatsNext": "Senegal are eliminated from the competition. A disappointing end to their campaign, but they can hold their heads high for at least trying to make a game of it.",
+      "pubAmmo": "They had more possession and more shots than Norway, but still lost. It's the classic 'all bark, no bite' scenario, isn't it?"
     },
     "JOR": {
-      "headline": "Jordan's Journey: From Hopeful Start to Heartbreak Hotel",
-      "storySoFar": "Jordan came into this hoping for a bit of magic, but it’s been more like a disappearing act. They managed to grab a goal against Austria, only to then concede an own goal from Yazan Al Arab and let Austria score a penalty late on to make it 3-1. Then, against Algeria, they actually took the lead, only to completely bottle it and lose 2-1. So close, yet so far. Plenty of fight, but not quite enough quality where it counts.",
-      "whatsNext": "They've shown glimpses of potential, particularly taking the lead against Algeria. They need to figure out how to hold onto a lead and stop inviting pressure. If they can sort out the defensive wobbles and avoid any more own goals, they might just snatch something, but it's looking like squeaky bum time for them.",
-      "pubAmmo": "Jordan managed to score the opening goal against Algeria, a cracking strike from Nizar Al Rashdan, but still ended up losing the match 2-1."
+      "teamCode": "JOR",
+      "headline": "Jordan's brave fight ends as Algeria snatch late victory.",
+      "storySoFar": "Three losses, zero points. They showed some spirit today, but ultimately, the quality of their opponents was just too much.",
+      "whatsNext": "Jordan are eliminated from the competition. They gave it a go, but alas, it wasn't enough to keep their World Cup dream alive.",
+      "pubAmmo": "Their goalkeeper made 6 saves, which tells you everything about how much pressure they were under. He earned his dinner tonight, the rest of them... less so."
     },
     "ALG": {
-      "headline": "Messi's Masterclass Sinks Algeria, But They Find Their Feet (Eventually!) Against Jordan!",
-      "storySoFar": "Well, where do we start with Algeria? Against Argentina, they looked like a deer in headlights, shipping three goals to the little magician, Lionel Messi. Honestly, it was a bit of a training exercise for Argentina, poor defending for all three. But credit where it's due, they bounced back like a proper Sunday League side after a half-time rollicking, coming from behind to beat Jordan 2-1 with a header and a tidy close-range volley. Still, conceding first to Jordan isn't exactly 'liquid football', is it?",
-      "whatsNext": "They need to figure out how to defend against actual world-class opposition, otherwise, it'll be more three-goal hammerings. And perhaps work on starting games a bit sharper so they don't give teams like Jordan a head start.",
-      "pubAmmo": "Did you know Algeria conceded a hat-trick to Lionel Messi, but then scored a header from a corner and a goal 'from very close range' against Jordan? Proper fox in the box stuff!"
-    },
-    "CAN": {
-      "headline": "Maple Leaf Mania: From Bosnia Blip to Qatari Carnage, Canada Are On Fire!",
-      "storySoFar": "Canada started a bit shaky, didn't they? A 1-1 draw against Bosnia-Herzegovina, even conceding a header. Not exactly setting the world alight. But then, my word, they absolutely ran riot against Qatar! Six goals, including a hat-trick from Jonathan David and a cracking free-kick from Nathan Saliba. Qatar even had two players sent off – seems they just couldn't handle the pressure. Proper scenes!",
-      "whatsNext": "Keep that attacking momentum going! Scoring six goals in one game, even against ten men for much of it, is a massive confidence booster. They'll need to remember how to defend, though, when they're not playing against a man down.",
-      "pubAmmo": "Jonathan David bagged a hat-trick for Canada against Qatar! And if that wasn't enough, Qatar also gifted Canada an own goal and had two players sent off. Talk about a helping hand!"
-    },
-    "COD": {
-      "headline": "Congo's Courageous Comeback: Snatch a Point from Portugal, But Can They Keep It Up?",
-      "storySoFar": "Only one game for Congo DR, but what a result! A very respectable 1-1 draw against Portugal. Went a goal down early on, but showed some proper fight and resilience to grab an equaliser right before halftime with a header from Yoane Wissa after a corner. That's a result to build on, isn't it? Shows they've got some grit about them.",
-      "whatsNext": "They need to build on that fantastic draw against Portugal. If they can replicate that kind of battling performance, they could certainly upset a few more teams. More of the same, please!",
-      "pubAmmo": "Congo DR went 1-0 down to Portugal but managed to claw back a draw with a header from Yoane Wissa in the 45+5th minute, just before halftime, following a corner! Proper battling performance!"
-    },
-    "COL": {
-      "headline": "Colombia's Comeback Kings: Overcome Uzbekistan's Header Heroics with a Three-Goal Blitz!",
-      "storySoFar": "Colombia only had one game, but it was a solid 3-1 win against Uzbekistan. They went a goal down to a header, which isn't ideal, but then Daniel Muñoz, Luis Díaz, and a late header from Jaminton Campaz sealed the deal. Showed good resilience and plenty of attacking firepower, even if they did let one in.",
-      "whatsNext": "Keep that attacking threat going, because it clearly works. Maybe tighten up the defence a bit, especially against aerial threats, so they don't have to always come from behind.",
-      "pubAmmo": "Despite winning 3-1 against Uzbekistan, Colombia actually conceded a header (Abbosbek Fayzullaev) and then scored one themselves (Jaminton Campaz's late goal). All about the headers, apparently!"
-    },
-    "CRO": {
-      "headline": "Croatia: From Level Pegging to Crumbled Dreams in a Flash!",
-      "storySoFar": "Oh, Croatia! They showed flashes of brilliance, twice clawing back to level terms against England. Baturina and Musa clearly didn't read the script about rolling over for the Three Lions. But then, as soon as the second half started, it was 'game over, thanks for coming'. Conceded two quick goals and that was that. You'd think they'd learn to defend a lead after all these years, wouldn't you?",
-      "whatsNext": "They need to find some defensive solidity, and fast. Conceding four goals in one match, even to England, isn't exactly World Cup winning form. Perhaps less 'liquid football' and more 'brick wall' at the back will do them some good. Modric being subbed off seemed to drain the life out of them, so they'll need to figure out how to cope without their maestro for the full 90.",
-      "pubAmmo": "Did you know Croatia managed to score two goals in the first half against England, only to concede two more in the second and still lose by two goals? Proper bottling it!"
-    },
-    "CZE": {
-      "headline": "Czechia: Masters of the Early Lead, Champions of the Late Collapse!",
-      "storySoFar": "Czechia started both their games like a house on fire, getting themselves in front. You think, 'Right, they're going to put their feet up and see this out.' Nope! Against Korea, they took the lead, then just stood there and watched Korea bag two. Then against South Africa, they scored early, but true to form, managed to concede a late penalty to completely bottle the win. It's almost impressive how consistently they fail to hold onto a lead.",
-      "whatsNext": "They need to learn what 'seeing out a game' actually means. Getting your noses in front is one thing, but if you can't defend for love nor money, you're just inviting trouble. More grit, less soft-centre, please. Otherwise, they'll be watching the knockout stages from their sofas.",
-      "pubAmmo": "Did you know Czechia scored the opening goal in both their matches but failed to win either, conceding a late equaliser from a penalty against South Africa?"
-    },
-    "GHA": {
-      "headline": "Ghana Snatch It at the Death! Injury Time Heroics!",
-      "storySoFar": "Talk about late drama! Ghana looked like they were heading for a rather uninspiring draw against Panama, with more delays and injuries than actual chances. But then, deep into injury time, Caleb Yirenkyi popped up with a winner! Absolute scenes, I tell ya. A proper scrappy affair, but they got the job done when it mattered most.",
-      "whatsNext": "While a 95th-minute winner is fantastic for the highlights reel, they probably want to aim for a slightly less stressful route to victory in the future. Finding a bit more attacking fluency earlier in the game would do wonders. They showed grit, but relying on last-gasp heroics can only get you so far.",
-      "pubAmmo": "Ghana's only goal in their opening match against Panama came in the 95th minute, scored by Caleb Yirenkyi, securing a dramatic 1-0 victory."
-    },
-    "KOR": {
-      "headline": "South Korea's See-Saw: Comeback Kings to Mexican Muddle!",
-      "storySoFar": "South Korea are a bit like a box of chocolates, aren't they? You never quite know what you're going to get! They showed proper grit to come from a goal down against Czechia, with Hwang In-Beom and a late Oh Hyeon-Gyu strike sealing a 2-1 win. But then, against Mexico, they went a bit flat, couldn't find the back of the net, and ended up losing 1-0. Son Heung-Min being taken off in both games is certainly a talking point for the pub!",
-      "whatsNext": "They've got the talent, but consistency is key. They need to ensure their attacking players are firing on all cylinders for the full ninety. If they can recapture the spirit of that Czechia comeback and translate it into a full game, they'll be a tough nut to crack. Otherwise, it'll be an early flight home.",
-      "pubAmmo": "South Korea managed to win against Czechia after conceding first, scoring two goals in the second half to turn the game around."
-    },
-    "MEX": {
-      "headline": "Mexico's March: Clean Sheets and Red Cards Galore!",
-      "storySoFar": "Mexico are doing bits, aren't they? Two games, two wins, and two clean sheets! They dispatched South Africa 2-0, with Quiñones and Jiménez on the score sheet, though South Africa did help themselves to two red cards. Then they followed it up with a solid 1-0 victory over South Korea, Luis Romo bagging the winner. Bit of handbags against South Africa with César Montes getting sent off, but hey, a win's a win!",
-      "whatsNext": "Maintain that defensive discipline and keep the goals flowing! Two clean sheets are nothing to scoff at. They'll need to watch the discipline though, no more silly red cards if they want to go deep. Looking good for the next round, if they don't get distracted by any more red card dramas!",
-      "pubAmmo": "In their 2-0 win against South Africa, Mexico saw South Africa receive two red cards, and then had a man sent off themselves with César Montes seeing red in injury time!"
-    },
-    "PAN": {
-      "headline": "Panama's Pains: Late Goal Heartbreak and Zero Goals to Show For It!",
-      "storySoFar": "Panama's start? Well, it's not exactly setting the world alight, is it? One game, one loss, and more importantly, zero goals scored. They battled hard against Ghana but eventually succumbed to a Caleb Yirenkyi goal in the 95th minute. Ouch. Conceding that late? That's a proper kick in the teeth. Couldn't hit a barn door with a banjo, let alone the back of the net.",
-      "whatsNext": "They need to find their scoring boots, and fast! Relying on a clean sheet and hoping for the best clearly isn't working. Get some shots on target, for goodness sake! If they don't start converting chances, it's going to be a very short and forgettable tournament for them.",
-      "pubAmmo": "Panama lost their only match 1-0 to Ghana, conceding the winning goal in the 95th minute."
-    },
-    "POR": {
-      "headline": "Portugal's 'Golden Generation' Bottled It Against... Congo DR? Hold My Pint!",
-      "storySoFar": "Well, the mighty Portugal started with a bang, João Neves nodding one in early. You thought they'd cruise, didn't you? But no, they decided to switch off and let Congo DR score a 'very close range' header just before half-time. Three yellow cards too, sounds like they were more interested in a scrap than playing liquid football. A draw against a team they should be hammering? Not exactly inspiring stuff, is it?",
-      "whatsNext": "They need to wake up and smell the Nando's before the real games begin. If they can't dominate a side like Congo DR, then the actual World Cup is going to be a rude awakening. More intensity, less faffing about with yellow cards, and certainly no more Sunday League defending!",
-      "pubAmmo": "Did you know Portugal conceded a header from 'very close range' just before half-time against Congo DR? Almost sounds like an England defence, doesn't it?"
-    },
-    "QAT": {
-      "headline": "Qatar: From Swiss Scrape to Canadian Catastrophe! Are We Sure They're Hosting?",
-      "storySoFar": "Kicked off with a cheeky draw against Switzerland, though they needed an own goal to snatch a point. You thought, 'alright, maybe they've got a bit of fight.' Then Canada came along and gave them an absolute pasting – six-nil! And two red cards, just to show they completely lost their heads. Sounds like they completely bottled it, the poor sods.",
-      "whatsNext": "They need to find a defence, a midfield, and probably a new game plan before anyone else gives them a proper hiding. Six goals is a humiliation. They'll be putting their feet up watching the knockouts if this carries on.",
-      "pubAmmo": "Did you know Qatar managed to get *two* red cards in their 6-0 thrashing by Canada? Talk about a proper bottle job!"
-    },
-    "RSA": {
-      "headline": "Bafana Bafana's Red Mist: Two Games, Three Sendings Off! Is This Football or UFC?",
-      "storySoFar": "Started with a bit of a shocker against Mexico, going down 2-0 and picking up a red card for Yaya Sithole. Then, just when you thought it couldn't get worse, Themba Zwane decided to join him for 'violent conduct' in the *same match*! A draw against Czechia with a penalty was a slight improvement, but they're racking up the yellows too. This isn't football, it's a wrestling match!",
-      "whatsNext": "They need to learn how to keep eleven men on the pitch, for starters. Discipline is a shambles. You can't compete at this level if you're constantly playing with a man (or two!) down. Sort it out, lads, or you'll be watching from the stands.",
-      "pubAmmo": "Did you know South Africa had *three* players sent off in just two matches? That's more red cards than goals scored!"
-    },
-    "SUI": {
-      "headline": "Switzerland's Odd Couple: Own Goal Blushes and Bosnian Bashes!",
-      "storySoFar": "Started with a bit of a wobble, needing an own goal from Qatar to share the spoils – not exactly a strong statement, was it? But then, *pow*, they turned up against Bosnia and Herzegovina, absolutely smashing them 4-1! Manzambi and Vargas getting amongst the goals. Seems they prefer teams that actually let them play. A proper mixed bag.",
-      "whatsNext": "Consistency, lads! Can't be scraping draws one minute and hammering teams the next. They need to bring that attacking confidence from the Bosnia game to every match. Stop relying on opposition defenders to do your job!",
-      "pubAmmo": "Did you know Switzerland scored four goals in their win against Bosnia and Herzegovina, but could only manage a draw against Qatar after an own goal?"
-    },
-    "UZB": {
-      "headline": "Uzbekistan's Colombian Conundrum: A Glimmer of Hope, Then Luis Díaz Turned Up!",
-      "storySoFar": "Poor old Uzbekistan. They fought back bravely to equalise against Colombia with a decent header from Fayzullaev, fair play to them! But then Luis Díaz decided to put his foot down and bag a goal, followed by Campaz to seal their fate. Not a terrible performance, but ultimately, they were outclassed by a stronger side. Shows you the difference world-class talent makes.",
-      "whatsNext": "They showed some spirit to equalise, but they need to find a way to keep top players quiet for 90 minutes. It's a steep learning curve, but if they can build on that fighting spirit and tighten up the defence, they might cause an upset down the line. Keep at it, lads!",
-      "pubAmmo": "Did you know Uzbekistan managed to equalise against Colombia with a header from Abbosbek Fayzullaev, only to concede two more goals shortly after?"
+      "teamCode": "ALG",
+      "headline": "Algeria stage late comeback to secure qualification in dramatic fashion.",
+      "storySoFar": "Two wins and a loss, finishing second in Group J. They've shown resilience and a knack for scoring when it matters, which is always a good sign.",
+      "whatsNext": "Algeria have qualified for the next round. They'll be buzzing after that comeback and will be looking to build on this momentum.",
+      "pubAmmo": "Coming back from a goal down with two late goals? That's the kind of drama we love to see! They certainly know how to make 'squeaky bum time' even squeakier."
     }
   },
   "matches": {
@@ -425,127 +360,127 @@
     },
     "ARG-AUT": {
       "matchKey": "ARG-AUT",
-      "editionTitle": "World Cup 2026 Group J",
-      "snappySummary": "Messi magic seals qualification for Argentina, despite an early penalty blunder.",
+      "editionTitle": "Messi's Mixed Bag Masterclass Secures Argentina's Spot",
+      "snappySummary": "Argentina secured their passage to the next round with a 2-0 victory over Austria, but not before Lionel Messi decided to keep everyone on their toes with a missed penalty before bagging a brace.",
       "talkingPoints": [
-        "Lionel Messi, after missing a penalty, decided to remind everyone he's still rather good by bagging two goals.",
-        "Austria's attacking threat was about as potent as a wet paper bag, managing only one shot on target.",
-        "The match was a stop-start affair, with more delays than a British train line, featuring injuries and drinks breaks galore."
+        "Lionel Messi's penalty miss early on had us all wondering if he'd left his magic boots at home, only for him to then casually score two goals.",
+        "Austria's lone shot on target suggests they were more interested in admiring Argentina's play than actually troubling the keeper.",
+        "Plenty of stoppages for injuries and drinks breaks, making it feel less like a World Cup match and more like a leisurely Sunday kickabout."
       ],
-      "randomQuirk": "Argentina's Lionel Messi managed to miss a penalty in the 9th minute, only to score a goal 29 minutes later, and then another in injury time. Talk about making up for it!"
+      "randomQuirk": "Lionel Messi, the man who usually can't miss, decided to give the Austrian keeper a bit of a break by sending his early penalty wide. Just to keep things interesting, I suppose."
     },
     "FRA-IRQ": {
       "matchKey": "FRA-IRQ",
-      "editionTitle": "World Cup 2026 Group I",
-      "snappySummary": "France strolls to a comfortable 3-0 victory over a toothless Iraq, securing their spot in the next round.",
+      "editionTitle": "Mbappé and Dembélé Run Riot as France Cruise Through",
+      "snappySummary": "France breezed past Iraq with a comfortable 3-0 victory, with Kylian Mbappé grabbing a brace and Ousmane Dembélé adding another to send them through to the knockouts.",
       "talkingPoints": [
-        "Kylian Mbappé was in fine form, grabbing a brace and showing Iraq exactly why France are considered contenders.",
-        "Iraq's attacking efforts were non-existent, failing to register a single shot on target throughout the entire match.",
-        "Michael Olise put on a masterclass in creativity, setting up two goals with some delightful play."
+        "France's 19 shots to Iraq's paltry 4, with zero on target for Iraq, tells you everything you need to know about the one-sided affair.",
+        "Michael Olise was pulling the strings beautifully, bagging two assists and making it all look far too easy.",
+        "Iraq's 28 clearances shows they were certainly busy, just not in the way they'd hoped, spending most of the match on the back foot."
       ],
-      "randomQuirk": "Iraq's strategy seemed to be 'admire France from a safe distance' as they failed to hit the target with any of their four shots. A casual kickabout in the park for the French, really."
+      "randomQuirk": "Iraq managed to go the entire match without a single shot on target, proving that sometimes, just sometimes, defending can be a full-time job."
     },
     "NOR-SEN": {
       "matchKey": "NOR-SEN",
-      "editionTitle": "World Cup 2026 Group I",
-      "snappySummary": "Haaland's brace ensures Norway's qualification in a five-goal thriller, despite Senegal's late rally.",
+      "editionTitle": "Haaland's Heroics Secure Norway's Progress in Five-Goal Thriller",
+      "snappySummary": "Norway edged out Senegal in a five-goal thriller, winning 3-2 thanks to a brace from the unstoppable Erling Haaland, securing their passage to the next round.",
       "talkingPoints": [
-        "Erling Haaland, that walking cheat code, bagged another two goals to send Norway through with ease.",
-        "Senegal showed some spirit, with Ismaïla Sarr grabbing a brace, but it wasn't enough to stop the Norwegian juggernaut.",
-        "Despite having more possession, Senegal couldn't convert it into a winning performance, proving possession isn't everything."
+        "Erling Haaland, the walking cheat code, bagged two goals, making it look like he was having a casual kickabout in the park.",
+        "Senegal showed some fight with Ismaïla Sarr also grabbing two goals, making Norway work for every single point.",
+        "Senegal had more possession and more shots, but Norway were clinical when it mattered, which is the sign of a team that knows how to win."
       ],
-      "randomQuirk": "Norway's Marcus Pedersen opened the scoring just 30 minutes after coming on as an early substitute due to injury, proving that sometimes, you just need to be in the right place at the right time."
+      "randomQuirk": "Despite having nearly 60% possession and more shots, Senegal still managed to lose. Proof that sometimes, just having the ball isn't enough to actually do anything with it."
     },
     "JOR-ALG": {
       "matchKey": "JOR-ALG",
-      "editionTitle": "World Cup 2026 Group J",
-      "snappySummary": "Algeria comes from behind to snatch a vital 2-1 win against Jordan, confirming their progression.",
+      "editionTitle": "Algeria's Late Comeback Sinks Jordan and Seals Qualification",
+      "snappySummary": "Algeria snatched a dramatic 2-1 victory from Jordan with two late goals, turning the game on its head after going a goal down, and securing their qualification.",
       "talkingPoints": [
-        "Jordan had the audacity to take the lead, but Algeria showed their class, turning the game around in the second half.",
-        "Algeria absolutely dominated possession, making Jordan chase shadows for most of the match.",
-        "Riyad Mahrez, even with limited minutes, managed to conjure up an assist from a corner, showing that touch of quality."
+        "Jordan's early lead was a lovely bit of liquid football, but Algeria's relentless pressure eventually paid off with 72% possession and 10 corners.",
+        "Nadhir Benbouali and Amine Gouiri both scoring late goals from corners, showing Algeria's set-piece prowess when the chips were down.",
+        "Jordan's goalkeeper, Yazeed Abulaila, was absolutely heroic, making 6 saves to keep them in it for so long."
       ],
-      "randomQuirk": "Jordan's Nizar Al-Rashdan scored with one of his two shots, while Algeria's Amine Gouiri scored with one of his three. Efficiency, eh? Though Algeria had 10 corners to Jordan's one, so they certainly kept the pressure on."
+      "randomQuirk": "Jordan, with a mere 27.9% possession, managed to score first. It's almost as if they thought the ball was radioactive and only wanted to touch it when absolutely necessary."
     }
   },
   "days": {
     "2026-06-19": {
-      "headline": "USA Books Their Spot! Haiti and Türkiye Are Heading Home, Brazil and Morocco Look Strong!",
-      "theDrama": "Another day, another team qualified! The USA put on a commanding performance against Australia and are officially through. Haiti, sadly, are booking their flights home after another loss, this time to Brazil. Türkiye also joins them on the early flight out. Morocco pulled off a good win against Scotland, and Brazil looked much better today. It's all getting a bit squeaky bum time for some now!",
-      "mustWatchHighlights": "The USA game was a good watch for their clinical performance. Brazil's win was also decent. If you're a fan of teams trying their best but ultimately failing, Haiti's match is there. Otherwise, maybe just check the scores.",
-      "progressionNews": "Mexico, Canada, Switzerland, and the USA have all qualified for the next round. Haiti and Türkiye are officially eliminated. Bosnia-Herzegovina and Qatar need a strong result in their final game to keep their best-3rd hopes alive. Brazil, Morocco, Scotland, Australia, and Paraguay are all in contention to finish in the top two, with one game left."
+      "headline": "Scotland Bottle It Again as Turkey Suffer Another 32-Shot Disaster!",
+      "theDrama": "Scotland managed zero shots on target and lost 1-0 to Morocco. Classic Scotland. Turkey had 32 shots, 78% possession, and somehow lost 1-0 to ten-man Paraguay. You couldn't write it if you tried!",
+      "mustWatchHighlights": "Turkey vs Paraguay for the sheer, hilarious injustice of it all. Avoid Scotland vs Morocco unless you enjoy watching Scottish heartbreak.",
+      "progressionNews": "USA and Brazil are safely through. Scotland are on the brink of booking their flights home, as is tradition for the Tartan Army."
     },
     "2026-06-20": {
-      "headline": "Germany Qualifies in Style! Netherlands Run Riot, and Ecuador Holds On for a Point!",
-      "theDrama": "Well, Germany decided to join the party and are officially qualified after a solid win against Ivory Coast! The Netherlands absolutely hammered Sweden, which was a bit of a surprise given Sweden's earlier form. Ecuador and Curaçao played out a rather dull goalless draw, which won't do much for either of their chances, will it? The goals are certainly flying in for some, and drying up for others!",
-      "mustWatchHighlights": "The Netherlands vs Sweden match was a proper goal-fest, definitely worth a watch. Germany's win was also a good display of their quality. Ecuador vs Curaçao? Unless you're a connoisseur of 0-0 draws, you can probably give that one a miss.",
-      "progressionNews": "Mexico, Canada, Switzerland, the USA, and Germany have all qualified for the knockout stages. Haiti and Türkiye are officially eliminated. Bosnia-Herzegovina and Qatar need a strong result in their final game to keep their best-3rd hopes alive. The Netherlands and Sweden are in contention to finish in the top two, as are Ivory Coast, Ecuador, and Curaçao. Japan and Tunisia still have games to play and are in contention."
+      "headline": "Dutch Demolition, German Drama, and Ecuador's Goal Drought Continues!",
+      "theDrama": "Today was a mixed bag of emotions! The Netherlands absolutely steamrolled Sweden, putting on a proper goal-scoring masterclass. Germany, on the other hand, had to dig deep, snatching a late winner against a very stubborn Côte d'Ivoire side. And then there was the absolute snooze-fest between Ecuador and Curaçao, where neither side could hit a cow's backside with a banjo, despite Ecuador having enough shots to sink a battleship!",
+      "mustWatchHighlights": "If you want goals and excitement, the **Netherlands vs Sweden** match is your absolute must-watch. Five goals, end-to-end stuff, proper liquid football! The **Germany vs Côte d'Ivoire** game also had a dramatic late winner, so worth a look for the tension. As for **Ecuador vs Curaçao**? Unless you're a fan of goalkeeping heroics and absolutely no goals, you can probably just watch paint dry instead.",
+      "progressionNews": "Germany are officially through as Group E winners, looking formidable! The Netherlands are practically there too, topping Group F with seven points and a fantastic goal difference. Sweden and Côte d'Ivoire are both sitting on three points, desperately hoping their goal difference is enough to sneak through as a best third-placed team. Ecuador and Curaçao, both on two points and with Ecuador having zero goals scored, are looking like they've booked their flights home. Hard luck, lads."
     },
     "2026-06-11": {
-      "headline": "Mexico and Korea Kick Off with a Bang, Others Still Finding Their Boots!",
-      "theDrama": "Well, the World Cup is officially underway, and we've seen some proper football, haven't we? Mexico put on a decent show against South Africa, proving they're not just there for the tacos. South Korea, bless 'em, managed to nick a win against Czechia in a game that was a bit more 'edge-of-your-seat' than 'put-your-feet-up'. Early days, but the first whistle has blown!",
-      "mustWatchHighlights": "Definitely catch Mexico's clinical finish – proper liquid football. As for the rest, it was a bit of a casual kickabout in the park for some, but a win's a win, eh?",
-      "progressionNews": "Everyone's still in the hunt, as you'd expect after just one game. Mexico, South Korea, Czechia, and South Africa are all in contention to finish in the top two of Group A, with plenty of football left to play."
+      "headline": "Red Cards Galore in Mexico and South Korea's Late Show!",
+      "theDrama": "Mexico and South Africa decided that football was secondary to a proper physical battle, racking up three red cards between them in a chaotic 2-0 win for the hosts. Absolute scenes. Meanwhile, South Korea actually played some football, edging past the Czech Republic 2-1 in a much more civilized affair.",
+      "mustWatchHighlights": "Mexico vs South Africa was the clear must-watch for the sheer Sunday League defending and chaotic discipline. Avoid Korea vs Czech Republic if you prefer your football with a side of red-card madness.",
+      "progressionNews": "Mexico and South Korea put their feet up with three points, while South Africa's discipline has left them in a right mess for the rest of the group stage."
     },
     "2026-06-12": {
-      "headline": "Yanks Go Wild! Paraguay Gets a Proper Thumping, Canada and Bosnia Share the Spoils!",
-      "theDrama": "Right, what a day! The USA decided to turn up and absolutely batter Paraguay, four goals to one! Someone forgot to tell Paraguay it wasn't a friendly. Meanwhile, Canada and Bosnia-Herzegovina played out a rather polite 1-1 draw. Not exactly 'absolute scenes' but a point's a point, I suppose. The Yanks are certainly making a statement early doors!",
-      "mustWatchHighlights": "If you like goals, the USA vs Paraguay match is your ticket. For those who enjoy a good old-fashioned midfield battle with a touch of 'could have been worse', Canada vs BIH is there for you.",
-      "progressionNews": "All teams across Groups A, B, C, D, E, F, G, H, I, J, K, and L are still in contention to finish in the top two, with games left to play. No one's booking their flights home just yet, thankfully."
+      "headline": "Yanks Run Riot While Canada Bottle It on Home Soil!",
+      "theDrama": "Canada dominated possession but defended like a Sunday League side to draw 1-1 with Bosnia. Meanwhile, the USA put on a clinic at SoFi Stadium, hammering Paraguay 4-1. The Paraguayans spent more time collecting five yellow cards than actually trying to play football.",
+      "mustWatchHighlights": "USA vs Paraguay was a masterclass in liquid football from the Americans. Skip Canada's frustrating stalemate unless you enjoy watching paint dry.",
+      "progressionNews": "The USA are flying high and looking like a walking cheat code, while Canada are already facing squeaky bum time if they want to escape the group."
     },
     "2026-06-13": {
-      "headline": "Scots Get Off to a Flyer! Brazil Stumbles, and Qatar Holds On for Dear Life!",
-      "theDrama": "Well, well, well! Scotland, against all odds, managed to bag a win against Haiti! Who saw that coming? Brazil, the mighty Brazil, could only manage a draw against Morocco. Perhaps they're still on their holidays. And Qatar, bless their cotton socks, somehow scraped a draw against Switzerland, despite being absolutely battered. Talk about riding your luck!",
-      "mustWatchHighlights": "Scotland's gritty win is worth a look for the sheer underdog spirit. Qatar vs Switzerland, if you enjoy watching a team defend for 90 minutes with their lives, is your cup of tea. Otherwise, maybe just check the score.",
-      "progressionNews": "Every single team across all groups remains in contention to finish in the top two. It's still wide open, as it should be at this stage. No early exits to report, folks!"
+      "headline": "Swiss Bottlers, Brazilian Blunders, and Scotland's Great Escape!",
+      "theDrama": "Switzerland had 26 shots against Qatar and somehow only managed a 1-1 draw. Absolute bottlers. Brazil looked like they were having a casual kickabout in the park and let Morocco snatch a 1-1 draw. Shockingly, Scotland actually won a football match, scraping a 1-0 win over Haiti.",
+      "mustWatchHighlights": "Brazil vs Morocco was a proper, high-quality contest. Avoid Qatar vs Switzerland unless you want to watch Swiss strikers miss the broad side of a barn.",
+      "progressionNews": "Scotland actually have hope! Brazil and Switzerland have left themselves with work to do after some seriously lazy performances."
     },
     "2026-06-14": {
-      "headline": "Germany Goes Goal Crazy! Netherlands Share the Spoils, and Australia Pulls a Fast One!",
-      "theDrama": "Crikey, Germany decided to show up and remind everyone they're actually quite good at football, putting seven past Curaçao! That's a proper thrashing. The Netherlands and Japan played out a rather entertaining draw, while Australia managed to sneak a win against a dominant Türkiye. Ivory Coast also got a narrow win against Ecuador. Sweden, meanwhile, put five past Tunisia – good grief, the goals are flying in!",
-      "mustWatchHighlights": "Germany's goal-fest is a must for anyone who loves seeing the net bulge. The Netherlands vs Japan was a decent scrap too. If you like a bit of smash-and-grab, Australia's win is worth a gander. Skip Curaçao's defending, unless you're a masochist.",
-      "progressionNews": "All teams across all groups are still in contention to finish in the top two. It's too early for anyone to be packing their bags, but some certainly look more comfortable than others after their opening fixtures."
+      "headline": "German Demolition Derby and Turkey's Ultimate Smash-and-Grab Disaster!",
+      "theDrama": "Turkey had 30 shots and 71% possession against Australia and still lost 2-0. Absolute comedy. Germany treated Curacao like a Sunday League pub team, putting seven past them in a 7-1 slaughter. Sweden also ran riot, hammering Tunisia 5-1.",
+      "mustWatchHighlights": "Germany vs Curacao for the sheer, unadulterated slaughter, or Netherlands vs Japan for a proper 2-2 thriller. Avoid Ivory Coast vs Ecuador unless you love boring 1-0s.",
+      "progressionNews": "Germany and Sweden are basically through to the knockouts. Turkey need to find their shooting boots immediately or they will be booking early flights home."
     },
     "2026-06-15": {
-      "headline": "Draws Galore! Spain Frustrated, Belgium and Egypt Share the Points in a Snoozer!",
-      "theDrama": "Well, if you like draws, today was your day! Spain couldn't break down Cape Verde, despite having enough shots to sink a battleship. Belgium and Egypt played out a rather forgettable 1-1, and Uruguay and Saudi Arabia also decided to share the spoils. Iran and New Zealand joined the party with a 2-2. It was a day for splitting points, not exactly setting the world alight!",
-      "mustWatchHighlights": "If you're a fan of goalkeepers, Spain vs Cape Verde might be your highlight reel, otherwise, it was a bit of a snooze-fest. Iran vs New Zealand had some goals, so that's something.",
-      "progressionNews": "Every team in every group is still in contention to finish in the top two. The points are being shared around, which means no one's qualified, and no one's out. It's all to play for, as they say!"
+      "headline": "Spain's Passing to Nowhere and Uruguay's Striking Horror Show!",
+      "theDrama": "Spain had 74% possession and 27 shots against Cape Verde but couldn't score. Classic Spain, passing the opposition to death but forgetting where the goal is. Uruguay did the exact same against Saudi Arabia in another frustrating 1-1 draw.",
+      "mustWatchHighlights": "Iran vs New Zealand was a cracking 2-2 draw with plenty of action. Avoid Spain vs Cape Verde unless you desperately need a cure for insomnia.",
+      "progressionNews": "Spain and Uruguay have made life incredibly difficult for themselves, while Cape Verde and Saudi Arabia celebrate historic, hard-fought points."
     },
     "2026-06-16": {
-      "headline": "France and Norway Flex Their Muscles! Argentina Dominates, and Mexico Books Its Spot!",
-      "theDrama": "Right, a bit more action today! France put Senegal to the sword, and Norway absolutely hammered Iraq. Argentina showed their class with a comfortable win over Algeria. But the big news? Mexico, after their second win, have officially booked their ticket to the knockout stages! Good on 'em! Canada and Switzerland also look rather comfortable after their results.",
-      "mustWatchHighlights": "France vs Senegal and Norway vs Iraq for some proper attacking football. Argentina's win was also a masterclass. If you're into tactical stalemates, you're out of luck today.",
-      "progressionNews": "Mexico has officially qualified for the next round, absolute scenes! Canada and Switzerland have also qualified, which is fantastic for them. Bosnia-Herzegovina and Qatar now need a strong result to keep their best-3rd hopes alive. All other teams are still in contention to finish in the top two."
+      "headline": "Haaland Cruises and Argentina Put on a Masterclass!",
+      "theDrama": "Norway dismantled Iraq 4-1 with Erling Haaland looking like a walking cheat code. Argentina brushed Algeria aside 3-0 without breaking a sweat, playing some lovely liquid football that made the Algerians look like they were chasing shadows.",
+      "mustWatchHighlights": "Iraq vs Norway to see some proper clinical finishing. Avoid Argentina vs Algeria if you wanted a competitive match, as it was a total mismatch.",
+      "progressionNews": "France, Norway, and Argentina are cruising towards the knockouts, while Iraq and Algeria look dead and buried already."
     },
     "2026-06-17": {
-      "headline": "England Starts Strong! Colombia Impresses, and Portugal Shares the Love (and Points)!",
-      "theDrama": "Gareth Southgate's England got off to a flyer, putting four past Croatia! A proper statement of intent, that. Colombia looked sharp with a solid win over Uzbekistan. Austria also bagged a decent win against Jordan. Portugal, however, could only manage a draw against Congo DR, which is a bit of a banana skin result, isn't it? Ghana also squeaked a win against Panama.",
-      "mustWatchHighlights": "England's goal-fest is definitely one to watch, especially if you're a fan of the Three Lions. Colombia's performance was also quite impressive. The Portugal game? Maybe just check the score and move on.",
-      "progressionNews": "Mexico, Canada, and Switzerland are all qualified for the next round. Bosnia-Herzegovina and Qatar need a strong result to keep their best-3rd hopes alive. All other teams, including England, Ghana, Colombia, Austria, Portugal, Congo DR, Uzbekistan, Jordan, Panama, and Croatia, are in contention to finish in the top two."
+      "headline": "England's Four-Goal Fiesta and Portugal's Portuguese Cock-up!",
+      "theDrama": "England actually looked competent, putting four past Croatia in a 4-2 thriller. Portugal, however, had 75% possession against DR Congo and managed exactly one shot on target in a shocking 1-1 draw. Absolute bottle job from Ronaldo and the lads.",
+      "mustWatchHighlights": "England vs Croatia for absolute scenes and goals galore. Avoid Portugal vs DR Congo unless you love watching sideways passes in your spare time.",
+      "progressionNews": "England and Colombia are looking good for the next round. Portugal are in a spot of bother after completely bottling their opening fixture."
     },
     "2026-06-18": {
-      "headline": "Mexico, Canada, Switzerland Through! Qatar and Bosnia on the Brink!",
-      "theDrama": "Well, the plot thickens! Mexico secured their spot with another solid win, this time against South Korea. Canada and Switzerland both put on dominant displays, absolutely hammering Qatar and Bosnia-Herzegovina respectively, and have now officially qualified! Qatar and Bosnia, on the other hand, are now in a bit of a pickle, aren't they? Czechia and South Africa played out a rather uninspiring draw.",
-      "mustWatchHighlights": "Canada's six-goal demolition of Qatar was a sight to behold, as was Switzerland's clinical performance. Mexico's win was a bit more cagey but effective. The Czechia vs South Africa draw was probably best watched with a cup of tea and a biscuit, if at all.",
-      "progressionNews": "Mexico, Canada, and Switzerland have all qualified for the knockout stages. Bosnia-Herzegovina and Qatar now need a strong result in their final game to keep their best-3rd hopes alive. All other teams, including South Korea, Czechia, and South Africa, remain in contention to finish in the top two."
+      "headline": "Canada's Six-Goal Slaughter and Qatar's Double Red Card Meltdown!",
+      "theDrama": "Canada absolutely battered Qatar 6-0. Qatar had zero shots on target and two red cards, essentially having a casual kickabout in the park while Canada ran riot. Switzerland also cruised, beating ten-man Bosnia 4-1.",
+      "mustWatchHighlights": "Canada vs Qatar for the absolute demolition and chaotic red cards. Avoid Czech Republic vs South Africa, which was a drab 1-1 draw.",
+      "progressionNews": "Canada and Switzerland have put themselves in prime position for the knockouts, while Qatar can start packing their bags after a disastrous display."
     },
     "2026-06-21": {
-      "headline": "Netherlands Through! Tunisia Books an Early Flight, Spain and Egypt Look Good!",
-      "theDrama": "Right, the Netherlands have officially qualified for the next round after Japan's big win against Tunisia! Speaking of Tunisia, they're now officially eliminated, joining Haiti and Türkiye on the plane home. Spain put on a dominant display, thrashing Saudi Arabia, while Egypt secured a good win against New Zealand. Belgium and Iran played out a rather feisty draw, with a red card for Belgium! Uruguay and Cape Verde also shared the spoils in a lively 2-2.",
-      "mustWatchHighlights": "Japan's clinical performance against Tunisia was impressive. Spain's dominant win is also worth a look. The Belgium vs Iran game had some drama, if you like a bit of needle. Otherwise, there were a few draws that might not set your world alight.",
-      "progressionNews": "Mexico, Canada, Switzerland, the USA, Germany, and the Netherlands have all qualified for the knockout stages. Haiti, Türkiye, and Tunisia are officially eliminated. Bosnia-Herzegovina and Qatar need a strong result in their final game to keep their best-3rd hopes alive. Japan, Sweden, Egypt, Iran, Belgium, New Zealand, Spain, Uruguay, Cape Verde, and Saudi Arabia are all in contention to finish in the top two."
+      "headline": "Goal-Fests, Goalless Grinds, and Goodbye Belgium! A Day of World Cup Drama!",
+      "theDrama": "Today saw some cracking goals, a few absolute snoozers, and some big names heading for an early bath. Japan and Spain put on masterclasses, while Belgium's 'Golden Generation' completely bottled it with a dire 0-0 draw and a red card. Uruguay and Cape Verde gave us a proper ding-dong, and Egypt showed their class to come from behind against New Zealand. Never a dull moment, eh?",
+      "mustWatchHighlights": "If you want goals and slick football, Japan vs Tunisia and Spain vs Saudi Arabia are your highlights. For a masterclass in how *not* to score, Belgium vs Iran is a must-watch – if you're into that sort of thing. Uruguay vs Cape Verde was a proper back-and-forth affair, definitely worth a gander.",
+      "progressionNews": "Well, the dust has settled on a few groups! Japan, Spain, Egypt, and Iran have all QUALIFIED, doing the business and securing their spots in the knockouts. On the flip side, Tunisia, Saudi Arabia, Belgium, Cape Verde, and New Zealand are all ELIMINATED and will be heading home. Haiti and Turkey are also out. Plenty of other teams are still IN CONTENTION, with everything to play for in their final group games. Squeaky bum time for some!"
     },
     "2026-06-22": {
-      "headline": "France, Norway, and Argentina Qualify! Senegal, Iraq, and Jordan Are Heading Home!",
-      "theDrama": "Well, the big guns are starting to really show up! France absolutely dispatched Iraq, and Norway put on a fantastic display to beat Senegal, meaning both are officially qualified! Argentina also secured their spot with a comfortable win over Austria. Sadly for Senegal, Iraq, and Jordan, they're now officially eliminated and will be booking their flights home. Algeria got a good win against Jordan, keeping their hopes alive!",
-      "mustWatchHighlights": "France and Norway both put on excellent attacking displays, definitely worth a watch. Argentina's win was also a masterclass. The Jordan vs Algeria game had a bit of fight, but for pure quality, stick with the qualifiers.",
-      "progressionNews": "Mexico, Canada, Switzerland, the USA, Germany, the Netherlands, France, Norway, and Argentina have all qualified for the knockout stages. Haiti, Türkiye, Tunisia, Senegal, Iraq, and Jordan are officially eliminated. Bosnia-Herzegovina and Qatar need a strong result in their final game to keep their best-3rd hopes alive. Austria, Algeria, South Korea, Czechia, South Africa, Australia, Paraguay, Ivory Coast, Ecuador, Curaçao, Japan, Sweden, Egypt, Iran, Belgium, New Zealand, Spain, Uruguay, Cape Verde, Saudi Arabia, Colombia, Portugal, Congo DR, Uzbekistan, England, Ghana, Panama, and Croatia are all in contention to finish in the top two."
+      "headline": "Messi's Penalty Ponderings, Haaland's Heroics & Late Algerian Drama!",
+      "theDrama": "Today was a proper mixed bag, wasn't it? We had Messi missing a penalty (yes, you read that right!) before bagging a brace, Haaland doing what Haaland does best with another two goals, and Algeria pulling off a dramatic late comeback. Senegal and Jordan put up a fight, but ultimately, the big guns prevailed. Plenty of injury stoppages and drinks breaks too, making some matches feel like they were played in slow motion!",
+      "mustWatchHighlights": "If you missed Norway vs. Senegal, you missed a five-goal thriller with Haaland and Sarr both bagging braces – absolute scenes! Jordan vs. Algeria also had a cracking late comeback. As for the sleepfests? Iraq's performance against France, with zero shots on target, was about as exciting as watching paint dry.",
+      "progressionNews": "Well, the big news is that France, Norway, Argentina, and Algeria have all officially qualified for the next round, so they can put their feet up! On the flip side, Haiti, Tunisia, Senegal, Iraq, Austria, and Jordan are all eliminated and will be booking their flights home. The rest of the teams are still very much in contention, with everything to play for in their final group games. Squeaky bum time for many, I reckon!"
     }
   },
   "today_preview": {
-    "headline": "Tomorrow's Treat: England's Second Test, Portugal's Prowess, and More Group Stage Mayhem!",
-    "theBigOnes": "Tomorrow we've got England taking on Ghana, which should be a cracking affair. Can England build on their first win, or will Ghana cause an upset? Portugal vs Uzbekistan also looks like a tasty encounter, with both teams looking to make a statement. Panama vs Croatia and Colombia vs Congo DR round out the day, and while they might not be headline-grabbers, you never know what drama the World Cup will throw up!",
-    "playersToWatch": "Keep an eye on England's attacking talent against Ghana – can they really turn on the style? For Portugal, all eyes will be on their main man to see if he can add to his tally. And in the Colombia vs Congo DR match, look out for any standout performances that could ignite their campaigns. It's all to play for!",
+    "headline": "Tomorrow's Tea-Time Treats: England's Next Test & Portugal's Prowess!",
+    "theBigOnes": "Tomorrow promises some cracking encounters! England against Ghana is always going to be a fiery affair, with both teams looking to stamp their authority. And Portugal facing Uzbekistan will be one to watch, as Ronaldo and co. look to build on their start. Panama vs. Croatia and Colombia vs. DR Congo also have plenty at stake, so don't you dare miss them!",
+    "playersToWatch": "Keep an eye on England's main man, whoever that might be, to see if they can get on the scoresheet. For Portugal, all eyes will be on the usual suspects to see if they can produce some liquid football. And in the other games, expect some passionate performances as teams fight for every single point!",
     "firstKickoffTime": "2026-06-23T17:00Z"
   },
   "espnMatches": {
@@ -3435,11 +3370,11 @@
           "awayYellowCards": 1,
           "homeRedCards": 0,
           "awayRedCards": 0,
-          "homePasses": 250,
-          "awayPasses": 640,
+          "homePasses": 251,
+          "awayPasses": 641,
           "homePassPct": 7,
           "awayPassPct": 9,
-          "homeClearances": 37,
+          "homeClearances": 36,
           "awayClearances": 15
         },
         "events": [
