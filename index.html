@@ -3108,7 +3108,12 @@ function mcLineups(ev,data){
   const rosters=data?.rosters||[];
   if(!rosters.length) return`<div class="mc-lu-na">Lineups not yet confirmed</div>`;
 
-  const POS={GK:0,G:0,CB:1,LB:1,RB:1,LWB:1,RWB:1,D:1,CM:2,DM:2,AM:2,LM:2,RM:2,M:2,LW:3,RW:3,CF:3,ST:3,F:3};
+  const POS={
+    GK:0,G:0,
+    CB:1,LB:1,RB:1,LWB:1,RWB:1,D:1,FB:1,LFB:1,RFB:1,WB:1,SW:1,DF:1,
+    CM:2,DM:2,AM:2,LM:2,RM:2,M:2,CDM:2,CAM:2,MF:2,DMF:2,AMF:2,
+    LW:3,RW:3,CF:3,ST:3,F:3,FW:3,ATT:3,SS:3,FO:3
+  };
   const hR=rosters.find(r=>r.homeAway==='home')||rosters[0];
   const aR=rosters.find(r=>r.homeAway==='away')||rosters[1];
   const hTi={name:ev.home.name,abbr:ev.home.abbr};
@@ -3120,7 +3125,7 @@ function mcLineups(ev,data){
     const bench=entries.filter(e=>!e.starter);
     const grp={GK:[],DEF:[],MID:[],FWD:[]};
     starters.forEach(e=>{
-      const p=POS[e.position?.abbreviation]??POS[e.position?.abbreviation?.charAt(0)]??2;
+      const p=POS[e.position?.abbreviation]??2;
       [grp.GK,grp.DEF,grp.MID,grp.FWD][p]?.push(e);
     });
     return{grp,bench};
