@@ -1343,12 +1343,11 @@ window.initKeepyUppy = function() {
     document.body.appendChild(div);
 
     const inp = div.querySelector('#_gameNameInput');
-    inp.addEventListener('input', () => { inp.value = inp.value.toUpperCase().replace(/[^A-Z0-9 _-]/g, ''); });
     setTimeout(() => inp.focus(), 80);
 
     const doSave = () => {
       _pendingScore = null;
-      const name = inp.value.trim() || selectedChar.name;
+      const name = inp.value.toUpperCase().replace(/[^A-Z0-9 _-]/g, '').trim() || selectedChar.name;
       div.remove();
       state = 'leaderboard';
       lbData = null;
@@ -1683,6 +1682,7 @@ window.initKeepyUppy = function() {
 
   canvas.addEventListener('pointerdown', handlePointer, {passive:false});
   window.addEventListener('keydown', e => {
+    if (document.activeElement && document.activeElement.tagName === 'INPUT') return;
     if (e.repeat) return; // Prevent keydown auto-repeat from triggering multiple taps
     if (e.code==='Space')                        { e.preventDefault(); if(state==='playing') tryKick(); }
     if (e.code==='ArrowLeft' ||e.code==='KeyA')  keys.left=true;
@@ -1691,6 +1691,7 @@ window.initKeepyUppy = function() {
     if (e.code==='Escape')                        { dismissNamePrompt(); state='menu'; }
   });
   window.addEventListener('keyup', e => {
+    if (document.activeElement && document.activeElement.tagName === 'INPUT') return;
     if (e.code==='ArrowLeft' ||e.code==='KeyA')  keys.left=false;
     if (e.code==='ArrowRight'||e.code==='KeyD')  keys.right=false;
   });
