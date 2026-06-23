@@ -1004,7 +1004,13 @@ body{
   max-height:0;overflow:hidden;
   transition:max-height .3s cubic-bezier(.4,0,.2,1);
 }
-.recap-card.open .recap-body{max-height:600px}
+.recap-card.open .recap-body{max-height:900px}
+.recap-results{margin-top:10px}
+.recap-result-row{display:flex;align-items:center;gap:6px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:12px}
+.recap-result-row:last-child{border-bottom:none}
+.recap-result-home{flex:1;text-align:right;color:rgba(255,255,255,.75)}
+.recap-result-score{font-size:13px;font-weight:800;color:#fff;min-width:36px;text-align:center;letter-spacing:.5px}
+.recap-result-away{flex:1;color:rgba(255,255,255,.75)}
 .recap-body-inner{padding:0 13px 13px;border-top:1px solid rgba(0,255,135,.08)}
 .recap-section{margin-top:10px}
 .recap-section-lbl{
@@ -2261,13 +2267,12 @@ function renderSummary(container, dispDate){
   const todayStr = new Date().toISOString().slice(0,10);
   const ds = dispDate ? dispDate.toISOString().slice(0,10) : todayStr;
   const isToday = ds === todayStr;
-  // Exact match for this day; fall back to most recent completed day when on today's view
   const row = _recapRows.find(r => r.date === ds) || (isToday ? _recapRows[0] : null);
   if(!row) return;
-  // Don't show if user dismissed this recap today
   if(isToday && localStorage.getItem('recap_dismissed') === row.date) return;
-  // Label: "Yesterday" when on today's view but showing prior day's recap
   const isYesterday = isToday && row.date !== todayStr;
+  // Time gate: only show the "Yesterday" card before noon local time
+  if(isYesterday && new Date().getHours() >= 12) return;
   const label = isYesterday ? 'Yesterday' : (row.date === todayStr ? 'Today' : fmtRecapDate(row.date));
   const card = document.createElement('div');
   card.className = 'recap-card';
@@ -2282,11 +2287,35 @@ function renderSummary(container, dispDate){
       ${row.theDrama?`<div class="recap-section"><div class="recap-section-lbl">The Drama</div><div class="recap-section-txt">${row.theDrama}</div></div>`:''}
       ${row.mustWatchHighlights?`<div class="recap-section"><div class="recap-section-lbl">Watch / Skip</div><div class="recap-section-txt">${row.mustWatchHighlights}</div></div>`:''}
       ${row.progressionNews?`<div class="recap-section"><div class="recap-section-lbl">Progression</div><div class="recap-section-txt">${row.progressionNews}</div></div>`:''}
+      ${isYesterday?`<div class="recap-results" id="recap-res-${row.date.replace(/-/g,'')}"><div class="recap-section-lbl">Results</div><div style="font-size:11px;color:rgba(255,255,255,.35);padding-top:4px">Loading…</div></div>`:''}
     </div></div>`;
-  // Insert after the day-nav, before match sections
   const nav = container.querySelector('#day-nav');
   if(nav && nav.nextSibling) container.insertBefore(card, nav.nextSibling);
   else container.append(card);
+  if(isYesterday) fetchRecapResults(row.date, card);
+}
+
+async function fetchRecapResults(date, card){
+  try {
+    const ds = date.replace(/-/g,'');
+    const r = await fetch(`${ESPN_URL}?dates=${ds}`, { signal: AbortSignal.timeout(8000) });
+    if(!r.ok) throw new Error(r.status);
+    const data = await r.json();
+    const events = (data.events||[]).map(parseEvent).filter(e => e.state==='post');
+    const el = card.querySelector(`#recap-res-${ds}`);
+    if(!el) return;
+    if(!events.length){ el.remove(); return; }
+    const rows = events.map(ev =>
+      `<div class="recap-result-row">
+        <div class="recap-result-home">${flag(ev.home.abbr)} ${ev.home.name}</div>
+        <div class="recap-result-score">${ev.home.score}–${ev.away.score}</div>
+        <div class="recap-result-away">${ev.away.name} ${flag(ev.away.abbr)}</div>
+      </div>`).join('');
+    el.innerHTML = `<div class="recap-section-lbl">Results</div><div>${rows}</div>`;
+  } catch(e){
+    const ds = date.replace(/-/g,'');
+    card.querySelector(`#recap-res-${ds}`)?.remove();
+  }
 }
 
 async function fetchMatches(){
