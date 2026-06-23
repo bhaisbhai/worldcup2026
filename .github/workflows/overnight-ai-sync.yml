@@ -1,17 +1,21 @@
 name: Overnight AI Recap Generation
 
 on:
-  push:
-    branches:
-      - main
   schedule:
-    - cron: '0 8 * * *'   # 08:00 UTC = 09:00 BST, after US West Coast late matches end
-  workflow_dispatch:        # Trigger manually for testing
+    # Run every 2 hours midnight–noon UTC. The pipeline self-gates:
+    # it exits immediately if games aren't all done yet or if the 1h
+    # post-game buffer hasn't elapsed, and skips if a recap already exists.
+    - cron: '0 0,2,4,6,8,10,12 * * *'
+  workflow_dispatch:
     inputs:
       date:
         description: 'Date to regenerate (YYYY-MM-DD). Leave blank to process yesterday.'
         required: false
         default: ''
+      force:
+        description: 'Skip readiness checks (--force)'
+        required: false
+        default: 'false'
 
 permissions:
   contents: write
@@ -36,11 +40,14 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
+          ARGS=""
           if [ -n "${{ github.event.inputs.date }}" ]; then
-            npm run pipeline:generate -- --date=${{ github.event.inputs.date }}
-          else
-            npm run pipeline:generate
+            ARGS="$ARGS --date=${{ github.event.inputs.date }}"
           fi
+          if [ "${{ github.event.inputs.force }}" = "true" ]; then
+            ARGS="$ARGS --force"
+          fi
+          npm run pipeline:generate -- $ARGS
 
       - name: Commit and Push
         run: |

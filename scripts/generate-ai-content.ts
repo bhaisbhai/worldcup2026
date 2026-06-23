@@ -427,6 +427,8 @@ async function main() {
 
   console.log(`📅 Processing target date: ${targetDate}`);
 
+  const force = process.argv.includes('--force');
+
   // 1. Fetch live matches from ESPN Scoreboard API
   const formattedDate = targetDate.replace(/-/g, '');
   const scoreboardUrl = `https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?dates=${formattedDate}`;
@@ -435,6 +437,40 @@ async function main() {
   const events = scoreboardData.events || [];
   if (events.length === 0) {
     console.warn(`⚠️ No matches found in ESPN Scoreboard for date ${targetDate}.`);
+  }
+
+  if (!force) {
+    // Idempotency: skip if recap already generated for this date
+    const recapsPath = path.resolve(__dirname, '..', 'data', 'recaps.json');
+    if (fs.existsSync(recapsPath)) {
+      const existing: any[] = JSON.parse(fs.readFileSync(recapsPath, 'utf-8'));
+      if (existing.some(r => r.date === targetDate && r.headline)) {
+        console.log(`✅ Recap for ${targetDate} already exists — skipping.`);
+        process.exit(0);
+      }
+    }
+
+    if (events.length > 0) {
+      // All games must be completed before we generate
+      const incomplete = events.filter((e: any) => !e.status?.type?.completed);
+      if (incomplete.length > 0) {
+        console.log(`⏳ ${incomplete.length} game(s) not yet completed for ${targetDate}. Exiting — will retry next run.`);
+        process.exit(0);
+      }
+
+      // 1 hour after the last game's estimated end time (kickoff + 115 min + 60 min buffer)
+      const latestKickoff = Math.max(...events.map((e: any) => new Date(e.date).getTime()));
+      const eligibleAt = latestKickoff + (115 + 60) * 60 * 1000;
+      if (Date.now() < eligibleAt) {
+        const waitMins = Math.ceil((eligibleAt - Date.now()) / 60000);
+        console.log(`⏳ Within 1h buffer of last game's end. ${waitMins}m remaining — will retry next run.`);
+        process.exit(0);
+      }
+
+      console.log(`✅ All ${events.length} game(s) complete and 1h buffer passed. Generating recap…`);
+    }
+  } else {
+    console.log('⚡ --force flag set — skipping readiness checks.');
   }
 
   // 2. Read existing master JSON database
