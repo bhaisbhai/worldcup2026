@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-22T23:12:46.360Z",
+  "lastUpdated": "2026-06-23T06:32:41.127Z",
   "teams": {
     "BIH": {
       "headline": "The Defensive Circus",
@@ -167,6 +167,62 @@
       "storySoFar": "Egypt showed their class today, coming from behind to beat New Zealand 3-1 and secure their spot in the next round. Seven points from three games, a solid performance.",
       "whatsNext": "Egypt are QUALIFIED for the next round! They've navigated the group stage with confidence and will be looking to make a deep run in the tournament.",
       "pubAmmo": "Mohamed Salah is just a different gravy, isn't he? Scores, assists, makes everything tick. A proper walking cheat code for Egypt."
+    },
+    "ARG": {
+      "teamCode": "ARG",
+      "headline": "Argentina book their ticket with a Messi masterclass!",
+      "storySoFar": "Two wins from two, six points, and a clean sheet record to boot. Argentina are looking like serious contenders, even if Messi did have a moment of madness with that penalty.",
+      "whatsNext": "Argentina are officially qualified for the knockout stages! They'll be looking to maintain their perfect record and top the group in their final game.",
+      "pubAmmo": "Did you see Messi miss that penalty? Even he's human! But then he just shrugged it off and scored two. Unbelievable, Jeff!"
+    },
+    "AUT": {
+      "teamCode": "AUT",
+      "headline": "Austria's World Cup dream fizzles out!",
+      "storySoFar": "It's been a tough ride for Austria, managing only one point from two games and now falling short in their final group match. Their attacking prowess was, shall we say, 'underwhelming'.",
+      "whatsNext": "Austria are officially eliminated. Time to pack their bags and contemplate what might have been. Probably a long flight home.",
+      "pubAmmo": "Austria's attacking strategy was to have one shot on target and hope for the best. Didn't quite work out, did it? They're going home!"
+    },
+    "FRA": {
+      "teamCode": "FRA",
+      "headline": "Les Bleus march on, looking imperious!",
+      "storySoFar": "Three games, three wins, nine goals scored, and only one conceded. France are absolutely flying, with Mbappé leading the charge. They've made it look rather easy, haven't they?",
+      "whatsNext": "France are officially qualified for the knockout stages! They've topped their group with a perfect record and are looking like a force to be reckoned with.",
+      "pubAmmo": "Mbappé's just showing off now, isn't he? Two goals and barely breaking a sweat. France are going to be a nightmare for anyone in the knockouts."
+    },
+    "IRQ": {
+      "teamCode": "IRQ",
+      "headline": "Iraq's World Cup journey ends with a whimper!",
+      "storySoFar": "Three losses, one goal scored, and ten conceded. It's been a baptism of fire for Iraq, who simply couldn't compete with the big boys in Group I.",
+      "whatsNext": "Iraq are officially eliminated. They'll be heading home with plenty to think about, particularly their inability to get a shot on target against France.",
+      "pubAmmo": "Iraq's attacking plan against France was to not have one. Zero shots on target! You've got to at least try, haven't you?"
+    },
+    "NOR": {
+      "teamCode": "NOR",
+      "headline": "Haaland-inspired Norway storm into the knockouts!",
+      "storySoFar": "Norway have been a revelation, winning all three of their group games, largely thanks to the goal-scoring exploits of Erling Haaland. They've shown they're more than just a one-man team, but he certainly helps!",
+      "whatsNext": "Norway are officially qualified for the knockout stages! They've topped their group and will be a team to watch, especially with Haaland in this form.",
+      "pubAmmo": "Haaland just keeps scoring, doesn't he? It's like he's playing a different game. Norway are through, and it's all thanks to that big lad."
+    },
+    "SEN": {
+      "teamCode": "SEN",
+      "headline": "Senegal's valiant effort falls short!",
+      "storySoFar": "Despite a spirited performance and two goals from Ismaïla Sarr today, Senegal couldn't overcome Norway and finish their group stage with three losses. A tough pill to swallow.",
+      "whatsNext": "Senegal are officially eliminated. They fought hard, but ultimately, it wasn't enough to secure a spot in the next round. Time for reflection.",
+      "pubAmmo": "Senegal gave it a good go, but you can't concede three goals and expect to win, especially against a team with Haaland. They're on the next flight home."
+    },
+    "JOR": {
+      "teamCode": "JOR",
+      "headline": "Jordan's World Cup adventure concludes!",
+      "storySoFar": "Jordan showed glimpses of promise, even taking the lead against Algeria, but ultimately, three losses mean their World Cup journey is over. They gave it a go, bless 'em.",
+      "whatsNext": "Jordan are officially eliminated. They'll be heading home after a challenging group stage, having learned some valuable lessons.",
+      "pubAmmo": "Jordan had a sniff of an upset, but Algeria just had too much quality. Their keeper was busy, but the defence just couldn't hold out. Another one bites the dust!"
+    },
+    "ALG": {
+      "teamCode": "ALG",
+      "headline": "Algeria fight back to secure knockout berth!",
+      "storySoFar": "After a bit of a scare, Algeria dug deep to come from behind and beat Jordan, securing their second win of the group stage and a spot in the next round. Solid performance when it mattered.",
+      "whatsNext": "Algeria are officially qualified for the knockout stages! A strong finish to the group stage sees them through, and they'll be looking to build on this momentum.",
+      "pubAmmo": "Algeria had to work for it today, but they got the job done. Dominated possession and showed character to come back. Proper stuff, that."
     }
   },
   "matches": {
@@ -301,6 +357,50 @@
         "New Zealand's two yellow cards suggest they were a bit too eager to get stuck in, with Sarpreet Singh and Callum McCowatt both booked."
       ],
       "randomQuirk": "New Zealand's Finn Surman scored with their first shot on target, giving them a fleeting moment of glory before Egypt decided to wake up."
+    },
+    "ARG-AUT": {
+      "matchKey": "ARG-AUT",
+      "editionTitle": "World Cup 2026 Group J",
+      "snappySummary": "Messi magic seals qualification for Argentina, despite an early penalty blunder.",
+      "talkingPoints": [
+        "Lionel Messi, after missing a penalty, decided to remind everyone he's still rather good by bagging two goals.",
+        "Austria's attacking threat was about as potent as a wet paper bag, managing only one shot on target.",
+        "The match was a stop-start affair, with more delays than a British train line, featuring injuries and drinks breaks galore."
+      ],
+      "randomQuirk": "Argentina's Lionel Messi managed to miss a penalty in the 9th minute, only to score a goal 29 minutes later, and then another in injury time. Talk about making up for it!"
+    },
+    "FRA-IRQ": {
+      "matchKey": "FRA-IRQ",
+      "editionTitle": "World Cup 2026 Group I",
+      "snappySummary": "France strolls to a comfortable 3-0 victory over a toothless Iraq, securing their spot in the next round.",
+      "talkingPoints": [
+        "Kylian Mbappé was in fine form, grabbing a brace and showing Iraq exactly why France are considered contenders.",
+        "Iraq's attacking efforts were non-existent, failing to register a single shot on target throughout the entire match.",
+        "Michael Olise put on a masterclass in creativity, setting up two goals with some delightful play."
+      ],
+      "randomQuirk": "Iraq's strategy seemed to be 'admire France from a safe distance' as they failed to hit the target with any of their four shots. A casual kickabout in the park for the French, really."
+    },
+    "NOR-SEN": {
+      "matchKey": "NOR-SEN",
+      "editionTitle": "World Cup 2026 Group I",
+      "snappySummary": "Haaland's brace ensures Norway's qualification in a five-goal thriller, despite Senegal's late rally.",
+      "talkingPoints": [
+        "Erling Haaland, that walking cheat code, bagged another two goals to send Norway through with ease.",
+        "Senegal showed some spirit, with Ismaïla Sarr grabbing a brace, but it wasn't enough to stop the Norwegian juggernaut.",
+        "Despite having more possession, Senegal couldn't convert it into a winning performance, proving possession isn't everything."
+      ],
+      "randomQuirk": "Norway's Marcus Pedersen opened the scoring just 30 minutes after coming on as an early substitute due to injury, proving that sometimes, you just need to be in the right place at the right time."
+    },
+    "JOR-ALG": {
+      "matchKey": "JOR-ALG",
+      "editionTitle": "World Cup 2026 Group J",
+      "snappySummary": "Algeria comes from behind to snatch a vital 2-1 win against Jordan, confirming their progression.",
+      "talkingPoints": [
+        "Jordan had the audacity to take the lead, but Algeria showed their class, turning the game around in the second half.",
+        "Algeria absolutely dominated possession, making Jordan chase shadows for most of the match.",
+        "Riyad Mahrez, even with limited minutes, managed to conjure up an assist from a corner, showing that touch of quality."
+      ],
+      "randomQuirk": "Jordan's Nizar Al-Rashdan scored with one of his two shots, while Algeria's Amine Gouiri scored with one of his three. Efficiency, eh? Though Algeria had 10 corners to Jordan's one, so they certainly kept the pressure on."
     }
   },
   "days": {
@@ -369,13 +469,19 @@
       "theDrama": "Today saw some cracking goals, a few absolute snoozers, and some big names heading for an early bath. Japan and Spain put on masterclasses, while Belgium's 'Golden Generation' completely bottled it with a dire 0-0 draw and a red card. Uruguay and Cape Verde gave us a proper ding-dong, and Egypt showed their class to come from behind against New Zealand. Never a dull moment, eh?",
       "mustWatchHighlights": "If you want goals and slick football, Japan vs Tunisia and Spain vs Saudi Arabia are your highlights. For a masterclass in how *not* to score, Belgium vs Iran is a must-watch – if you're into that sort of thing. Uruguay vs Cape Verde was a proper back-and-forth affair, definitely worth a gander.",
       "progressionNews": "Well, the dust has settled on a few groups! Japan, Spain, Egypt, and Iran have all QUALIFIED, doing the business and securing their spots in the knockouts. On the flip side, Tunisia, Saudi Arabia, Belgium, Cape Verde, and New Zealand are all ELIMINATED and will be heading home. Haiti and Turkey are also out. Plenty of other teams are still IN CONTENTION, with everything to play for in their final group games. Squeaky bum time for some!"
+    },
+    "2026-06-22": {
+      "headline": "Messi's Redemption, Haaland's Haul, and the Great Escape Artists!",
+      "theDrama": "Today was a proper mixed bag, wasn't it? We saw Messi miss a penalty, then decide to score two anyway, because, well, he's Messi. Haaland continued his goal-scoring rampage, making it look far too easy. And Algeria pulled off a cracking comeback, proving that sometimes, you just need to keep plugging away. Plenty of goals, plenty of drama, and a few teams booking their flights home.",
+      "mustWatchHighlights": "If you missed the Norway vs Senegal game, go watch the highlights – five goals, a Haaland brace, and a spirited comeback from Senegal. The Argentina vs Austria match had Messi's penalty miss and subsequent redemption, which is always worth a gander. As for France vs Iraq, it was a bit of a training exercise for the French, and Jordan vs Algeria had a decent comeback, but perhaps not a 'must-watch' for the neutrals.",
+      "progressionNews": "Well, the big news is that Argentina, France, Norway, and Algeria have all officially qualified for the knockout stages – well done, lads! On the flip side, Haiti, Tunisia, Senegal, Iraq, Austria, and Jordan are all officially eliminated. Hard lines, but that's football, isn't it? The rest of the teams are still in contention, with everything to play for in their final group games. Squeaky bum time for a few of them!"
     }
   },
   "today_preview": {
-    "headline": "More Group Stage Mayhem on the Horizon! Who's Next to Bottle It?",
-    "theBigOnes": "Tomorrow promises more fireworks! Argentina vs Austria looks like a proper clash of titans, while France vs Iraq and Norway vs Senegal could throw up some surprises. Jordan vs Algeria might be a bit of a tactical battle, but you never know in this tournament!",
-    "playersToWatch": "Keep an eye on Messi for Argentina, obviously – he's always a threat. The French attackers will be looking to make a statement against Iraq. And let's see if Norway's star striker can deliver the goods against a tricky Senegal side. Plenty of talent on display, so grab a cuppa and enjoy the show!",
-    "firstKickoffTime": "2026-06-22T17:00Z"
+    "headline": "Tomorrow's Treat: England's Second Test, Portugal's Prowess, and More Group Stage Mayhem!",
+    "theBigOnes": "Tomorrow we've got England taking on Ghana, which should be a cracking affair. Can England build on their first win, or will Ghana cause an upset? Portugal vs Uzbekistan also looks like a tasty encounter, with both teams looking to make a statement. Panama vs Croatia and Colombia vs Congo DR round out the day, and while they might not be headline-grabbers, you never know what drama the World Cup will throw up!",
+    "playersToWatch": "Keep an eye on England's attacking talent against Ghana – can they really turn on the style? For Portugal, all eyes will be on their main man to see if he can add to his tally. And in the Colombia vs Congo DR match, look out for any standout performances that could ignite their campaigns. It's all to play for!",
+    "firstKickoffTime": "2026-06-23T17:00Z"
   },
   "espnMatches": {
     "2026-06-11": [
@@ -3034,6 +3140,273 @@
           "90'+11' [End Regular Time] "
         ]
       }
+    ],
+    "2026-06-22": [
+      {
+        "id": "760456",
+        "name": "Austria at Argentina",
+        "homeTeam": "ARG",
+        "awayTeam": "AUT",
+        "homeScore": 2,
+        "awayScore": 0,
+        "status": "STATUS_FULL_TIME",
+        "stadium": "AT&T Stadium",
+        "time": "05:00 PM",
+        "stats": {
+          "homePossession": "53.6%",
+          "awayPossession": "46.4%",
+          "homeShots": 12,
+          "awayShots": 6,
+          "homeShotsOnTarget": 5,
+          "awayShotsOnTarget": 1,
+          "homeCorners": 1,
+          "awayCorners": 3,
+          "homeYellowCards": 2,
+          "awayYellowCards": 2,
+          "homeRedCards": 0,
+          "awayRedCards": 0,
+          "homePasses": 554,
+          "awayPasses": 468,
+          "homePassPct": 9,
+          "awayPassPct": 9,
+          "homeClearances": 35,
+          "awayClearances": 15
+        },
+        "events": [
+          " [Kickoff] ",
+          "4' [Start Delay] Delay in match because of an injury Lautaro Martínez (Argentina).",
+          "4' [Start Delay] ",
+          "7' [End Delay] Delay over. They are ready to continue.",
+          "7' [End Delay] ",
+          "7' [Start Delay] ",
+          "9' [Penalty - Missed] Penalty missed. Lionel Messi (Argentina) left footed shot is close, but misses to the right.",
+          "21' [Start Delay] Delay in match because of an injury Rodrigo De Paul (Argentina).",
+          "21' [Start Delay] Delay in match (Austria).",
+          "22' [End Delay] Delay over. They are ready to continue.",
+          "22' [End Delay] ",
+          "23' [Start Delay] Delay in match for a drinks break.",
+          "23' [Start Delay] ",
+          "26' [End Delay] Delay over. They are ready to continue.",
+          "26' [End Delay] ",
+          "38' [Goal] Goal! Argentina 1, Austria 0. Lionel Messi (Argentina) left footed shot from the centre of the box to the bottom left corner. Assisted by Facundo Medina following a fast break.",
+          "40' [Yellow Card] Stefan Posch (Austria) is shown the yellow card.",
+          "45'+7' [Halftime] ",
+          "45' [Start 2nd Half] Second Half begins Argentina 1, Austria 0.",
+          "57' [Substitution] Substitution, Argentina. Nicolás Otamendi replaces Cristian Romero because of an injury.",
+          "62' [Start Delay] Delay in match because of an injury Kevin Danso (Austria).",
+          "62' [Start Delay] ",
+          "62' [End Delay] Delay over. They are ready to continue.",
+          "62' [End Delay] ",
+          "64' [Substitution] Substitution, Argentina. Julián Alvarez replaces Thiago Almada.",
+          "65' [Substitution] Substitution, Argentina. Nico González replaces Lautaro Martínez.",
+          "67' [Substitution] Substitution, Austria. Marco Friedl replaces David Alaba.",
+          "68' [Substitution] Substitution, Austria. Alexander Prass replaces Stefan Posch.",
+          "68' [Substitution] Substitution, Austria. Marko Arnautovic replaces Paul Wanner.",
+          "69' [Start Delay] Delay in match for a drinks break.",
+          "69' [Start Delay] ",
+          "71' [End Delay] Delay over. They are ready to continue.",
+          "71' [End Delay] ",
+          "76' [Yellow Card] Facundo Medina (Argentina) is shown the yellow card.",
+          "76' [Yellow Card] Konrad Laimer (Austria) is shown the yellow card.",
+          "78' [Substitution] Substitution, Austria. Patrick Wimmer replaces Romano Schmid.",
+          "79' [Start Delay] Delay in match because of an injury Emiliano Martínez (Argentina).",
+          "79' [Start Delay] ",
+          "80' [End Delay] Delay over. They are ready to continue.",
+          "80' [End Delay] ",
+          "82' [Substitution] Substitution, Argentina. Leandro Paredes replaces Rodrigo De Paul.",
+          "82' [Substitution] Substitution, Argentina. Nicolás Tagliafico replaces Facundo Medina.",
+          "85' [Substitution] Substitution, Austria. Carney Chukwuemeka replaces Michael Gregoritsch.",
+          "90'+2' [Yellow Card] Leandro Paredes (Argentina) is shown the yellow card for a bad foul.",
+          "90'+5' [Goal] Goal! Argentina 2, Austria 0. Lionel Messi (Argentina) left footed shot from the left side of the six yard box to the centre of the goal following a fast break.",
+          "90'+8' [End Regular Time] "
+        ]
+      },
+      {
+        "id": "760457",
+        "name": "Iraq at France",
+        "homeTeam": "FRA",
+        "awayTeam": "IRQ",
+        "homeScore": 3,
+        "awayScore": 0,
+        "status": "STATUS_FULL_TIME",
+        "stadium": "Lincoln Financial Field",
+        "time": "09:00 PM",
+        "stats": {
+          "homePossession": "55.6%",
+          "awayPossession": "44.4%",
+          "homeShots": 19,
+          "awayShots": 4,
+          "homeShotsOnTarget": 5,
+          "awayShotsOnTarget": 0,
+          "homeCorners": 4,
+          "awayCorners": 2,
+          "homeYellowCards": 0,
+          "awayYellowCards": 1,
+          "homeRedCards": 0,
+          "awayRedCards": 0,
+          "homePasses": 603,
+          "awayPasses": 481,
+          "homePassPct": 9,
+          "awayPassPct": 9,
+          "homeClearances": 9,
+          "awayClearances": 28
+        },
+        "events": [
+          " [Kickoff] ",
+          "6' [Yellow Card] Amir Al Ammari (Iraq) is shown the yellow card for a bad foul.",
+          "14' [Goal] Goal! France 1, Iraq 0. Kylian Mbappé (France) left footed shot from outside the box to the bottom left corner. Assisted by Michael Olise.",
+          "23' [Start Delay] Delay in match for a drinks break.",
+          "23' [Start Delay] ",
+          "25' [End Delay] ",
+          "25' [End Delay] Delay over. They are ready to continue.",
+          "26' [Substitution] Substitution, Iraq. Ali Al Hamadi replaces Aymen Hussein because of an injury.",
+          "28' [Start Delay] ",
+          "28' [End Delay] ",
+          "45' [Start Delay] ",
+          "45'+4' [Halftime] ",
+          "45' [Start 2nd Half] ",
+          "54' [Goal] Goal! France 2, Iraq 0. Kylian Mbappé (France) right footed shot from the centre of the box to the bottom right corner. Assisted by Ousmane Dembélé.",
+          "60' [Substitution] Substitution, Iraq. Rebin Sulaka replaces Zaid Tahseen.",
+          "60' [Substitution] Substitution, Iraq. Youssef Amyn replaces Zaid Ismael.",
+          "66' [Goal] Goal! France 3, Iraq 0. Ousmane Dembélé (France) right footed shot from the centre of the box to the bottom left corner. Assisted by Michael Olise with a through ball.",
+          "68' [Substitution] Substitution, France. Désiré Doué replaces Ousmane Dembélé.",
+          "68' [Substitution] Substitution, France. Rayan Cherki replaces Michael Olise.",
+          "68' [Substitution] Substitution, Iraq. Aimar Sher replaces Amir Al Ammari.",
+          "69' [Substitution] Substitution, Iraq. Marko Farji replaces Ibrahim Bayesh.",
+          "83' [Substitution] Substitution, France. Maghnes Akliouche replaces Bradley Barcola.",
+          "83' [Substitution] Substitution, France. Malo Gusto replaces Jules Koundé.",
+          "90'+1' [Substitution] Substitution, France. Marcus Thuram replaces Kylian Mbappé.",
+          "90'+3' [End Regular Time] "
+        ]
+      },
+      {
+        "id": "760454",
+        "name": "Senegal at Norway",
+        "homeTeam": "NOR",
+        "awayTeam": "SEN",
+        "homeScore": 3,
+        "awayScore": 2,
+        "status": "STATUS_FULL_TIME",
+        "stadium": "MetLife Stadium",
+        "time": "12:00 AM",
+        "stats": {
+          "homePossession": "41.7%",
+          "awayPossession": "58.3%",
+          "homeShots": 13,
+          "awayShots": 16,
+          "homeShotsOnTarget": 7,
+          "awayShotsOnTarget": 4,
+          "homeCorners": 5,
+          "awayCorners": 4,
+          "homeYellowCards": 0,
+          "awayYellowCards": 0,
+          "homeRedCards": 0,
+          "awayRedCards": 0,
+          "homePasses": 353,
+          "awayPasses": 489,
+          "homePassPct": 8,
+          "awayPassPct": 9,
+          "homeClearances": 26,
+          "awayClearances": 18
+        },
+        "events": [
+          " [Kickoff] First Half begins.",
+          "13' [Substitution] Substitution, Norway. Marcus Pedersen replaces Julian Ryerson because of an injury.",
+          "23' [Start Delay] Delay in match for a drinks break.",
+          "23' [Start Delay] ",
+          "26' [End Delay] Delay over. They are ready to continue.",
+          "26' [End Delay] ",
+          "43' [Goal] Goal! Norway 1, Senegal 0. Marcus Pedersen (Norway) right footed shot from the right side of the box to the top right corner.",
+          "45'+5' [Halftime] First Half ends, Norway 1, Senegal 0.",
+          "45' [Substitution] Substitution, Norway. Patrick Berg replaces Fredrik Aursnes.",
+          "45' [Start 2nd Half] Second Half begins Norway 1, Senegal 0.",
+          "48' [Goal] Goal! Norway 2, Senegal 0. Erling Haaland (Norway) left footed shot from the centre of the box to the top right corner. Assisted by Martin Ødegaard with a through ball following a fast break.",
+          "53' [Goal] Goal! Norway 2, Senegal 1. Ismaïla Sarr (Senegal) right footed shot from the centre of the box to the top right corner. Assisted by Sadio Mané.",
+          "54' [Substitution] Substitution, Senegal. Ismail Jakobs replaces El Hadji Malick Diouf.",
+          "54' [Substitution] Substitution, Senegal. Ibrahim Mbaye replaces Pape Gueye.",
+          "58' [Goal - Volley] Goal! Norway 3, Senegal 1. Erling Haaland (Norway) right footed shot from the centre of the box to the high centre of the goal. Assisted by Patrick Berg.",
+          "59' [Start Delay] Delay in match because of an injury Édouard Mendy (Senegal).",
+          "59' [Start Delay] ",
+          "63' [End Delay] Delay over. They are ready to continue.",
+          "63' [End Delay] ",
+          "63' [Substitution] Substitution, Senegal. Mory Diaw replaces Édouard Mendy because of an injury.",
+          "63' [Substitution] Substitution, Senegal. Pathé Ciss replaces Lamine Camara.",
+          "68' [Start Delay] Delay in match for a drinks break.",
+          "68' [Start Delay] ",
+          "71' [Substitution] Substitution, Norway. Andreas Schjelderup replaces Antonio Nusa.",
+          "71' [End Delay] Delay over. They are ready to continue.",
+          "71' [End Delay] ",
+          "72' [Substitution] Substitution, Senegal. Pape Matar Sarr replaces Kalidou Koulibaly.",
+          "84' [Substitution] Substitution, Norway. Oscar Bobb replaces Alexander Sørloth.",
+          "84' [Substitution] Substitution, Norway. Leo Østigård replaces Torbjørn Heggem because of an injury.",
+          "90'+3' [Goal] Goal! Norway 3, Senegal 2. Ismaïla Sarr (Senegal) right footed shot from the centre of the box to the top right corner. Assisted by Nicolas Jackson.",
+          "90'+7' [Start Delay] Delay in match because of an injury Leo Østigård (Norway).",
+          "90'+7' [Start Delay] ",
+          "90'+7' [End Delay] Delay over. They are ready to continue.",
+          "90'+7' [End Delay] ",
+          "90'+11' [End Regular Time] Second Half ends, Norway 3, Senegal 2."
+        ]
+      },
+      {
+        "id": "760455",
+        "name": "Algeria at Jordan",
+        "homeTeam": "JOR",
+        "awayTeam": "ALG",
+        "homeScore": 1,
+        "awayScore": 2,
+        "status": "STATUS_FULL_TIME",
+        "stadium": "Levi's Stadium",
+        "time": "03:00 AM",
+        "stats": {
+          "homePossession": "27.9%",
+          "awayPossession": "72.1%",
+          "homeShots": 8,
+          "awayShots": 17,
+          "homeShotsOnTarget": 4,
+          "awayShotsOnTarget": 8,
+          "homeCorners": 1,
+          "awayCorners": 10,
+          "homeYellowCards": 1,
+          "awayYellowCards": 1,
+          "homeRedCards": 0,
+          "awayRedCards": 0,
+          "homePasses": 250,
+          "awayPasses": 640,
+          "homePassPct": 7,
+          "awayPassPct": 9,
+          "homeClearances": 37,
+          "awayClearances": 15
+        },
+        "events": [
+          " [Kickoff] First Half begins.",
+          "24' [Start Delay] Delay in match for a drinks break.",
+          "24' [Start Delay] ",
+          "27' [End Delay] Delay over. They are ready to continue.",
+          "27' [End Delay] ",
+          "36' [Goal] Goal! Jordan 1, Algeria 0. Nizar Al Rashdan (Jordan) right footed shot from the centre of the box to the bottom right corner. Assisted by Mousa Al Tamari.",
+          "44' [Yellow Card] Ramiz Zerrouki (Algeria) is shown the yellow card for a bad foul.",
+          "45'+5' [Halftime] First Half ends, Jordan 1, Algeria 0.",
+          "45' [Substitution] Substitution, Algeria. Nabil Bentaleb replaces Ramiz Zerrouki.",
+          "45' [Substitution] Substitution, Algeria. Nadhir Benbouali replaces Hicham Boudaoui.",
+          "45' [Start 2nd Half] Second Half begins Jordan 1, Algeria 0.",
+          "64' [Yellow Card] Husam Abu Dahab (Jordan) is shown the yellow card for a bad foul.",
+          "69' [Goal - Header] Goal! Jordan 1, Algeria 1. Nadhir Benbouali (Algeria) header from the centre of the box to the bottom left corner. Assisted by Riyad Mahrez with a cross following a corner.",
+          "74' [Start Delay] Delay in match for a drinks break.",
+          "74' [Start Delay] ",
+          "76' [Substitution] Substitution, Algeria. Anis Hadj Moussa replaces Riyad Mahrez.",
+          "76' [Substitution] Substitution, Jordan. Odeh Fakhoury replaces Mahmoud Al Mardi.",
+          "77' [End Delay] Delay over. They are ready to continue.",
+          "77' [End Delay] ",
+          "82' [Goal - Volley] Goal! Jordan 1, Algeria 2. Amine Gouiri (Algeria) right footed shot from very close range to the centre of the goal following a corner.",
+          "84' [Substitution] Substitution, Jordan. Ali Azaizeh replaces Mousa Al Tamari.",
+          "85' [Substitution] Substitution, Jordan. Mohammad Abu Hasheesh replaces Mohannad Abu Taha.",
+          "85' [Substitution] Substitution, Algeria. Jaouen Hadjam replaces Rayan Aït-Nouri.",
+          "86' [Substitution] Substitution, Algeria. Zineddine Belaïd replaces Amine Gouiri.",
+          "90'+1' [Substitution] Substitution, Jordan. Saleem Obaid replaces Husam Abu Dahab.",
+          "90'+2' [Substitution] Substitution, Jordan. Mohammad Abu Zraiq replaces Ali Olwan.",
+          "90'+8' [End Regular Time] "
+        ]
+      }
     ]
   },
   "espnStandings": [
@@ -3435,32 +3808,32 @@
         {
           "code": "NOR",
           "name": "Norway",
-          "mp": 1,
-          "w": 1,
+          "mp": 2,
+          "w": 2,
           "d": 0,
           "l": 0,
           "gf": 0,
           "ga": 0,
-          "pts": 3
+          "pts": 6
         },
         {
           "code": "FRA",
           "name": "France",
-          "mp": 1,
-          "w": 1,
+          "mp": 2,
+          "w": 2,
           "d": 0,
           "l": 0,
           "gf": 0,
           "ga": 0,
-          "pts": 3
+          "pts": 6
         },
         {
           "code": "SEN",
           "name": "Senegal",
-          "mp": 1,
+          "mp": 2,
           "w": 0,
           "d": 0,
-          "l": 1,
+          "l": 2,
           "gf": 0,
           "ga": 0,
           "pts": 0
@@ -3468,10 +3841,10 @@
         {
           "code": "IRQ",
           "name": "Iraq",
-          "mp": 1,
+          "mp": 2,
           "w": 0,
           "d": 0,
-          "l": 1,
+          "l": 2,
           "gf": 0,
           "ga": 0,
           "pts": 0
@@ -3506,21 +3879,21 @@
         {
           "code": "ALG",
           "name": "Algeria",
-          "mp": 1,
-          "w": 0,
+          "mp": 2,
+          "w": 1,
           "d": 0,
           "l": 1,
           "gf": 0,
           "ga": 0,
-          "pts": 0
+          "pts": 3
         },
         {
           "code": "JOR",
           "name": "Jordan",
-          "mp": 1,
+          "mp": 2,
           "w": 0,
           "d": 0,
-          "l": 1,
+          "l": 2,
           "gf": 0,
           "ga": 0,
           "pts": 0
