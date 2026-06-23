@@ -3110,9 +3110,9 @@ function mcLineups(ev,data){
 
   const POS={
     GK:0,G:0,
-    CB:1,LB:1,RB:1,LWB:1,RWB:1,D:1,FB:1,LFB:1,RFB:1,WB:1,SW:1,DF:1,
+    CB:1,CD:1,LB:1,RB:1,LWB:1,RWB:1,D:1,FB:1,LFB:1,RFB:1,WB:1,SW:1,DF:1,LD:1,RD:1,
     CM:2,DM:2,AM:2,LM:2,RM:2,M:2,CDM:2,CAM:2,MF:2,DMF:2,AMF:2,
-    LW:3,RW:3,CF:3,ST:3,F:3,FW:3,ATT:3,SS:3,FO:3
+    LW:3,RW:3,CF:3,ST:3,F:3,FW:3,ATT:3,SS:3,FO:3,W:3,WF:3,LF:3,RF:3
   };
   const hR=rosters.find(r=>r.homeAway==='home')||rosters[0];
   const aR=rosters.find(r=>r.homeAway==='away')||rosters[1];
@@ -3125,7 +3125,9 @@ function mcLineups(ev,data){
     const bench=entries.filter(e=>!e.starter);
     const grp={GK:[],DEF:[],MID:[],FWD:[]};
     starters.forEach(e=>{
-      const p=POS[e.position?.abbreviation]??2;
+      const abbr=e.position?.abbreviation;
+      const p=POS[abbr]??2;
+      if(abbr && POS[abbr]===undefined) console.warn('[lineup] unmapped position:',abbr,e.athlete?.displayName);
       [grp.GK,grp.DEF,grp.MID,grp.FWD][p]?.push(e);
     });
     return{grp,bench};
