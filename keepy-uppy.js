@@ -1330,7 +1330,7 @@ window.initKeepyUppy = function() {
     div.style.cssText = 'position:fixed;inset:0;z-index:600;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.65)';
     div.innerHTML = `
       <div style="background:#050716;border:2px solid #ffd43b;border-radius:12px;padding:28px 24px;text-align:center;max-width:300px;width:90%;font-family:ui-monospace,Menlo,Consolas,monospace">
-        <div style="color:#ffd43b;font-size:20px;font-weight:900;margin-bottom:4px">&#127942; TOP 5!</div>
+        <div style="color:#ffd43b;font-size:20px;font-weight:900;margin-bottom:4px">&#127942; TOP 10!</div>
         <div style="color:#41f8ff;font-size:12px;font-weight:700;margin-bottom:4px">SCORE: ${sc}</div>
         <div style="color:#94a3b8;font-size:11px;margin-bottom:18px">Enter your name for the leaderboard</div>
         <input id="_gameNameInput" type="text" maxlength="12" placeholder="YOUR NAME" autocomplete="off" autocorrect="off" spellcheck="false"
@@ -1394,7 +1394,7 @@ window.initKeepyUppy = function() {
       .then(d => {
         if (!_pendingScore) return; // user already navigated away, handled by _flushPendingScore
         const scores = d.scores || [];
-        const qualifies = scores.length < 5 || sc > (scores[4]?.score ?? 0);
+        const qualifies = scores.length < 10 || sc > (scores[9]?.score ?? 0);
         if (qualifies && state === 'gameover') {
           setTimeout(() => {
             if (state === 'gameover' && _pendingScore) {
@@ -1402,7 +1402,7 @@ window.initKeepyUppy = function() {
               showNameInput(sc, combo, perf);
             }
             // if user left gameover, _flushPendingScore was already called by resetGame/MENU
-          }, 1000);
+          }, 300);
         } else {
           _pendingScore = null;
           submitScore(selectedChar.name, sc, combo, perf);
@@ -1558,7 +1558,7 @@ window.initKeepyUppy = function() {
 
     addButton('RETRY',  24,  357, 148, 40, () => resetGame());
     addButton('SHARE',  186, 357, 148, 40, shareScore);
-    addButton('SCORES', 24,  407, 148, 40, () => { state = 'leaderboard'; fetchLeaderboard(); });
+    addButton('SCORES', 24,  407, 148, 40, () => { dismissNamePrompt(); state = 'leaderboard'; fetchLeaderboard(true); });
     addButton('MENU',   186, 407, 148, 40, () => { dismissNamePrompt(); state = 'menu'; });
   }
 
