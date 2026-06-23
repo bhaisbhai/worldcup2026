@@ -182,6 +182,225 @@ function updateCSVFile(filePath: string, headers: string[], idColIndex: number, 
   fs.writeFileSync(filePath, outputStr, 'utf-8');
 }
 
+function getGroupName(index: number): string {
+  const groups = ['Group A', 'Group B', 'Group C', 'Group D', 'Group E', 'Group F', 'Group G', 'Group H', 'Group I', 'Group J', 'Group K', 'Group L'];
+  return groups[index] || `Group ${index + 1}`;
+}
+
+function computeStandingsAndStatus(masterDB: any, targetDate: string) {
+  const espnStandings = masterDB.espnStandings || [];
+  const espnMatches = masterDB.espnMatches || {};
+
+  const teamStandingsMap = new Map<string, any>();
+  const groupTeamsMap = new Map<string, string[]>();
+  const completedMatches: any[] = [];
+
+  // Initialize group and team mappings
+  espnStandings.forEach((g: any, gIdx: number) => {
+    const gName = g.group || getGroupName(gIdx);
+    const codes: string[] = [];
+    for (const t of g.teams || []) {
+      const code = t.code;
+      if (!code) continue;
+      teamStandingsMap.set(code, {
+        code,
+        name: t.name,
+        group: gName,
+        mp: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, gd: 0
+      });
+      codes.push(code);
+    }
+    groupTeamsMap.set(gName, codes);
+  });
+
+  // Collect all completed matches up to targetDate
+  for (const date of Object.keys(espnMatches)) {
+    if (date > targetDate) continue;
+    for (const m of espnMatches[date] || []) {
+      const isCompleted = m.status === 'STATUS_FINAL' || m.status === 'STATUS_FULL_TIME';
+      if (!isCompleted) continue;
+
+      const h = teamStandingsMap.get(m.homeTeam);
+      const a = teamStandingsMap.get(m.awayTeam);
+      if (h && a && h.group === a.group) {
+        completedMatches.push({
+          homeTeam: m.homeTeam,
+          awayTeam: m.awayTeam,
+          homeScore: m.homeScore,
+          awayScore: m.awayScore
+        });
+      }
+    }
+  }
+
+  // Update standings using completed matches
+  for (const match of completedMatches) {
+    const home = teamStandingsMap.get(match.homeTeam);
+    const away = teamStandingsMap.get(match.awayTeam);
+    if (home) {
+      home.mp += 1;
+      home.gf += match.homeScore;
+      home.ga += match.awayScore;
+      home.gd = home.gf - home.ga;
+      if (match.homeScore > match.awayScore) { home.w += 1; home.pts += 3; }
+      else if (match.homeScore === match.awayScore) { home.d += 1; home.pts += 1; }
+      else { home.l += 1; }
+    }
+    if (away) {
+      away.mp += 1;
+      away.gf += match.awayScore;
+      away.ga += match.homeScore;
+      away.gd = away.gf - away.ga;
+      if (match.awayScore > match.homeScore) { away.w += 1; away.pts += 3; }
+      else if (match.awayScore === match.homeScore) { away.d += 1; away.pts += 1; }
+      else { away.l += 1; }
+    }
+  }
+
+  const statusLines: string[] = [];
+  const groupStandings: string[] = [];
+
+  for (const [gName, codes] of groupTeamsMap) {
+    // Deduce remaining matches for this group
+    const remainingMatches: any[] = [];
+    for (let i = 0; i < codes.length; i++) {
+      for (let j = i + 1; j < codes.length; j++) {
+        const team1 = codes[i];
+        const team2 = codes[j];
+
+        // Check if already played
+        const played = completedMatches.some(m =>
+          (m.homeTeam === team1 && m.awayTeam === team2) ||
+          (m.homeTeam === team2 && m.awayTeam === team1)
+        );
+
+        if (!played) {
+          remainingMatches.push({ homeTeam: team1, awayTeam: team2 });
+        }
+      }
+    }
+
+    // Generate scenarios recursively
+    const scenarios: any[][] = [];
+    function genScenarios(index: number, currentScenario: any[]) {
+      if (index === remainingMatches.length) {
+        scenarios.push([...currentScenario]);
+        return;
+      }
+      // Outcome 1: Home Win (1-0)
+      currentScenario.push({ match: remainingMatches[index], outcome: 'H' });
+      genScenarios(index + 1, currentScenario);
+      currentScenario.pop();
+
+      // Outcome 2: Draw (0-0)
+      currentScenario.push({ match: remainingMatches[index], outcome: 'D' });
+      genScenarios(index + 1, currentScenario);
+      currentScenario.pop();
+
+      // Outcome 3: Away Win (0-1)
+      currentScenario.push({ match: remainingMatches[index], outcome: 'A' });
+      genScenarios(index + 1, currentScenario);
+      currentScenario.pop();
+    }
+    genScenarios(0, []);
+
+    // Track simulated ranks and points for each team
+    const teamStats: Record<string, { ranks: number[]; ptsList: number[] }> = {};
+    codes.forEach(code => {
+      teamStats[code] = {
+        ranks: [],
+        ptsList: []
+      };
+    });
+
+    // Evaluate all scenarios
+    scenarios.forEach(scen => {
+      // Clone current standings
+      const clone: Record<string, any> = {};
+      codes.forEach(code => {
+        const t = teamStandingsMap.get(code);
+        clone[code] = { ...t };
+      });
+
+      // Apply scenario outcomes
+      scen.forEach(({ match, outcome }) => {
+        const home = clone[match.homeTeam];
+        const away = clone[match.awayTeam];
+        if (outcome === 'H') {
+          home.pts += 3; home.gf += 1; home.gd += 1;
+          away.ga += 1; away.gd -= 1;
+        } else if (outcome === 'D') {
+          home.pts += 1;
+          away.pts += 1;
+        } else {
+          away.pts += 3; away.gf += 1; away.gd += 1;
+          home.ga += 1; home.gd -= 1;
+        }
+      });
+
+      // Sort clone
+      const sorted = Object.values(clone).sort((a: any, b: any) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf);
+      sorted.forEach((team: any, idx: number) => {
+        teamStats[team.code].ranks.push(idx + 1);
+        teamStats[team.code].ptsList.push(team.pts);
+      });
+    });
+
+    // Determine final status for each team based on simulated outcomes
+    const entries = codes
+      .map(code => teamStandingsMap.get(code))
+      .sort((a: any, b: any) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf);
+
+    const rows = entries.map(t =>
+      `  ${t.code.padEnd(4)} P${t.mp} W${t.w} D${t.d} L${t.l} GF${t.gf} GA${t.ga} Pts${t.pts}`
+    );
+    groupStandings.push(`${gName}:\n${rows.join('\n')}`);
+
+    statusLines.push(`${gName}:`);
+    entries.forEach(t => {
+      const stats = teamStats[t.code];
+      const minRank = Math.min(...stats.ranks); // e.g. 1
+      const maxRank = Math.max(...stats.ranks); // e.g. 4
+      const maxPts = Math.max(...stats.ptsList);
+
+      let status = '';
+      if (maxRank <= 2) {
+        status = 'QUALIFIED (top 2 confirmed)';
+      } else if (minRank === 4 && maxRank === 4) {
+        status = 'ELIMINATED (finished bottom)';
+      } else if (t.mp === 3) {
+        const pos = entries.findIndex(x => x.code === t.code) + 1;
+        if (pos <= 2) {
+          status = 'QUALIFIED (top 2 confirmed)';
+        } else if (pos === 3) {
+          if (t.pts >= 4) {
+            status = `POSSIBLE BEST-3RD (${t.pts} pts – awaiting other groups)`;
+          } else {
+            status = `ELIMINATED (${t.pts} pts after all 3 games – cannot reach best-3rd)`;
+          }
+        } else {
+          status = `ELIMINATED (${t.pts} pts after all 3 games – finished bottom)`;
+        }
+      } else {
+        if (maxPts < 4 && minRank >= 3) {
+          status = `ELIMINATED (max ${maxPts} pts possible – cannot reach top 2 or best-3rd)`;
+        } else if (minRank >= 3) {
+          status = `NEEDS POINTS (cannot reach top 2, best-3rd route only – max ${maxPts} pts possible)`;
+        } else {
+          status = `IN CONTENTION (can still finish top 2 – ${3 - t.mp} game${3 - t.mp !== 1 ? 's' : ''} left)`;
+        }
+      }
+      statusLines.push(`  ${t.code} (${t.name}): ${status}`);
+    });
+    statusLines.push('');
+  }
+
+  return {
+    standingsContext: groupStandings.join('\n\n'),
+    advancementStatus: statusLines.join('\n')
+  };
+}
+
 // Main execution function
 async function main() {
   console.log("⚙️ Starting Overnight Gen AI Commentary Generation...");
@@ -218,52 +437,6 @@ async function main() {
     console.warn(`⚠️ No matches found in ESPN Scoreboard for date ${targetDate}.`);
   }
 
-  // 1b. Fetch live group standings — store raw data for post-match status computation
-  // Status is computed AFTER today's completed results are applied (step 3b below)
-  let standingsContext = '';
-  let advancementStatus = '';
-  // Maps for post-match status computation
-  const teamStandingsMap = new Map<string, any>(); // teamCode → mutable standings entry
-  const groupTeamsMap = new Map<string, any[]>();   // groupName → ordered team list
-  try {
-    const standingsData = await fetchJSON('https://site.api.espn.com/apis/v2/sports/soccer/fifa.world/standings');
-    const preGroups: string[] = [];
-
-    for (const child of standingsData.children || []) {
-      const gName = child.name || '';
-      const entries = (child.standings?.entries || []).map((e: any) => {
-        const stats = e.stats || [];
-        const get = (n: string) => stats.find((s: any) => s.name === n || s.shortDisplayName === n)?.value ?? 0;
-        const gf = get('pointsFor');
-        const ga = get('pointsAgainst');
-        return {
-          abbr: (e.team?.abbreviation || '').trim(),
-          mp: get('gamesPlayed'),
-          w: get('wins'), d: get('ties'), l: get('losses'),
-          gf, ga, pts: get('points'), gd: gf - ga,
-        };
-      }).sort((a: any, b: any) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf);
-
-      // Store in maps for later mutation
-      for (const e of entries) {
-        teamStandingsMap.set(e.abbr, { ...e, group: gName });
-      }
-      groupTeamsMap.set(gName, entries.map((e: any) => e.abbr));
-
-      // Pre-match standings table (for context only)
-      const rows = entries.map((t: any) =>
-        `  ${t.abbr.padEnd(4)} P${t.mp} W${t.w} D${t.d} L${t.l} GF${t.gf} GA${t.ga} Pts${t.pts}`
-      );
-      if (rows.length) preGroups.push(`${gName}:\n${rows.join('\n')}`);
-    }
-
-    if (preGroups.length) {
-      console.log(`📊 Fetched pre-match standings for ${preGroups.length} groups — advancement status will be computed post-match`);
-    }
-  } catch (err) {
-    console.warn('⚠️ Could not fetch standings — progression notes will lack group context');
-  }
-
   // 2. Read existing master JSON database
   const masterPath = path.resolve(__dirname, '..', 'public', 'assets', 'ai', 'ai_master.json');
   let masterDB: any = { lastUpdated: '', teams: {}, matches: {}, days: {}, today_preview: {}, espnMatches: {}, espnStandings: [] };
@@ -284,6 +457,10 @@ async function main() {
   masterDB.today_preview = masterDB.today_preview || {};
   masterDB.espnMatches = masterDB.espnMatches || {};
   masterDB.espnStandings = masterDB.espnStandings || [];
+
+  // 1b. Initialize empty standings context (will be computed historically post-match)
+  let standingsContext = '';
+  let advancementStatus = '';
 
   // Clear or initialize today's real match list
   masterDB.espnMatches[targetDate] = [];
@@ -428,77 +605,12 @@ async function main() {
     }
   }
 
-  // 3b. Apply today's completed results to standings, then compute advancement status
-  // This ensures Gemini sees pts/mp that INCLUDE today's matches — not the pre-match snapshot.
-  if (teamStandingsMap.size > 0) {
-    for (const match of completedMatchesForRecap) {
-      const home = teamStandingsMap.get(match.homeTeam);
-      const away = teamStandingsMap.get(match.awayTeam);
-      if (home) {
-        home.mp += 1;
-        home.gf += match.homeScore;
-        home.ga += match.awayScore;
-        home.gd = home.gf - home.ga;
-        if (match.homeScore > match.awayScore)       { home.w += 1; home.pts += 3; }
-        else if (match.homeScore === match.awayScore) { home.d += 1; home.pts += 1; }
-        else                                           { home.l += 1; }
-      }
-      if (away) {
-        away.mp += 1;
-        away.gf += match.awayScore;
-        away.ga += match.homeScore;
-        away.gd = away.gf - away.ga;
-        if (match.awayScore > match.homeScore)       { away.w += 1; away.pts += 3; }
-        else if (match.awayScore === match.homeScore) { away.d += 1; away.pts += 1; }
-        else                                           { away.l += 1; }
-      }
-    }
-
-    // World Cup 2026: 48 teams, 12 groups of 4. Top 2 from each group advance (24 teams).
-    // 8 best 3rd-place teams also advance → 32 total.
-    // Realistic best-3rd threshold: ~4 pts. 3 pts is borderline; 2 pts is almost always out.
-    const BEST_THIRD_MIN = 4;
-    const updatedGroups: string[] = [];
-    const statusLines: string[] = [];
-
-    for (const [gName, abbrList] of groupTeamsMap) {
-      // Re-sort entries with updated points
-      const updatedEntries = abbrList
-        .map((abbr: string) => teamStandingsMap.get(abbr))
-        .filter(Boolean)
-        .sort((a: any, b: any) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf);
-
-      const p2Pts = updatedEntries[1]?.pts ?? 0;
-      const rows: string[] = [];
-      statusLines.push(`${gName}:`);
-
-      updatedEntries.forEach((t: any, idx: number) => {
-        rows.push(`  ${t.abbr.padEnd(4)} P${t.mp} W${t.w} D${t.d} L${t.l} GF${t.gf} GA${t.ga} Pts${t.pts}`);
-        const gamesLeft = 3 - t.mp;
-        const maxPts = t.pts + gamesLeft * 3;
-        const pos = idx + 1;
-        let status: string;
-        if (t.mp === 3) {
-          if (pos <= 2)                              status = 'QUALIFIED (top 2 confirmed)';
-          else if (pos === 3 && t.pts >= BEST_THIRD_MIN) status = `POSSIBLE BEST-3RD (${t.pts} pts – awaiting other groups)`;
-          else                                       status = `ELIMINATED (${t.pts} pts after all 3 games – cannot reach best-3rd threshold)`;
-        } else if (maxPts < p2Pts && maxPts < BEST_THIRD_MIN) {
-          status = `ELIMINATED (max ${maxPts} pts possible – cannot reach top 2 or best-3rd threshold)`;
-        } else if (maxPts < p2Pts) {
-          status = `NEEDS POINTS (cannot reach top 2, best-3rd route only – max ${maxPts} pts possible)`;
-        } else {
-          status = `IN CONTENTION (can still finish top 2 – ${gamesLeft} game${gamesLeft !== 1 ? 's' : ''} left)`;
-        }
-        statusLines.push(`  ${t.abbr}: ${status}`);
-      });
-      statusLines.push('');
-      if (rows.length) updatedGroups.push(`${gName}:\n${rows.join('\n')}`);
-    }
-
-    standingsContext = `GROUP STANDINGS (after today's completed matches, ${targetDate}):\n${updatedGroups.join('\n\n')}`;
-    advancementStatus = `COMPUTED ADVANCEMENT STATUS (after today's completed matches, ${targetDate}):\n${statusLines.join('\n')}`;
-    console.log(`📊 Post-match standings and advancement status computed for ${updatedGroups.length} groups`);
-  }
+  // 3b. Compute standings and advancement status mathematically
+  console.log(`📊 Computing offline standings and advancement status for date ${targetDate}...`);
+  const computed = computeStandingsAndStatus(masterDB, targetDate);
+  standingsContext = `GROUP STANDINGS (after today's completed matches, ${targetDate}):\n${computed.standingsContext}`;
+  advancementStatus = `COMPUTED ADVANCEMENT STATUS (after today's completed matches, ${targetDate}):\n${computed.advancementStatus}`;
+  console.log(`📊 Advancement status computed successfully`);
 
   // 4. Fetch tomorrow's scoreboard for preview
   const tomorrow = new Date(new Date(targetDate).getTime() + 24 * 60 * 60 * 1000);
@@ -843,7 +955,7 @@ YOU MUST RETURN A RAW JSON OBJECT THAT MATCHES THIS EXACT SCHEMA SPECIFICATION. 
     const groups = standingsData.children || [];
     
     for (const group of groups) {
-      const groupName = group.displayName || '';
+      const groupName = group.name || group.displayName || '';
       const entries = group.standings?.entries || [];
       const teamsList = entries.map((entry: any) => {
         const stats = entry.stats || [];
