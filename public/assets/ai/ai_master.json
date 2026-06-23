@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-23T11:56:44.108Z",
+  "lastUpdated": "2026-06-23T12:22:46.150Z",
   "teams": {
     "BIH": {
       "headline": "Bosnia-Herzegovina: A Defensive Disasterclass",
@@ -158,52 +158,60 @@
       "pubAmmo": "Egypt's 3-1 victory over New Zealand saw them score three goals in a single match, a massive improvement after their 1-1 draw with Belgium where their only goal was assisted by Mohamed Salah."
     },
     "ARG": {
-      "headline": "Lionel Messi: The Walking Cheat Code Still Running the Show",
-      "storySoFar": "Argentina are looking like absolute title contenders. They made light work of Algeria with a 3-0 masterclass, and even when Messi missed a penalty against Austria, he just shrugged it off and bagged a brace anyway. It’s liquid football at its finest, even if they do seem to pick up a few too many knocks along the way.",
-      "whatsNext": "Keep feeding the ball to the little magician and hope the physio room doesn't get any busier. They’re cruising, but they need to keep their discipline—those yellow cards are starting to pile up.",
-      "pubAmmo": "Did you know Lionel Messi has scored 5 goals across just two matches, including a brace against Austria and a hat-trick against Algeria?"
+      "teamCode": "ARG",
+      "headline": "The Albiceleste juggernaut rolls on",
+      "storySoFar": "Two wins from two, looking like absolute title contenders.",
+      "whatsNext": "They are through to the next round, so they can put their feet up.",
+      "pubAmmo": "They've kept two clean sheets and have Messi. What more do you want?"
     },
     "AUT": {
-      "headline": "Austria: From Clinical Finishers to Messi's Latest Victims",
-      "storySoFar": "Austria started with a decent enough 3-1 win over Jordan, showing some grit, but then ran into the Messi show against Argentina. They held their own for a bit, but let's be honest, trying to stop Lionel Messi is like trying to stop a pint from being pulled on a Friday night—it's inevitable. A 2-0 loss was a proper reality check.",
-      "whatsNext": "They need to stop relying on late penalties and own goals to bail them out. If they want to progress, they need to find a bit more composure in the final third and stop picking up yellow cards like they're collecting stickers.",
-      "pubAmmo": "Did you know Austria's only goals in their last two matches came from an own goal by Jordan's Yazan Al Arab and a 90th-minute penalty from Marko Arnautovic?"
+      "teamCode": "AUT",
+      "headline": "Austrian hopes hanging by a thread",
+      "storySoFar": "One win, one loss, and a lot of work to do.",
+      "whatsNext": "Still in the hunt for a top-two finish, plenty to play for.",
+      "pubAmmo": "They managed to hold their own for a bit, but the quality gap was clear."
     },
     "FRA": {
-      "headline": "Les Bleus: The Kylian Mbappé Show and Friends",
-      "storySoFar": "France have been clinical, dispatching Senegal 3-1 and Iraq 3-0 with the kind of efficiency that makes you wonder if they're even breaking a sweat. Mbappé is playing like a man possessed, and when he's not scoring, he's making everyone else look like they're stuck in mud. It’s not quite total football, but it’s certainly getting the job done.",
-      "whatsNext": "They look like the team to beat, but they need to stop leaving it late—that 90th-minute goal against Senegal was a bit of a squeaky bum time moment they could have avoided. Keep the focus, and they'll be deep in the tournament.",
-      "pubAmmo": "Did you know Kylian Mbappé scored in both matches, including a late strike against Senegal and a brace against Iraq?"
+      "teamCode": "FRA",
+      "headline": "France are simply too good",
+      "storySoFar": "Two games, two wins, and they've barely shifted out of second gear.",
+      "whatsNext": "They are through to the next round, absolute scenes.",
+      "pubAmmo": "They've scored six and conceded one. They are the team to beat."
     },
     "IRQ": {
-      "headline": "Iraq's World Cup Dream Turns Into A Nightmare On Elm Street",
-      "storySoFar": "It has been a proper baptism of fire for Iraq. They managed a brief moment of glory against Norway with Aymen Hussein’s header, but let’s be honest, they were chasing shadows for most of the tournament. Getting dismantled by France and then suffering the indignity of an own goal to cap off the Norway defeat? That is the definition of a proper bottle job.",
-      "whatsNext": "They need to stop treating the opposition penalty area like a no-go zone and perhaps consider that defending is actually a core part of the sport. If they don't tighten up at the back, they’ll be booking their flights home before the group stage even finishes.",
-      "pubAmmo": "Did you know Iraq conceded a staggering seven goals across just two matches, including a cruel own goal in the dying embers of their clash with Norway?"
+      "teamCode": "IRQ",
+      "headline": "Iraq's World Cup dream ends",
+      "storySoFar": "Two games, two losses, and a mountain of goals conceded.",
+      "whatsNext": "They are eliminated and can start booking their flights home.",
+      "pubAmmo": "They didn't manage a single shot on target against France. That's a tough watch."
     },
     "NOR": {
-      "headline": "The Haaland Express: Norway’s One-Man Goal Machine!",
-      "storySoFar": "Norway are basically just Erling Haaland and ten blokes trying to keep up. They’ve had two high-scoring thrillers, beating Iraq 4-1 and Senegal 3-2. It’s not exactly a defensive masterclass—they’re leaking goals like a rusty bucket—but when you’ve got a walking cheat code up top, who cares? They’re playing with fire, but they’re winning, and that’s all that matters in this game.",
-      "whatsNext": "They need to stop relying on Haaland to bail them out every single time. If they don't shore up that defence, they’re going to get absolutely torn apart by a team that knows how to mark a striker.",
-      "pubAmmo": "Erling Haaland has been on a tear, scoring in both matches, including a brace against Senegal and a brace against Iraq, proving he’s the ultimate fox in the box."
+      "teamCode": "NOR",
+      "headline": "Norway are the real deal",
+      "storySoFar": "Two wins from two, and Haaland is firing on all cylinders.",
+      "whatsNext": "They are through to the next round, job done.",
+      "pubAmmo": "They've scored seven goals in two games. Pure liquid football."
     },
     "SEN": {
-      "headline": "Senegal: The Lions of Teranga Are Currently More Like Kittens",
-      "storySoFar": "It’s been a rough ride at MetLife. Getting dismantled by France was one thing, but the 3-2 loss to Norway was the real kicker. We saw flashes of brilliance from Ismaïla Sarr, but the defense was leaking goals like a rusty bucket. It’s been a masterclass in how not to hold a lead against a proper fox in the box like Haaland.",
-      "whatsNext": "They need to tighten up the backline immediately. You can't expect to win games when you're conceding three goals a match. It’s squeaky bum time for the coaching staff to sort out the defensive shape.",
-      "pubAmmo": "Did you know Ismaïla Sarr scored both of Senegal's goals in their 3-2 defeat to Norway, effectively doing the heavy lifting for the entire attack?"
+      "teamCode": "SEN",
+      "headline": "Senegal's campaign in tatters",
+      "storySoFar": "Two games, two losses, and a leaky defense.",
+      "whatsNext": "They are eliminated and will be heading home early.",
+      "pubAmmo": "They showed some fight against Norway, but it was too little, too late."
     },
     "JOR": {
-      "headline": "Jordan: The Kings Of The 'Almost' Performance",
-      "storySoFar": "Jordan have been the ultimate tease. They looked like they might actually cause an upset against Algeria, but then they just completely ran out of steam. Against Austria, they showed some grit to level it up, only to concede a late penalty and an own goal. It’s been a masterclass in how to lose games you were actually in for 80 minutes.",
-      "whatsNext": "They need to learn that a football match lasts 90 minutes, not 75. If they can stop gifting goals to the opposition and find a way to hold onto a lead, they might actually stop being the tournament's most tragic story.",
-      "pubAmmo": "Did you know Jordan’s only two goals in the tournament came from Nizar Al Rashdan and Ali Olwan, yet they still finished both matches with zero points?"
+      "teamCode": "JOR",
+      "headline": "Jordan's heartbreak in the desert",
+      "storySoFar": "Two games, two losses, and a tough exit.",
+      "whatsNext": "They are eliminated and can start packing their bags.",
+      "pubAmmo": "They led against Algeria but just couldn't hold the line."
     },
     "ALG": {
-      "headline": "Algeria: From Desert Storm to Absolute Shambles and Back Again",
-      "storySoFar": "Algeria’s tournament has been a proper rollercoaster. They started by getting absolutely dismantled by Argentina, looking like they were having a casual kickabout in the park while Messi ran rings around them. But fair play, they showed some grit against Jordan, coming back from a goal down to snatch a win with a proper fox-in-the-box header and a scrappy volley.",
-      "whatsNext": "They need to stop the Sunday League defending if they want to progress. If they keep leaking goals like they did against the big boys, they’ll be booking their flights home before the knockout stages even start.",
-      "pubAmmo": "Did you know Algeria’s comeback win against Jordan was secured by two goals in the final 25 minutes, proving they have the stamina even if the start was a bit sluggish?"
+      "teamCode": "ALG",
+      "headline": "Algeria keep the dream alive",
+      "storySoFar": "One win, one loss, and a vital three points today.",
+      "whatsNext": "Still in the hunt for a top-two finish, they've got a fighting chance.",
+      "pubAmmo": "They dominated possession and finally found the breakthrough."
     },
     "CAN": {
       "headline": "Canada's Rollercoaster: From BMO Boredom to Qatar Carnage",
@@ -800,16 +808,16 @@
       "progressionNews": "Mexico, Canada, Switzerland, USA, Germany, and the Netherlands have officially qualified for the knockouts. Haiti, Türkiye, and Tunisia are officially eliminated and can start booking their flights home. Bosnia-Herzegovina and Qatar need points to keep their best-3rd hopes alive, while everyone else remains in the hunt and in contention to progress."
     },
     "2026-06-22": {
-      "headline": "Argentina and France Cruise While Others Trip Over Their Own Shoelaces",
-      "theDrama": "Argentina looked like a walking cheat code against Austria, while France dismantled Iraq with the kind of clinical efficiency that makes you wonder if they were even breaking a sweat. Norway and Senegal gave us a proper scrap, though the defending in that one was pure Sunday League stuff. Algeria managed to scrape past Jordan, but let's be honest, watching that was about as exciting as watching paint dry in a monsoon.",
-      "mustWatchHighlights": "Norway versus Senegal was the only one with a pulse, providing a bit of end-to-end chaos. As for the rest, put your feet up and have a nap; the other fixtures were absolute snoozefests that would struggle to keep a goldfish entertained.",
-      "progressionNews": "France, Norway, Argentina, and Germany have officially qualified for the knockouts, so they can put their feet up. Meanwhile, Haiti, Türkiye, Tunisia, Senegal, Iraq, and Jordan are officially out and can start booking their flights home. Everyone else is still in the hunt, with Bosnia-Herzegovina and Qatar needing points to keep their best-3rd place hopes alive."
+      "headline": "Messi and Mbappé Run Riot as the Big Boys Flex Their Muscles",
+      "theDrama": "A day of clinical finishes and defensive disasters. Argentina and France look like they're just having a casual kickabout in the park, while Norway's Haaland is making a mockery of international defenses.",
+      "mustWatchHighlights": "Norway vs Senegal was the pick of the bunch for pure, unadulterated chaos.",
+      "progressionNews": "Argentina, France, and Norway have officially qualified. Iraq, Senegal, and Jordan are eliminated and can start booking their flights home."
     }
   },
   "today_preview": {
-    "headline": "Tomorrow's Treat: England, Portugal, and Colombia Take Centre Stage!",
-    "theBigOnes": "Tomorrow looks like a cracker! Portugal vs. Uzbekistan could be a fascinating clash, but let's be honest, everyone's eyes will be on England vs. Ghana. Can the Three Lions roar again, or will Ghana cause a bit of a stir? Panama vs. Croatia and Colombia vs. DR Congo also promise some intriguing battles.",
-    "playersToWatch": "Keep an eye on England's main men, whoever they might be, to see if they can deliver the goods. For Portugal, you know who to watch, don't you? And in the other games, look out for any standout performers from Colombia and Croatia who could light up the tournament.",
+    "headline": "The Battle for Survival: Tomorrow's High-Stakes Showdown",
+    "theBigOnes": "England vs Ghana is the one to watch, as both sides look to cement their place in the next round.",
+    "playersToWatch": "Keep an eye on the English midfield to see if they can finally click, and watch out for the Ghanaian counter-attack.",
     "firstKickoffTime": "2026-06-23T17:00Z"
   },
   "espnMatches": {
@@ -3740,7 +3748,7 @@
   },
   "espnStandings": [
     {
-      "group": "",
+      "group": "Group A",
       "teams": [
         {
           "code": "MEX",
@@ -3789,7 +3797,7 @@
       ]
     },
     {
-      "group": "",
+      "group": "Group B",
       "teams": [
         {
           "code": "CAN",
@@ -3838,7 +3846,7 @@
       ]
     },
     {
-      "group": "",
+      "group": "Group C",
       "teams": [
         {
           "code": "BRA",
@@ -3887,7 +3895,7 @@
       ]
     },
     {
-      "group": "",
+      "group": "Group D",
       "teams": [
         {
           "code": "PAR",
@@ -3936,7 +3944,7 @@
       ]
     },
     {
-      "group": "",
+      "group": "Group E",
       "teams": [
         {
           "code": "ECU",
@@ -3985,7 +3993,7 @@
       ]
     },
     {
-      "group": "",
+      "group": "Group F",
       "teams": [
         {
           "code": "NED",
@@ -4034,7 +4042,7 @@
       ]
     },
     {
-      "group": "",
+      "group": "Group G",
       "teams": [
         {
           "code": "BEL",
@@ -4083,7 +4091,7 @@
       ]
     },
     {
-      "group": "",
+      "group": "Group H",
       "teams": [
         {
           "code": "ESP",
@@ -4132,7 +4140,7 @@
       ]
     },
     {
-      "group": "",
+      "group": "Group I",
       "teams": [
         {
           "code": "NOR",
@@ -4181,7 +4189,7 @@
       ]
     },
     {
-      "group": "",
+      "group": "Group J",
       "teams": [
         {
           "code": "ARG",
@@ -4230,7 +4238,7 @@
       ]
     },
     {
-      "group": "",
+      "group": "Group K",
       "teams": [
         {
           "code": "COL",
@@ -4279,7 +4287,7 @@
       ]
     },
     {
-      "group": "",
+      "group": "Group L",
       "teams": [
         {
           "code": "ENG",
