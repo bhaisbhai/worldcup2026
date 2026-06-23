@@ -3124,13 +3124,27 @@ function mcLineups(ev,data){
     const starters=entries.filter(e=>e.starter);
     const bench=entries.filter(e=>!e.starter);
     const grp={GK:[],DEF:[],MID:[],FWD:[]};
-    starters.forEach(e=>{
-      const abbr=e.position?.abbreviation;
-      const p=POS[abbr]??2;
-      if(abbr && POS[abbr]===undefined) console.warn('[lineup] unmapped position:',abbr,e.athlete?.displayName);
-      [grp.GK,grp.DEF,grp.MID,grp.FWD][p]?.push(e);
-    });
-    return{grp,bench};
+    const fStr=roster?.formation||'';
+    const fLayers=fStr.split('-').map(Number).filter(n=>n>0);
+    if(fLayers.length>=2){
+      // Use ESPN formation string to distribute players in roster order (GK first, then DEF→MID→FWD)
+      const sorted=starters.some(e=>e.formationPlace!=null)
+        ?[...starters].sort((a,b)=>(a.formationPlace||99)-(b.formationPlace||99))
+        :starters;
+      let idx=0;
+      if(sorted.length) grp.GK.push(sorted[idx++]);
+      fLayers.forEach((count,i)=>{
+        const target=i===0?grp.DEF:i===fLayers.length-1?grp.FWD:grp.MID;
+        for(let j=0;j<count&&idx<sorted.length;j++) target.push(sorted[idx++]);
+      });
+    } else {
+      starters.forEach(e=>{
+        const abbr=e.position?.abbreviation;
+        const p=POS[abbr]??2;
+        [grp.GK,grp.DEF,grp.MID,grp.FWD][p]?.push(e);
+      });
+    }
+    return{grp,bench,formation:fStr};
   }
 
   function formStr(grp){
@@ -3191,7 +3205,7 @@ function mcLineups(ev,data){
   }
 
   const h=buildGroups(hR), a=buildGroups(aR);
-  const hForm=formStr(h.grp), aForm=formStr(a.grp);
+  const hForm=h.formation||formStr(h.grp), aForm=a.formation||formStr(a.grp);
 
   return`
     <div class="fp-header">
