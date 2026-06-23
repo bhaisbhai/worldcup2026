@@ -83,20 +83,20 @@ const templates = {
 
   // Defenders (CB, LB, RB, D)
   defClean: [
-    "Anchored the {team} backline masterfully, securing a clean sheet with {clearances} clearances. {name} was an absolute rock.",
-    "Defended like his life depended on it. {name} registered {clearances} clearances to secure a crucial clean sheet.",
-    "Absolutely pocketed the opposition striker. {name} made {clearances} clearances in a flawless clean sheet display.",
-    "Commanding defensive display from {name}. Recorded {clearances} clearances and kept a pristine clean sheet.",
-    "Put on a defensive clinic today. {name} secured a clean sheet for {team} with {clearances} clearances.",
-    "A masterclass in center-back play. {name} cleared the ball {clearances} times and never gave the attackers a sniff."
+    "Anchored the {team} backline masterfully, securing a clean sheet. {name} was an absolute rock.",
+    "Defended like his life depended on it to secure a crucial clean sheet for {team}.",
+    "Absolutely pocketed the opposition striker in a flawless clean sheet display by {name}.",
+    "Commanding defensive display from {name}, keeping a pristine clean sheet.",
+    "Put on a defensive clinic today, securing a clean sheet for {team}.",
+    "A masterclass in center-back play. {name} never gave the attackers a sniff."
   ],
   defSolid: [
-    "Solid defensive performance. {name} held the {team} backline together with {clearances} clearances.",
-    "Anchored the defense effectively under pressure, registering {clearances} clearances for {team} today.",
-    "Put in a shift at the back. {name} made {clearances} clearances and kept the defense organized.",
-    "Reliable as ever. {name} did the dirty work with {clearances} clearances and kept things tight.",
-    "A stable and professional defensive performance by {name}, logging {clearances} clearances.",
-    "Kept his concentration all match. {name} registered {clearances} clearances to keep the opposition at bay."
+    "Solid defensive performance. {name} held the {team} backline together.",
+    "Anchored the defense effectively under pressure for {team} today.",
+    "Put in a shift at the back. {name} kept the defense organized.",
+    "Reliable as ever. {name} did the dirty work and kept things tight.",
+    "A stable and professional defensive performance by {name}.",
+    "Kept his concentration all match. {name} kept the opposition at bay."
   ],
   defHorror: [
     "Had an absolute horror show at the back as {team} was sliced open like cheap cheese. Sunday League defending from {name}.",
@@ -109,20 +109,20 @@ const templates = {
 
   // Midfielders (M, CM, DM, AM, LM, RM)
   midPlaymaker: [
-    "The puppet master in midfield for {team}. {name} dictated the tempo with {passingAccuracy}% passing accuracy.",
-    "Pulling all the strings in the middle. {name} kept possession ticking over with {passingAccuracy}% passing accuracy.",
-    "Absolutely ran the show in midfield today. {name} was class, completing {passesCompleted}/{passesAttempted} passes.",
-    "A midfield masterclass from {name}. Played with real maturity, logging a clean {passingAccuracy}% passing accuracy.",
-    "Controlled the engine room. {name} dominated midfield possession, completing {passesCompleted} passes.",
-    "Pure orchestration. {name} played some lovely progressive passes with {passingAccuracy}% accuracy."
+    "The puppet master in midfield for {team}. {name} dictated the tempo beautifully.",
+    "Pulling all the strings in the middle. {name} kept possession ticking over nicely.",
+    "Absolutely ran the show in midfield today. {name} was pure class.",
+    "A midfield masterclass from {name}. Played with real maturity.",
+    "Controlled the engine room. {name} dominated midfield possession today.",
+    "Pure orchestration. {name} played some lovely progressive passes."
   ],
   midCardio: [
     "A quiet afternoon for {name}. Got some decent cardio in for {team} but did absolutely nothing to bother the stat sheet.",
-    "Sideways passing that would put a caffeine addict to sleep. {name} kept it excessively safe with a boring {passingAccuracy}% accuracy.",
+    "Extremely safe sideways passing. {name} kept it excessively simple today.",
     "Just ran around today. {name} had a very quiet game, failing to create any real chances in 90 minutes.",
     "Spent the match passing backward. {name} took zero risks and looked happy to just float through the game.",
     "A passenger's performance in midfield. {name} was practically invisible for long stretches today.",
-    "Registered {passesAttempted} passes but none of them went forward. {name} had a very uninspiring afternoon."
+    "A very uninspiring afternoon in midfield for {name} today."
   ],
 
   // Forwards (F, ST, CF, LW, RW)
@@ -156,87 +156,6 @@ const templates = {
 function getTemplate(list: string[], seed: string): string {
   const hash = seed.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
   return list[hash % list.length];
-}
-
-// Deterministic advanced stats simulator
-function derivePlayerAdvancedStats(
-  athleteId: string,
-  posCode: string,
-  mins: number,
-  teamAbbr: string,
-  matchMeta: any,
-  teamStats: any
-) {
-  const isHome = teamAbbr === matchMeta.homeTeam;
-  const oppScore = isHome ? matchMeta.awayScore : matchMeta.homeScore;
-  
-  // Clean Sheet
-  const cleanSheet = oppScore === 0 && mins >= 45;
-  
-  // Position categorization
-  const pos = (posCode || '').toUpperCase();
-  const isGK = pos === 'GK' || pos.includes('GOAL');
-  const isDEF = pos.includes('D') || pos.includes('B') || pos.includes('BACK');
-  const isMID = pos.includes('M') || pos.includes('MID');
-  const isFWD = pos.includes('F') || pos.includes('S') || pos.includes('W') || pos.includes('FWD') || pos.includes('STR') || pos.includes('WING');
-
-  // Deterministic seed based on athleteId and matchId
-  const matchId = matchMeta.id || '0';
-  const seedString = `${athleteId}-${matchId}`;
-  let hash = 0;
-  for (let i = 0; i < seedString.length; i++) {
-    hash = (hash << 5) - hash + seedString.charCodeAt(i);
-    hash |= 0;
-  }
-  const random = () => {
-    hash = (hash * 1664525 + 1013904223) | 0;
-    return (Math.abs(hash) % 1000) / 1000;
-  };
-
-  const teamPasses = isHome ? (teamStats.homePasses || 400) : (teamStats.awayPasses || 400);
-  const teamPassPct = isHome ? (teamStats.homePassPct || 80) : (teamStats.awayPassPct || 80);
-  const teamClearances = isHome ? (teamStats.homeClearances || 15) : (teamStats.awayClearances || 15);
-
-  let clearances = 0;
-  let passesAttempted = 0;
-  let passingAccuracy = 0;
-
-  if (mins > 0) {
-    if (isGK) {
-      clearances = Math.floor(random() * 2);
-      passesAttempted = Math.round((teamPasses * 0.05) * (mins / 90) + (random() * 5));
-      passingAccuracy = Math.round(teamPassPct - 10 + (random() * 6 - 3));
-    } else if (isDEF) {
-      clearances = Math.round((teamClearances * (0.2 + random() * 0.15)) * (mins / 90));
-      if (clearances < 1 && mins > 45) clearances = Math.round(1 + random() * 3);
-      passesAttempted = Math.round((teamPasses * (0.12 + random() * 0.06)) * (mins / 90));
-      passingAccuracy = Math.round(teamPassPct + 4 + (random() * 6 - 3));
-    } else if (isMID) {
-      clearances = Math.round((teamClearances * (0.05 + random() * 0.1)) * (mins / 90));
-      passesAttempted = Math.round((teamPasses * (0.16 + random() * 0.08)) * (mins / 90));
-      passingAccuracy = Math.round(teamPassPct + 2 + (random() * 6 - 3));
-    } else if (isFWD) {
-      clearances = Math.floor(random() * 2);
-      passesAttempted = Math.round((teamPasses * (0.07 + random() * 0.04)) * (mins / 90));
-      passingAccuracy = Math.round(teamPassPct - 6 + (random() * 8 - 4));
-    } else {
-      clearances = Math.round((teamClearances * 0.1) * (mins / 90));
-      passesAttempted = Math.round((teamPasses * 0.1) * (mins / 90));
-      passingAccuracy = Math.round(teamPassPct);
-    }
-  }
-
-  if (passingAccuracy > 99) passingAccuracy = 99;
-  if (passingAccuracy < 40) passingAccuracy = 40;
-  const passesCompleted = Math.round(passesAttempted * (passingAccuracy / 100));
-
-  return {
-    clearances,
-    passesCompleted,
-    passesAttempted,
-    passingAccuracy,
-    cleanSheet
-  };
 }
 
 async function main() {
@@ -276,28 +195,6 @@ async function main() {
       if (!res.ok) continue;
       const summary = await res.json();
       
-      const teamsStats = summary.boxscore?.teams || [];
-      const homeCode = match.homeTeam;
-      const awayCode = match.awayTeam;
-      const homeStatsList = teamsStats.find((t: any) => t.team?.abbreviation === homeCode)?.statistics || [];
-      const awayStatsList = teamsStats.find((t: any) => t.team?.abbreviation === awayCode)?.statistics || [];
-
-      const getStatVal = (stats: any[], name: string, fallback: number): number => {
-        const st = stats.find((s: any) => s.name === name);
-        if (!st) return fallback;
-        const cleanVal = String(st.displayValue || st.value || '').replace(/[^0-9]/g, '');
-        return cleanVal ? Number(cleanVal) : fallback;
-      };
-
-      const teamStats = {
-        homePasses: getStatVal(homeStatsList, 'totalPasses', 400),
-        awayPasses: getStatVal(awayStatsList, 'totalPasses', 400),
-        homePassPct: getStatVal(homeStatsList, 'passPct', 80),
-        awayPassPct: getStatVal(awayStatsList, 'passPct', 80),
-        homeClearances: getStatVal(homeStatsList, 'totalClearance', getStatVal(homeStatsList, 'effectiveClearance', 15)),
-        awayClearances: getStatVal(awayStatsList, 'totalClearance', getStatVal(awayStatsList, 'effectiveClearance', 15))
-      };
-      
       for (const team of summary.rosters || []) {
         const teamAbbr = team.team?.abbreviation || '';
         for (const entry of team.roster || []) {
@@ -323,14 +220,6 @@ async function main() {
             const goalsConceded = getVal('goalsConceded');
             const posCode = (entry.position?.abbreviation || '').toUpperCase();
             
-            const advanced = derivePlayerAdvancedStats(
-              pid,
-              posCode,
-              mins,
-              teamAbbr,
-              match,
-              teamStats
-            );
             const posName = (entry.position?.displayName || '').toLowerCase();
             const isGK = posCode === 'GK' || posName.includes('goalkeeper');
             const isDEF = posCode.includes('D') || posCode.includes('B') || posName.includes('defender') || posName.includes('back');
@@ -395,11 +284,7 @@ async function main() {
               .replace(/{assists}/g, String(assists))
               .replace(/{shots}/g, String(getVal('totalShots')))
               .replace(/{saves}/g, String(saves))
-              .replace(/{conceded}/g, String(goalsConceded))
-              .replace(/{clearances}/g, String(advanced.clearances))
-              .replace(/{passingAccuracy}/g, String(advanced.passingAccuracy))
-              .replace(/{passesCompleted}/g, String(advanced.passesCompleted))
-              .replace(/{passesAttempted}/g, String(advanced.passesAttempted));
+              .replace(/{conceded}/g, String(goalsConceded));
 
             verdicts[pid] = verdict;
             count++;

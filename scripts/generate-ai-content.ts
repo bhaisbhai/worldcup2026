@@ -182,87 +182,6 @@ function updateCSVFile(filePath: string, headers: string[], idColIndex: number, 
   fs.writeFileSync(filePath, outputStr, 'utf-8');
 }
 
-// Deterministic advanced stats simulator
-function derivePlayerAdvancedStats(
-  athleteId: string,
-  posCode: string,
-  mins: number,
-  teamAbbr: string,
-  matchMeta: any,
-  teamStats: any
-) {
-  const isHome = teamAbbr === matchMeta.homeTeam;
-  const oppScore = isHome ? matchMeta.awayScore : matchMeta.homeScore;
-  
-  // Clean Sheet
-  const cleanSheet = oppScore === 0 && mins >= 45;
-  
-  // Position categorization
-  const pos = (posCode || '').toUpperCase();
-  const isGK = pos === 'GK' || pos.includes('GOAL');
-  const isDEF = pos.includes('D') || pos.includes('B') || pos.includes('BACK');
-  const isMID = pos.includes('M') || pos.includes('MID');
-  const isFWD = pos.includes('F') || pos.includes('S') || pos.includes('W') || pos.includes('FWD') || pos.includes('STR') || pos.includes('WING');
-
-  // Deterministic seed based on athleteId and matchId
-  const matchId = matchMeta.id || '0';
-  const seedString = `${athleteId}-${matchId}`;
-  let hash = 0;
-  for (let i = 0; i < seedString.length; i++) {
-    hash = (hash << 5) - hash + seedString.charCodeAt(i);
-    hash |= 0;
-  }
-  const random = () => {
-    hash = (hash * 1664525 + 1013904223) | 0;
-    return (Math.abs(hash) % 1000) / 1000;
-  };
-
-  const teamPasses = isHome ? (teamStats.homePasses || 400) : (teamStats.awayPasses || 400);
-  const teamPassPct = isHome ? (teamStats.homePassPct || 80) : (teamStats.awayPassPct || 80);
-  const teamClearances = isHome ? (teamStats.homeClearances || 15) : (teamStats.awayClearances || 15);
-
-  let clearances = 0;
-  let passesAttempted = 0;
-  let passingAccuracy = 0;
-
-  if (mins > 0) {
-    if (isGK) {
-      clearances = Math.floor(random() * 2);
-      passesAttempted = Math.round((teamPasses * 0.05) * (mins / 90) + (random() * 5));
-      passingAccuracy = Math.round(teamPassPct - 10 + (random() * 6 - 3));
-    } else if (isDEF) {
-      clearances = Math.round((teamClearances * (0.2 + random() * 0.15)) * (mins / 90));
-      if (clearances < 1 && mins > 45) clearances = Math.round(1 + random() * 3);
-      passesAttempted = Math.round((teamPasses * (0.12 + random() * 0.06)) * (mins / 90));
-      passingAccuracy = Math.round(teamPassPct + 4 + (random() * 6 - 3));
-    } else if (isMID) {
-      clearances = Math.round((teamClearances * (0.05 + random() * 0.1)) * (mins / 90));
-      passesAttempted = Math.round((teamPasses * (0.16 + random() * 0.08)) * (mins / 90));
-      passingAccuracy = Math.round(teamPassPct + 2 + (random() * 6 - 3));
-    } else if (isFWD) {
-      clearances = Math.floor(random() * 2);
-      passesAttempted = Math.round((teamPasses * (0.07 + random() * 0.04)) * (mins / 90));
-      passingAccuracy = Math.round(teamPassPct - 6 + (random() * 8 - 4));
-    } else {
-      clearances = Math.round((teamClearances * 0.1) * (mins / 90));
-      passesAttempted = Math.round((teamPasses * 0.1) * (mins / 90));
-      passingAccuracy = Math.round(teamPassPct);
-    }
-  }
-
-  if (passingAccuracy > 99) passingAccuracy = 99;
-  if (passingAccuracy < 40) passingAccuracy = 40;
-  const passesCompleted = Math.round(passesAttempted * (passingAccuracy / 100));
-
-  return {
-    clearances,
-    passesCompleted,
-    passesAttempted,
-    passingAccuracy,
-    cleanSheet
-  };
-}
-
 // Main execution function
 async function main() {
   console.log("⚙️ Starting Overnight Gen AI Commentary Generation...");
@@ -488,16 +407,6 @@ async function main() {
 
             const mins = getVal('minutesPlayed');
             if (entry.starter === true || mins > 0) {
-              const posCode = entry.position?.abbreviation || '';
-              const advanced = derivePlayerAdvancedStats(
-                playerId,
-                posCode,
-                mins,
-                teamAbbr,
-                realMatchMeta,
-                parsedStats
-              );
-
               playersWhoPlayed.push({
                 id: playerId,
                 name: ath.displayName || ath.fullName || 'Unknown Player',
@@ -509,12 +418,7 @@ async function main() {
                   saves: getVal('saves'),
                   yellowCards: getVal('yellowCards'),
                   redCards: getVal('redCards'),
-                  minutesPlayed: mins,
-                  clearances: advanced.clearances,
-                  passesCompleted: advanced.passesCompleted,
-                  passesAttempted: advanced.passesAttempted,
-                  passingAccuracy: advanced.passingAccuracy,
-                  cleanSheet: advanced.cleanSheet ? 1 : 0
+                  minutesPlayed: mins
                 }
               });
             }
@@ -717,7 +621,7 @@ async function main() {
     ).join('\n');
 
     const playersListStr = playersWhoPlayed.map(p => 
-      `- ${p.name} (Team: ${p.team}, ID: ${p.id}): played ${p.stats.minutesPlayed} mins, Goals: ${p.stats.goals}, Assists: ${p.stats.assists}, Shots: ${p.stats.shots}, Saves: ${p.stats.saves}, Clearances: ${p.stats.clearances || 0}, Passing Accuracy: ${p.stats.passingAccuracy || 0}% (${p.stats.passesCompleted || 0}/${p.stats.passesAttempted || 0} passes), Clean Sheet: ${p.stats.cleanSheet === 1 ? 'Yes' : 'No'}, Yellows: ${p.stats.yellowCards}, Reds: ${p.stats.redCards}`
+      `- ${p.name} (Team: ${p.team}, ID: ${p.id}): played ${p.stats.minutesPlayed} mins, Goals: ${p.stats.goals}, Assists: ${p.stats.assists}, Shots: ${p.stats.shots}, Saves: ${p.stats.saves}, Yellows: ${p.stats.yellowCards}, Reds: ${p.stats.redCards}`
     ).join('\n');
 
     const prompt = `
@@ -762,10 +666,9 @@ For the "playerVerdicts" key:
 - An ARRAY of objects, one per player. Each object must have id (the player's ESPN ID as a string) and verdict (a witty, short, one-sentence pundit verdict/roast based on their stats). Be extremely sarcastic, funny, or celebratory depending on how they performed. For example:
   - If a player scored or assisted: praise them with witty pundit lines.
   - If a player got a red card or a yellow: roast their lack of discipline.
-  - If a defender/outfield player had a high number of clearances (e.g. 5+ clearances) or exceptional passing accuracy (e.g. 95%): highlight/comment on their solid distribution or defensive work.
-  - If a player had 0 goals/assists/shots/clearances despite playing 90 minutes: mock them for getting a cardio session in.
-  - If a goalkeeper kept a clean sheet or made many saves: praise their heroic brick wall, or mock their defense.
-- REFER to the actual statistics provided (e.g. their passing accuracy, clearances, saves) inside your witty verdict to anchor it to reality!
+  - If a player had 0 goals/assists/shots/saves despite playing 90 minutes: mock them for getting a cardio session in.
+  - If a goalkeeper made many saves: praise their heroic brick wall, or mock their defense.
+- REFER to the actual statistics provided (e.g. their goals, assists, saves, cards) inside your witty verdict to anchor it to reality!
 ` : ''}
 
 For the "day" key:
