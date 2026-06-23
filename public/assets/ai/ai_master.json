@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-23T20:42:12.916Z",
+  "lastUpdated": "2026-06-23T20:54:38.450Z",
   "teams": {
     "BIH": {
       "headline": "Bosnia-Herzegovina: A Defensive Disasterclass",
@@ -159,59 +159,59 @@
     },
     "ARG": {
       "teamCode": "ARG",
-      "headline": "The Albiceleste juggernaut rolls on",
-      "storySoFar": "Two wins from two, they are looking like the team to beat.",
-      "whatsNext": "They are through to the next round, so they can put their feet up.",
-      "pubAmmo": "They've got Messi, and you don't. Simple as."
+      "headline": "The Albiceleste March On",
+      "storySoFar": "Two wins from two, and they've already booked their spot in the next round.",
+      "whatsNext": "They are through to the knockout stages, so they can put their feet up for the final group game.",
+      "pubAmmo": "They've got Messi, and you don't."
     },
     "AUT": {
       "teamCode": "AUT",
-      "headline": "Austria left searching for answers",
-      "storySoFar": "One win and one loss, they are still in the hunt for a spot.",
-      "whatsNext": "They are still in the hunt and have a game left to prove they aren't just tourists.",
-      "pubAmmo": "They managed to keep it respectable for 38 minutes, which is a moral victory, right?"
+      "headline": "Austria Still Fighting",
+      "storySoFar": "One win and one loss, leaving them in a decent position.",
+      "whatsNext": "They are still in the hunt and have a game left to push for qualification.",
+      "pubAmmo": "They're a tough nut to crack, even if they couldn't stop Messi today."
     },
     "FRA": {
       "teamCode": "FRA",
-      "headline": "France are simply inevitable",
-      "storySoFar": "Two games, two wins, and they've barely broken a sweat.",
-      "whatsNext": "They are through to the next round, so they can start scouting the competition.",
-      "pubAmmo": "They're playing like a walking cheat code."
+      "headline": "Business as Usual for Les Bleus",
+      "storySoFar": "Two games, two wins, and a place in the next round secured.",
+      "whatsNext": "They've qualified, so expect some rotation and a bit of showboating.",
+      "pubAmmo": "They're scoring for fun and haven't even hit top gear yet."
     },
     "IRQ": {
       "teamCode": "IRQ",
-      "headline": "Iraq's World Cup dream hits a wall",
-      "storySoFar": "Two losses, zero points, and a goal difference that makes for grim reading.",
-      "whatsNext": "They are out, so they can start booking their flights home.",
-      "pubAmmo": "They've had a lovely holiday in the States, but the football hasn't been up to scratch."
+      "headline": "Iraq Out of Their Depth",
+      "storySoFar": "Two defeats and zero points, a tough outing for them.",
+      "whatsNext": "They are eliminated and will be watching the rest of the tournament from the sofa.",
+      "pubAmmo": "They'll be looking to salvage some pride in their final match."
     },
     "NOR": {
       "teamCode": "NOR",
-      "headline": "Norway's Viking raid continues",
-      "storySoFar": "Two wins from two, they are looking like a proper force.",
-      "whatsNext": "They are through to the next round, so they can celebrate with a cold one.",
-      "pubAmmo": "They've got a robot up front who doesn't know how to miss."
+      "headline": "Viking Power",
+      "storySoFar": "Two wins from two and they've already secured their progression.",
+      "whatsNext": "They're through, so they can enjoy the rest of the group stage without the squeaky bum time.",
+      "pubAmmo": "Haaland is basically a cheat code in human form."
     },
     "SEN": {
       "teamCode": "SEN",
-      "headline": "Senegal's campaign ends in heartbreak",
-      "storySoFar": "Two games, two losses, and they're officially out of the running.",
-      "whatsNext": "They are out, so they can start packing their bags.",
-      "pubAmmo": "They fought hard, but their defense was basically a revolving door."
+      "headline": "Senegal Bow Out",
+      "storySoFar": "Two losses in two, and they're officially out of the running.",
+      "whatsNext": "They are eliminated and can start planning their summer holidays.",
+      "pubAmmo": "They showed some fight, but the defense was as leaky as a sieve."
     },
     "JOR": {
       "teamCode": "JOR",
-      "headline": "Jordan's late collapse",
-      "storySoFar": "Two losses, zero points, and they are officially out.",
-      "whatsNext": "They are out, so they can start looking forward to the flight home.",
-      "pubAmmo": "They held on for 80 minutes, which is about 79 minutes longer than anyone expected."
+      "headline": "Heartbreak for the Underdogs",
+      "storySoFar": "Two losses, and their tournament journey is officially over.",
+      "whatsNext": "They are eliminated and can start booking their flights home.",
+      "pubAmmo": "They gave it a go, but the quality gap was just too wide."
     },
     "ALG": {
       "teamCode": "ALG",
-      "headline": "Algeria keep the dream alive",
-      "storySoFar": "One win and one loss, they are still in the hunt.",
-      "whatsNext": "They are still in the hunt and have a game left to secure their progression.",
-      "pubAmmo": "They showed some grit, which is more than you can say for most of the teams today."
+      "headline": "Algeria Keep the Dream Alive",
+      "storySoFar": "One win and one loss, keeping them right in the mix.",
+      "whatsNext": "They are still in the hunt and have a game left to secure their spot.",
+      "pubAmmo": "They know how to turn the screw when it matters most."
     },
     "CAN": {
       "headline": "Canada's Rollercoaster: From BMO Boredom to Qatar Carnage",
@@ -411,47 +411,47 @@
     },
     "ARG-AUT": {
       "matchKey": "ARG-AUT",
-      "editionTitle": "Messi Magic and Austrian Misery",
-      "snappySummary": "Argentina cruised to a 2-0 win as Messi reminded everyone he's still the main character.",
+      "editionTitle": "Messi Magic vs Austrian Resilience",
+      "snappySummary": "Argentina eventually broke down a stubborn Austria side, with Messi proving he's still the main man.",
       "talkingPoints": [
-        "Messi missing a penalty like he was trying to find his car keys in the dark.",
-        "Austria's defense looking like they were auditioning for a slapstick comedy.",
-        "Argentina's injury list is growing faster than my bar tab."
+        "Messi missing a penalty like a Sunday League amateur before finding his range.",
+        "Austria's defense held firm until the final minutes.",
+        "A flurry of injuries disrupted the flow of the game."
       ],
-      "randomQuirk": "The match had more injury delays than a Sunday League game on a frozen pitch."
+      "randomQuirk": "The match featured more injury delays than a local A&E department on a Saturday night."
     },
     "FRA-IRQ": {
       "matchKey": "FRA-IRQ",
       "editionTitle": "Les Bleus Cruise Control",
-      "snappySummary": "France dismantled Iraq with the clinical efficiency of a tax auditor.",
+      "snappySummary": "France dismantled Iraq with clinical efficiency, barely breaking a sweat.",
       "talkingPoints": [
-        "Mbappé scoring for fun while Iraq's defense watched on in awe.",
-        "Iraq managed zero shots on target, which is a bold strategy for a World Cup match.",
+        "Mbappé showing why he's a walking cheat code.",
+        "Iraq struggled to register a single shot on target.",
         "France looked like they were having a casual kickabout in the park."
       ],
-      "randomQuirk": "Iraq's defense spent more time clearing the ball than actually playing football."
+      "randomQuirk": "Iraq managed 28 clearances, which is basically just them playing pinball with the ball."
     },
     "NOR-SEN": {
       "matchKey": "NOR-SEN",
       "editionTitle": "Haaland's High-Octane Thriller",
-      "snappySummary": "Norway edged out Senegal in a five-goal barnstormer that had more twists than a cheap thriller.",
+      "snappySummary": "A proper end-to-end scrap that saw Norway edge out a spirited Senegal.",
       "talkingPoints": [
-        "Haaland doing what he does best: putting the ball in the net and looking bored about it.",
-        "Senegal showed heart but their defense was leakier than a rusty bucket.",
-        "A proper end-to-end scrap that actually kept us awake."
+        "Haaland doing what he does best: finding the back of the net.",
+        "Senegal fought back late but left it too little, too late.",
+        "A defensive masterclass it certainly was not."
       ],
-      "randomQuirk": "Senegal's goalkeeper change mid-match was the most dramatic thing since the invention of VAR."
+      "randomQuirk": "Senegal had more possession but couldn't stop the Viking juggernaut."
     },
     "JOR-ALG": {
       "matchKey": "JOR-ALG",
       "editionTitle": "Algeria's Late Rescue Act",
-      "snappySummary": "Jordan bottled a lead as Algeria turned the screw late on to snatch the points.",
+      "snappySummary": "Jordan put up a hell of a fight, but Algeria's quality told in the end.",
       "talkingPoints": [
-        "Jordan's 27% possession was a masterclass in 'park the bus and pray'.",
-        "Algeria finally woke up in the second half to avoid an absolute embarrassment.",
-        "Ten corners for Algeria, yet they only looked dangerous when they stopped overthinking it."
+        "Jordan's early goal had the underdogs dreaming of an upset.",
+        "Algeria dominated the ball but looked shaky until the final 20 minutes.",
+        "A classic smash-and-grab finish from the Algerians."
       ],
-      "randomQuirk": "Jordan's goalkeeper made six saves, which is basically a full day's work for a brickie."
+      "randomQuirk": "Algeria racked up 10 corners, which is a lot of effort for just two goals."
     },
     "MEX-RSA": {
       "editionTitle": "MEXICO CRUISE AS SOUTH AFRICA LOSE THE PLOT",
@@ -812,16 +812,16 @@
       "progressionNews": "Mexico, Canada, Switzerland, USA, Germany, and the Netherlands have officially qualified for the knockouts. Haiti, Türkiye, and Tunisia are officially out and can start booking their flights home. Bosnia-Herzegovina and Qatar need a strong result to keep their best-3rd hopes alive. Everyone else remains in the hunt and can still qualify."
     },
     "2026-06-22": {
-      "headline": "Messi and Mbappé Run Riot While Jordan Bottles It",
-      "theDrama": "A day of predictable dominance from the big boys, with Argentina and France showing why they're the favorites, while Norway and Algeria kept the drama levels high.",
-      "mustWatchHighlights": "Norway vs Senegal was the only game that didn't feel like a training session.",
-      "progressionNews": "Argentina, France, and Norway have officially qualified. Senegal, Iraq, and Jordan are officially eliminated and can start booking their flights home."
+      "headline": "Messi and Mbappé Run the Show as the Big Boys Flex",
+      "theDrama": "It was a day for the heavyweights to assert their dominance, with Argentina, France, and Norway all securing their spots in the next round. Jordan and Iraq, meanwhile, found out the hard way that the World Cup is a cruel mistress.",
+      "mustWatchHighlights": "Norway vs Senegal was the pick of the bunch—proper end-to-end chaos. Avoid the Iraq highlights unless you enjoy watching a team get dismantled.",
+      "progressionNews": "Argentina, France, and Norway are officially through. Jordan, Iraq, and Senegal are eliminated and can start packing their bags. Everyone else is still in the hunt or fighting for that best-3rd place lifeline."
     }
   },
   "today_preview": {
-    "headline": "Tomorrow's Menu: Can England Avoid a Stinker?",
-    "theBigOnes": "England vs Ghana is the one to watch, unless you prefer watching paint dry, in which case Panama vs Croatia is for you.",
-    "playersToWatch": "Keep an eye on the England squad to see if they can actually play like a team for once.",
+    "headline": "Tomorrow's Menu: Can the Underdogs Bite Back?",
+    "theBigOnes": "England vs Ghana is the one to watch, while Portugal will be looking to prove a point against Uzbekistan.",
+    "playersToWatch": "Keep an eye on the English attack and see if Ghana can pull off a shocker.",
     "firstKickoffTime": "2026-06-23T17:00Z"
   },
   "espnMatches": {
