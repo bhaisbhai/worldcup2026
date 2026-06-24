@@ -219,12 +219,29 @@ body{
 .mc-cd-sm{font-family:var(--mono);font-size:10px;color:var(--t2);font-weight:500}
 
 /* ── STAKES STRIP ───────────────────────────── */
-.mc-stakes{display:flex;align-items:flex-start;gap:7px;padding:9px 0;margin-bottom:13px;border-top:1px solid rgba(255,255,255,.07)}
+.mc-stakes{display:flex;align-items:flex-start;gap:7px;padding:7px 0;margin-top:8px;border-top:1px solid rgba(255,255,255,.07)}
 .mc-stakes-pill{flex-shrink:0;font-size:8px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;border-radius:3px;padding:2px 6px;margin-top:1px;line-height:1.6}
 .mc-stakes-pill.elim{color:#ff8c42;background:rgba(255,140,66,.12);border:1px solid rgba(255,140,66,.25)}
 .mc-stakes-pill.qual{color:#ffd43b;background:rgba(255,212,59,.12);border:1px solid rgba(255,212,59,.25)}
 .mc-stakes-pill.seed{color:var(--accent);background:rgba(0,255,135,.1);border:1px solid rgba(0,255,135,.2)}
 .mc-stakes-txt{font-size:11px;color:rgba(255,255,255,.6);line-height:1.5}
+
+/* ── UPCOMING CARD COMPACT LAYOUT ───────────── */
+.mc.up{padding:12px 15px}
+.mc-up-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.mc-up-grp{font-size:10px;color:var(--t2);font-weight:600;letter-spacing:.4px;text-transform:uppercase}
+.mc-up-tv{font-size:10px;color:var(--t3)}
+.mc-up-teams{display:flex;align-items:center;gap:4px}
+.mc-up-side{display:flex;align-items:center;gap:7px;flex:1;min-width:0}
+.mc-up-side-r{justify-content:flex-end}
+.mc-up-flag{font-size:22px;flex-shrink:0;line-height:1}
+.mc-up-name{font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer;transition:color .15s}
+.mc-up-name:hover{color:var(--accent)}
+.mc-up-sep{font-size:11px;color:var(--t3);flex-shrink:0;padding:0 6px;letter-spacing:.5px}
+.mc-up-foot{display:flex;align-items:baseline;justify-content:space-between;margin-top:9px}
+.mc-up-time{font-size:15px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.3px}
+.mc-up-cd{font-family:var(--mono);font-size:10px;color:var(--gold);font-weight:500;margin-left:7px}
+.mc-up-venue{font-size:10px;color:var(--t3);text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:45%}
 
 /* ── SKELETON ───────────────────────────────── */
 .skel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:11px}
@@ -1706,7 +1723,7 @@ function buildCard(ev){
   const isFt   = ev.state==='post';
   const isUp   = ev.state==='pre';
 
-  const card = el('div', `mc${isLive?' live':isFt?' ft':''}`);
+  const card = el('div', `mc${isLive?' live':isFt?' ft':isUp?' up':''}`);
   card.dataset.evId = ev.id;
 
   // badge
@@ -1746,6 +1763,37 @@ function buildCard(ev){
 
   const hlHtml = isFt ? `<div class="mc-thumb-slot" data-hlid="${ev.id}"></div>` : '';
 
+  if(isUp){
+    const tvCh = getUKChannel(ev.home.abbr, ev.away.abbr);
+    const venue = ev.city || ev.venue || '';
+    card.innerHTML = `
+      <div class="mc-up-hdr">
+        <span class="mc-up-grp">${ev.group}</span>
+        ${tvCh ? `<span class="mc-up-tv">${tvCh}</span>` : ''}
+      </div>
+      <div class="mc-up-teams">
+        <div class="mc-up-side">
+          <span class="mc-up-flag">${flag(ev.home.abbr)}</span>
+          <span class="mc-up-name t-link" onclick="event.stopPropagation();openTeamPage('${esc(ev.home.name)}')">${ev.home.name}</span>
+        </div>
+        <span class="mc-up-sep">vs</span>
+        <div class="mc-up-side mc-up-side-r">
+          <span class="mc-up-name t-link" onclick="event.stopPropagation();openTeamPage('${esc(ev.away.name)}')">${ev.away.name}</span>
+          <span class="mc-up-flag">${flag(ev.away.abbr)}</span>
+        </div>
+      </div>
+      ${buildStakesHtml(ev)}
+      <div class="mc-up-foot">
+        <div>
+          <span class="mc-up-time">${localTime(ev.date)}</span>
+          <span class="mc-up-cd" data-cdid="${ev.id}" data-ts="${ev.date.getTime()}">${countdown(ev.date)}</span>
+        </div>
+        ${venue ? `<span class="mc-up-venue" title="${esc([ev.venue,ev.city].filter(Boolean).join(' · '))}">${esc(venue)}</span>` : ''}
+      </div>
+    `;
+    return card;
+  }
+
   card.innerHTML = `
     <div class="mc-top">
       ${badge || '<div></div>'}
@@ -1763,7 +1811,6 @@ function buildCard(ev){
       </div>
     </div>
     ${(isLive||isFt) ? renderScorers(ev.goals) : ''}
-    ${isUp ? buildStakesHtml(ev) : ''}
     <div class="mc-foot">${foot_l}${foot_r}</div>
     ${hlHtml}
   `;
@@ -2390,7 +2437,7 @@ async function fetchStakesData(){
       if(!ev) return;
       const html = buildStakesHtml(ev);
       if(!html) return;
-      const foot = card.querySelector('.mc-foot');
+      const foot = card.querySelector('.mc-up-foot') || card.querySelector('.mc-foot');
       if(foot){ const d=document.createElement('div'); d.innerHTML=html; foot.before(d.firstElementChild); }
     });
   } catch(e){}
