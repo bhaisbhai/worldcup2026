@@ -2,8 +2,9 @@ name: Overnight AI Recap Generation
 
 on:
   schedule:
-    # Every 2h midnight–noon UTC. Self-gating: exits if games not done or 1h buffer not elapsed.
-    - cron: '0 0,2,4,6,8,10,12 * * *'
+    # 04:00 UTC primary run (covers games ending by ~03:00 UTC). 07:00 UTC backup.
+    - cron: '0 4 * * *'
+    - cron: '0 7 * * *'
   workflow_dispatch:
     inputs:
       date:
