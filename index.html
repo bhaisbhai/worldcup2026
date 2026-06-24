@@ -2642,7 +2642,6 @@ function renderKnockout(){
     </div>
     <div class="bscroll-track"><div class="bscroll-thumb" id="bscroll-thumb"></div></div>`;
   const b = $('bracket');
-  initBscrollHint();
 
   function mkKOTeam(label){
     const key = koSlotKey(label);
@@ -2686,6 +2685,7 @@ function renderKnockout(){
   b.append(mkKORound('Round of 16',    KO_DATA.right.r16));
   b.append(mkKORound('Round of 32',    KO_DATA.right.r32));
 
+  initBscrollHint();
 }
 
 // ═══════════════════════════════════════════════════
@@ -3937,7 +3937,6 @@ function renderKnockoutDynamic(rounds){
     </div>
     <div class="bscroll-track"><div class="bscroll-thumb" id="bscroll-thumb"></div></div>`;
   const b = $('bracket');
-  initBscrollHint();
 
   const roundOrder = ['Round of 32','Round of 16','Quarter-Final','Semi-Final','Final'];
   const leftRounds  = roundOrder.slice(0, Math.ceil((roundOrder.length-1)/2));
@@ -3991,6 +3990,7 @@ function renderKnockoutDynamic(rounds){
   b.append(trophy);
 
   rightRounds.forEach(lbl => b.append(rounds[lbl] ? mkDynRound(lbl,rounds[lbl]) : mkTBDRound(lbl,countFor(lbl))));
+  initBscrollHint();
 }
 
 // ═══════════════════════════════════════════════════
