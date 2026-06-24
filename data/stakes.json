@@ -1,1 +1,31 @@
-{"generatedAt":null,"byDate":{}}
+{
+  "generatedAt": "2026-06-24T22:52:41.900Z",
+  "byDate": {
+    "2026-06-24": {
+      "BIH-QAT": {
+        "summary": "Bosnia-Herzegovina is 3rd with 4 points, likely advancing. Qatar is eliminated in 4th place with 1 point.",
+        "status": "Elimination Risk"
+      },
+      "SUI-CAN": {
+        "summary": "Switzerland is 1st with 7 points, qualified. Canada is 2nd with 4 points, also qualified for knockout stage.",
+        "status": "Knockout Seeding"
+      },
+      "MAR-HAI": {
+        "summary": "Morocco needs a win or draw to secure automatic qualification. Haiti needs a massive win for any slim hope of advancing.",
+        "status": "Qualification Battle"
+      },
+      "SCO-BRA": {
+        "summary": "Scotland needs a win for automatic qualification. Brazil needs a win or draw to secure their spot in the knockout stage.",
+        "status": "Qualification Battle"
+      },
+      "CZE-MEX": {
+        "summary": "Mexico is already qualified and playing for group winner seeding. Czechia needs a win and help for a slim chance to advance.",
+        "status": "Elimination Risk"
+      },
+      "RSA-KOR": {
+        "summary": "South Korea needs a win to guarantee automatic qualification. South Africa needs a win and help for a slim chance to advance.",
+        "status": "Qualification Battle"
+      }
+    }
+  }
+}
