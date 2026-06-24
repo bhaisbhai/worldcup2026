@@ -218,6 +218,14 @@ body{
 .mc-kickoff-time{font-size:18px;font-weight:700;color:var(--text);letter-spacing:-.5px;font-variant-numeric:tabular-nums;line-height:1.1}
 .mc-cd-sm{font-family:var(--mono);font-size:10px;color:var(--t2);font-weight:500}
 
+/* ── STAKES STRIP ───────────────────────────── */
+.mc-stakes{display:flex;align-items:flex-start;gap:7px;padding:9px 0;margin-bottom:13px;border-top:1px solid rgba(255,255,255,.07)}
+.mc-stakes-pill{flex-shrink:0;font-size:8px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;border-radius:3px;padding:2px 6px;margin-top:1px;line-height:1.6}
+.mc-stakes-pill.elim{color:#ff8c42;background:rgba(255,140,66,.12);border:1px solid rgba(255,140,66,.25)}
+.mc-stakes-pill.qual{color:#ffd43b;background:rgba(255,212,59,.12);border:1px solid rgba(255,212,59,.25)}
+.mc-stakes-pill.seed{color:var(--accent);background:rgba(0,255,135,.1);border:1px solid rgba(0,255,135,.2)}
+.mc-stakes-txt{font-size:11px;color:rgba(255,255,255,.6);line-height:1.5}
+
 /* ── SKELETON ───────────────────────────────── */
 .skel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:11px}
 .skel{
@@ -1756,6 +1764,7 @@ function buildCard(ev){
       </div>
     </div>
     ${(isLive||isFt) ? renderScorers(ev.goals) : ''}
+    ${isUp ? buildStakesHtml(ev) : ''}
     <div class="mc-foot">${foot_l}${foot_r}</div>
     ${hlHtml}
   `;
@@ -2359,6 +2368,68 @@ async function fetchRecapResults(date, card){
     const ds = date.replace(/-/g,'');
     card.querySelector(`#recap-res-${ds}`)?.remove();
   }
+}
+
+// ═══════════════════════════════════════════════════
+//  STAKES DATA (Google Sheet)
+// ═══════════════════════════════════════════════════
+const STAKES_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQvS05BL3QPnJ_H0S_S3mRo6Wah2BYhQC0jwGu-7wV9Rv0wU5UZTVT-G6ylkpqL4ZZNXKb4LjEKvtq-/pub?output=csv';
+let stakesCache = {};
+
+function normTeam(n){ return (n||'').toLowerCase().replace(/[^a-z0-9]/g,''); }
+
+function parseCSVLine(line){
+  const fields=[]; let field='', inQ=false;
+  for(let i=0;i<line.length;i++){
+    const c=line[i];
+    if(c==='"'){inQ=!inQ;continue;}
+    if(c===','&&!inQ){fields.push(field);field='';continue;}
+    field+=c;
+  }
+  fields.push(field);
+  return fields.map(f=>f.trim());
+}
+
+async function fetchStakesData(){
+  try {
+    const r = await fetch(STAKES_CSV_URL, { signal: AbortSignal.timeout(8000) });
+    if(!r.ok) return;
+    const text = await r.text();
+    const lines = text.trim().split(/\r?\n/);
+    const cache = {};
+    for(let i=1;i<lines.length;i++){
+      const f = parseCSVLine(lines[i]);
+      if(f.length < 4) continue;
+      const [date, home, away, summary, status=''] = f;
+      if(!date||!home||!away) continue;
+      const val = { summary: summary||'', status: status||'' };
+      const k1 = `${date}|${normTeam(home)}|${normTeam(away)}`;
+      const k2 = `${date}|${normTeam(away)}|${normTeam(home)}`;
+      cache[k1] = val; cache[k2] = val;
+    }
+    stakesCache = cache;
+    // inject into already-rendered upcoming cards
+    document.querySelectorAll('.mc:not(.live):not(.ft)').forEach(card => {
+      if(card.querySelector('.mc-stakes')) return;
+      const ev = lastEvents.find(e => e.id === card.dataset.evId);
+      if(!ev) return;
+      const html = buildStakesHtml(ev);
+      if(!html) return;
+      const foot = card.querySelector('.mc-foot');
+      if(foot){ const d=document.createElement('div'); d.innerHTML=html; foot.before(d.firstElementChild); }
+    });
+  } catch(e){}
+}
+
+function buildStakesHtml(ev){
+  const d = ev.date instanceof Date ? ev.date : new Date(ev.date);
+  const dateStr = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  const k = `${dateStr}|${normTeam(ev.home.name)}|${normTeam(ev.away.name)}`;
+  const s = stakesCache[k];
+  if(!s || !s.summary) return '';
+  const cls = {'Elimination Risk':'elim','Qualification Battle':'qual','Knockout Seeding':'seed'}[s.status] || 'qual';
+  const label = s.status || 'Context';
+  return `<div class="mc-stakes"><span class="mc-stakes-pill ${cls}">${esc(label)}</span><span class="mc-stakes-txt">${esc(s.summary)}</span></div>`;
 }
 
 async function renderYesterdayScores(){
@@ -5038,6 +5109,7 @@ refreshKnockoutBracket();
 fetchPlayerClubs();
 fetchPlayerStats();
 fetchPlayerVerdicts();
+fetchStakesData();
 renderYesterdayScores();
 fetchMatches();
 fetchGroupStandings();
