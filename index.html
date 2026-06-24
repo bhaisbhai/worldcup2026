@@ -367,6 +367,53 @@ body{
 .trophy-l{font-size:9px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--gold);text-align:center}
 .trophy-t{font-size:10px;color:var(--t2);font-style:italic;text-align:center}
 
+/* ── BRACKET SCROLL AFFORDANCE ───────────────── */
+.bscroll-wrap{position:relative}
+.bscroll-wrap::before,.bscroll-wrap::after{
+  content:'';position:absolute;top:0;bottom:22px;width:90px;
+  pointer-events:none;z-index:2;transition:opacity .3s;
+}
+.bscroll-wrap::before{
+  left:0;
+  background:linear-gradient(to right,#080808 30%,transparent);
+  opacity:0;
+}
+.bscroll-wrap::after{
+  right:0;
+  background:linear-gradient(to left,#080808 30%,transparent);
+}
+.bscroll-wrap.bs-left::before{opacity:1}
+.bscroll-wrap.bs-end::after{opacity:0}
+.bscroll-track{
+  height:3px;background:rgba(255,255,255,.06);border-radius:2px;margin-top:6px;
+}
+.bscroll-thumb{
+  height:100%;background:var(--accent);border-radius:2px;width:0%;
+  transition:width .1s linear;
+}
+.bscroll-hint{
+  position:absolute;right:16px;bottom:30px;
+  display:flex;align-items:center;gap:6px;
+  background:rgba(255,255,255,.1);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:999px;padding:7px 14px;
+  font-size:12px;font-weight:700;color:#fff;
+  pointer-events:none;z-index:3;
+  animation:bshint 1.4s ease-in-out infinite;
+  transition:opacity .5s;
+}
+.bscroll-hint.gone{opacity:0;pointer-events:none}
+.bscroll-hint svg{flex-shrink:0;animation:bsarrow 1.4s ease-in-out infinite}
+@keyframes bshint{
+  0%,100%{transform:translateX(0);box-shadow:0 0 0 0 rgba(255,255,255,.12)}
+  50%{transform:translateX(-7px);box-shadow:0 0 0 8px rgba(255,255,255,0)}
+}
+@keyframes bsarrow{
+  0%,100%{transform:translateX(0)}
+  50%{transform:translateX(-4px)}
+}
+
 /* ── DAY NAV ────────────────────────────────── */
 .day-nav{width:100%;margin-bottom:16px}
 .dnav-row{display:flex;align-items:center;width:100%}
@@ -2559,13 +2606,43 @@ function koSlotKey(label){
   return null;
 }
 
+function initBscrollHint(){
+  const scroller = $('bscroll-el');
+  const wrap = $('bscroll-wrap');
+  const hint = $('bscroll-hint');
+  const thumb = $('bscroll-thumb');
+  if(!scroller||!wrap) return;
+  let dismissed = false;
+  function onScroll(){
+    const sl = scroller.scrollLeft;
+    const max = scroller.scrollWidth - scroller.clientWidth;
+    if(!dismissed && sl > 20){
+      dismissed = true;
+      hint.classList.add('gone');
+    }
+    wrap.classList.toggle('bs-left', sl > 10);
+    wrap.classList.toggle('bs-end', max < 10 || sl >= max - 10);
+    if(thumb && max > 0) thumb.style.width = Math.min(100, (sl/max)*100)+'%';
+  }
+  scroller.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+}
+
 function renderKnockout(){
   const sec = $('tab-knockout');
   sec.innerHTML = `
     <div class="ko-hd">Knockout Stage</div>
     <div class="ko-sub">Round of 32 · Round of 16 · Quarter-Finals · Semi-Finals · Final — MetLife Stadium, Jul 19</div>
-    <div class="bscroll"><div class="bracket" id="bracket"></div></div>`;
+    <div class="bscroll-wrap" id="bscroll-wrap">
+      <div class="bscroll" id="bscroll-el"><div class="bracket" id="bracket"></div></div>
+      <div class="bscroll-hint" id="bscroll-hint">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Swipe to explore
+      </div>
+    </div>
+    <div class="bscroll-track"><div class="bscroll-thumb" id="bscroll-thumb"></div></div>`;
   const b = $('bracket');
+  initBscrollHint();
 
   function mkKOTeam(label){
     const key = koSlotKey(label);
@@ -3851,8 +3928,16 @@ function renderKnockoutDynamic(rounds){
   sec.innerHTML = `
     <div class="ko-hd">Knockout Stage</div>
     <div class="ko-sub">Round of 32 · Round of 16 · Quarter-Finals · Semi-Finals · Final — MetLife Stadium, July 19</div>
-    <div class="bscroll"><div class="bracket" id="bracket"></div></div>`;
+    <div class="bscroll-wrap" id="bscroll-wrap">
+      <div class="bscroll" id="bscroll-el"><div class="bracket" id="bracket"></div></div>
+      <div class="bscroll-hint" id="bscroll-hint">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Swipe to explore
+      </div>
+    </div>
+    <div class="bscroll-track"><div class="bscroll-thumb" id="bscroll-thumb"></div></div>`;
   const b = $('bracket');
+  initBscrollHint();
 
   const roundOrder = ['Round of 32','Round of 16','Quarter-Final','Semi-Final','Final'];
   const leftRounds  = roundOrder.slice(0, Math.ceil((roundOrder.length-1)/2));
