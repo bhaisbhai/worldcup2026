@@ -2322,18 +2322,21 @@ function renderSummary(container, dispDate){
   const card = document.createElement('div');
   card.className = 'recap-card';
   card.onclick = function(e){ if(!e.target.closest('.recap-dismiss')) this.classList.toggle('open'); };
+  // New format: single `summary` field (50 words). Old format: headline + sections.
+  const isNewFormat = !!row.summary;
   card.innerHTML =
     `<div class="recap-hdr">
       <span class="recap-pill">${label}</span>
-      <span class="recap-hl">${row.headline||''}</span>
+      <span class="recap-hl">${isNewFormat ? row.summary : (row.headline||'')}</span>
       <button class="recap-dismiss" onclick="dismissRecap('${row.date}',event)" title="Dismiss">✕</button>
     </div>
-    <div class="recap-body"><div class="recap-body-inner">
+    ${isNewFormat ? '' : `<div class="recap-body"><div class="recap-body-inner">
       ${row.theDrama?`<div class="recap-section"><div class="recap-section-lbl">The Drama</div><div class="recap-section-txt">${row.theDrama}</div></div>`:''}
       ${row.mustWatchHighlights?`<div class="recap-section"><div class="recap-section-lbl">Watch / Skip</div><div class="recap-section-txt">${row.mustWatchHighlights}</div></div>`:''}
       ${row.progressionNews?`<div class="recap-section"><div class="recap-section-lbl">Progression</div><div class="recap-section-txt">${row.progressionNews}</div></div>`:''}
       ${isYesterday?`<div class="recap-results" id="recap-res-${row.date.replace(/-/g,'')}"><div class="recap-section-lbl">Results</div><div style="font-size:11px;color:rgba(255,255,255,.35);padding-top:4px">Loading…</div></div>`:''}
-    </div></div>`;
+    </div></div>`}
+    ${isNewFormat && isYesterday ? `<div class="recap-body open"><div class="recap-body-inner"><div class="recap-results" id="recap-res-${row.date.replace(/-/g,'')}"><div class="recap-section-lbl">Results</div><div style="font-size:11px;color:rgba(255,255,255,.35);padding-top:4px">Loading…</div></div></div></div>` : ''}`;
   const nav = container.querySelector('#day-nav');
   if(nav && nav.nextSibling) container.insertBefore(card, nav.nextSibling);
   else container.append(card);
@@ -2364,41 +2367,20 @@ async function fetchRecapResults(date, card){
 }
 
 // ═══════════════════════════════════════════════════
-//  STAKES DATA (Google Sheet)
+//  STAKES DATA  (/data/stakes.json — AI-generated nightly)
 // ═══════════════════════════════════════════════════
-const STAKES_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQvS05BL3QPnJ_H0S_S3mRo6Wah2BYhQC0jwGu-7wV9Rv0wU5UZTVT-G6ylkpqL4ZZNXKb4LjEKvtq-/pub?output=csv';
-let stakesCache = {};
-
-function normTeam(n){ return (n||'').toLowerCase().replace(/[^a-z0-9]/g,''); }
-
-function parseCSVLine(line){
-  const fields=[]; let field='', inQ=false;
-  for(let i=0;i<line.length;i++){
-    const c=line[i];
-    if(c==='"'){inQ=!inQ;continue;}
-    if(c===','&&!inQ){fields.push(field);field='';continue;}
-    field+=c;
-  }
-  fields.push(field);
-  return fields.map(f=>f.trim());
-}
+let stakesCache = {}; // key: "YYYY-MM-DD|HOME-AWAY" → {summary, status}
 
 async function fetchStakesData(){
   try {
-    const r = await fetch(STAKES_CSV_URL, { signal: AbortSignal.timeout(8000) });
+    const r = await fetch('/data/stakes.json', { signal: AbortSignal.timeout(8000) });
     if(!r.ok) return;
-    const text = await r.text();
-    const lines = text.trim().split(/\r?\n/);
+    const data = await r.json();
     const cache = {};
-    for(let i=1;i<lines.length;i++){
-      const f = parseCSVLine(lines[i]);
-      if(f.length < 4) continue;
-      const [date, home, away, summary, status=''] = f;
-      if(!date||!home||!away) continue;
-      const val = { summary: summary||'', status: status||'' };
-      const k1 = `${date}|${normTeam(home)}|${normTeam(away)}`;
-      const k2 = `${date}|${normTeam(away)}|${normTeam(home)}`;
-      cache[k1] = val; cache[k2] = val;
+    for(const [date, matches] of Object.entries(data.byDate || {})){
+      for(const [matchKey, val] of Object.entries(matches)){
+        cache[`${date}|${matchKey}`] = val;
+      }
     }
     stakesCache = cache;
     // inject into already-rendered upcoming cards
@@ -2417,12 +2399,11 @@ async function fetchStakesData(){
 function buildStakesHtml(ev){
   const d = ev.date instanceof Date ? ev.date : new Date(ev.date);
   const dateStr = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-  const k = `${dateStr}|${normTeam(ev.home.name)}|${normTeam(ev.away.name)}`;
-  const s = stakesCache[k];
+  const matchKey = `${ev.home.abbr}-${ev.away.abbr}`;
+  const s = stakesCache[`${dateStr}|${matchKey}`];
   if(!s || !s.summary) return '';
   const cls = {'Elimination Risk':'elim','Qualification Battle':'qual','Knockout Seeding':'seed'}[s.status] || 'qual';
-  const label = s.status || 'Context';
-  return `<div class="mc-stakes"><span class="mc-stakes-pill ${cls}">${esc(label)}</span><span class="mc-stakes-txt">${esc(s.summary)}</span></div>`;
+  return `<div class="mc-stakes"><span class="mc-stakes-pill ${cls}">${esc(s.status||'Context')}</span><span class="mc-stakes-txt">${esc(s.summary)}</span></div>`;
 }
 
 async function renderYesterdayScores(){
