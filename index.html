@@ -206,6 +206,8 @@ body{
 .sc.vs{font-size:20px;color:var(--t2);font-weight:400}
 
 .mc-foot{display:flex;align-items:center;justify-content:space-between}
+.mc-tap-hint{display:flex;align-items:center;justify-content:center;gap:4px;margin-top:10px;padding-top:9px;border-top:1px solid rgba(255,255,255,.06);font-size:10px;font-weight:600;color:var(--t2);letter-spacing:.5px;text-transform:uppercase}
+.mc-tap-hint svg{opacity:.6}
 .mc-min{
   font-family:var(--mono);font-size:11px;font-weight:700;color:var(--accent);
   background:rgba(0,255,135,.1);padding:2px 7px;border-radius:5px;letter-spacing:.4px;
@@ -1471,24 +1473,29 @@ function parseEvent(ev){
   const groupMatch = groupNote.match(/Group ([A-Z])/);
   const groupLabel = groupMatch ? `Group ${groupMatch[1]}` : groupNote;
 
-  // Extract goal events from comp.details (available in scoreboard for completed matches)
+  // Extract goal events from comp.details (scoreboard for FT, live updates for in-progress)
   const homeTeamId   = home.team.id;
   const homeTeamAbbr = home.team.abbreviation;
   const goals = (comp.details || [])
     .filter(d => {
       const t = (d.type?.text || d.type?.name || '').toLowerCase();
-      return t.includes('goal');
+      return t.includes('goal') || t === 'score';
     })
     .map(d => {
       const og  = d.ownGoal || false;
       const pen = d.penaltyKick || false;
+      // ESPN uses athletesInvolved OR participants depending on context
       const raw = d.athletesInvolved?.[0];
-      const name = raw?.shortName || raw?.displayName || (og ? 'OG' : '');
+      const part = d.participants?.find(p => p.type === 'scorer' || p.order === 1)?.athlete;
+      const name = raw?.shortName || raw?.displayName
+        || part?.shortName || part?.displayName
+        || (og ? 'OG' : '');
       const min  = d.clock?.displayValue || '';
       const dt   = d.team;
       const isHome = dt ? (dt.id === homeTeamId || dt.abbreviation === homeTeamAbbr) : false;
       return { name: og ? 'OG' : name, min, isHome, og, pen };
-    });
+    })
+    .filter(g => g.name || g.og);
 
   return {
     id: ev.id,
@@ -1753,6 +1760,7 @@ function buildCard(ev){
     ${(isLive||isFt) ? renderScorers(ev.goals) : ''}
     <div class="mc-foot">${foot_l}${foot_r}</div>
     ${hlHtml}
+    ${isLive ? `<div class="mc-tap-hint"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 8 16 12 12 16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>Tap for match details</div>` : ''}
   `;
   if(isFt){
     // If already cached, swap slot for thumbnail immediately
