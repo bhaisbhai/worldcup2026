@@ -206,8 +206,6 @@ body{
 .sc.vs{font-size:20px;color:var(--t2);font-weight:400}
 
 .mc-foot{display:flex;align-items:center;justify-content:space-between}
-.mc-tap-hint{display:flex;align-items:center;justify-content:center;gap:4px;margin-top:10px;padding-top:9px;border-top:1px solid rgba(255,255,255,.06);font-size:10px;font-weight:600;color:var(--t2);letter-spacing:.5px;text-transform:uppercase}
-.mc-tap-hint svg{opacity:.6}
 .mc-min{
   font-family:var(--mono);font-size:11px;font-weight:700;color:var(--accent);
   background:rgba(0,255,135,.1);padding:2px 7px;border-radius:5px;letter-spacing:.4px;
@@ -1760,7 +1758,6 @@ function buildCard(ev){
     ${(isLive||isFt) ? renderScorers(ev.goals) : ''}
     <div class="mc-foot">${foot_l}${foot_r}</div>
     ${hlHtml}
-    ${isLive ? `<div class="mc-tap-hint"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 8 16 12 12 16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>Tap for match details</div>` : ''}
   `;
   if(isFt){
     // If already cached, swap slot for thumbnail immediately
