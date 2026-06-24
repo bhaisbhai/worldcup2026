@@ -2,8 +2,7 @@ name: Player Clubs Sync
 
 on:
   workflow_dispatch:   # Trigger manually from GitHub Actions tab
-  schedule:
-    - cron: '0 6 * * 1'  # Weekly on Monday 06:00 UTC (catches squad changes)
+  # schedule disabled — run manually as needed
 
 permissions:
   contents: write

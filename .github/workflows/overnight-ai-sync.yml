@@ -1,11 +1,7 @@
 name: Overnight AI Recap Generation
 
 on:
-  schedule:
-    # Run every 2 hours midnight–noon UTC. The pipeline self-gates:
-    # it exits immediately if games aren't all done yet or if the 1h
-    # post-game buffer hasn't elapsed, and skips if a recap already exists.
-    - cron: '0 0,2,4,6,8,10,12 * * *'
+  # schedule disabled — content now manually maintained via Google Sheet
   workflow_dispatch:
     inputs:
       date:
