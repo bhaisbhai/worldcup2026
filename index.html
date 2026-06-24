@@ -1884,8 +1884,9 @@ function goToDate(d){
 function patchCard(card, ev){
   const isLive = ev.state==='in';
   const isFt   = ev.state==='post';
+  const isUp   = ev.state==='pre';
 
-  card.className = `mc${isLive?' live':isFt?' ft':''} vis`;
+  card.className = `mc${isLive?' live':isFt?' ft':isUp?' up':''} vis`;
 
   const badge = card.querySelector('.mc-badge');
   if(badge){
