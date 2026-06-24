@@ -368,43 +368,37 @@ body{
 .trophy-t{font-size:10px;color:var(--t2);font-style:italic;text-align:center}
 
 /* ── BRACKET SCROLL AFFORDANCE ───────────────── */
-.bscroll-wrap{position:relative}
-.bscroll-wrap::before,.bscroll-wrap::after{
-  content:'';position:absolute;top:0;bottom:22px;width:90px;
-  pointer-events:none;z-index:2;transition:opacity .3s;
+.bscroll-wrap{position:relative;overflow:hidden}
+.bscroll-fade{
+  position:absolute;top:0;bottom:0;width:120px;
+  pointer-events:none;z-index:10;transition:opacity .3s;
 }
-.bscroll-wrap::before{
-  left:0;
-  background:linear-gradient(to right,#080808 30%,transparent);
-  opacity:0;
-}
-.bscroll-wrap::after{
-  right:0;
-  background:linear-gradient(to left,#080808 30%,transparent);
-}
-.bscroll-wrap.bs-left::before{opacity:1}
-.bscroll-wrap.bs-end::after{opacity:0}
+.bscroll-fade-l{left:0;background:linear-gradient(to right,var(--bg) 35%,transparent);opacity:0}
+.bscroll-fade-r{right:0;background:linear-gradient(to left,var(--bg) 35%,transparent)}
+.bscroll-wrap.bs-left .bscroll-fade-l{opacity:1}
+.bscroll-wrap.bs-end .bscroll-fade-r{opacity:0}
 .bscroll-track{
-  height:3px;background:rgba(255,255,255,.06);border-radius:2px;margin-top:6px;
+  height:3px;background:rgba(255,255,255,.08);border-radius:2px;margin-top:8px;
 }
 .bscroll-thumb{
   height:100%;background:var(--accent);border-radius:2px;width:0%;
-  transition:width .1s linear;
+  transition:width .12s linear;box-shadow:0 0 6px rgba(0,255,135,.5);
 }
 .bscroll-hint{
-  position:absolute;right:16px;bottom:30px;
+  position:absolute;right:12px;top:50%;transform:translateY(-50%);
   display:flex;align-items:center;gap:6px;
-  background:rgba(255,255,255,.1);
-  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-  border:1px solid rgba(255,255,255,.18);
-  border-radius:999px;padding:7px 14px;
-  font-size:12px;font-weight:700;color:#fff;
-  pointer-events:none;z-index:3;
-  animation:bshint 1.4s ease-in-out infinite;
+  background:rgba(0,0,0,.75);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border:1px solid rgba(255,255,255,.22);
+  border-radius:999px;padding:8px 16px;
+  font-size:12px;font-weight:700;color:#fff;letter-spacing:.2px;
+  pointer-events:none;z-index:20;
+  animation:bshint 1.3s ease-in-out infinite;
   transition:opacity .5s;
+  white-space:nowrap;
 }
 .bscroll-hint.gone{opacity:0;pointer-events:none}
-.bscroll-hint svg{flex-shrink:0;animation:bsarrow 1.4s ease-in-out infinite}
+.bscroll-hint svg{flex-shrink:0;animation:bsarrow 1.3s ease-in-out infinite}
 @keyframes bshint{
   0%,100%{transform:translateX(0);box-shadow:0 0 0 0 rgba(255,255,255,.12)}
   50%{transform:translateX(-7px);box-shadow:0 0 0 8px rgba(255,255,255,0)}
@@ -2635,6 +2629,8 @@ function renderKnockout(){
     <div class="ko-sub">Round of 32 · Round of 16 · Quarter-Finals · Semi-Finals · Final — MetLife Stadium, Jul 19</div>
     <div class="bscroll-wrap" id="bscroll-wrap">
       <div class="bscroll" id="bscroll-el"><div class="bracket" id="bracket"></div></div>
+      <div class="bscroll-fade bscroll-fade-l" id="bscroll-fade-l"></div>
+      <div class="bscroll-fade bscroll-fade-r" id="bscroll-fade-r"></div>
       <div class="bscroll-hint" id="bscroll-hint">
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
         Swipe to explore
@@ -3930,6 +3926,8 @@ function renderKnockoutDynamic(rounds){
     <div class="ko-sub">Round of 32 · Round of 16 · Quarter-Finals · Semi-Finals · Final — MetLife Stadium, July 19</div>
     <div class="bscroll-wrap" id="bscroll-wrap">
       <div class="bscroll" id="bscroll-el"><div class="bracket" id="bracket"></div></div>
+      <div class="bscroll-fade bscroll-fade-l" id="bscroll-fade-l"></div>
+      <div class="bscroll-fade bscroll-fade-r" id="bscroll-fade-r"></div>
       <div class="bscroll-hint" id="bscroll-hint">
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
         Swipe to explore
