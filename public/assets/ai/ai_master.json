@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-23T22:22:16.264Z",
+  "lastUpdated": "2026-06-24T07:35:07.508Z",
   "teams": {
     "BIH": {
       "headline": "Bosnia-Herzegovina: A Defensive Disasterclass",
@@ -8,10 +8,11 @@
       "pubAmmo": "Did you know that in their 4-1 defeat to Switzerland, Bosnia-Herzegovina conceded three of those goals after the 70th minute, including a red card for Tarik Muharemovic?"
     },
     "ENG": {
-      "headline": "England: Four Goals, One Rollercoaster, and Plenty of Squeaky Bum Time",
-      "storySoFar": "Typical England, isn't it? They put four past Croatia in a proper thriller, but not without making us sweat for it. It was liquid football at times, but that defensive lapse to let it go to 2-2 had me reaching for the blood pressure tablets. Still, a win is a win, and Rashford coming off the bench to seal it was pure class.",
-      "whatsNext": "They need to tighten up at the back. You can't rely on scoring four every game to cover up for defensive lapses, or they'll be staring down the barrel of a proper bottle job when the pressure really ramps up.",
-      "pubAmmo": "England's 4-2 win against Croatia featured a penalty from Harry Kane and a late goal from Marcus Rashford, proving they can still find the net when the pressure is on."
+      "teamCode": "ENG",
+      "headline": "England through, but where's the spark?",
+      "storySoFar": "Qualified, but that 0-0 draw against Ghana was a proper bore-fest.",
+      "whatsNext": "They are through to the next stage.",
+      "pubAmmo": "They've qualified, but they're playing like they're afraid to break a sweat."
     },
     "SCO": {
       "headline": "Scotland: From Tartan Army Glory to Gillette Stadium Heartbreak",
@@ -226,16 +227,18 @@
       "pubAmmo": "Did you know Congo DR managed to hold Portugal to a 1-1 draw despite conceding the opening goal within the first six minutes?"
     },
     "COL": {
-      "headline": "Colombia: The Late-Show Specialists Who Love a Dramatic Finish",
-      "storySoFar": "Colombia against Uzbekistan was a proper rollercoaster. They looked comfortable enough, then let Uzbekistan back in, but Luis Díaz decided he wasn't having any of that nonsense. They kept their heads, kept playing, and Jaminton Campaz put the cherry on top with a 99th-minute header. It’s not good for the blood pressure, but it’s certainly entertaining stuff.",
-      "whatsNext": "They’ve got the momentum now. They just need to stop giving the opposition a sniff of a comeback and kill these games off earlier so we can all get to the bar before the final whistle.",
-      "pubAmmo": "Did you know Colombia scored their third goal against Uzbekistan in the 99th minute of the match?"
+      "teamCode": "COL",
+      "headline": "Colombia march on",
+      "storySoFar": "Two wins, two clean sheets, and they're looking solid.",
+      "whatsNext": "They are through to the next stage.",
+      "pubAmmo": "They're the team nobody wants to play right now."
     },
     "CRO": {
-      "headline": "Croatia's World Cup Hopes: A Proper Bottle Job or Just Bad Luck?",
-      "storySoFar": "Croatia turned up to the AT&T Stadium looking like they might actually cause an upset against England, but ended up looking like they were having a casual kickabout in the park while England did the business. They managed to claw back to 2-2, but then the wheels fell off, and they let England run away with a 4-2 win. It was classic Sunday League defending at the back when it mattered most.",
-      "whatsNext": "They need to stop playing like they're on a holiday and start defending like their lives depend on it. If they don't tighten up that backline, they'll be packing their bags and heading home before the group stage is even properly finished.",
-      "pubAmmo": "Did you know Croatia managed to score two goals against England, including a screamer from Martin Baturina, yet still conceded four in a defensive collapse?"
+      "teamCode": "CRO",
+      "headline": "Croatia keep the dream alive",
+      "storySoFar": "A win and a loss, they're still in the mix for the top two.",
+      "whatsNext": "They are still in the hunt and have games to play.",
+      "pubAmmo": "They're hanging on by a thread, but they've got the experience to pull it off."
     },
     "CZE": {
       "headline": "Czechia: The Masters of the 'Almost' Result",
@@ -268,10 +271,11 @@
       "pubAmmo": "Did you know Panama conceded the only goal of their match against Ghana in the 95th minute, effectively losing the game with the very last kick of the match?"
     },
     "POR": {
-      "headline": "Portugal's World Cup Campaign: A Masterclass in Underwhelming",
-      "storySoFar": "Portugal turned up to the NRG Stadium looking like they were having a casual kickabout in the park. They grabbed an early lead through João Neves, but then decided that defending was optional, letting Congo DR snatch a draw. It was a proper bottle job to drop points there, and frankly, the constant drinks breaks were more exciting than the football on display.",
-      "whatsNext": "They need to stop treating the pitch like a Sunday League training session and actually show some urgency. If they don't sharpen up, they'll be booking their flights home before the knockout stages even start.",
-      "pubAmmo": "Did you know Portugal managed to pick up three yellow cards in a single match against Congo DR while only managing to score once?"
+      "teamCode": "POR",
+      "headline": "Portugal cruise into the next round",
+      "storySoFar": "Two wins from two, and they've looked like a well-oiled machine against the minnows.",
+      "whatsNext": "They are through to the next stage.",
+      "pubAmmo": "They've scored 6 and conceded 1. They're looking like a proper threat."
     },
     "QAT": {
       "headline": "Qatar's Tournament: From Miracle Draw to Absolute Car Crash",
@@ -742,6 +746,50 @@
         "Paraguay played the entire second half with ten men after Miguel Almirón was sent off in stoppage time of the first half."
       ],
       "randomQuirk": "The match was so stop-start that it felt like a series of delays, with the referee blowing for injury or drinks breaks on at least 15 separate occasions throughout the 90 minutes."
+    },
+    "POR-UZB": {
+      "matchKey": "POR-UZB",
+      "editionTitle": "The Ronaldo Show",
+      "snappySummary": "Portugal turned the NRG Stadium into a training ground, putting five past a hapless Uzbekistan side.",
+      "talkingPoints": [
+        "Ronaldo proving he's still got the legs for a tap-in or two.",
+        "Uzbekistan looked like they were playing in lead boots.",
+        "A five-goal drubbing that was never in doubt."
+      ],
+      "randomQuirk": "Uzbekistan managed to concede an own goal just to spice up the misery."
+    },
+    "ENG-GHA": {
+      "matchKey": "ENG-GHA",
+      "editionTitle": "A Snoozefest at Gillette",
+      "snappySummary": "England and Ghana played out a goalless draw that had all the excitement of watching paint dry.",
+      "talkingPoints": [
+        "England dominated possession but couldn't hit a barn door.",
+        "Ghana's defense was the only thing keeping them in the tournament.",
+        "A masterclass in how to waste 90 minutes of everyone's time."
+      ],
+      "randomQuirk": "England had 19 shots and only 3 on target—absolutely clinical, if you're a fan of row Z."
+    },
+    "PAN-CRO": {
+      "matchKey": "PAN-CRO",
+      "editionTitle": "Modric's Men Edge It",
+      "snappySummary": "Croatia scraped past Panama thanks to a solitary Budimir strike in a game that won't be remembered for long.",
+      "talkingPoints": [
+        "Panama defended for their lives but eventually cracked.",
+        "Croatia looked like they were playing at 50% capacity.",
+        "A scrappy win that keeps the dream alive for the Croats."
+      ],
+      "randomQuirk": "Panama managed 42% possession and still looked like they were having a casual kickabout in the park."
+    },
+    "COL-COD": {
+      "matchKey": "COL-COD",
+      "editionTitle": "Muñoz Saves the Day",
+      "snappySummary": "Colombia finally broke the deadlock late on to sink Congo DR in a tight, nervy affair.",
+      "talkingPoints": [
+        "Daniel Muñoz with the goal that saved Colombia from a frustrating draw.",
+        "Congo DR's keeper was busy, but even he couldn't stop the inevitable.",
+        "Colombia's persistence paid off after 20 shots."
+      ],
+      "randomQuirk": "Congo DR's keeper made 8 saves, which is basically a full day's work in the office."
     }
   },
   "days": {
@@ -816,13 +864,19 @@
       "theDrama": "A day where the superstars actually turned up, with Messi, Mbappé, and Haaland all finding the net to keep their sides in the driving seat.",
       "mustWatchHighlights": "Norway vs Senegal was the pick of the bunch, a proper end-to-end thriller that had everything but a clean sheet.",
       "progressionNews": "Argentina, France, and Norway have all officially qualified for the next round. Meanwhile, Iraq, Senegal, and Jordan are officially eliminated and can start looking at flight prices home."
+    },
+    "2026-06-23": {
+      "headline": "Goals, Groans, and Goalless Draws",
+      "theDrama": "Portugal put on a clinic, England put on a nap, and Colombia squeezed through a tight one.",
+      "mustWatchHighlights": "Watch the Portugal highlights if you like goals; skip the England game unless you suffer from insomnia.",
+      "progressionNews": "Portugal, England, and Colombia have officially qualified. Panama, Uzbekistan, and Congo DR are either out or fighting for their lives."
     }
   },
   "today_preview": {
-    "headline": "The Battle for Survival: Can England Keep Their Cool?",
-    "theBigOnes": "England vs Ghana is the one to watch, as both sides look to solidify their standing in the group.",
-    "playersToWatch": "Keep an eye on the English midfield to see if they can actually control a game for once.",
-    "firstKickoffTime": "2026-06-23T17:00Z"
+    "headline": "Tomorrow's Tactical Tussles",
+    "theBigOnes": "SUI vs CAN and CZE vs MEX are the ones to watch for pure drama.",
+    "playersToWatch": "Keep an eye on the Canadian attack—they've been surprisingly sharp.",
+    "firstKickoffTime": "2026-06-24T19:00Z"
   },
   "espnMatches": {
     "2026-06-11": [
@@ -3749,6 +3803,260 @@
           "90'+8' [End Regular Time] "
         ]
       }
+    ],
+    "2026-06-23": [
+      {
+        "id": "760461",
+        "name": "Uzbekistan at Portugal",
+        "homeTeam": "POR",
+        "awayTeam": "UZB",
+        "homeScore": 5,
+        "awayScore": 0,
+        "status": "STATUS_FULL_TIME",
+        "stadium": "NRG Stadium",
+        "time": "05:00 PM",
+        "stats": {
+          "homePossession": "65.9%",
+          "awayPossession": "34.1%",
+          "homeShots": 17,
+          "awayShots": 7,
+          "homeShotsOnTarget": 9,
+          "awayShotsOnTarget": 2,
+          "homeCorners": 3,
+          "awayCorners": 2,
+          "homeYellowCards": 1,
+          "awayYellowCards": 1,
+          "homeRedCards": 0,
+          "awayRedCards": 0,
+          "homePasses": 624,
+          "awayPasses": 327,
+          "homePassPct": 9,
+          "awayPassPct": 8,
+          "homeClearances": 16,
+          "awayClearances": 30
+        },
+        "events": [
+          " [Kickoff] First Half begins.",
+          "6' [Goal - Volley] Goal! Portugal 1, Uzbekistan 0. Cristiano Ronaldo (Portugal) right footed shot from the centre of the box to the bottom right corner. Assisted by João Cancelo with a cross.",
+          "14' [Yellow Card] Odiljon Khamrobekov (Uzbekistan) is shown the yellow card for a bad foul.",
+          "17' [Goal - Free-kick] Goal! Portugal 2, Uzbekistan 0. Nuno Mendes (Portugal) from a free kick with a left footed shot to the bottom left corner.",
+          "23' [Start Delay] Delay in match for a drinks break.",
+          "23' [Start Delay] ",
+          "25' [End Delay] Delay over. They are ready to continue.",
+          "25' [End Delay] ",
+          "30' [Start Delay] ",
+          "31' [End Delay] ",
+          "39' [Goal] Goal! Portugal 3, Uzbekistan 0. Cristiano Ronaldo (Portugal) right footed shot from the right side of the box to the bottom left corner. Assisted by Bruno Fernandes with a through ball following a fast break.",
+          "45'+2' [Start Delay] Delay in match (Portugal).",
+          "45'+2' [Start Delay] ",
+          "45'+2' [End Delay] Delay over. They are ready to continue.",
+          "45'+2' [End Delay] ",
+          "45'+7' [Halftime] First Half ends, Portugal 3, Uzbekistan 0.",
+          "45' [Substitution] Substitution, Uzbekistan. Khojiakbar Alijonov replaces Sherzod Nasrullaev.",
+          "45' [Substitution] Substitution, Uzbekistan. Akmal Mozgovoy replaces Odiljon Khamrobekov.",
+          "45' [Substitution] Substitution, Portugal. Nélson Semedo replaces João Cancelo.",
+          "45' [Substitution] Substitution, Portugal. Francisco Conceição replaces Pedro Neto.",
+          "45' [Start 2nd Half] Second Half begins Portugal 3, Uzbekistan 0.",
+          "60' [Own Goal] Own Goal by Abduvokhid Nematov, Uzbekistan. Portugal 4, Uzbekistan 0.",
+          "63' [Substitution] Substitution, Portugal. Trincão replaces João Félix.",
+          "68' [Yellow Card] Renato Veiga (Portugal) is shown the yellow card for a bad foul.",
+          "69' [Start Delay] Delay in match for a drinks break.",
+          "69' [Start Delay] ",
+          "71' [End Delay] Delay over. They are ready to continue.",
+          "71' [End Delay] ",
+          "73' [Substitution] Substitution, Uzbekistan. Igor Sergeev replaces Abbosbek Fayzullaev.",
+          "76' [Substitution] Substitution, Portugal. Bernardo Silva replaces João Neves.",
+          "83' [Substitution] Substitution, Portugal. Rafael Leão replaces Vitinha.",
+          "87' [Goal] Goal! Portugal 5, Uzbekistan 0. Rafael Leão (Portugal) right footed shot from the centre of the box to the top left corner.",
+          "90'+2' [Substitution] Substitution, Uzbekistan. Ruslanbek Jiyanov replaces Bekhruz Karimov.",
+          "90'+2' [Substitution] Substitution, Uzbekistan. Sherzod Esanov replaces Otabek Shukurov.",
+          "90'+6' [End Regular Time] "
+        ]
+      },
+      {
+        "id": "760458",
+        "name": "Ghana at England",
+        "homeTeam": "ENG",
+        "awayTeam": "GHA",
+        "homeScore": 0,
+        "awayScore": 0,
+        "status": "STATUS_FULL_TIME",
+        "stadium": "Gillette Stadium",
+        "time": "08:00 PM",
+        "stats": {
+          "homePossession": "78.9%",
+          "awayPossession": "21.1%",
+          "homeShots": 19,
+          "awayShots": 2,
+          "homeShotsOnTarget": 3,
+          "awayShotsOnTarget": 1,
+          "homeCorners": 9,
+          "awayCorners": 2,
+          "homeYellowCards": 1,
+          "awayYellowCards": 1,
+          "homeRedCards": 0,
+          "awayRedCards": 0,
+          "homePasses": 633,
+          "awayPasses": 172,
+          "homePassPct": 9,
+          "awayPassPct": 7,
+          "homeClearances": 6,
+          "awayClearances": 39
+        },
+        "events": [
+          " [Kickoff] ",
+          "20' [Start Delay] Delay in match because of an injury Jordan Ayew (Ghana).",
+          "20' [Start Delay] Delay in match because of an injury Reece James (England).",
+          "23' [End Delay] Delay over. They are ready to continue.",
+          "23' [End Delay] ",
+          "26' [Start Delay] Delay in match for a drinks break.",
+          "26' [Start Delay] ",
+          "29' [End Delay] Delay over. They are ready to continue.",
+          "29' [End Delay] ",
+          "41' [Yellow Card] Declan Rice (England) is shown the yellow card for a bad foul.",
+          "45'+7' [Halftime] First Half ends, England 0, Ghana 0.",
+          "45' [Start 2nd Half] ",
+          "60' [Yellow Card] Iñaki Williams (Ghana) is shown the yellow card for a bad foul.",
+          "65' [Start Delay] Delay in match because of an injury Caleb Yirenkyi (Ghana).",
+          "65' [Start Delay] ",
+          "65' [Substitution] Substitution, England. Bukayo Saka replaces Anthony Gordon.",
+          "66' [Substitution] Substitution, England. Nico O'Reilly replaces Djed Spence.",
+          "66' [End Delay] Delay over. They are ready to continue.",
+          "66' [End Delay] ",
+          "66' [Substitution] Substitution, Ghana. Abdul Fatawu replaces Iñaki Williams.",
+          "67' [Substitution] Substitution, Ghana. Prince Adu replaces Jordan Ayew.",
+          "70' [Start Delay] Delay in match for a drinks break.",
+          "70' [Start Delay] ",
+          "73' [End Delay] Delay over. They are ready to continue.",
+          "73' [End Delay] ",
+          "73' [Substitution] Substitution, England. Morgan Rogers replaces Jude Bellingham.",
+          "74' [Substitution] Substitution, England. Eberechi Eze replaces Elliot Anderson.",
+          "83' [Substitution] Substitution, England. Marcus Rashford replaces Noni Madueke.",
+          "87' [Substitution] Substitution, Ghana. Kojo Peprah Oppong replaces Marvin Senaya.",
+          "90'+5' [Substitution] Substitution, Ghana. Abdul Rahman Baba replaces Prince Adu.",
+          "90'+7' [End Regular Time] "
+        ]
+      },
+      {
+        "id": "760460",
+        "name": "Croatia at Panama",
+        "homeTeam": "PAN",
+        "awayTeam": "CRO",
+        "homeScore": 0,
+        "awayScore": 1,
+        "status": "STATUS_FULL_TIME",
+        "stadium": "BMO Field",
+        "time": "11:00 PM",
+        "stats": {
+          "homePossession": "42%",
+          "awayPossession": "58%",
+          "homeShots": 8,
+          "awayShots": 6,
+          "homeShotsOnTarget": 1,
+          "awayShotsOnTarget": 2,
+          "homeCorners": 7,
+          "awayCorners": 2,
+          "homeYellowCards": 1,
+          "awayYellowCards": 1,
+          "homeRedCards": 0,
+          "awayRedCards": 0,
+          "homePasses": 352,
+          "awayPasses": 512,
+          "homePassPct": 8,
+          "awayPassPct": 8,
+          "homeClearances": 29,
+          "awayClearances": 38
+        },
+        "events": [
+          " [Kickoff] First Half begins.",
+          "23' [Start Delay] Delay in match for a drinks break.",
+          "23' [Start Delay] ",
+          "26' [End Delay] Delay over. They are ready to continue.",
+          "26' [End Delay] ",
+          "45'+4' [Halftime] ",
+          "45' [Substitution] Substitution, Croatia. Ante Budimir replaces Petar Musa.",
+          "45' [Substitution] Substitution, Croatia. Andrej Kramaric replaces Josko Gvardiol.",
+          "45' [Start 2nd Half] Second Half begins Panama 0, Croatia 0.",
+          "54' [Goal - Volley] Goal! Panama 0, Croatia 1. Ante Budimir (Croatia) left footed shot from very close range to the bottom left corner. Assisted by Josip Stanisic with a cross.",
+          "61' [Yellow Card] Yoel Bárcenas (Panama) is shown the yellow card for a bad foul.",
+          "69' [Start Delay] Delay in match for a drinks break.",
+          "69' [Start Delay] ",
+          "72' [End Delay] Delay over. They are ready to continue.",
+          "72' [End Delay] ",
+          "72' [Substitution] Substitution, Croatia. Luka Sucic replaces Marco Pasalic.",
+          "72' [Substitution] Substitution, Croatia. Petar Sucic replaces Mateo Kovacic.",
+          "77' [Substitution] Substitution, Panama. Cecilio Waterman replaces Jiovany Ramos.",
+          "81' [Substitution] Substitution, Croatia. Mario Pasalic replaces Luka Modric.",
+          "83' [Substitution] Substitution, Panama. Azarías Londoño replaces José Fajardo.",
+          "90' [Substitution] Substitution, Panama. Éric Davis replaces César Blackman.",
+          "90' [Substitution] Substitution, Panama. Tomás Rodríguez replaces Yoel Bárcenas.",
+          "90'+2' [Yellow Card] Petar Sucic (Croatia) is shown the yellow card for a bad foul.",
+          "90'+6' [End Regular Time] "
+        ]
+      },
+      {
+        "id": "760459",
+        "name": "Congo DR at Colombia",
+        "homeTeam": "COL",
+        "awayTeam": "COD",
+        "homeScore": 1,
+        "awayScore": 0,
+        "status": "STATUS_FULL_TIME",
+        "stadium": "Estadio Akron",
+        "time": "02:00 AM",
+        "stats": {
+          "homePossession": "63.5%",
+          "awayPossession": "36.5%",
+          "homeShots": 20,
+          "awayShots": 7,
+          "homeShotsOnTarget": 9,
+          "awayShotsOnTarget": 1,
+          "homeCorners": 5,
+          "awayCorners": 4,
+          "homeYellowCards": 2,
+          "awayYellowCards": 1,
+          "homeRedCards": 0,
+          "awayRedCards": 0,
+          "homePasses": 541,
+          "awayPasses": 299,
+          "homePassPct": 9,
+          "awayPassPct": 8,
+          "homeClearances": 18,
+          "awayClearances": 19
+        },
+        "events": [
+          " [Kickoff] First Half begins.",
+          "7' [Start Delay] Delay in match because of an injury Lionel Mpasi (Congo DR).",
+          "7' [Start Delay] ",
+          "8' [End Delay] Delay over. They are ready to continue.",
+          "8' [End Delay] ",
+          "25' [Start Delay] Delay in match for a drinks break.",
+          "25' [Start Delay] ",
+          "28' [End Delay] Delay over. They are ready to continue.",
+          "28' [End Delay] ",
+          "45'+5' [Start Delay] ",
+          "45'+5' [End Delay] ",
+          "45'+5' [Halftime] First Half ends, Colombia 0, Congo DR 0.",
+          "45' [Substitution] Substitution, Congo DR. Noah Sadiki replaces Ngal'ayel Mukau.",
+          "45' [Start 2nd Half] Second Half begins Colombia 0, Congo DR 0.",
+          "56' [Yellow Card] Jhon Lucumí (Colombia) is shown the yellow card for a bad foul.",
+          "57' [Substitution] Substitution, Congo DR. Simon Banza replaces Cédric Bakambu.",
+          "58' [Substitution] Substitution, Colombia. Jhon Córdoba replaces Luis Suárez.",
+          "58' [Substitution] Substitution, Colombia. Juan Fernando Quintero replaces James Rodríguez.",
+          "68' [Start Delay] Delay in match for a drinks break.",
+          "68' [Start Delay] ",
+          "71' [End Delay] Delay over. They are ready to continue.",
+          "71' [End Delay] ",
+          "72' [Substitution] Substitution, Congo DR. Joris Kayembe replaces Arthur Masuaku.",
+          "72' [Substitution] Substitution, Congo DR. Charles Pickel replaces Edo Kayembe.",
+          "76' [Goal] Goal! Colombia 1, Congo DR 0. Daniel Muñoz (Colombia) left footed shot from the right side of the box to the bottom right corner. Assisted by Juan Fernando Quintero.",
+          "78' [Substitution] Substitution, Colombia. Richard Ríos replaces Jhon Arias.",
+          "82' [Substitution] Substitution, Congo DR. Nathanaël Mbuku replaces Samuel Moutoussamy.",
+          "90'+3' [Yellow Card] Charles Pickel (Congo DR) is shown the yellow card.",
+          "90'+4' [Yellow Card] Jefferson Lerma (Colombia) is shown the yellow card for a bad foul.",
+          "90'+7' [End Regular Time] "
+        ]
+      }
     ]
   },
   "espnStandings": [
@@ -4248,13 +4556,13 @@
         {
           "code": "COL",
           "name": "Colombia",
-          "mp": 1,
-          "w": 1,
+          "mp": 2,
+          "w": 2,
           "d": 0,
           "l": 0,
           "gf": 0,
           "ga": 0,
-          "pts": 3
+          "pts": 6
         },
         {
           "code": "POR",
@@ -4281,10 +4589,10 @@
         {
           "code": "COD",
           "name": "Congo DR",
-          "mp": 1,
+          "mp": 2,
           "w": 0,
           "d": 1,
-          "l": 0,
+          "l": 1,
           "gf": 0,
           "ga": 0,
           "pts": 1
@@ -4308,21 +4616,21 @@
         {
           "code": "CRO",
           "name": "Croatia",
-          "mp": 1,
-          "w": 0,
+          "mp": 2,
+          "w": 1,
           "d": 0,
           "l": 1,
           "gf": 0,
           "ga": 0,
-          "pts": 0
+          "pts": 3
         },
         {
           "code": "PAN",
           "name": "Panama",
-          "mp": 1,
+          "mp": 2,
           "w": 0,
           "d": 0,
-          "l": 1,
+          "l": 2,
           "gf": 0,
           "ga": 0,
           "pts": 0
