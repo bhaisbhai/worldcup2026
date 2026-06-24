@@ -2606,20 +2606,19 @@ function renderThirdPlaceRanking(){
     <div class="gcard" style="margin-top:0">
       <table class="gtbl">
         <thead><tr>
-          <th class="tl" colspan="3">Team</th>
+          <th class="tl" colspan="2">Team</th>
           <th>P</th><th>W</th><th>D</th><th>L</th><th>GD</th><th>Pts</th>
         </tr></thead>
         <tbody>
         ${thirds.map((t,i)=>`
           <tr class="${i<ADVANCE_COUNT?'tpr-adv ':''} g-clickable" onclick="openTeamPage('${esc(t.n)}')" role="button">
             <td class="tl" style="width:28px"><span class="gpos">${i+1}</span></td>
-            <td class="tl" style="width:28px;font-size:10px;color:var(--t2);font-family:var(--mono)">${t.grp}</td>
-            <td class="tl"><div class="gteam"><span class="gflag">${t.f}</span><span class="gname">${t.n}</span></div></td>
+            <td class="tl"><div class="gteam"><span class="gflag">${t.f}</span><span class="gname">${t.n}</span><span style="font-size:9px;color:var(--t2);font-family:var(--mono);margin-left:4px">${t.grp}</span></div></td>
             <td>${t.p}</td><td>${t.w}</td><td>${t.d}</td><td>${t.l}</td>
             <td class="ggd">${fmt(t.gd)}</td>
             <td><span class="gpts${i<ADVANCE_COUNT?' lead':''}">${t.pts}</span></td>
           </tr>
-          ${i===ADVANCE_COUNT-1 && thirds.length>ADVANCE_COUNT ? '<tr class="tpr-cut-row"><td colspan="9"><div class="tpr-cutoff"></div></td></tr>' : ''}`
+          ${i===ADVANCE_COUNT-1 && thirds.length>ADVANCE_COUNT ? '<tr class="tpr-cut-row"><td colspan="8"><div class="tpr-cutoff"></div></td></tr>' : ''}`
         ).join('')}
         </tbody>
       </table>
