@@ -1809,6 +1809,7 @@ function buildCard(ev){
       </div>
     </div>
     ${(isLive||isFt) ? renderScorers(ev.goals) : ''}
+    ${isLive ? buildStakesHtml(ev) : ''}
     <div class="mc-foot">${foot_l}${foot_r}</div>
     ${hlHtml}
   `;
@@ -2426,7 +2427,7 @@ async function fetchStakesData(){
     }
     stakesCache = cache;
     // inject into already-rendered upcoming cards
-    document.querySelectorAll('.mc:not(.live):not(.ft)').forEach(card => {
+    document.querySelectorAll('.mc:not(.ft)').forEach(card => {
       if(card.querySelector('.mc-stakes')) return;
       const ev = lastEvents.find(e => e.id === card.dataset.evId);
       if(!ev) return;
