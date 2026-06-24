@@ -2446,8 +2446,7 @@ function buildStakesHtml(ev){
   const matchKey = `${ev.home.abbr}-${ev.away.abbr}`;
   const s = stakesCache[`${dateStr}|${matchKey}`];
   if(!s || !s.summary) return '';
-  const cls = {'Elimination Risk':'elim','Qualification Battle':'qual','Knockout Seeding':'seed'}[s.status] || 'qual';
-  return `<div class="mc-stakes"><span class="mc-stakes-pill ${cls}">${esc(s.status||'Context')}</span><span class="mc-stakes-txt">${esc(s.summary)}</span></div>`;
+  return `<div class="mc-stakes"><span class="mc-stakes-txt">${esc(s.summary)}</span></div>`;
 }
 
 async function renderYesterdayScores(){
