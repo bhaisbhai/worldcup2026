@@ -2325,9 +2325,8 @@ function openPlayerById(id){
 }
 
 async function fetchDailyRecaps(){
-  return; // disabled — data under review
   try {
-    const r = await fetch('/api/recaps', { signal: AbortSignal.timeout(5000) });
+    const r = await fetch('/data/recaps.json', { signal: AbortSignal.timeout(5000) });
     if(r.ok){
       const today = new Date().toISOString().slice(0,10);
       const rows = await r.json();
@@ -2363,8 +2362,6 @@ function renderSummary(container, dispDate){
   if(!row) return;
   if(isToday && localStorage.getItem('recap_dismissed') === row.date) return;
   const isYesterday = isToday && row.date === yesterdayStr;
-  // Time gate: only show the "Yesterday" card before noon local time
-  if(isYesterday && new Date().getHours() >= 12) return;
   const label = isYesterday ? 'Yesterday' : (row.date === todayStr ? 'Today' : fmtRecapDate(row.date));
   const card = document.createElement('div');
   card.className = 'recap-card';
