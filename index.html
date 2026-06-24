@@ -1741,7 +1741,6 @@ function buildCard(ev){
     badge=``;
     foot_l=`<div class="mc-kickoff">
       <div class="mc-kickoff-time">${localTime(ev.date)}</div>
-      <div class="mc-cd-sm" data-cdid="${ev.id}" data-ts="${ev.date.getTime()}">${countdown(ev.date)}</div>
     </div>`;
   }
 
@@ -1786,7 +1785,6 @@ function buildCard(ev){
       <div class="mc-up-foot">
         <div>
           <span class="mc-up-time">${localTime(ev.date)}</span>
-          <span class="mc-up-cd" data-cdid="${ev.id}" data-ts="${ev.date.getTime()}">${countdown(ev.date)}</span>
         </div>
         ${venue ? `<span class="mc-up-venue" title="${esc([ev.venue,ev.city].filter(Boolean).join(' · '))}">${esc(venue)}</span>` : ''}
       </div>
