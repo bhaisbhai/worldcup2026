@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-24T22:52:41.900Z",
+  "generatedAt": "2026-06-24T23:27:49.090Z",
   "byDate": {
     "2026-06-24": {
       "BIH-QAT": {
@@ -25,6 +25,32 @@
       "RSA-KOR": {
         "summary": "South Korea needs a win to guarantee automatic qualification. South Africa needs a win and help for a slim chance to advance.",
         "status": "Qualification Battle"
+      }
+    },
+    "2026-06-25": {
+      "CUW-CIV": {
+        "summary": "Curaçao needs a win for any slim hope of 3rd place; a draw or loss eliminates them. Ivory Coast seeks top-2.",
+        "status": "Elimination Risk"
+      },
+      "ECU-GER": {
+        "summary": "Ecuador needs a win and goal difference swing for top-2, or a draw for 3rd. Germany is already qualified.",
+        "status": "Elimination Risk"
+      },
+      "JPN-SWE": {
+        "summary": "Japan and Sweden both need a win to guarantee top-2, or a draw for a strong 3rd place chance.",
+        "status": "Qualification Battle"
+      },
+      "TUN-NED": {
+        "summary": "Tunisia is eliminated. Netherlands needs a draw to guarantee top-2, or a win for 1st place.",
+        "status": "Elimination Risk"
+      },
+      "PAR-AUS": {
+        "summary": "Paraguay and Australia both need a win to secure top-2 or a strong 3rd place spot.",
+        "status": "Qualification Battle"
+      },
+      "TUR-USA": {
+        "summary": "Türkiye is eliminated. United States is already qualified, playing for group seeding.",
+        "status": "Knockout Seeding"
       }
     }
   }
