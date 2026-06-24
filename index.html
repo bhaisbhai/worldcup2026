@@ -2330,6 +2330,52 @@ async function fetchRecapResults(date, card){
   }
 }
 
+async function renderYesterdayScores(){
+  // Only show before 11pm local time
+  if(new Date().getHours() >= 23) return;
+
+  const yd = new Date(); yd.setDate(yd.getDate()-1);
+  const yesterdayStr = yd.toISOString().slice(0,10);
+  const dismissKey = 'yscores_dismissed';
+  if(localStorage.getItem(dismissKey) === yesterdayStr) return;
+
+  const container = $('tab-today');
+  if(!container) return;
+
+  try {
+    const ds = yesterdayStr.replace(/-/g,'');
+    const r = await fetch(`${ESPN_URL}?dates=${ds}`, { signal: AbortSignal.timeout(8000) });
+    if(!r.ok) return;
+    const data = await r.json();
+    const events = (data.events||[]).map(parseEvent).filter(e => e.state==='post');
+    if(!events.length) return;
+
+    const rows = events.map(ev =>
+      `<div class="recap-result-row">
+        <div class="recap-result-home">${flag(ev.home.abbr)} ${ev.home.name}</div>
+        <div class="recap-result-score">${ev.home.score}–${ev.away.score}</div>
+        <div class="recap-result-away">${ev.away.name} ${flag(ev.away.abbr)}</div>
+      </div>`).join('');
+
+    const card = document.createElement('div');
+    card.className = 'recap-card open';
+    card.id = 'yscores-card';
+    card.innerHTML = `
+      <div class="recap-hdr">
+        <span class="recap-pill">Yesterday</span>
+        <span class="recap-hl" style="font-size:12px;color:var(--t2)">${fmtRecapDate(yesterdayStr)} · ${events.length} match${events.length>1?'es':''}</span>
+        <button class="recap-dismiss" onclick="(function(){localStorage.setItem('${dismissKey}','${yesterdayStr}');document.getElementById('yscores-card')?.remove();})()" title="Dismiss">✕</button>
+      </div>
+      <div class="recap-body"><div class="recap-body-inner">
+        <div class="recap-results">${rows}</div>
+      </div></div>`;
+
+    const nav = container.querySelector('#day-nav');
+    if(nav && nav.nextSibling) container.insertBefore(card, nav.nextSibling);
+    else container.prepend(card);
+  } catch(e){}
+}
+
 async function fetchMatches(){
   setRefreshLabel('↻ Refreshing…', true);
   $('rfLabel').style.pointerEvents = 'none';
@@ -4936,7 +4982,8 @@ refreshKnockoutBracket();
 fetchPlayerClubs();
 fetchPlayerStats();
 fetchPlayerVerdicts();
-fetchDailyRecaps().then(() => fetchMatches());
+renderYesterdayScores();
+fetchMatches();
 fetchGroupStandings();
 fetchKnockoutData();
 if(favTeam) renderMyTeam();
