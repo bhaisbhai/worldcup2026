@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-25T06:10:25.556Z",
+  "generatedAt": "2026-06-25T08:07:11.800Z",
   "byDate": {
     "2026-06-24": {
       "BIH-QAT": {
@@ -77,6 +77,16 @@
       "NZL-BEL": {
         "summary": "Both New Zealand and Belgium need a victory to have a realistic chance of advancing.",
         "status": "Qualification Battle"
+      }
+    },
+    "2026-06-12": {
+      "CAN-BIH": {
+        "summary": "Canada has already advanced as group runner-up. Bosnia-Herzegovina needs to be among the best eight third-place teams.",
+        "status": "Elimination Risk"
+      },
+      "USA-PAR": {
+        "summary": "USA has qualified, competing for first place. Paraguay needs a win or draw to secure automatic qualification or a strong third-place spot.",
+        "status": "Elimination Risk"
       }
     }
   }
