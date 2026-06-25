@@ -2361,12 +2361,19 @@ function renderSummary(container, dispDate){
   const yesterdayStr = yd.toISOString().slice(0,10);
   const ds = dispDate ? dispDate.toISOString().slice(0,10) : todayStr;
   const isToday = ds === todayStr;
-  // Only fall back to the most recent recap if it is from exactly yesterday — not older
-  const row = _recapRows.find(r => r.date === ds) ||
-    (isToday && _recapRows[0]?.date === yesterdayStr ? _recapRows[0] : null);
+
+  let row;
+  if(isToday){
+    // Today view: always show yesterday's recap, hidden after noon
+    if(new Date().getHours() >= 12) return;
+    row = _recapRows.find(r => r.date === yesterdayStr) || null;
+  } else {
+    row = _recapRows.find(r => r.date === ds) || null;
+  }
+
   if(!row) return;
   if(isToday && localStorage.getItem('recap_dismissed') === row.date) return;
-  const isYesterday = isToday && row.date === yesterdayStr;
+  const isYesterday = isToday;
   const label = isYesterday ? 'Yesterday' : (row.date === todayStr ? 'Today' : fmtRecapDate(row.date));
   const card = document.createElement('div');
   card.className = 'recap-card';
