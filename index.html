@@ -25,11 +25,12 @@
         userVisibleOnly: true,
         applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
       });
-      await fetch('/api/subscribe', {
+      var r = await fetch('/api/subscribe', {
         method: 'POST',
         headers: {'Content-Type':'application/json'},
         body: JSON.stringify(sub)
       });
+      if(!r.ok) throw new Error('Subscribe API returned ' + r.status);
       localStorage.setItem('push_subscribed','1');
       hideBanner();
     } catch(e) { console.warn('Push subscribe failed', e); }
