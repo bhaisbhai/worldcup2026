@@ -69,7 +69,12 @@ async function main() {
     return ptDate(d);
   })();
 
-  console.log(`📅  Target date: ${targetDate}  force=${force}`);
+  // Calculate tomorrow in PT upfront — needed for both self-gating and stakes fetch
+  const tomorrowPT = new Date(`${targetDate}T12:00:00`);
+  tomorrowPT.setDate(tomorrowPT.getDate() + 1);
+  const tomorrowStr = ptDate(tomorrowPT);
+
+  console.log(`📅  Target date: ${targetDate}  tomorrow: ${tomorrowStr}  force=${force}`);
 
   // ── 1. Fetch yesterday's scoreboard ───────────────────────────────────────
   const ds = targetDate.replace(/-/g, '');
@@ -79,15 +84,32 @@ async function main() {
   const events: any[] = scoreboard.events || [];
 
   // ── 2. Self-gating ─────────────────────────────────────────────────────────
+  // Skip only when BOTH recap and tomorrow's stakes are already generated.
+  // If stakes are missing (e.g. games finished after a previous partial run),
+  // continue so the stakes are regenerated with up-to-date standings.
   if (!force) {
     const recapsPath = path.resolve(__dirname, '..', 'data', 'recaps.json');
+    const stakesPath = path.resolve(__dirname, '..', 'data', 'stakes.json');
+
+    let recapDone = false;
     if (fs.existsSync(recapsPath)) {
       const existing: any[] = JSON.parse(fs.readFileSync(recapsPath, 'utf-8'));
-      if (existing.some(r => r.date === targetDate && r.summary)) {
-        console.log(`✅  Recap for ${targetDate} already exists — skipping.`);
-        process.exit(0);
-      }
+      recapDone = existing.some(r => r.date === targetDate && r.summary);
     }
+
+    let stakesDone = false;
+    if (fs.existsSync(stakesPath)) {
+      const existing: any = JSON.parse(fs.readFileSync(stakesPath, 'utf-8'));
+      stakesDone = Object.keys(existing.byDate?.[tomorrowStr] || {}).length > 0;
+    }
+
+    if (recapDone && stakesDone) {
+      console.log(`✅  Recap for ${targetDate} and stakes for ${tomorrowStr} already exist — skipping.`);
+      process.exit(0);
+    }
+
+    if (recapDone) console.log(`ℹ️  Recap exists but stakes for ${tomorrowStr} missing — regenerating stakes.`);
+
     const incomplete = events.filter(e => !e.status?.type?.completed);
     if (incomplete.length > 0) {
       console.log(`⏳  ${incomplete.length} game(s) still in progress.`);
@@ -153,10 +175,6 @@ async function main() {
   }
 
   // ── 5. Fetch upcoming games (tomorrow) ─────────────────────────────────────
-  // Add 1 day to targetDate in PT to get tomorrow's PT date
-  const tomorrowPT = new Date(`${targetDate}T12:00:00`);
-  tomorrowPT.setDate(tomorrowPT.getDate() + 1);
-  const tomorrowStr = ptDate(tomorrowPT);
   const upcomingMatches: any[] = [];
 
   try {
