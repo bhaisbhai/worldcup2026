@@ -5,9 +5,11 @@ function subKey(endpoint) {
   return 'push:' + Buffer.from(endpoint).toString('base64').slice(-40).replace(/[^a-zA-Z0-9]/g, '_');
 }
 
-async function redis(cmd) {
-  const res = await fetch(`${KV_URL}/${cmd}`, {
-    headers: { Authorization: `Bearer ${KV_TOKEN}` },
+async function redis(...args) {
+  const res = await fetch(KV_URL, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${KV_TOKEN}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify(args),
   });
   return res.json();
 }
@@ -22,15 +24,14 @@ module.exports = async function handler(req, res) {
     const sub = req.body;
     if (!sub || !sub.endpoint) return res.status(400).json({ error: 'Invalid subscription' });
     const key = subKey(sub.endpoint);
-    const ttl = 60 * 60 * 24 * 400;
-    await redis(`set/${encodeURIComponent(key)}/${encodeURIComponent(JSON.stringify(sub))}/ex/${ttl}`);
+    await redis('SET', key, JSON.stringify(sub), 'EX', 60 * 60 * 24 * 400);
     return res.status(201).json({ ok: true });
   }
 
   if (req.method === 'DELETE') {
     const endpoint = req.body && req.body.endpoint;
     if (!endpoint) return res.status(400).json({ error: 'Missing endpoint' });
-    await redis(`del/${encodeURIComponent(subKey(endpoint))}`);
+    await redis('DEL', subKey(endpoint));
     return res.status(200).json({ ok: true });
   }
 
