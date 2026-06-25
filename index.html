@@ -16,12 +16,10 @@
 
   async function subscribe() {
     try {
-      if(!('serviceWorker' in navigator) || !('PushManager' in window)) {
-        alert('Push notifications are not supported in this browser.');
-        return;
-      }
+      if(!('serviceWorker' in navigator)) { alert('No serviceWorker support'); return; }
       var reg = await navigator.serviceWorker.register('/sw.js');
       await navigator.serviceWorker.ready;
+      if(!reg.pushManager) { alert('No pushManager on registration (browser does not support push)'); return; }
       var perm = await Notification.requestPermission();
       if(perm !== 'granted') { alert('Permission not granted: ' + perm); return; }
       var sub = await reg.pushManager.subscribe({
