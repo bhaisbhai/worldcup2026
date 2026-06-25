@@ -2421,9 +2421,9 @@ async function fetchStakesData(){
     if(!r.ok) return;
     const data = await r.json();
     const cache = {};
-    for(const [date, matches] of Object.entries(data.byDate || {})){
+    for(const [, matches] of Object.entries(data.byDate || {})){
       for(const [matchKey, val] of Object.entries(matches)){
-        cache[`${date}|${matchKey}`] = val;
+        cache[matchKey] = val;
       }
     }
     stakesCache = cache;
@@ -2441,10 +2441,8 @@ async function fetchStakesData(){
 }
 
 function buildStakesHtml(ev){
-  const d = ev.date instanceof Date ? ev.date : new Date(ev.date);
-  const dateStr = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
   const matchKey = `${ev.home.abbr}-${ev.away.abbr}`;
-  const s = stakesCache[`${dateStr}|${matchKey}`];
+  const s = stakesCache[matchKey];
   if(!s || !s.summary) return '';
   return `<div class="mc-stakes"><span class="mc-stakes-txt">${esc(s.summary)}</span></div>`;
 }
