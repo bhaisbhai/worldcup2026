@@ -73,7 +73,9 @@ jobs:
       - name: Send Recap Ready Notification
         if: steps.commit.outputs.committed == 'true' && github.event.inputs.force != 'true'
         env:
-          ONESIGNAL_APP_ID: ${{ secrets.ONESIGNAL_APP_ID }}
-          ONESIGNAL_REST_API_KEY: ${{ secrets.ONESIGNAL_REST_API_KEY }}
+          VAPID_PUBLIC_KEY: ${{ secrets.VAPID_PUBLIC_KEY }}
+          VAPID_PRIVATE_KEY: ${{ secrets.VAPID_PRIVATE_KEY }}
+          KV_REST_API_URL: ${{ secrets.KV_REST_API_URL }}
+          KV_REST_API_TOKEN: ${{ secrets.KV_REST_API_TOKEN }}
           APP_URL: ${{ secrets.APP_URL }}
         run: npm run notify:recap
