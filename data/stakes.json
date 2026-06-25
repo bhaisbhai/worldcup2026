@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-25T08:07:11.800Z",
+  "generatedAt": "2026-06-25T08:40:45.149Z",
   "byDate": {
     "2026-06-24": {
       "BIH-QAT": {
@@ -86,6 +86,204 @@
       },
       "USA-PAR": {
         "summary": "USA has qualified, competing for first place. Paraguay needs a win or draw to secure automatic qualification or a strong third-place spot.",
+        "status": "Elimination Risk"
+      }
+    },
+    "2026-06-13": {
+      "QAT-SUI": {
+        "summary": "Switzerland has already qualified as group winners. Qatar is eliminated, finishing last in the group.",
+        "status": "Elimination Risk"
+      },
+      "BRA-MAR": {
+        "summary": "Both Brazil and Morocco have already qualified for the knockout stage, with Brazil finishing as group winners.",
+        "status": "Knockout Seeding"
+      },
+      "HAI-SCO": {
+        "summary": "Haiti is eliminated, finishing last. Scotland finished 3rd with 3 points, making advancement very unlikely.",
+        "status": "Elimination Risk"
+      }
+    },
+    "2026-06-14": {
+      "AUS-TUR": {
+        "summary": "Australia needs a win or draw to qualify; Türkiye must win for a slim chance as a best third-place team.",
+        "status": "Elimination Risk"
+      },
+      "GER-CUW": {
+        "summary": "Germany is qualified, playing for group winner seeding. Curaçao must win for a slim best third-place chance.",
+        "status": "Elimination Risk"
+      },
+      "NED-JPN": {
+        "summary": "Both teams need a win or draw to guarantee top-two qualification; a loss still likely means best third-place advancement.",
+        "status": "Qualification Battle"
+      },
+      "CIV-ECU": {
+        "summary": "Ivory Coast needs a win or draw to qualify. Ecuador must win to have any chance of advancing; otherwise, eliminated.",
+        "status": "Elimination Risk"
+      },
+      "SWE-TUN": {
+        "summary": "Sweden needs a win to guarantee top-two qualification or a strong third-place spot. Tunisia is already eliminated.",
+        "status": "Elimination Risk"
+      }
+    },
+    "2026-06-15": {
+      "ESP-CPV": {
+        "summary": "Spain needs a win or draw to guarantee top-two. Cape Verde needs a win for strong qualification hopes.",
+        "status": "Elimination Risk"
+      },
+      "BEL-EGY": {
+        "summary": "Egypt needs a win or draw to guarantee top-two. Belgium needs a win for strong qualification hopes.",
+        "status": "Elimination Risk"
+      },
+      "KSA-URU": {
+        "summary": "Uruguay needs a win for strong qualification hopes. Saudi Arabia must win to have any chance of advancing.",
+        "status": "Elimination Risk"
+      },
+      "IRN-NZL": {
+        "summary": "Iran needs a win for strong qualification hopes. New Zealand must win to have any chance of advancing.",
+        "status": "Elimination Risk"
+      }
+    },
+    "2026-06-16": {
+      "FRA-SEN": {
+        "summary": "France is qualified for top two, competing for first place. Senegal is eliminated regardless of the result.",
+        "status": "Elimination Risk"
+      },
+      "IRQ-NOR": {
+        "summary": "Norway is qualified for top two, competing for first place. Iraq is eliminated regardless of the result.",
+        "status": "Elimination Risk"
+      },
+      "ARG-ALG": {
+        "summary": "Argentina is qualified for top two, competing for first place. Algeria needs a win or draw to realistically advance.",
+        "status": "Elimination Risk"
+      }
+    },
+    "2026-06-17": {
+      "AUT-JOR": {
+        "summary": "Austria needs a win or draw to advance. Jordan must win to have a very slim chance as a best third-place team.",
+        "status": "Elimination Risk"
+      },
+      "POR-COD": {
+        "summary": "Portugal needs a draw to guarantee top two. Congo DR must win for a realistic best third-place chance.",
+        "status": "Elimination Risk"
+      },
+      "ENG-CRO": {
+        "summary": "England needs a draw to guarantee top two. Croatia must win for automatic qualification or draw for a good third-place chance.",
+        "status": "Elimination Risk"
+      },
+      "GHA-PAN": {
+        "summary": "Ghana needs a draw to guarantee top two. Panama is already eliminated from World Cup contention.",
+        "status": "Elimination Risk"
+      },
+      "UZB-COL": {
+        "summary": "Colombia is already qualified and playing for group winner. Uzbekistan is already eliminated from World Cup contention.",
+        "status": "Elimination Risk"
+      }
+    },
+    "2026-06-18": {
+      "CZE-RSA": {
+        "summary": "South Africa needs a win or draw to qualify automatically. Czechia must win to have any chance as a best third-place team.",
+        "status": "Elimination Risk"
+      },
+      "SUI-BIH": {
+        "summary": "Switzerland is qualified, playing for seeding. Bosnia-Herzegovina needs points to secure qualification or a best-third spot.",
+        "status": "Qualification Battle"
+      },
+      "CAN-QAT": {
+        "summary": "Canada needs a win to guarantee automatic qualification. Qatar must win to have any chance as a best third-place team.",
+        "status": "Elimination Risk"
+      },
+      "MEX-KOR": {
+        "summary": "Mexico is qualified, playing for seeding. South Korea needs at least a draw for a realistic best-third place chance.",
+        "status": "Qualification Battle"
+      }
+    },
+    "2026-06-19": {
+      "USA-AUS": {
+        "summary": "USA is qualified, aiming for group winner. Australia needs points to secure automatic qualification or a strong third-place spot.",
+        "status": "Elimination Risk"
+      },
+      "SCO-MAR": {
+        "summary": "Morocco has qualified. Scotland finished third with three points, making advancement as a best third-place team unlikely.",
+        "status": "Elimination Risk"
+      },
+      "BRA-HAI": {
+        "summary": "Brazil has qualified as group winner. Haiti finished last with zero points and is eliminated from the tournament.",
+        "status": "Elimination Risk"
+      },
+      "TUR-PAR": {
+        "summary": "Paraguay needs points for automatic qualification or a strong third-place spot. Türkiye must win to avoid elimination.",
+        "status": "Qualification Battle"
+      }
+    },
+    "2026-06-20": {
+      "NED-SWE": {
+        "summary": "Netherlands needs a draw to guarantee top-two. Sweden needs a win for guaranteed qualification; a loss risks elimination.",
+        "status": "Elimination Risk"
+      },
+      "GER-CIV": {
+        "summary": "Germany is already qualified. Ivory Coast needs a win for guaranteed top-two; a loss risks elimination.",
+        "status": "Elimination Risk"
+      },
+      "ECU-CUW": {
+        "summary": "Both teams need a win to have any chance of qualifying; a draw or loss eliminates them.",
+        "status": "Elimination Risk"
+      }
+    },
+    "2026-06-21": {
+      "TUN-JPN": {
+        "summary": "Japan needs a win or draw to guarantee top two. Tunisia is already eliminated from contention.",
+        "status": "Elimination Risk"
+      },
+      "ESP-KSA": {
+        "summary": "Spain needs a win or draw to guarantee top two. Saudi Arabia must win to have any chance of advancing.",
+        "status": "Qualification Battle"
+      },
+      "BEL-IRN": {
+        "summary": "Both Belgium and Iran must win to guarantee a top-two spot and avoid likely elimination.",
+        "status": "Elimination Risk"
+      },
+      "URU-CPV": {
+        "summary": "Both Uruguay and Cape Verde must win to guarantee a top-two spot and avoid likely elimination.",
+        "status": "Elimination Risk"
+      },
+      "NZL-EGY": {
+        "summary": "Egypt needs a win or draw to guarantee top two. New Zealand must win to have any chance of advancing.",
+        "status": "Qualification Battle"
+      }
+    },
+    "2026-06-22": {
+      "ARG-AUT": {
+        "summary": "Argentina seeks first place. Austria needs a win for top-two, or a draw for a strong third-place qualification.",
+        "status": "Qualification Battle"
+      },
+      "FRA-IRQ": {
+        "summary": "France is already qualified, competing for first place. Iraq is eliminated regardless of the match result.",
+        "status": "Elimination Risk"
+      },
+      "NOR-SEN": {
+        "summary": "Norway is already qualified, competing for first place. Senegal is eliminated regardless of the match result.",
+        "status": "Elimination Risk"
+      },
+      "JOR-ALG": {
+        "summary": "Jordan is eliminated regardless of result. Algeria needs a win for automatic qualification or a strong best-third chance.",
+        "status": "Elimination Risk"
+      }
+    },
+    "2026-06-23": {
+      "POR-UZB": {
+        "summary": "Portugal needs a win or draw to guarantee top-two. Uzbekistan is eliminated from top-two and very unlikely to advance.",
+        "status": "Elimination Risk"
+      },
+      "ENG-GHA": {
+        "summary": "Both England and Ghana need a win or draw to secure a top-two spot or a strong third-place finish.",
+        "status": "Qualification Battle"
+      },
+      "PAN-CRO": {
+        "summary": "Croatia needs a win to guarantee top-two or a draw for a strong third. Panama is eliminated from top-two contention.",
+        "status": "Elimination Risk"
+      },
+      "COL-COD": {
+        "summary": "Colombia is already qualified. Congo DR needs a win to reach four points and have a realistic chance as a best third-place team.",
         "status": "Elimination Risk"
       }
     }
