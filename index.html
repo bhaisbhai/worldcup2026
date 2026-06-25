@@ -1996,8 +1996,6 @@ function renderToday(events, dayDate, patch){
 
   renderDayNav(dispDate);
 
-  // Daily recap card — contextual to the viewed day
-  renderSummary(wrap, dispDate);
 
   if(events.length===0){
     wrap.append(el('div','empty','No matches scheduled · Use the arrows to browse other days'));
@@ -5129,7 +5127,6 @@ refreshKnockoutBracket();
 fetchPlayerClubs();
 fetchPlayerStats();
 fetchStakesData();
-fetchDailyRecaps();
 renderYesterdayScores();
 fetchMatches();
 fetchGroupStandings();
