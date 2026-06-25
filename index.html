@@ -2333,6 +2333,11 @@ async function fetchDailyRecaps(){
       _recapRows = rows
         .filter(row => row.date && row.date <= today)
         .sort((a,b) => b.date.localeCompare(a.date)); // newest first
+      // If today tab is already rendered but recap card not yet inserted, add it now
+      const wrap = $('today-content');
+      if(wrap && !wrap.querySelector('.recap-card')){
+        renderSummary(wrap, browseDate || new Date());
+      }
     }
   } catch(e){}
 }
@@ -5117,6 +5122,7 @@ refreshKnockoutBracket();
 fetchPlayerClubs();
 fetchPlayerStats();
 fetchStakesData();
+fetchDailyRecaps();
 renderYesterdayScores();
 fetchMatches();
 fetchGroupStandings();
