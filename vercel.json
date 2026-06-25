@@ -7,6 +7,7 @@
     { "src": "robots.txt", "use": "@vercel/static" },
     { "src": "sitemap.xml", "use": "@vercel/static" },
     { "src": "keepy-uppy.js", "use": "@vercel/static" },
+    { "src": "OneSignalSDKWorker.js", "use": "@vercel/static" },
     { "src": "public/assets/**", "use": "@vercel/static" },
     { "src": "data/**", "use": "@vercel/static" },
     { "src": "api/recaps.js", "use": "@vercel/node", "config": { "includeFiles": ["data/**"] } },

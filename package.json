@@ -11,7 +11,9 @@
     "pipeline:generate": "tsx scripts/generate-ai-content.ts",
     "pipeline:retrospective-days": "tsx scripts/generate-retrospective-days.ts",
     "pipeline:clubs": "tsx scripts/generate-player-clubs.ts",
-    "pipeline:stats": "tsx scripts/generate-player-stats.ts"
+    "pipeline:stats": "tsx scripts/generate-player-stats.ts",
+    "notify:digest": "tsx scripts/send-notifications.ts --type=digest",
+    "notify:recap": "tsx scripts/send-notifications.ts --type=recap"
   },
   "dependencies": {
     "@google/genai": "latest",

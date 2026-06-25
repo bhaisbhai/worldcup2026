@@ -55,6 +55,7 @@ jobs:
           npm run pipeline:generate -- $ARGS
 
       - name: Commit and Push
+        id: commit
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
@@ -63,6 +64,16 @@ jobs:
             git commit -m "chore: daily AI recap sync [skip ci]"
             git pull --rebase origin main
             git push origin main
+            echo "committed=true" >> $GITHUB_OUTPUT
           else
             echo "No changes to commit."
+            echo "committed=false" >> $GITHUB_OUTPUT
           fi
+
+      - name: Send Recap Ready Notification
+        if: steps.commit.outputs.committed == 'true' && github.event.inputs.force != 'true'
+        env:
+          ONESIGNAL_APP_ID: ${{ secrets.ONESIGNAL_APP_ID }}
+          ONESIGNAL_REST_API_KEY: ${{ secrets.ONESIGNAL_REST_API_KEY }}
+          APP_URL: ${{ secrets.APP_URL }}
+        run: npm run notify:recap
