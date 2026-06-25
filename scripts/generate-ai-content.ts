@@ -214,17 +214,44 @@ async function main() {
     console.warn(`⚠️  Could not fetch tomorrow's schedule:`, e);
   }
 
-  // ── 6. AI Call 1 — Recap (50 words, facts only) ───────────────────────────
+  // ── 6. AI Call 1 — Recap ─────────────────────────────────────────────────
+  const qualRules = `World Cup 2026 format: 48 teams, 12 groups of 4.
+Qualification rules:
+- Top 2 from each group qualify automatically (guaranteed).
+- Best 8 third-place teams across all 12 groups also advance.
+- 3rd place with 4+ points: realistic best-3rd contender.
+- 3rd place with 3 or fewer points: very unlikely to advance.
+- 4th place: always eliminated, no best-3rd route.
+Mathematical certainty rules:
+- QUALIFIED: a team is guaranteed top-2 when no other team in the group can mathematically overtake them, regardless of remaining results.
+- ELIMINATED: a team cannot reach top-2 AND cannot accumulate enough points to be a competitive best-3rd candidate (i.e. max possible points ≤ 3 with negative GD when 4pts+ is needed).`;
+
   let recapSummary = '';
   if (recapLines.length > 0) {
     console.log('🤖  Generating recap…');
+
+    const allStandingsText = standingsGroups.map(g => {
+      const entries: any[] = g.standings?.entries || [];
+      return `${g.name || 'Group'}:\n${groupStandingsText(entries)}`;
+    }).join('\n\n');
+
     const recapPrompt = `You are a football journalist writing a brief match report.
 
-Write a factual 40-50 word summary of these World Cup results. Use ONLY the data provided below. Do not invent scorers, statistics, or match events that are not listed.
+Write a factual summary of these World Cup results. Use ONLY the data provided below. Do not invent scorers, statistics, or match events that are not listed.
 
+Structure your summary in two parts:
+1. Results (40-50 words): key scores and goal scorers.
+2. Standings update (up to 30 additional words, ONLY if applicable): list any teams now MATHEMATICALLY GUARANTEED to have qualified for the knockouts, and any teams MATHEMATICALLY ELIMINATED. Only include this section if you can state it with 100% certainty based on the standings data. If uncertain, omit entirely.
+
+${qualRules}
+
+Match results:
 ${recapLines.join('\n')}
 
-Return JSON: {"summary": "your 40-50 word factual summary here"}`;
+Current group standings (after today's games):
+${allStandingsText}
+
+Return JSON: {"summary": "your full factual summary here (results + optional standings update)"}`;
 
     try {
       const res = await callGemini(recapPrompt);
@@ -239,14 +266,6 @@ Return JSON: {"summary": "your 40-50 word factual summary here"}`;
   const stakesOut: Record<string, { summary: string; status: string }> = {};
   if (upcomingMatches.length > 0) {
     console.log('🤖  Generating stakes…');
-
-    const qualRules = `World Cup 2026 format: 48 teams, 12 groups of 4.
-Qualification rules:
-- Top 2 from each group qualify automatically (guaranteed).
-- Best 8 third-place teams across all 12 groups also advance.
-- 3rd place with 4+ points: realistic best-3rd contender.
-- 3rd place with 3 or fewer points: very unlikely to advance.
-- 4th place: always eliminated, no best-3rd route.`;
 
     const matchBlock = upcomingMatches.map((m, i) =>
       `Match ${i + 1}: ${m.homeTeam} vs ${m.awayTeam}  [key: ${m.matchKey}]\n${m.groupCtx}`
