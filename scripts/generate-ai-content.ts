@@ -59,10 +59,14 @@ async function main() {
   const dateArg = args.find(a => a.startsWith('--date='))?.split('=')[1];
   const force   = args.includes('--force');
 
-  // Default: process yesterday (pipeline runs after midnight)
+  // Use Pacific Time (America/Los_Angeles) so late West Coast games are attributed to the correct date
+  const ptDate = (d = new Date()) =>
+    d.toLocaleDateString('en-CA', { timeZone: 'America/Los_Angeles' }); // en-CA gives YYYY-MM-DD
+
+  // Default: process yesterday in PT (pipeline runs after midnight PT)
   const targetDate = dateArg || (() => {
     const d = new Date(); d.setDate(d.getDate() - 1);
-    return d.toISOString().split('T')[0];
+    return ptDate(d);
   })();
 
   console.log(`📅  Target date: ${targetDate}  force=${force}`);
@@ -149,8 +153,10 @@ async function main() {
   }
 
   // ── 5. Fetch upcoming games (tomorrow) ─────────────────────────────────────
-  const tomorrow = new Date(new Date(`${targetDate}T12:00:00Z`).getTime() + 24 * 60 * 60 * 1000);
-  const tomorrowStr = tomorrow.toISOString().split('T')[0];
+  // Add 1 day to targetDate in PT to get tomorrow's PT date
+  const tomorrowPT = new Date(`${targetDate}T12:00:00`);
+  tomorrowPT.setDate(tomorrowPT.getDate() + 1);
+  const tomorrowStr = ptDate(tomorrowPT);
   const upcomingMatches: any[] = [];
 
   try {
