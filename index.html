@@ -1996,6 +1996,8 @@ function renderToday(events, dayDate, patch){
 
   renderDayNav(dispDate);
 
+  // Recap card only when browsing a previous day (not on today's tab)
+  if(browseDate) renderSummary(wrap, dispDate);
 
   if(events.length===0){
     wrap.append(el('div','empty','No matches scheduled · Use the arrows to browse other days'));
@@ -2331,10 +2333,10 @@ async function fetchDailyRecaps(){
       _recapRows = rows
         .filter(row => row.date && row.date <= today)
         .sort((a,b) => b.date.localeCompare(a.date)); // newest first
-      // If today tab is already rendered but recap card not yet inserted, add it now
+      // If already browsing a past day and recap card not yet inserted, add it now
       const wrap = $('today-content');
-      if(wrap && !wrap.querySelector('.recap-card')){
-        renderSummary(wrap, browseDate || new Date());
+      if(wrap && browseDate && !wrap.querySelector('.recap-card')){
+        renderSummary(wrap, browseDate);
       }
     }
   } catch(e){}
@@ -2353,26 +2355,11 @@ function dismissRecap(date, e){
 }
 
 function renderSummary(container, dispDate){
-  if(!_recapRows.length) return;
-  const todayStr = new Date().toISOString().slice(0,10);
-  const yd = new Date(); yd.setDate(yd.getDate()-1);
-  const yesterdayStr = yd.toISOString().slice(0,10);
-  const ds = dispDate ? dispDate.toISOString().slice(0,10) : todayStr;
-  const isToday = ds === todayStr;
-
-  let row;
-  if(isToday){
-    // Today view: always show yesterday's recap, hidden after noon
-    if(new Date().getHours() >= 12) return;
-    row = _recapRows.find(r => r.date === yesterdayStr) || null;
-  } else {
-    row = _recapRows.find(r => r.date === ds) || null;
-  }
-
+  if(!_recapRows.length || !dispDate) return;
+  const ds = dispDate.toISOString().slice(0,10);
+  const row = _recapRows.find(r => r.date === ds);
   if(!row) return;
-  if(isToday && localStorage.getItem('recap_dismissed') === row.date) return;
-  const isYesterday = isToday;
-  const label = isYesterday ? 'Yesterday' : (row.date === todayStr ? 'Today' : fmtRecapDate(row.date));
+  const label = fmtRecapDate(row.date);
   const card = document.createElement('div');
   card.className = 'recap-card';
   card.onclick = function(e){ if(!e.target.closest('.recap-dismiss')) this.classList.toggle('open'); };
@@ -2388,13 +2375,10 @@ function renderSummary(container, dispDate){
       ${row.theDrama?`<div class="recap-section"><div class="recap-section-lbl">The Drama</div><div class="recap-section-txt">${row.theDrama}</div></div>`:''}
       ${row.mustWatchHighlights?`<div class="recap-section"><div class="recap-section-lbl">Watch / Skip</div><div class="recap-section-txt">${row.mustWatchHighlights}</div></div>`:''}
       ${row.progressionNews?`<div class="recap-section"><div class="recap-section-lbl">Progression</div><div class="recap-section-txt">${row.progressionNews}</div></div>`:''}
-      ${isYesterday?`<div class="recap-results" id="recap-res-${row.date.replace(/-/g,'')}"><div class="recap-section-lbl">Results</div><div style="font-size:11px;color:rgba(255,255,255,.35);padding-top:4px">Loading…</div></div>`:''}
-    </div></div>`}
-    ${isNewFormat && isYesterday ? `<div class="recap-body open"><div class="recap-body-inner"><div class="recap-results" id="recap-res-${row.date.replace(/-/g,'')}"><div class="recap-section-lbl">Results</div><div style="font-size:11px;color:rgba(255,255,255,.35);padding-top:4px">Loading…</div></div></div></div>` : ''}`;
+    </div></div>`}`;
   const nav = container.querySelector('#day-nav');
   if(nav && nav.nextSibling) container.insertBefore(card, nav.nextSibling);
   else container.append(card);
-  if(isYesterday) fetchRecapResults(row.date, card);
 }
 
 async function fetchRecapResults(date, card){
@@ -5127,6 +5111,7 @@ refreshKnockoutBracket();
 fetchPlayerClubs();
 fetchPlayerStats();
 fetchStakesData();
+fetchDailyRecaps();
 renderYesterdayScores();
 fetchMatches();
 fetchGroupStandings();
