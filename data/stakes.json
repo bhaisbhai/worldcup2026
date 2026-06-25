@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-24T23:27:49.090Z",
+  "generatedAt": "2026-06-25T00:08:53.893Z",
   "byDate": {
     "2026-06-24": {
       "BIH-QAT": {
@@ -51,6 +51,32 @@
       "TUR-USA": {
         "summary": "Türkiye is eliminated. United States is already qualified, playing for group seeding.",
         "status": "Knockout Seeding"
+      }
+    },
+    "2026-06-26": {
+      "NOR-FRA": {
+        "summary": "Norway and France are both qualified for the next round. This match determines who wins Group I.",
+        "status": "Knockout Seeding"
+      },
+      "SEN-IRQ": {
+        "summary": "Both Senegal and Iraq are already eliminated from World Cup contention, playing only for pride.",
+        "status": "Elimination Risk"
+      },
+      "CPV-KSA": {
+        "summary": "Both Cape Verde and Saudi Arabia need a victory to have any realistic chance of advancing.",
+        "status": "Qualification Battle"
+      },
+      "URU-ESP": {
+        "summary": "Spain needs a draw to guarantee qualification. Uruguay needs a win to secure advancement.",
+        "status": "Qualification Battle"
+      },
+      "EGY-IRN": {
+        "summary": "Egypt needs a draw to guarantee qualification. Iran needs a win to secure advancement.",
+        "status": "Qualification Battle"
+      },
+      "NZL-BEL": {
+        "summary": "Both New Zealand and Belgium need a victory to have a realistic chance of advancing.",
+        "status": "Qualification Battle"
       }
     }
   }
