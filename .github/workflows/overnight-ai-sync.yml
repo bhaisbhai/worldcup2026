@@ -2,9 +2,15 @@ name: Overnight AI Recap Generation
 
 on:
   schedule:
-    # 04:00 UTC primary run (covers games ending by ~03:00 UTC). 07:00 UTC backup.
+    # Runs hourly 04:00–08:00 UTC to catch games at any West Coast kick-off time.
+    # Self-gating in the script skips each run cheaply if games aren't done yet
+    # or if both recap + stakes are already generated.
+    # Latest possible end time: ~9pm PT (3am BST) + 2h = 11pm PT = 07:00 UTC.
     - cron: '0 4 * * *'
+    - cron: '0 5 * * *'
+    - cron: '0 6 * * *'
     - cron: '0 7 * * *'
+    - cron: '0 8 * * *'
   workflow_dispatch:
     inputs:
       date:
