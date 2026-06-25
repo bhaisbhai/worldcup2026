@@ -1,27 +1,31 @@
-import { Redis } from '@upstash/redis';
+const KV_URL   = process.env.KV_REST_API_URL   || '(not set)';
+const KV_TOKEN = process.env.KV_REST_API_TOKEN || '(not set)';
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
 
-  const url = process.env.KV_REST_API_URL || '(not set)';
-  const token = process.env.KV_REST_API_TOKEN || '(not set)';
-
   const result = {
-    url_set: url !== '(not set)',
-    url_prefix: url.slice(0, 30),
-    token_set: token !== '(not set)',
-    token_prefix: token.slice(0, 10),
+    url_set: KV_URL !== '(not set)',
+    url_prefix: KV_URL.slice(0, 35),
+    token_set: KV_TOKEN !== '(not set)',
+    token_prefix: KV_TOKEN.slice(0, 10),
   };
 
   try {
-    const redis = new Redis({ url, token });
-    await redis.ping();
-    result.redis_ping = 'OK';
-    const keys = await redis.keys('push:*');
-    result.subscriber_count = keys.length;
+    const ping = await fetch(`${KV_URL}/ping`, {
+      headers: { Authorization: `Bearer ${KV_TOKEN}` },
+    });
+    const pingBody = await ping.json();
+    result.redis_ping = pingBody.result || pingBody;
+
+    const keys = await fetch(`${KV_URL}/keys/push:*`, {
+      headers: { Authorization: `Bearer ${KV_TOKEN}` },
+    });
+    const keysBody = await keys.json();
+    result.subscriber_count = Array.isArray(keysBody.result) ? keysBody.result.length : keysBody;
   } catch (e) {
     result.redis_error = e.message;
   }
 
   res.status(200).json(result);
-}
+};
