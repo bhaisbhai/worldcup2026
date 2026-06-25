@@ -1,0 +1,32 @@
+name: Morning Fixture Digest
+
+on:
+  schedule:
+    - cron: '0 7 * * *'  # 7:00 UTC = 8:00 BST / 3:00 ET
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Send Morning Fixture Digest
+        env:
+          ONESIGNAL_APP_ID: ${{ secrets.ONESIGNAL_APP_ID }}
+          ONESIGNAL_REST_API_KEY: ${{ secrets.ONESIGNAL_REST_API_KEY }}
+          APP_URL: ${{ secrets.APP_URL }}
+        run: npm run notify:digest

@@ -11,12 +11,16 @@
     "pipeline:generate": "tsx scripts/generate-ai-content.ts",
     "pipeline:retrospective-days": "tsx scripts/generate-retrospective-days.ts",
     "pipeline:clubs": "tsx scripts/generate-player-clubs.ts",
-    "pipeline:stats": "tsx scripts/generate-player-stats.ts"
+    "pipeline:stats": "tsx scripts/generate-player-stats.ts",
+    "notify:digest": "tsx scripts/send-notifications.ts --type=digest",
+    "notify:recap": "tsx scripts/send-notifications.ts --type=recap"
   },
   "dependencies": {
     "@google/genai": "latest",
+    "@upstash/redis": "^1.38.0",
     "dotenv": "^16.4.5",
-    "lucide": "^0.395.0"
+    "lucide": "^0.395.0",
+    "web-push": "^3.6.7"
   },
   "devDependencies": {
     "@types/node": "^20.12.7",
