@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-26T08:37:25.121Z",
+  "generatedAt": "2026-06-26T08:38:41.566Z",
   "byDate": {
     "2026-06-24": {
       "BIH-QAT": {
@@ -105,23 +105,23 @@
     },
     "2026-06-14": {
       "AUS-TUR": {
-        "summary": "Australia needs a win for top-two or a draw for a strong third-place chance; Türkiye is already eliminated.",
+        "summary": "Australia qualified for the knockout stage. Türkiye is eliminated, finishing fourth in Group D.",
         "status": "Elimination Risk"
       },
       "GER-CUW": {
-        "summary": "Germany is already qualified and playing for group winner seeding; Curaçao is already eliminated.",
-        "status": "Knockout Seeding"
-      },
-      "NED-JPN": {
-        "summary": "Both teams need a win or draw to guarantee top-two qualification and secure group winner seeding.",
-        "status": "Qualification Battle"
-      },
-      "CIV-ECU": {
-        "summary": "Ivory Coast needs a win for top-two or a draw for a strong third-place chance; Ecuador needs a win to advance.",
+        "summary": "Germany qualified for the knockout stage. Curaçao is eliminated, finishing last in Group E.",
         "status": "Elimination Risk"
       },
+      "NED-JPN": {
+        "summary": "Netherlands and Japan both qualified for the knockout stage, finishing first and second respectively.",
+        "status": "Knockout Seeding"
+      },
+      "CIV-ECU": {
+        "summary": "Ivory Coast qualified for the knockout stage. Ecuador finished third with four points, a strong best-3rd contender.",
+        "status": "Qualification Battle"
+      },
       "SWE-TUN": {
-        "summary": "Sweden needs a win to guarantee top-two qualification or a draw for a strong third-place chance; Tunisia is eliminated.",
+        "summary": "Sweden finished third with four points, a strong best-3rd contender. Tunisia is eliminated, finishing last.",
         "status": "Elimination Risk"
       }
     },
