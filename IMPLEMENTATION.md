@@ -635,6 +635,24 @@ const localDate = `${d.getFullYear()}-${...}`;
 - **Location**: `buildStakesHtml()` in `index.html`
 - The "KNOCKOUT SEEDING" / "ELIMINATION RISK" / "QUALIFICATION BATTLE" pill badges were removed — only the summary text remains
 
+### Upcoming match cards expand on auto-refresh (padding jump)
+- **Cause**: `patchCard()` resets `card.className` without preserving the `up` class. Upcoming cards use `.mc.up` (`padding:12px 15px`); dropping `up` falls back to `.mc` (`padding:17px 19px`), causing a visible expansion every 10–30 seconds.
+- **Symptom**: Visible when browsing any date that has upcoming matches — cards briefly grow then the layout shifts. Triggered by navigating between dates (which resets the refresh cycle), making it look like a date-navigation bug.
+- **Fix**: Added `const isUp = ev.state==='pre'` in `patchCard` and changed:
+  ```js
+  // before (broken):
+  card.className = `mc${isLive?' live':isFt?' ft':''} vis`;
+  // after (fixed):
+  card.className = `mc${isLive?' live':isFt?' ft':isUp?' up':''} vis`;
+  ```
+- **File**: `patchCard()` in `index.html`
+
+### AI recap `progression` field was a cumulative team list, not contextual news
+- **Cause**: Prompt asked to "list every team now MATHEMATICALLY GUARANTEED to have qualified or been ELIMINATED" — this produces a growing laundry list of all teams ever qualified/eliminated, not what changed today.
+- **Symptom**: Progression section showed every qualified/eliminated team across the whole tournament, not just what changed as a result of today's games.
+- **Fix**: Changed prompt to: "As a result of TODAY's games only, which teams have NEWLY qualified for or been eliminated? Write 1-2 sentences of news narrative. If no team changed status today, return empty string."
+- **File**: `recapPrompt` in `scripts/generate-ai-content.ts`
+
 ---
 
 ## Premier League Rebuild Notes
