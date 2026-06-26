@@ -653,6 +653,27 @@ const localDate = `${d.getFullYear()}-${...}`;
 - **Fix**: Changed prompt to: "As a result of TODAY's games only, which teams have NEWLY qualified for or been eliminated? Write 1-2 sentences of news narrative. If no team changed status today, return empty string."
 - **File**: `recapPrompt` in `scripts/generate-ai-content.ts`
 
+### AI calling teams ELIMINATED when they still had a slim best-3rd chance
+- **Cause**: The `ELIMINATED` rule in `qualRules` said "max possible points ≤ 3 with negative GD" — but 3 points with a good GD can still qualify as best-3rd (8 of 12 third-place teams advance). Senegal with 0pts and 1 game left was incorrectly called eliminated.
+- **Symptom**: Progression section stated teams were out when they still had a mathematical path via the best-3rd route.
+- **Fix**: Tightened the ELIMINATED condition to only fire when max possible points is 0 or 1 — making best-3rd mathematically impossible. Added "when in doubt, do NOT call a team eliminated."
+- **File**: `qualRules` constant in `scripts/generate-ai-content.ts`
+- **Key rule**: Best-3rd threshold is roughly 4 pts (solid) or 3 pts (slim but real). Never call ELIMINATED unless it's arithmetically impossible, not just unlikely.
+
+### Recap notification skipped when pipeline triggered with `--force`
+- **Cause**: The notification step in `overnight-ai-sync.yml` had condition `if: steps.commit.outputs.committed == 'true' && github.event.inputs.force != 'true'`. The `force` flag is for skipping readiness checks, not for suppressing notifications — but it was silently blocking them during manual backfill runs.
+- **Symptom**: User never received recap notification after backfill runs were triggered manually.
+- **Fix**: Removed `&& github.event.inputs.force != 'true'` from the condition. Notifications now fire whenever data was actually committed, regardless of how the pipeline was triggered.
+- **File**: `.github/workflows/overnight-ai-sync.yml`
+- **Also added**: `.github/workflows/send-recap-notification.yml` — a standalone `workflow_dispatch` workflow to manually send the recap notification if one is ever missed again, without needing to re-run the full pipeline.
+
+### Header wordmark wraps when "Refreshing…" text appears
+- **Cause**: The refresh label changes from "↻ Refresh" to "↻ Refreshing…" (wider text), squeezing the flex container and causing "CUP" in "FIFA WORLD CUP 2026" to wrap to a new line.
+- **Symptom**: Glitchy one-line-to-two-line jump in the header wordmark every time a refresh fires.
+- **Fix**: Stopped changing the label text entirely. The ↻ icon now spins via CSS animation (`@keyframes spin`) when `.fetching` class is applied, and the text stays "↻ Refresh" always. Zero layout shift.
+- **File**: `.refresh-label` CSS + `setRefreshLabel()` in `index.html`
+- **Note**: Attempted `white-space:nowrap` + `flex-shrink:0` first — this caused horizontal overflow and pushed the entire page right on mobile. The correct fix is never changing the text width.
+
 ---
 
 ## Premier League Rebuild Notes
