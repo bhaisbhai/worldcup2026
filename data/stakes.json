@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-26T04:16:20.757Z",
+  "generatedAt": "2026-06-26T04:21:27.573Z",
   "byDate": {
     "2026-06-24": {
       "BIH-QAT": {
@@ -55,27 +55,27 @@
     },
     "2026-06-26": {
       "NOR-FRA": {
-        "summary": "Norway and France are both qualified. This match determines who finishes first in Group I for knockout seeding.",
+        "summary": "Both teams are already qualified for the knockout stage. This match determines who finishes first in Group I.",
         "status": "Knockout Seeding"
       },
       "SEN-IRQ": {
-        "summary": "Senegal and Iraq are eliminated from top-2. A win gives 3 points, likely insufficient for best third-place qualification.",
+        "summary": "Both teams are eliminated from advancing. A win secures third place but is insufficient for qualification.",
         "status": "Elimination Risk"
       },
       "CPV-KSA": {
-        "summary": "Cape Verde needs a win for top-2 or best third. Saudi Arabia needs a win for best third; a draw eliminates them.",
+        "summary": "Cape Verde needs a win for a realistic chance at top two or best third. Saudi Arabia must win to avoid elimination.",
         "status": "Qualification Battle"
       },
       "URU-ESP": {
-        "summary": "Spain needs a win or draw to guarantee top-2. Uruguay needs a win for top-2; a draw or loss risks elimination.",
+        "summary": "Spain needs a draw to guarantee top-two qualification. Uruguay must win to guarantee a top-two spot.",
         "status": "Qualification Battle"
       },
       "EGY-IRN": {
-        "summary": "Egypt needs a win or draw to guarantee top-2. Iran needs a win for top-2; a draw or loss risks elimination.",
+        "summary": "Egypt needs a draw to guarantee top-two qualification. Iran must win to guarantee a top-two spot.",
         "status": "Qualification Battle"
       },
       "NZL-BEL": {
-        "summary": "Belgium needs a win to guarantee top-2. New Zealand needs a win for best third; a draw or loss eliminates them.",
+        "summary": "Belgium needs a win to guarantee top-two qualification. New Zealand must win to avoid elimination.",
         "status": "Qualification Battle"
       }
     },
