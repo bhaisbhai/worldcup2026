@@ -2509,7 +2509,7 @@ async function fetchStakesData(){
 
 function buildStakesHtml(ev){
   const d = ev.date instanceof Date ? ev.date : new Date(ev.date);
-  const dateStr = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  const dateStr = d.toLocaleDateString('en-CA', { timeZone: 'America/Los_Angeles' });
   const matchKey = `${ev.home.abbr}-${ev.away.abbr}`;
   const s = stakesCache[`${dateStr}|${matchKey}`];
   if(!s || !s.summary) return '';
