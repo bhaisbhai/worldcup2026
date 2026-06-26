@@ -50,7 +50,7 @@ module.exports = async function (req, res) {
       return k;
     }
 
-    await Promise.all(matches.slice(0, 50).map(async ({ id, competitors }) => {
+    await Promise.all(matches.slice(0, 120).map(async ({ id, competitors }) => {
       try {
         const data = await get(`${SUMMARY}?event=${id}`);
 
@@ -64,14 +64,18 @@ module.exports = async function (req, res) {
             if (!name) continue;
             const athleteId = String(entry.athlete?.id || '');
             const stats = entry.stats || [];
-            const getStat = n => {
-              const s = stats.find(x => x.name === n);
-              return Math.round(parseFloat(s?.value ?? s?.displayValue)) || 0;
+            const getStat = (...names) => {
+              for (const n of names) {
+                const s = stats.find(x => x.name === n);
+                const v = Math.round(parseFloat(s?.value ?? s?.displayValue)) || 0;
+                if (v) return v;
+              }
+              return 0;
             };
-            const goals   = getStat('totalGoals');
-            const assists = getStat('goalAssists');
-            const yellow  = getStat('yellowCards');
-            const red     = getStat('redCards');
+            const goals   = getStat('goals', 'totalGoals', 'goalsScored');
+            const assists = getStat('goalAssists', 'assists');
+            const yellow  = getStat('yellowCards', 'yellow');
+            const red     = getStat('redCards', 'red', 'redCard');
             if (goals || assists || yellow || red) {
               const k = player(name, tName, tAbbr, athleteId);
               playerMap[k].goals       += goals;
