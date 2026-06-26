@@ -219,12 +219,13 @@ async function main() {
 Qualification rules:
 - Top 2 from each group qualify automatically (guaranteed).
 - Best 8 third-place teams across all 12 groups also advance.
-- 3rd place with 4+ points: realistic best-3rd contender.
-- 3rd place with 3 or fewer points: very unlikely to advance.
+- 3rd place with 4+ points: solid best-3rd contender.
+- 3rd place with 3 points: slim but real chance (has happened historically).
+- 3rd place with 0-1 points maximum possible: cannot realistically qualify.
 - 4th place: always eliminated, no best-3rd route.
-Mathematical certainty rules:
-- QUALIFIED: a team is guaranteed top-2 when no other team in the group can mathematically overtake them, regardless of remaining results.
-- ELIMINATED: a team cannot reach top-2 AND cannot accumulate enough points to be a competitive best-3rd candidate (i.e. max possible points ≤ 3 with negative GD when 4pts+ is needed).`;
+Mathematical certainty rules — BE CONSERVATIVE, only state these when 100% certain:
+- QUALIFIED: a team is guaranteed top-2 when no other team in the group can mathematically overtake them regardless of remaining results.
+- ELIMINATED: ONLY when BOTH are true: (1) the team mathematically cannot finish top-2, AND (2) their maximum possible points total is 0 or 1 (making best-3rd mathematically impossible). A team with any chance of reaching 3+ points is NOT eliminated. When in doubt, do NOT call a team eliminated.`;
 
   let recapSummary = '';
   let recapProgression = '';
