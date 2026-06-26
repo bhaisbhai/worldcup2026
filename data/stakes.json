@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-25T09:20:21.376Z",
+  "generatedAt": "2026-06-26T04:16:20.757Z",
   "byDate": {
     "2026-06-24": {
       "BIH-QAT": {
@@ -55,27 +55,27 @@
     },
     "2026-06-26": {
       "NOR-FRA": {
-        "summary": "Norway and France are both qualified for the next round. This match determines who wins Group I.",
+        "summary": "Norway and France are both qualified. This match determines who finishes first in Group I for knockout seeding.",
         "status": "Knockout Seeding"
       },
       "SEN-IRQ": {
-        "summary": "Both Senegal and Iraq are already eliminated from World Cup contention, playing only for pride.",
+        "summary": "Senegal and Iraq are eliminated from top-2. A win gives 3 points, likely insufficient for best third-place qualification.",
         "status": "Elimination Risk"
       },
       "CPV-KSA": {
-        "summary": "Both Cape Verde and Saudi Arabia need a victory to have any realistic chance of advancing.",
+        "summary": "Cape Verde needs a win for top-2 or best third. Saudi Arabia needs a win for best third; a draw eliminates them.",
         "status": "Qualification Battle"
       },
       "URU-ESP": {
-        "summary": "Spain needs a draw to guarantee qualification. Uruguay needs a win to secure advancement.",
+        "summary": "Spain needs a win or draw to guarantee top-2. Uruguay needs a win for top-2; a draw or loss risks elimination.",
         "status": "Qualification Battle"
       },
       "EGY-IRN": {
-        "summary": "Egypt needs a draw to guarantee qualification. Iran needs a win to secure advancement.",
+        "summary": "Egypt needs a win or draw to guarantee top-2. Iran needs a win for top-2; a draw or loss risks elimination.",
         "status": "Qualification Battle"
       },
       "NZL-BEL": {
-        "summary": "Both New Zealand and Belgium need a victory to have a realistic chance of advancing.",
+        "summary": "Belgium needs a win to guarantee top-2. New Zealand needs a win for best third; a draw or loss eliminates them.",
         "status": "Qualification Battle"
       }
     },
