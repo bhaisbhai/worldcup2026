@@ -227,6 +227,23 @@ Mathematical certainty rules — BE CONSERVATIVE, only state these when 100% cer
 - QUALIFIED: a team is guaranteed top-2 when no other team in the group can mathematically overtake them regardless of remaining results.
 - ELIMINATED: ONLY when BOTH are true: (1) the team mathematically cannot finish top-2, AND (2) their maximum possible points total is 0 or 1 (making best-3rd mathematically impossible). A team with any chance of reaching 3+ points is NOT eliminated. When in doubt, do NOT call a team eliminated.`;
 
+  // Build a list of teams already announced as qualified/eliminated in prior recaps
+  // so the AI doesn't re-announce them today.
+  let alreadyAnnouncedText = '';
+  try {
+    const recapsPath = path.resolve(__dirname, '..', 'data', 'recaps.json');
+    if (fs.existsSync(recapsPath)) {
+      const allRecaps: any[] = JSON.parse(fs.readFileSync(recapsPath, 'utf-8'));
+      const priorProgressions = allRecaps
+        .filter(r => r.date < targetDate && (r.progression || r.progressionNews))
+        .map(r => r.progression || r.progressionNews || '')
+        .filter(Boolean);
+      if (priorProgressions.length > 0) {
+        alreadyAnnouncedText = `\nTeams already reported as qualified/eliminated in previous days' recaps (DO NOT repeat these):\n${priorProgressions.join('\n')}`;
+      }
+    }
+  } catch {}
+
   let recapSummary = '';
   let recapProgression = '';
   if (recapLines.length > 0) {
@@ -248,11 +265,12 @@ ${recapLines.join('\n')}
 
 Current group standings (after today's games):
 ${allStandingsText}
+${alreadyAnnouncedText}
 
 Return JSON with exactly these two fields:
 {
   "summary": "Results only: 40-50 words on key scores and goal scorers. No qualification info here.",
-  "progression": "As a result of TODAY's games only, which teams have NEWLY qualified for or been eliminated from the knockout stage? Write 1-2 sentences of news narrative (e.g. 'Brazil confirmed their place in the knockouts while Scotland were eliminated after...'). Base this ONLY on changes caused by today's results — do not list teams that were already qualified/eliminated before today. If no team changed status today, return empty string."
+  "progression": "As a result of TODAY's games only, which teams have NEWLY qualified for or been eliminated from the knockout stage — i.e. teams not already listed in the 'already announced' section above? Write 1-2 sentences of news narrative. If no NEW team changed status today, return empty string."
 }`;
 
     try {
