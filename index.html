@@ -159,8 +159,8 @@ body{
   display:flex;align-items:center;justify-content:space-between;height:66px;gap:12px;
 }
 .wordmark{line-height:1.1}
-.wordmark-name{font-size:17px;font-weight:800;letter-spacing:-.4px;color:var(--text);white-space:nowrap}
-.wordmark-event{font-size:10px;font-weight:600;color:var(--accent);letter-spacing:.9px;text-transform:uppercase;margin-top:3px;white-space:nowrap}
+.wordmark-name{font-size:17px;font-weight:800;letter-spacing:-.4px;color:var(--text)}
+.wordmark-event{font-size:10px;font-weight:600;color:var(--accent);letter-spacing:.9px;text-transform:uppercase;margin-top:3px}
 .sub{font-size:10px;color:var(--t3);margin-top:3px;letter-spacing:.2px}
 .hdr-r{display:flex;align-items:center;gap:14px}
 
@@ -180,10 +180,11 @@ body{
 .clock{font-family:var(--mono);font-size:13px;color:var(--t2);letter-spacing:.8px}
 .refresh-label{
   font-size:10px;color:var(--t2);letter-spacing:.3px;height:12px;
-  min-width:68px;text-align:right;
-  transition:opacity .3s;cursor:pointer;-webkit-tap-highlight-color:transparent;
+  transition:color .3s;cursor:pointer;-webkit-tap-highlight-color:transparent;
 }
 .refresh-label.fetching{color:var(--accent)}
+.refresh-label.fetching .rl-icon{display:inline-block;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
 
 /* ── TABS ───────────────────────────────────── */
 .tabs-bar{
@@ -1195,7 +1196,7 @@ body{
       <div class="live-pill hidden" id="livePill"><div class="ldot"></div>LIVE</div>
       <div class="hdr-meta">
         <div class="clock" id="clock">--:--:--</div>
-        <div class="refresh-label" id="rfLabel" onclick="fetchMatches()" role="button" aria-label="Refresh scores">↻ Refresh</div>
+        <div class="refresh-label" id="rfLabel" onclick="fetchMatches()" role="button" aria-label="Refresh scores"><span class="rl-icon">↻</span> Refresh</div>
       </div>
       <button class="srch-btn" onclick="openSearch()" aria-label="Search players and teams">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg>
@@ -2106,9 +2107,7 @@ function esc(str){ return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&l
 //  FETCH ESPN
 // ═══════════════════════════════════════════════════
 function setRefreshLabel(txt, accent=false){
-  const lbl = $('rfLabel');
-  lbl.textContent = txt;
-  lbl.classList.toggle('fetching', accent);
+  $('rfLabel').classList.toggle('fetching', accent);
 }
 
 function showSkeleton(keepNav=false){
