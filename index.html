@@ -2415,10 +2415,10 @@ function dismissRecap(date, e){
 
 function renderSummary(container, dispDate){
   if(!_recapRows.length) return;
-  const todayStr = new Date().toISOString().slice(0,10);
+  const todayStr = new Date().toLocaleDateString('en-CA');
   const yd = new Date(); yd.setDate(yd.getDate()-1);
-  const yesterdayStr = yd.toISOString().slice(0,10);
-  const ds = dispDate ? dispDate.toISOString().slice(0,10) : todayStr;
+  const yesterdayStr = yd.toLocaleDateString('en-CA');
+  const ds = dispDate ? dispDate.toLocaleDateString('en-CA') : todayStr;
   const isToday = ds === todayStr;
   // Only fall back to the most recent recap if it is from exactly yesterday — not older
   const row = _recapRows.find(r => r.date === ds) ||
@@ -5185,6 +5185,7 @@ refreshKnockoutBracket();
 fetchPlayerClubs();
 fetchPlayerStats();
 fetchStakesData();
+fetchDailyRecaps();
 fetchMatches();
 fetchGroupStandings();
 fetchKnockoutData();
