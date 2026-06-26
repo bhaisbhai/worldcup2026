@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-26T08:32:55.350Z",
+  "generatedAt": "2026-06-26T08:36:20.777Z",
   "byDate": {
     "2026-06-24": {
       "BIH-QAT": {
@@ -217,15 +217,15 @@
     },
     "2026-06-20": {
       "NED-SWE": {
-        "summary": "Netherlands needs a win or draw for top-two. Sweden needs a win; a draw likely advances, loss risks elimination.",
-        "status": "Qualification Battle"
+        "summary": "Netherlands qualified as group winners. Sweden finished third with 4 points, likely advancing as a best third-place team.",
+        "status": "Knockout Seeding"
       },
       "GER-CIV": {
-        "summary": "Germany qualified. Ivory Coast needs a win or draw for top-two; a loss makes qualification dependent.",
-        "status": "Qualification Battle"
+        "summary": "Germany qualified as group winners. Ivory Coast qualified as group runners-up. Both teams are through to the knockout stage.",
+        "status": "Knockout Seeding"
       },
       "ECU-CUW": {
-        "summary": "Both Ecuador and Curaçao need a win to have any chance of advancing. A draw or loss means elimination.",
+        "summary": "Ecuador finished third with 4 points, likely advancing as a best third-place team. Curaçao is eliminated.",
         "status": "Elimination Risk"
       }
     },
