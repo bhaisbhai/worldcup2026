@@ -229,17 +229,23 @@ Mathematical certainty rules — BE CONSERVATIVE, only state these when 100% cer
 
   // Build a list of teams already announced as qualified/eliminated in prior recaps
   // so the AI doesn't re-announce them today.
+  // For entries with a dedicated `progression` field, use that.
+  // For older entries where qualification info is embedded in `summary`, use the full summary
+  // so the AI can extract what was already reported.
   let alreadyAnnouncedText = '';
   try {
     const recapsPath = path.resolve(__dirname, '..', 'data', 'recaps.json');
     if (fs.existsSync(recapsPath)) {
       const allRecaps: any[] = JSON.parse(fs.readFileSync(recapsPath, 'utf-8'));
-      const priorProgressions = allRecaps
-        .filter(r => r.date < targetDate && (r.progression || r.progressionNews))
-        .map(r => r.progression || r.progressionNews || '')
-        .filter(Boolean);
-      if (priorProgressions.length > 0) {
-        alreadyAnnouncedText = `\nTeams already reported as qualified/eliminated in previous days' recaps (DO NOT repeat these):\n${priorProgressions.join('\n')}`;
+      const priorLines = allRecaps
+        .filter(r => r.date < targetDate)
+        .map(r => {
+          const text = r.progression || r.progressionNews || r.summary || r.headline || '';
+          return text ? `[${r.date}] ${text}` : null;
+        })
+        .filter(Boolean) as string[];
+      if (priorLines.length > 0) {
+        alreadyAnnouncedText = `\nPrevious days' match reports (includes teams already reported as qualified/eliminated — DO NOT repeat any team already mentioned here):\n${priorLines.join('\n')}`;
       }
     }
   } catch {}
