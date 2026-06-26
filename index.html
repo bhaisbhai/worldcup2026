@@ -2432,21 +2432,21 @@ function renderSummary(container, dispDate){
   const card = document.createElement('div');
   card.className = 'recap-card';
   card.onclick = function(e){ if(!e.target.closest('.recap-dismiss')) this.classList.toggle('open'); };
-  // New format: single `summary` field (50 words). Old format: headline + sections.
   const isNewFormat = !!row.summary;
+  const progressionText = row.progression || row.progressionNews || '';
+  const resultsSection = isYesterday ? `<div class="recap-results" id="recap-res-${row.date.replace(/-/g,'')}"><div class="recap-section-lbl">Results</div><div style="font-size:11px;color:rgba(255,255,255,.35);padding-top:4px">Loading…</div></div>` : '';
   card.innerHTML =
     `<div class="recap-hdr">
       <span class="recap-pill">${label}</span>
       <span class="recap-hl">${isNewFormat ? row.summary : (row.headline||'')}</span>
       <button class="recap-dismiss" onclick="dismissRecap('${row.date}',event)" title="Dismiss">✕</button>
     </div>
-    ${isNewFormat ? '' : `<div class="recap-body"><div class="recap-body-inner">
-      ${row.theDrama?`<div class="recap-section"><div class="recap-section-lbl">The Drama</div><div class="recap-section-txt">${row.theDrama}</div></div>`:''}
-      ${row.mustWatchHighlights?`<div class="recap-section"><div class="recap-section-lbl">Watch / Skip</div><div class="recap-section-txt">${row.mustWatchHighlights}</div></div>`:''}
-      ${row.progressionNews?`<div class="recap-section"><div class="recap-section-lbl">Progression</div><div class="recap-section-txt">${row.progressionNews}</div></div>`:''}
-      ${isYesterday?`<div class="recap-results" id="recap-res-${row.date.replace(/-/g,'')}"><div class="recap-section-lbl">Results</div><div style="font-size:11px;color:rgba(255,255,255,.35);padding-top:4px">Loading…</div></div>`:''}
-    </div></div>`}
-    ${isNewFormat && isYesterday ? `<div class="recap-body open"><div class="recap-body-inner"><div class="recap-results" id="recap-res-${row.date.replace(/-/g,'')}"><div class="recap-section-lbl">Results</div><div style="font-size:11px;color:rgba(255,255,255,.35);padding-top:4px">Loading…</div></div></div></div>` : ''}`;
+    <div class="recap-body"><div class="recap-body-inner">
+      ${!isNewFormat && row.theDrama ? `<div class="recap-section"><div class="recap-section-lbl">The Drama</div><div class="recap-section-txt">${row.theDrama}</div></div>` : ''}
+      ${!isNewFormat && row.mustWatchHighlights ? `<div class="recap-section"><div class="recap-section-lbl">Watch / Skip</div><div class="recap-section-txt">${row.mustWatchHighlights}</div></div>` : ''}
+      ${progressionText ? `<div class="recap-section"><div class="recap-section-lbl">Progression</div><div class="recap-section-txt">${progressionText}</div></div>` : ''}
+      ${resultsSection}
+    </div></div>`;
   const nav = container.querySelector('#day-nav');
   if(nav && nav.nextSibling) container.insertBefore(card, nav.nextSibling);
   else container.append(card);

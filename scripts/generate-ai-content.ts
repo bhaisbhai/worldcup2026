@@ -227,6 +227,7 @@ Mathematical certainty rules:
 - ELIMINATED: a team cannot reach top-2 AND cannot accumulate enough points to be a competitive best-3rd candidate (i.e. max possible points ≤ 3 with negative GD when 4pts+ is needed).`;
 
   let recapSummary = '';
+  let recapProgression = '';
   if (recapLines.length > 0) {
     console.log('🤖  Generating recap…');
 
@@ -239,10 +240,6 @@ Mathematical certainty rules:
 
 Write a factual summary of these World Cup results. Use ONLY the data provided below. Do not invent scorers, statistics, or match events that are not listed.
 
-Structure your summary in two parts:
-1. Results (40-50 words): key scores and goal scorers.
-2. Standings update (up to 30 additional words, ONLY if applicable): list any teams now MATHEMATICALLY GUARANTEED to have qualified for the knockouts, and any teams MATHEMATICALLY ELIMINATED. Only include this section if you can state it with 100% certainty based on the standings data. If uncertain, omit entirely.
-
 ${qualRules}
 
 Match results:
@@ -251,12 +248,17 @@ ${recapLines.join('\n')}
 Current group standings (after today's games):
 ${allStandingsText}
 
-Return JSON: {"summary": "your full factual summary here (results + optional standings update)"}`;
+Return JSON with exactly these two fields:
+{
+  "summary": "Results only: 40-50 words on key scores and goal scorers. No qualification info here.",
+  "progression": "Qualification/elimination only: list every team now MATHEMATICALLY GUARANTEED to have qualified or been ELIMINATED, with 100% certainty. If none, return empty string."
+}`;
 
     try {
       const res = await callGemini(recapPrompt);
       recapSummary = res?.summary || '';
-      console.log(`✅  Recap generated (${recapSummary.split(' ').length} words)`);
+      recapProgression = res?.progression || '';
+      console.log(`✅  Recap generated (${recapSummary.split(' ').length} words, progression: ${recapProgression ? 'yes' : 'none'})`);
     } catch (e) {
       console.error('❌  Recap generation failed:', e);
     }
@@ -317,7 +319,8 @@ Status definitions:
     let recaps: any[] = [];
     try { recaps = JSON.parse(fs.readFileSync(recapsPath, 'utf-8')); } catch {}
     const idx   = recaps.findIndex(r => r.date === targetDate);
-    const entry = { date: targetDate, summary: recapSummary };
+    const entry: any = { date: targetDate, summary: recapSummary };
+    if (recapProgression) entry.progression = recapProgression;
     if (idx !== -1) recaps[idx] = entry; else recaps.push(entry);
     recaps.sort((a, b) => a.date.localeCompare(b.date));
     fs.writeFileSync(recapsPath, JSON.stringify(recaps, null, 2));
