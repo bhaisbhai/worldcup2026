@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-26T08:36:20.777Z",
+  "generatedAt": "2026-06-26T08:37:25.121Z",
   "byDate": {
     "2026-06-24": {
       "BIH-QAT": {
@@ -253,19 +253,19 @@
     },
     "2026-06-22": {
       "ARG-AUT": {
-        "summary": "Argentina is qualified, aiming for first. Austria needs points to secure automatic qualification or a strong third-place spot.",
-        "status": "Elimination Risk"
+        "summary": "Argentina needs a draw to guarantee top-two qualification. Austria needs a win for top-two, or a draw for a strong third-place.",
+        "status": "Qualification Battle"
       },
       "FRA-IRQ": {
-        "summary": "France is qualified, competing for first place. Iraq is eliminated and cannot advance further in the tournament.",
+        "summary": "France is already qualified, competing for group winner. Iraq needs a win for a slim chance at best third-place qualification.",
         "status": "Elimination Risk"
       },
       "NOR-SEN": {
-        "summary": "Norway is qualified, competing for first place. Senegal is eliminated and cannot advance further in the tournament.",
+        "summary": "Norway is already qualified, competing for group winner. Senegal needs a win for a slim chance at best third-place qualification.",
         "status": "Elimination Risk"
       },
       "JOR-ALG": {
-        "summary": "Jordan is eliminated and cannot advance. Algeria needs a win or draw to secure automatic qualification or a strong third-place spot.",
+        "summary": "Jordan needs a win for a slim chance at best third-place qualification. Algeria needs a win for top-two or strong third-place.",
         "status": "Elimination Risk"
       }
     },
