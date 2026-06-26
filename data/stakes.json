@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-26T08:31:48.036Z",
+  "generatedAt": "2026-06-26T08:32:55.350Z",
   "byDate": {
     "2026-06-24": {
       "BIH-QAT": {
@@ -29,27 +29,27 @@
     },
     "2026-06-25": {
       "CUW-CIV": {
-        "summary": "Curaçao is eliminated. Ivory Coast has automatically qualified for the knockout stages by finishing second in Group E.",
+        "summary": "Ivory Coast has secured qualification for the knockout stage. Curaçao is definitively eliminated from the tournament.",
         "status": "Elimination Risk"
       },
       "ECU-GER": {
-        "summary": "Germany has automatically qualified. Ecuador finished third with four points, awaiting best third-place team qualification results.",
-        "status": "Qualification Battle"
+        "summary": "Germany has qualified for the knockout stage. Ecuador finished third with 4 points, hoping for a best-3rd spot.",
+        "status": "Elimination Risk"
       },
       "JPN-SWE": {
-        "summary": "Japan has automatically qualified. Sweden finished third with four points, awaiting best third-place team qualification results.",
-        "status": "Qualification Battle"
+        "summary": "Japan has qualified for the knockout stage. Sweden finished third with 4 points, hoping for a best-3rd spot.",
+        "status": "Elimination Risk"
       },
       "TUN-NED": {
-        "summary": "Tunisia is eliminated. Netherlands has automatically qualified for the knockout stages by finishing first in Group F.",
+        "summary": "Netherlands has secured qualification for the knockout stage. Tunisia is definitively eliminated from the tournament.",
         "status": "Elimination Risk"
       },
       "PAR-AUS": {
-        "summary": "Australia has automatically qualified. Paraguay finished third with four points, awaiting best third-place team qualification results.",
-        "status": "Qualification Battle"
+        "summary": "Australia has qualified for the knockout stage. Paraguay finished third with 4 points, hoping for a best-3rd spot.",
+        "status": "Elimination Risk"
       },
       "TUR-USA": {
-        "summary": "Türkiye is eliminated. United States has automatically qualified for the knockout stages by finishing first in Group D.",
+        "summary": "United States has secured qualification for the knockout stage. Türkiye is definitively eliminated from the tournament.",
         "status": "Elimination Risk"
       }
     },
