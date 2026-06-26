@@ -2521,7 +2521,7 @@ async function renderYesterdayScores(){
   if(new Date().getHours() >= 23) return;
 
   const yd = new Date(); yd.setDate(yd.getDate()-1);
-  const yesterdayStr = yd.toISOString().slice(0,10);
+  const yesterdayStr = yd.toLocaleDateString('en-CA');
   const dismissKey = 'yscores_dismissed';
   if(localStorage.getItem(dismissKey) === yesterdayStr) return;
 
