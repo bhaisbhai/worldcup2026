@@ -273,10 +273,12 @@ Current group standings (after today's games):
 ${allStandingsText}
 ${alreadyAnnouncedText}
 
+CRITICAL RULE FOR PROGRESSION: Only report teams that appear in today's match results above. If a team did not play today, their status cannot have changed today — do not mention them regardless of their standings position.
+
 Return JSON with exactly these two fields:
 {
   "summary": "Results only: 40-50 words on key scores and goal scorers. No qualification info here.",
-  "progression": "As a result of TODAY's games only, which teams have NEWLY qualified for or been eliminated from the knockout stage — i.e. teams not already listed in the 'already announced' section above? Write 1-2 sentences of news narrative. If no NEW team changed status today, return empty string."
+  "progression": "Among the teams that played TODAY (and only those teams), which ones newly secured qualification or were newly eliminated as a direct result of today's specific result? Write 1-2 sentences of news narrative. If none of today's teams changed status, return empty string."
 }`;
 
     try {
