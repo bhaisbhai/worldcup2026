@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-26T04:21:27.573Z",
+  "generatedAt": "2026-06-26T07:59:10.769Z",
   "byDate": {
     "2026-06-24": {
       "BIH-QAT": {
@@ -271,19 +271,19 @@
     },
     "2026-06-23": {
       "POR-UZB": {
-        "summary": "Portugal needs a win to guarantee top-two. Uzbekistan is eliminated from top-two, needing a win for a slim best-third spot.",
+        "summary": "Portugal needs a win or draw to guarantee top-two qualification. Uzbekistan must win for a slim best third-place chance.",
         "status": "Elimination Risk"
       },
       "ENG-GHA": {
-        "summary": "England and Ghana both need a draw to guarantee top-two. A loss for either risks dropping to third place.",
+        "summary": "Both England and Ghana need a win or draw to guarantee top-two qualification, or a strong best third-place.",
         "status": "Qualification Battle"
       },
       "PAN-CRO": {
-        "summary": "Croatia needs a win for top-two, a draw for third. Panama is eliminated from top-two, needing a win for a slim best-third.",
+        "summary": "Croatia needs a win for top-two, or a draw for strong third-place. Panama must win for a slim chance.",
         "status": "Elimination Risk"
       },
       "COL-COD": {
-        "summary": "Colombia is qualified, playing for group winner. Congo DR needs a win for a best-third chance; a draw or loss eliminates them.",
+        "summary": "Colombia is qualified, playing for group winner. Congo DR must win for a strong best third-place chance.",
         "status": "Elimination Risk"
       }
     }
