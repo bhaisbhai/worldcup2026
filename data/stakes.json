@@ -1,30 +1,30 @@
 {
-  "generatedAt": "2026-06-26T07:59:10.769Z",
+  "generatedAt": "2026-06-26T08:12:07.994Z",
   "byDate": {
     "2026-06-24": {
       "BIH-QAT": {
-        "summary": "Bosnia-Herzegovina is 3rd with 4 points, likely advancing. Qatar is eliminated in 4th place with 1 point.",
+        "summary": "Bosnia-Herzegovina finished third with four points, making them a strong best-third contender. Qatar is eliminated.",
         "status": "Elimination Risk"
       },
       "SUI-CAN": {
-        "summary": "Switzerland is 1st with 7 points, qualified. Canada is 2nd with 4 points, also qualified for knockout stage.",
+        "summary": "Switzerland and Canada both qualified for the knockout stage, finishing first and second respectively in the group.",
         "status": "Knockout Seeding"
       },
       "MAR-HAI": {
-        "summary": "Morocco needs a win or draw to secure automatic qualification. Haiti needs a massive win for any slim hope of advancing.",
-        "status": "Qualification Battle"
+        "summary": "Morocco qualified for the knockout stage. Haiti is eliminated, finishing last in the group with zero points.",
+        "status": "Elimination Risk"
       },
       "SCO-BRA": {
-        "summary": "Scotland needs a win for automatic qualification. Brazil needs a win or draw to secure their spot in the knockout stage.",
-        "status": "Qualification Battle"
+        "summary": "Brazil qualified for the knockout stage. Scotland finished third with three points, holding a slim best-third chance.",
+        "status": "Elimination Risk"
       },
       "CZE-MEX": {
-        "summary": "Mexico is already qualified and playing for group winner seeding. Czechia needs a win and help for a slim chance to advance.",
+        "summary": "Mexico qualified for the knockout stage. Czechia is eliminated, finishing last in the group with one point.",
         "status": "Elimination Risk"
       },
       "RSA-KOR": {
-        "summary": "South Korea needs a win to guarantee automatic qualification. South Africa needs a win and help for a slim chance to advance.",
-        "status": "Qualification Battle"
+        "summary": "South Africa qualified for the knockout stage. South Korea finished third with three points, holding a slim best-third chance.",
+        "status": "Elimination Risk"
       }
     },
     "2026-06-25": {
