@@ -251,7 +251,7 @@ ${allStandingsText}
 Return JSON with exactly these two fields:
 {
   "summary": "Results only: 40-50 words on key scores and goal scorers. No qualification info here.",
-  "progression": "Qualification/elimination only: list every team now MATHEMATICALLY GUARANTEED to have qualified or been ELIMINATED, with 100% certainty. If none, return empty string."
+  "progression": "As a result of TODAY's games only, which teams have NEWLY qualified for or been eliminated from the knockout stage? Write 1-2 sentences of news narrative (e.g. 'Brazil confirmed their place in the knockouts while Scotland were eliminated after...'). Base this ONLY on changes caused by today's results — do not list teams that were already qualified/eliminated before today. If no team changed status today, return empty string."
 }`;
 
     try {
