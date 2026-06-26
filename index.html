@@ -2389,11 +2389,10 @@ function openPlayerById(id){
 }
 
 async function fetchDailyRecaps(){
-  return; // disabled — data under review
   try {
     const r = await fetch('/api/recaps', { signal: AbortSignal.timeout(5000) });
     if(r.ok){
-      const today = new Date().toISOString().slice(0,10);
+      const today = new Date().toLocaleDateString('en-CA');
       const rows = await r.json();
       _recapRows = rows
         .filter(row => row.date && row.date <= today)
@@ -5186,7 +5185,6 @@ refreshKnockoutBracket();
 fetchPlayerClubs();
 fetchPlayerStats();
 fetchStakesData();
-renderYesterdayScores();
 fetchMatches();
 fetchGroupStandings();
 fetchKnockoutData();
