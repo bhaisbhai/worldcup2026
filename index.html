@@ -158,9 +158,9 @@ body{
   max-width:1240px;margin:0 auto;padding:0 22px;
   display:flex;align-items:center;justify-content:space-between;height:66px;gap:12px;
 }
-.wordmark{line-height:1.1}
-.wordmark-name{font-size:17px;font-weight:800;letter-spacing:-.4px;color:var(--text)}
-.wordmark-event{font-size:10px;font-weight:600;color:var(--accent);letter-spacing:.9px;text-transform:uppercase;margin-top:3px}
+.wordmark{line-height:1.1;flex-shrink:0}
+.wordmark-name{font-size:17px;font-weight:800;letter-spacing:-.4px;color:var(--text);white-space:nowrap}
+.wordmark-event{font-size:10px;font-weight:600;color:var(--accent);letter-spacing:.9px;text-transform:uppercase;margin-top:3px;white-space:nowrap}
 .sub{font-size:10px;color:var(--t3);margin-top:3px;letter-spacing:.2px}
 .hdr-r{display:flex;align-items:center;gap:14px}
 
@@ -180,6 +180,7 @@ body{
 .clock{font-family:var(--mono);font-size:13px;color:var(--t2);letter-spacing:.8px}
 .refresh-label{
   font-size:10px;color:var(--t2);letter-spacing:.3px;height:12px;
+  min-width:68px;text-align:right;
   transition:opacity .3s;cursor:pointer;-webkit-tap-highlight-color:transparent;
 }
 .refresh-label.fetching{color:var(--accent)}
