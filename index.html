@@ -4008,9 +4008,10 @@ function updateKnockoutFromGroups(){
       Number(b.gd??0)  - Number(a.gd??0) ||
       Number(b.gf??0)  - Number(a.gf??0)
     );
-    // Only fill slots where ESPN's official "advanced" stat === 1 (mathematically clinched)
-    if(teams[0]?.advancedOfficial) fillKOSlot('1'+g.id, teams[0]);
-    if(teams[1]?.advancedOfficial) fillKOSlot('2'+g.id, teams[1]);
+    // Fill if ESPN officially confirmed advancement OR all 3 group games are done
+    const groupComplete = teams.length >= 2 && teams.every(t => (t.p ?? 0) >= 3);
+    if(teams[0]?.advancedOfficial || groupComplete) fillKOSlot('1'+g.id, teams[0]);
+    if(teams[1]?.advancedOfficial || groupComplete) fillKOSlot('2'+g.id, teams[1]);
   });
 }
 
