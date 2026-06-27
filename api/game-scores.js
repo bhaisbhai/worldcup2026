@@ -40,7 +40,7 @@ module.exports = async function handler(req, res) {
 
   try {
     if (req.method === 'GET') {
-      const raw = await redis('ZREVRANGE', KEY, 0, 9, 'WITHSCORES');
+      const raw = await redis('ZREVRANGE', KEY, 0, 99, 'WITHSCORES');
       const scores = [];
       if (Array.isArray(raw)) {
         for (let i = 0; i < raw.length; i += 2) {
