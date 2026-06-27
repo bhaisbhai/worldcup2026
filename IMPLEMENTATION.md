@@ -35,7 +35,7 @@ User Browser
     ├─ Fetches /data/stakes.json (static, Vercel CDN)
     └─ Fetches /api/scoreboard → Vercel function → ESPN API (live)
 
-GitHub Actions (nightly, 4–8am UTC)
+GitHub Actions (nightly, 4–12am UTC window — see cron delay note)
     ├─ Calls ESPN API for yesterday's scores
     ├─ Calls Gemini AI for recap text
     ├─ Calls ESPN API for tomorrow's schedule + standings
@@ -162,7 +162,7 @@ Runs nightly via GitHub Actions. Uses Gemini 2.5 Flash.
 
 ### Self-gating logic
 
-The script is triggered hourly (4–8am UTC) but skips cheaply if:
+The script is triggered hourly (4–12am UTC) but skips cheaply if:
 - All of yesterday's games are not yet complete (`status.type.completed === false`)
 - Less than 1h 55m has passed since the last game kicked off (buffer for extra time + post-game data propagation)
 - Both recap AND stakes are already generated for the target dates
@@ -473,7 +473,7 @@ Vercel's `@vercel/node` runtime automatically parses JSON request bodies when `C
 
 ### `overnight-ai-sync.yml`
 
-Runs hourly 4–8am UTC. Generates recaps and stakes.
+Runs hourly 4–12am UTC. Generates recaps and stakes. Self-gating means extra cron slots are free — script exits immediately if both outputs already exist.
 
 ```yaml
 schedule:
@@ -482,7 +482,13 @@ schedule:
   - cron: '0 6 * * *'
   - cron: '0 7 * * *'
   - cron: '0 8 * * *'
+  - cron: '0 9 * * *'
+  - cron: '0 10 * * *'
+  - cron: '0 11 * * *'
+  - cron: '0 12 * * *'
 ```
+
+**CRITICAL — GitHub Actions cron delay**: GitHub's scheduled jobs routinely run 2-3 hours late under load. A 4-8 UTC window can be entirely missed. The 4-12 UTC window gives 9 attempts, absorbing worst-case delays. When the pipeline hasn't run by 9am UTC and games finished at 22:00 UTC the night before, manually trigger via `workflow_dispatch`.
 
 Steps:
 1. Run `npm run pipeline:generate` (with optional `--date=YYYY-MM-DD` and `--force` inputs)
@@ -673,6 +679,85 @@ const localDate = `${d.getFullYear()}-${...}`;
 - **Fix**: Stopped changing the label text entirely. The ↻ icon now spins via CSS animation (`@keyframes spin`) when `.fetching` class is applied, and the text stays "↻ Refresh" always. Zero layout shift.
 - **File**: `.refresh-label` CSS + `setRefreshLabel()` in `index.html`
 - **Note**: Attempted `white-space:nowrap` + `flex-shrink:0` first — this caused horizontal overflow and pushed the entire page right on mobile. The correct fix is never changing the text width.
+
+### GitHub Actions cron window too narrow — pipeline missing entirely
+- **Cause**: Original schedule only ran 4-8am UTC. GitHub Actions cron can be 2-3+ hours late. On days with heavy GitHub load the 4-8 UTC window was completely missed — zero runs.
+- **Symptom**: `data/recaps.json` not updated by 9am BST even though last night's games finished by 22:00 UTC. Users see "no recap today."
+- **Fix**: Extended cron window to 4-12am UTC (9 hourly slots). Self-gating (`recapDone && stakesDone`) makes extra slots free — the script exits in milliseconds if work is already done.
+- **Lesson for PL rebuild**: Whatever window you set, assume 3h delay. Final game ends at 22:00 UK time → processing needed by 01:00 UTC → cron window should start at 01:00 UTC and run until at least 07:00 UTC.
+
+### `data/recaps.json` missing `progression` field broke `alreadyAnnouncedText`
+- **Cause**: Early recap entries (e.g. June 24, June 25) were committed without a `progression` field, either because the pipeline didn't generate one or it wasn't in the original format. The pipeline builds `alreadyAnnouncedText` from all prior `progression` fields to prevent re-announcing already-known qualification statuses. Missing fields meant those teams were unknown to the AI and it re-announced them.
+- **Symptom**: Day N recap said "Switzerland qualified today" when Switzerland actually qualified on day N-2. Also caused the AI to omit newly qualified teams from the current day because it had no context to distinguish "new" from "old."
+- **Fix**: Manually added accurate `progression` fields to all historical entries, e.g. for June 24: `"progression": "Switzerland, Canada, Morocco, Brazil, Mexico, and South Africa all secured automatic knockout stage berths..."`. For entries that predate the `progression` field, the pipeline falls back to the full `summary` text — so verify summary text also doesn't silently omit team statuses.
+- **Verification step**: Before trusting the pipeline's output, cross-check each `progression` field in `recaps.json` against the actual match results for that date. The AI is right ~80% of the time but will miss edge cases like best-third qualification, head-to-head tiebreakers, or teams that qualified by another team's result.
+
+### AI recap incorrectly reported Cape Verde qualified on wrong date / missed Saudi Arabia eliminated
+- **Cause**: On June 26, Group J completed: Spain won (1st, already announced), Cape Verde drew 0-0 with Saudi Arabia (3pts → 2nd, newly qualified), Saudi Arabia (2pts, 4th on head-to-head GD → eliminated). The AI correctly identified Iraq and New Zealand as eliminated (Group I and K fourth-place) but missed the Group J resolution entirely.
+- **Root cause**: Group J standings tiebreaker (URU 2pts vs KSA 2pts on GD -1 vs -4) required arithmetic the AI sometimes skips. Also CPV qualifying via a draw while only getting 3 total points is counterintuitive when other groups needed 4pts for second place.
+- **Fix**: Manually updated June 26's `progression` field in `recaps.json` and pushed to `main`.
+- **Lesson**: Always manually verify the pipeline's `progression` output on final matchday of any group. Head-to-head tiebreakers and best-third calculations are the highest-risk cases.
+
+### ESPN player stats match cap too low (50 → 120)
+- **Cause**: `api/playerstats.js` had `matches.slice(0, 50)` but WC2026 has 96 matches in the group stage alone. Only the first 50 completed games were scored, so mid-tournament stats were incomplete.
+- **Symptom**: Top scorers leaderboard missing goals for players who scored in matches 51-96.
+- **Fix**: Changed cap to `matches.slice(0, 120)`.
+- **Lesson for PL rebuild**: Set the cap to at least `matchdays × games_per_matchday × 2` as a buffer. PL has ~380 matches per season; cap at 400+.
+
+### ESPN player stats wrong stat name keys
+- **Cause**: ESPN's match summary API returns player stats under different key names depending on the source section (`rosters[].roster[].stats[]` vs `boxscore.players[]`). Goal stat name can be `goals`, `totalGoals`, or `goalsScored`. Assist stat can be `goalAssists` or `assists`.
+- **Symptom**: Top scorers leaderboard showed 0 goals for players who scored. Depends on which ESPN internal endpoint served the data — varies by match/competition.
+- **Fix**: Rewrote `getStat()` to accept multiple name variants and return the first non-zero one:
+  ```javascript
+  const getStat = (...names) => {
+    for (const n of names) {
+      const s = stats.find(x => x.name === n);
+      const v = Math.round(parseFloat(s?.value ?? s?.displayValue)) || 0;
+      if (v) return v;
+    }
+    return 0;
+  };
+  const goals   = getStat('goals', 'totalGoals', 'goalsScored');
+  const assists = getStat('goalAssists', 'assists');
+  const yellow  = getStat('yellowCards', 'yellow');
+  const red     = getStat('redCards', 'red', 'redCard');
+  ```
+- **Lesson for PL rebuild**: Always probe multiple ESPN stat name variants. Log what keys actually come back during initial setup and hardcode all observed variants.
+
+---
+
+## Remote Environment / Deployment Gotchas
+
+These apply when Claude Code runs in the managed remote execution environment (GitHub Actions trigger, web app session, etc.) rather than on a local machine.
+
+### Git push to `main` is blocked — use `mcp__github__push_files`
+
+In the remote environment, `git push origin main` is rejected. All pushes to `main` must go through the `mcp__github__push_files` MCP tool. This tool takes file paths and their base64-encoded contents and creates a commit directly on the remote.
+
+```
+# Wrong in remote environment:
+git push origin main   ← rejected
+
+# Correct:
+mcp__github__push_files({ files: [...], message: "...", branch: "main" })
+```
+
+**Data-only changes** (like updating `data/recaps.json` and `data/stakes.json`) must be pushed this way. **Code changes** go to the feature branch (`claude/app-overview-l70sz7`) and then merge.
+
+**After any `mcp__github__push_files` to main**: run `git fetch origin main && git reset --hard origin/main` to sync the local clone. Otherwise the local `main` diverges from remote, and later operations fail with "local commits ahead of origin."
+
+### Stop hook: commit author email must be `noreply@anthropic.com`
+
+A stop hook at `~/.claude/stop-hook-git-check.sh` checks that all commits on `main` have committer email `noreply@anthropic.com`. Commits made by a local `git commit` with a different email fail this check.
+
+**Fix if it triggers**:
+```bash
+git config user.email noreply@anthropic.com
+git config user.name Claude
+git rebase --exec "git commit --amend --no-edit --reset-author" origin/main
+```
+
+**Preferred fix**: Don't create local commits on `main` at all in this environment. Push data changes directly via `mcp__github__push_files`. Use the feature branch for code changes; let the PR merge handle main.
 
 ---
 
