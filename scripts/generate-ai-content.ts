@@ -59,13 +59,22 @@ async function main() {
   const dateArg = args.find(a => a.startsWith('--date='))?.split('=')[1];
   const force   = args.includes('--force');
 
-  // Default: process yesterday (pipeline runs after midnight)
+  // Use Pacific Time (America/Los_Angeles) so late West Coast games are attributed to the correct date
+  const ptDate = (d = new Date()) =>
+    d.toLocaleDateString('en-CA', { timeZone: 'America/Los_Angeles' }); // en-CA gives YYYY-MM-DD
+
+  // Default: process yesterday in PT (pipeline runs after midnight PT)
   const targetDate = dateArg || (() => {
     const d = new Date(); d.setDate(d.getDate() - 1);
-    return d.toISOString().split('T')[0];
+    return ptDate(d);
   })();
 
-  console.log(`📅  Target date: ${targetDate}  force=${force}`);
+  // Calculate tomorrow in PT upfront — needed for both self-gating and stakes fetch
+  const tomorrowPT = new Date(`${targetDate}T12:00:00`);
+  tomorrowPT.setDate(tomorrowPT.getDate() + 1);
+  const tomorrowStr = ptDate(tomorrowPT);
+
+  console.log(`📅  Target date: ${targetDate}  tomorrow: ${tomorrowStr}  force=${force}`);
 
   // ── 1. Fetch yesterday's scoreboard ───────────────────────────────────────
   const ds = targetDate.replace(/-/g, '');
@@ -75,15 +84,32 @@ async function main() {
   const events: any[] = scoreboard.events || [];
 
   // ── 2. Self-gating ─────────────────────────────────────────────────────────
+  // Skip only when BOTH recap and tomorrow's stakes are already generated.
+  // If stakes are missing (e.g. games finished after a previous partial run),
+  // continue so the stakes are regenerated with up-to-date standings.
   if (!force) {
     const recapsPath = path.resolve(__dirname, '..', 'data', 'recaps.json');
+    const stakesPath = path.resolve(__dirname, '..', 'data', 'stakes.json');
+
+    let recapDone = false;
     if (fs.existsSync(recapsPath)) {
       const existing: any[] = JSON.parse(fs.readFileSync(recapsPath, 'utf-8'));
-      if (existing.some(r => r.date === targetDate && r.summary)) {
-        console.log(`✅  Recap for ${targetDate} already exists — skipping.`);
-        process.exit(0);
-      }
+      recapDone = existing.some(r => r.date === targetDate && r.summary);
     }
+
+    let stakesDone = false;
+    if (fs.existsSync(stakesPath)) {
+      const existing: any = JSON.parse(fs.readFileSync(stakesPath, 'utf-8'));
+      stakesDone = Object.keys(existing.byDate?.[tomorrowStr] || {}).length > 0;
+    }
+
+    if (recapDone && stakesDone) {
+      console.log(`✅  Recap for ${targetDate} and stakes for ${tomorrowStr} already exist — skipping.`);
+      process.exit(0);
+    }
+
+    if (recapDone) console.log(`ℹ️  Recap exists but stakes for ${tomorrowStr} missing — regenerating stakes.`);
+
     const incomplete = events.filter(e => !e.status?.type?.completed);
     if (incomplete.length > 0) {
       console.log(`⏳  ${incomplete.length} game(s) still in progress.`);
@@ -149,8 +175,6 @@ async function main() {
   }
 
   // ── 5. Fetch upcoming games (tomorrow) ─────────────────────────────────────
-  const tomorrow = new Date(new Date(`${targetDate}T12:00:00Z`).getTime() + 24 * 60 * 60 * 1000);
-  const tomorrowStr = tomorrow.toISOString().split('T')[0];
   const upcomingMatches: any[] = [];
 
   try {
@@ -190,22 +214,78 @@ async function main() {
     console.warn(`⚠️  Could not fetch tomorrow's schedule:`, e);
   }
 
-  // ── 6. AI Call 1 — Recap (50 words, facts only) ───────────────────────────
+  // ── 6. AI Call 1 — Recap ─────────────────────────────────────────────────
+  const qualRules = `World Cup 2026 format: 48 teams, 12 groups of 4.
+Qualification rules:
+- Top 2 from each group qualify automatically (guaranteed).
+- Best 8 third-place teams across all 12 groups also advance.
+- 3rd place with 4+ points: solid best-3rd contender.
+- 3rd place with 3 points: slim but real chance (has happened historically).
+- 3rd place with 0-1 points maximum possible: cannot realistically qualify.
+- 4th place: always eliminated, no best-3rd route.
+Mathematical certainty rules — BE CONSERVATIVE, only state these when 100% certain:
+- QUALIFIED: a team is guaranteed top-2 when no other team in the group can mathematically overtake them regardless of remaining results.
+- ELIMINATED: ONLY when BOTH are true: (1) the team mathematically cannot finish top-2, AND (2) their maximum possible points total is 0 or 1 (making best-3rd mathematically impossible). A team with any chance of reaching 3+ points is NOT eliminated. When in doubt, do NOT call a team eliminated.`;
+
+  // Build a list of teams already announced as qualified/eliminated in prior recaps
+  // so the AI doesn't re-announce them today.
+  // For entries with a dedicated `progression` field, use that.
+  // For older entries where qualification info is embedded in `summary`, use the full summary
+  // so the AI can extract what was already reported.
+  let alreadyAnnouncedText = '';
+  try {
+    const recapsPath = path.resolve(__dirname, '..', 'data', 'recaps.json');
+    if (fs.existsSync(recapsPath)) {
+      const allRecaps: any[] = JSON.parse(fs.readFileSync(recapsPath, 'utf-8'));
+      const priorLines = allRecaps
+        .filter(r => r.date < targetDate)
+        .map(r => {
+          const text = r.progression || r.progressionNews || r.summary || r.headline || '';
+          return text ? `[${r.date}] ${text}` : null;
+        })
+        .filter(Boolean) as string[];
+      if (priorLines.length > 0) {
+        alreadyAnnouncedText = `\nPrevious days' match reports (includes teams already reported as qualified/eliminated — DO NOT repeat any team already mentioned here):\n${priorLines.join('\n')}`;
+      }
+    }
+  } catch {}
+
   let recapSummary = '';
+  let recapProgression = '';
   if (recapLines.length > 0) {
     console.log('🤖  Generating recap…');
+
+    const allStandingsText = standingsGroups.map(g => {
+      const entries: any[] = g.standings?.entries || [];
+      return `${g.name || 'Group'}:\n${groupStandingsText(entries)}`;
+    }).join('\n\n');
+
     const recapPrompt = `You are a football journalist writing a brief match report.
 
-Write a factual 40-50 word summary of these World Cup results. Use ONLY the data provided below. Do not invent scorers, statistics, or match events that are not listed.
+Write a factual summary of these World Cup results. Use ONLY the data provided below. Do not invent scorers, statistics, or match events that are not listed.
 
+${qualRules}
+
+Match results:
 ${recapLines.join('\n')}
 
-Return JSON: {"summary": "your 40-50 word factual summary here"}`;
+Current group standings (after today's games):
+${allStandingsText}
+${alreadyAnnouncedText}
+
+CRITICAL RULE FOR PROGRESSION: Only report teams that appear in today's match results above. If a team did not play today, their status cannot have changed today — do not mention them regardless of their standings position.
+
+Return JSON with exactly these two fields:
+{
+  "summary": "Results only: 40-50 words on key scores and goal scorers. No qualification info here.",
+  "progression": "Among the teams that played TODAY (and only those teams), which ones newly secured qualification or were newly eliminated as a direct result of today's specific result? Write 1-2 sentences of news narrative. If none of today's teams changed status, return empty string."
+}`;
 
     try {
       const res = await callGemini(recapPrompt);
       recapSummary = res?.summary || '';
-      console.log(`✅  Recap generated (${recapSummary.split(' ').length} words)`);
+      recapProgression = res?.progression || '';
+      console.log(`✅  Recap generated (${recapSummary.split(' ').length} words, progression: ${recapProgression ? 'yes' : 'none'})`);
     } catch (e) {
       console.error('❌  Recap generation failed:', e);
     }
@@ -215,14 +295,6 @@ Return JSON: {"summary": "your 40-50 word factual summary here"}`;
   const stakesOut: Record<string, { summary: string; status: string }> = {};
   if (upcomingMatches.length > 0) {
     console.log('🤖  Generating stakes…');
-
-    const qualRules = `World Cup 2026 format: 48 teams, 12 groups of 4.
-Qualification rules:
-- Top 2 from each group qualify automatically (guaranteed).
-- Best 8 third-place teams across all 12 groups also advance.
-- 3rd place with 4+ points: realistic best-3rd contender.
-- 3rd place with 3 or fewer points: very unlikely to advance.
-- 4th place: always eliminated, no best-3rd route.`;
 
     const matchBlock = upcomingMatches.map((m, i) =>
       `Match ${i + 1}: ${m.homeTeam} vs ${m.awayTeam}  [key: ${m.matchKey}]\n${m.groupCtx}`
@@ -274,7 +346,8 @@ Status definitions:
     let recaps: any[] = [];
     try { recaps = JSON.parse(fs.readFileSync(recapsPath, 'utf-8')); } catch {}
     const idx   = recaps.findIndex(r => r.date === targetDate);
-    const entry = { date: targetDate, summary: recapSummary };
+    const entry: any = { date: targetDate, summary: recapSummary };
+    if (recapProgression) entry.progression = recapProgression;
     if (idx !== -1) recaps[idx] = entry; else recaps.push(entry);
     recaps.sort((a, b) => a.date.localeCompare(b.date));
     fs.writeFileSync(recapsPath, JSON.stringify(recaps, null, 2));

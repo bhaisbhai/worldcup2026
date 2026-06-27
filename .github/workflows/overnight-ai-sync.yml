@@ -2,9 +2,19 @@ name: Overnight AI Recap Generation
 
 on:
   schedule:
-    # 04:00 UTC primary run (covers games ending by ~03:00 UTC). 07:00 UTC backup.
+    # Runs hourly 04:00–12:00 UTC to catch games at any West Coast kick-off time.
+    # Self-gating in the script skips each run cheaply if games aren't done yet
+    # or if both recap + stakes are already generated.
+    # Window is extended to 12:00 UTC to absorb GitHub Actions cron delays (often 2-3h late).
     - cron: '0 4 * * *'
+    - cron: '0 5 * * *'
+    - cron: '0 6 * * *'
     - cron: '0 7 * * *'
+    - cron: '0 8 * * *'
+    - cron: '0 9 * * *'
+    - cron: '0 10 * * *'
+    - cron: '0 11 * * *'
+    - cron: '0 12 * * *'
   workflow_dispatch:
     inputs:
       date:
@@ -49,6 +59,7 @@ jobs:
           npm run pipeline:generate -- $ARGS
 
       - name: Commit and Push
+        id: commit
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
@@ -57,6 +68,18 @@ jobs:
             git commit -m "chore: daily AI recap sync [skip ci]"
             git pull --rebase origin main
             git push origin main
+            echo "committed=true" >> $GITHUB_OUTPUT
           else
             echo "No changes to commit."
+            echo "committed=false" >> $GITHUB_OUTPUT
           fi
+
+      - name: Send Recap Ready Notification
+        if: steps.commit.outputs.committed == 'true'
+        env:
+          VAPID_PUBLIC_KEY: ${{ secrets.VAPID_PUBLIC_KEY }}
+          VAPID_PRIVATE_KEY: ${{ secrets.VAPID_PRIVATE_KEY }}
+          KV_REST_API_URL: ${{ secrets.KV_REST_API_URL }}
+          KV_REST_API_TOKEN: ${{ secrets.KV_REST_API_TOKEN }}
+          APP_URL: ${{ secrets.APP_URL }}
+        run: npm run notify:recap

@@ -178,9 +178,11 @@ body{
 .clock{font-family:var(--mono);font-size:13px;color:var(--t2);letter-spacing:.8px}
 .refresh-label{
   font-size:10px;color:var(--t2);letter-spacing:.3px;height:12px;
-  transition:opacity .3s;cursor:pointer;-webkit-tap-highlight-color:transparent;
+  transition:color .3s;cursor:pointer;-webkit-tap-highlight-color:transparent;
 }
 .refresh-label.fetching{color:var(--accent)}
+.refresh-label.fetching .rl-icon{display:inline-block;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
 
 /* ── TABS ───────────────────────────────────── */
 .tabs-bar{
@@ -1115,11 +1117,13 @@ body{
 }
 .recap-card.open .recap-hl{white-space:normal;padding-bottom:0}
 .recap-dismiss{
-  background:none;border:none;color:rgba(255,255,255,.2);font-size:13px;
-  cursor:pointer;padding:2px 6px;flex-shrink:0;line-height:1;
-  -webkit-tap-highlight-color:transparent;margin-left:2px;
+  background:rgba(74,222,128,.12);border:1.5px solid rgba(74,222,128,.4);
+  color:#4ade80;font-size:13px;font-weight:700;
+  border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;padding:0;flex-shrink:0;line-height:1;
+  -webkit-tap-highlight-color:transparent;margin-left:6px;
 }
-.recap-dismiss:active{color:rgba(255,255,255,.6)}
+.recap-dismiss:active{background:rgba(74,222,128,.3);color:#fff}
 .recap-body{
   max-height:0;overflow:hidden;
   transition:max-height .3s cubic-bezier(.4,0,.2,1);
@@ -1190,7 +1194,7 @@ body{
       <div class="live-pill hidden" id="livePill"><div class="ldot"></div>LIVE</div>
       <div class="hdr-meta">
         <div class="clock" id="clock">--:--:--</div>
-        <div class="refresh-label" id="rfLabel" onclick="fetchMatches()" role="button" aria-label="Refresh scores">↻ Refresh</div>
+        <div class="refresh-label" id="rfLabel" onclick="fetchMatches()" role="button" aria-label="Refresh scores"><span class="rl-icon">↻</span> Refresh</div>
       </div>
       <button class="srch-btn" onclick="openSearch()" aria-label="Search players and teams">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg>
@@ -1947,8 +1951,9 @@ function goToDate(d){
 function patchCard(card, ev){
   const isLive = ev.state==='in';
   const isFt   = ev.state==='post';
+  const isUp   = ev.state==='pre';
 
-  card.className = `mc${isLive?' live':isFt?' ft':''} vis`;
+  card.className = `mc${isLive?' live':isFt?' ft':isUp?' up':''} vis`;
 
   const badge = card.querySelector('.mc-badge');
   if(badge){
@@ -2100,9 +2105,7 @@ function esc(str){ return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&l
 //  FETCH ESPN
 // ═══════════════════════════════════════════════════
 function setRefreshLabel(txt, accent=false){
-  const lbl = $('rfLabel');
-  lbl.textContent = txt;
-  lbl.classList.toggle('fetching', accent);
+  $('rfLabel').classList.toggle('fetching', accent);
 }
 
 function showSkeleton(keepNav=false){
@@ -2387,11 +2390,10 @@ function openPlayerById(id){
 }
 
 async function fetchDailyRecaps(){
-  return; // disabled — data under review
   try {
     const r = await fetch('/api/recaps', { signal: AbortSignal.timeout(5000) });
     if(r.ok){
-      const today = new Date().toISOString().slice(0,10);
+      const today = new Date().toLocaleDateString('en-CA');
       const rows = await r.json();
       _recapRows = rows
         .filter(row => row.date && row.date <= today)
@@ -2414,10 +2416,10 @@ function dismissRecap(date, e){
 
 function renderSummary(container, dispDate){
   if(!_recapRows.length) return;
-  const todayStr = new Date().toISOString().slice(0,10);
+  const todayStr = new Date().toLocaleDateString('en-CA');
   const yd = new Date(); yd.setDate(yd.getDate()-1);
-  const yesterdayStr = yd.toISOString().slice(0,10);
-  const ds = dispDate ? dispDate.toISOString().slice(0,10) : todayStr;
+  const yesterdayStr = yd.toLocaleDateString('en-CA');
+  const ds = dispDate ? dispDate.toLocaleDateString('en-CA') : todayStr;
   const isToday = ds === todayStr;
   // Only fall back to the most recent recap if it is from exactly yesterday — not older
   const row = _recapRows.find(r => r.date === ds) ||
@@ -2431,21 +2433,21 @@ function renderSummary(container, dispDate){
   const card = document.createElement('div');
   card.className = 'recap-card';
   card.onclick = function(e){ if(!e.target.closest('.recap-dismiss')) this.classList.toggle('open'); };
-  // New format: single `summary` field (50 words). Old format: headline + sections.
   const isNewFormat = !!row.summary;
+  const progressionText = row.progression || row.progressionNews || '';
+  const resultsSection = isYesterday ? `<div class="recap-results" id="recap-res-${row.date.replace(/-/g,'')}"><div class="recap-section-lbl">Results</div><div style="font-size:11px;color:rgba(255,255,255,.35);padding-top:4px">Loading…</div></div>` : '';
   card.innerHTML =
     `<div class="recap-hdr">
       <span class="recap-pill">${label}</span>
       <span class="recap-hl">${isNewFormat ? row.summary : (row.headline||'')}</span>
       <button class="recap-dismiss" onclick="dismissRecap('${row.date}',event)" title="Dismiss">✕</button>
     </div>
-    ${isNewFormat ? '' : `<div class="recap-body"><div class="recap-body-inner">
-      ${row.theDrama?`<div class="recap-section"><div class="recap-section-lbl">The Drama</div><div class="recap-section-txt">${row.theDrama}</div></div>`:''}
-      ${row.mustWatchHighlights?`<div class="recap-section"><div class="recap-section-lbl">Watch / Skip</div><div class="recap-section-txt">${row.mustWatchHighlights}</div></div>`:''}
-      ${row.progressionNews?`<div class="recap-section"><div class="recap-section-lbl">Progression</div><div class="recap-section-txt">${row.progressionNews}</div></div>`:''}
-      ${isYesterday?`<div class="recap-results" id="recap-res-${row.date.replace(/-/g,'')}"><div class="recap-section-lbl">Results</div><div style="font-size:11px;color:rgba(255,255,255,.35);padding-top:4px">Loading…</div></div>`:''}
-    </div></div>`}
-    ${isNewFormat && isYesterday ? `<div class="recap-body open"><div class="recap-body-inner"><div class="recap-results" id="recap-res-${row.date.replace(/-/g,'')}"><div class="recap-section-lbl">Results</div><div style="font-size:11px;color:rgba(255,255,255,.35);padding-top:4px">Loading…</div></div></div></div>` : ''}`;
+    <div class="recap-body"><div class="recap-body-inner">
+      ${!isNewFormat && row.theDrama ? `<div class="recap-section"><div class="recap-section-lbl">The Drama</div><div class="recap-section-txt">${row.theDrama}</div></div>` : ''}
+      ${!isNewFormat && row.mustWatchHighlights ? `<div class="recap-section"><div class="recap-section-lbl">Watch / Skip</div><div class="recap-section-txt">${row.mustWatchHighlights}</div></div>` : ''}
+      ${progressionText ? `<div class="recap-section"><div class="recap-section-lbl">Progression</div><div class="recap-section-txt">${progressionText}</div></div>` : ''}
+      ${resultsSection}
+    </div></div>`;
   const nav = container.querySelector('#day-nav');
   if(nav && nav.nextSibling) container.insertBefore(card, nav.nextSibling);
   else container.append(card);
@@ -2507,12 +2509,11 @@ async function fetchStakesData(){
 
 function buildStakesHtml(ev){
   const d = ev.date instanceof Date ? ev.date : new Date(ev.date);
-  const dateStr = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  const dateStr = d.toLocaleDateString('en-CA', { timeZone: 'America/Los_Angeles' });
   const matchKey = `${ev.home.abbr}-${ev.away.abbr}`;
   const s = stakesCache[`${dateStr}|${matchKey}`];
   if(!s || !s.summary) return '';
-  const cls = {'Elimination Risk':'elim','Qualification Battle':'qual','Knockout Seeding':'seed'}[s.status] || 'qual';
-  return `<div class="mc-stakes"><span class="mc-stakes-pill ${cls}">${esc(s.status||'Context')}</span><span class="mc-stakes-txt">${esc(s.summary)}</span></div>`;
+  return `<div class="mc-stakes"><span class="mc-stakes-txt">${esc(s.summary)}</span></div>`;
 }
 
 async function renderYesterdayScores(){
@@ -2520,7 +2521,7 @@ async function renderYesterdayScores(){
   if(new Date().getHours() >= 23) return;
 
   const yd = new Date(); yd.setDate(yd.getDate()-1);
-  const yesterdayStr = yd.toISOString().slice(0,10);
+  const yesterdayStr = yd.toLocaleDateString('en-CA');
   const dismissKey = 'yscores_dismissed';
   if(localStorage.getItem(dismissKey) === yesterdayStr) return;
 
@@ -5186,7 +5187,7 @@ refreshKnockoutBracket();
 fetchPlayerClubs();
 fetchPlayerStats();
 fetchStakesData();
-renderYesterdayScores();
+fetchDailyRecaps();
 fetchMatches();
 fetchGroupStandings();
 fetchKnockoutData();

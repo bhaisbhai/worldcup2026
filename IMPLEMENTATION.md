@@ -71,53 +71,26 @@ GitHub Actions (8am UTC daily)
 /
 ├── index.html              ← Entire frontend app (~270KB, single file)
 ├── sw.js                   ← Service worker (push notifications only)
-├── keepy-uppy.js           ← Browser mini-game (keepy-uppy) served as static
 ├── vercel.json             ← Vercel build + routing config
-├── package.json            ← "type": "module" (ESM) — scripts use ESM import/export
+├── package.json
 ├── data/
 │   ├── recaps.json         ← AI-generated match recaps (committed by pipeline)
-│   ├── stakes.json         ← AI-generated pre-match stakes (committed by pipeline)
-│   ├── player-stats.json   ← Tournament player stats per athlete ID (run via player-stats-sync.yml)
-│   ├── player-clubs.json   ← Player ID → club lookup via Wikidata (run via player-clubs-sync.yml)
-│   ├── player-verdicts.json← AI pundit roasts/verdicts per athlete ID
-│   ├── daily-summary.json  ← Older format AI daily summaries
-│   ├── days_ai.csv         ← Legacy CSV (old pipeline architecture, now superseded)
-│   ├── matches_ai.csv      ← Legacy CSV
-│   └── teams_ai.csv        ← Legacy CSV
+│   └── stakes.json         ← AI-generated pre-match stakes (committed by pipeline)
 ├── api/
 │   ├── package.json        ← CRITICAL: {"type":"commonjs"} — all api/*.js must use CommonJS
 │   ├── _proxy.js           ← Reusable ESPN proxy with cache headers
 │   ├── subscribe.js        ← Web push subscription storage (POST/DELETE)
-│   ├── recaps.js           ← Serves data/recaps.json (bundled at Vercel deploy time)
+│   ├── recaps.js           ← Serves data/recaps.json
 │   ├── scoreboard.js       ← Proxies ESPN scoreboard
 │   ├── standings.js        ← Proxies ESPN standings
-│   ├── playerstats.js      ← Live player stat leaders (reads ESPN match summaries on-demand)
-│   ├── leaders.js          ← Proxies ESPN leaders endpoint
-│   ├── summary.js          ← Proxies ESPN match summary endpoint
-│   ├── statistics.js       ← ESPN v4 statistics endpoint with fallback URL
-│   ├── highlights.js       ← YouTube API proxy for match highlights
-│   ├── game-scores.js      ← Redis sorted-set leaderboard for keepy-uppy mini-game
-│   ├── health.js           ← Simple health check {ok:true, ts:...}
-│   ├── debug.js            ← ESPN response shape inspector (dev tool, not for production)
-│   └── test-push.js        ← Debug push sender (SHOULD BE DELETED — publicly accessible)
+│   └── [others]            ← Other ESPN proxies
 ├── scripts/
-│   ├── generate-ai-content.ts       ← Main nightly pipeline (recaps + stakes)
-│   ├── send-notifications.ts        ← Push notification sender (digest + recap)
-│   ├── generate-player-stats.ts     ← Aggregates ESPN match summaries → data/player-stats.json
-│   ├── generate-player-clubs.ts     ← ESPN rosters + Wikidata SPARQL → data/player-clubs.json
-│   ├── generate-retrospective-days.ts   ← Historical backfill for recaps
-│   ├── generate-offline-verdicts.ts     ← Template-based offline player verdict generator
-│   ├── backfill-master.ts               ← General backfill utility
-│   ├── generate-retrospective-matches.ts
-│   ├── generate-retrospective-teams.ts
-│   └── update-player-clubs.cjs          ← CJS update utility for player clubs
+│   ├── generate-ai-content.ts    ← Main nightly pipeline
+│   ├── send-notifications.ts     ← Push notification sender
+│   └── [other scripts]
 └── .github/workflows/
-    ├── overnight-ai-sync.yml          ← Nightly recap + stakes generation (4–12am UTC)
-    ├── morning-digest.yml             ← Daily 8am fixture notification
-    ├── player-stats-sync.yml          ← Manual: aggregates player tournament stats
-    ├── player-clubs-sync.yml          ← Manual: refreshes player→club Wikidata lookup
-    ├── backfill-recaps.yml            ← Manual: sequential multi-date recap backfill
-    └── send-recap-notification.yml    ← Manual: sends recap push notification standalone
+    ├── overnight-ai-sync.yml     ← Nightly recap + stakes generation
+    └── morning-digest.yml        ← Daily 8am fixture notification
 ```
 
 ---
@@ -138,22 +111,6 @@ GitHub Actions (8am UTC daily)
 4. Commits results to `data/recaps.json` and `data/stakes.json`
 5. Frontend fetches these as static JSON files at startup
 
-### Player stats (tournament-wide)
-1. Manually triggered via `player-stats-sync.yml` (or run locally with `npm run pipeline:stats`)
-2. `scripts/generate-player-stats.ts` fetches every completed match scoreboard from ESPN
-3. For each match, fetches the match summary and parses `rosters[].roster[].stats[]`
-4. Aggregates per athlete ID: goals, assists, shots, saves, yellow/red cards, minutes played
-5. Commits result to `data/player-stats.json` (keyed by ESPN athlete ID)
-6. Frontend uses this for the player profile modal
-
-### Player clubs lookup
-1. Manually triggered via `player-clubs-sync.yml`
-2. `scripts/generate-player-clubs.ts` fetches all 48 WC2026 team rosters from ESPN
-3. Runs Wikidata SPARQL query in batches of 80 to find each player's current club
-4. Falls back to individual Wikidata entity search for any player SPARQL missed
-5. Commits result to `data/player-clubs.json` (keyed by ESPN athlete ID)
-6. Frontend uses this to show "Club: Manchester City" in player profiles
-
 ### Push notifications
 1. User visits site → banner appears after 8 seconds → clicks "Notify me"
 2. Browser registers `/sw.js` as service worker
@@ -173,10 +130,7 @@ All endpoints are public (no auth). Base domain: `https://site.api.espn.com`
 | Scoreboard | `/apis/site/v2/sports/soccer/fifa.world/scoreboard?dates=YYYYMMDD` |
 | Standings | `/apis/v2/sports/soccer/fifa.world/standings` |
 | Match summary | `/apis/site/v2/sports/soccer/fifa.world/summary?event={id}` |
-| Leaders | `/apis/site/v2/sports/soccer/fifa.world/leaders` |
-| Statistics | `/apis/v4/sports/soccer/fifa.world/statistics?season=2026` (falls back to no season param) |
-| Team roster | `/apis/site/v2/sports/soccer/fifa.world/teams/{id}/roster` |
-| All teams | `/apis/site/v2/sports/soccer/fifa.world/teams?limit=100` |
+| Player stats | `/apis/site/v2/sports/soccer/fifa.world/athletes/{id}` |
 
 **Date format**: `YYYYMMDD` (no dashes) e.g. `20260626`
 
@@ -468,17 +422,6 @@ Old format (pre-June 2026 backfill): `{ headline, theDrama, mustWatchHighlights,
 
 ## API Endpoints (Vercel Serverless)
 
-### ESM vs CommonJS split (CRITICAL)
-
-The root `package.json` has `"type": "module"` — all scripts in `scripts/` use **ESM** (`import`/`export`). But `api/package.json` has `"type": "commonjs"` — all serverless functions in `api/` use **CommonJS** (`require`/`module.exports`). These two halves of the codebase use different module systems.
-
-**ESM gotcha in scripts**: `__dirname` and `__filename` don't exist in ESM. Must use:
-```typescript
-import { fileURLToPath } from 'url';
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-```
-This was the root cause of all `ReferenceError: __dirname is not defined` crashes on GitHub Actions (originally written on Mac where this may have been masked).
-
 ### CRITICAL: CommonJS Requirement
 
 `api/package.json` contains `{ "type": "commonjs" }`. This means **all files in `api/` must use CommonJS syntax**. ES module syntax (`import`/`export`) will cause a silent crash with `FUNCTION_INVOCATION_FAILED`.
@@ -494,32 +437,6 @@ export default async function handler(req, res) { ... }
 ```
 
 **Workaround**: For packages that need to be imported (like `@upstash/redis`), use the package's HTTP REST API directly with `fetch` instead. Node 18+ (Vercel default) has `fetch` built-in — no import needed.
-
-### `vercel.json` key details
-
-```json
-{
-  "builds": [
-    { "src": "api/recaps.js", "use": "@vercel/node", "config": { "includeFiles": ["data/**"] } },
-    { "src": "api/**/*.js", "use": "@vercel/node" },
-    { "src": "data/**", "use": "@vercel/static" },
-    { "src": "sw.js", "use": "@vercel/static" }
-  ],
-  "routes": [
-    { "src": "/api/(.*)", "dest": "/api/$1.js" },
-    { "handle": "filesystem" },
-    { "src": "/(.*)", "dest": "/index.html" }
-  ]
-}
-```
-
-**`includeFiles: ["data/**"]` on `api/recaps.js`**: `api/recaps.js` uses `require('../data/recaps.json')` — which resolves the path at **build time**. Without `includeFiles`, Vercel doesn't bundle the data files with the function and it crashes. This config ensures `data/` is available to the function at runtime.
-
-**Static `data/**`**: Data files are also served directly as static assets at `/data/recaps.json` etc. The frontend can fetch either `/api/recaps` (function) or `/data/recaps.json` (static) — both serve the same data. The static route is preferred for performance (CDN-cached).
-
-**Catch-all SPA route**: `{ "src": "/(.*)", "dest": "/index.html" }` — all paths that don't match a file or API route fall through to `index.html`. This enables client-side routing.
-
-**`api/recaps.js` deploys at build time**: `const recaps = require('../data/recaps.json')` — the JSON is bundled into the function at deploy time. Changes to `data/recaps.json` require a new Vercel deploy before they're reflected via `/api/recaps`. The static `/data/recaps.json` URL updates immediately when the file is committed.
 
 ### `api/_proxy.js`
 
@@ -549,129 +466,6 @@ Stores/removes Web Push subscriptions in Upstash Redis.
 ### Request body parsing
 
 Vercel's `@vercel/node` runtime automatically parses JSON request bodies when `Content-Type: application/json`. No `body-parser` needed.
-
-### `api/highlights.js` — YouTube proxy
-
-Proxies YouTube Data API v3. Requires `YOUTUBE_API_KEY` environment variable.
-
-```javascript
-// Two modes:
-// mode=catalog → fetches BBC Sport uploads playlist (hard-coded playlist ID)
-// q=<query>    → YouTube search for match highlights
-GET /api/highlights?mode=catalog
-GET /api/highlights?q=France+vs+Norway+highlights
-```
-
-Cache: `public, s-maxage=3600, stale-while-revalidate=300` (1h CDN cache — YouTube quota is limited).
-
-**`YOUTUBE_API_KEY`** must be in Vercel environment variables. Not needed in GitHub secrets (pipeline doesn't use it).
-
-### `api/game-scores.js` — Keepy-uppy leaderboard
-
-Redis sorted set (`ZADD kuking_leaderboard GT score member`) stores the global leaderboard for the `keepy-uppy.js` browser mini-game.
-
-```javascript
-GET /api/game-scores  → top 10 scores
-POST /api/game-scores { name, score, combo, perfects } → submit score
-```
-
-- Uses `ZADD KEY GT score member` — only updates if new score is higher than existing
-- `ZREMRANGEBYRANK KEY 0 -501` keeps only top 500 entries
-- Uses Upstash Redis pipeline endpoint for atomic multi-command execution
-- Accepts both `UPSTASH_REDIS_REST_URL`/`UPSTASH_REDIS_REST_TOKEN` and `KV_REST_API_URL`/`KV_REST_API_TOKEN` env var names (same Redis instance, just two naming conventions)
-
-### `api/debug.js` — ESPN response shape inspector
-
-Dev tool that hits the ESPN standings and statistics endpoints and returns metadata about the response shapes (top-level keys, first category name, first entry structure). Used to verify what ESPN is actually returning without reading raw JSON. **Not for production use** — slow and uncached.
-
-### `api/test-push.js` — SHOULD BE DELETED
-
-A debug endpoint that sends a test push notification. It's publicly accessible at `/api/test-push`. Anyone who finds this URL can send push notifications to all subscribers. **Delete this file.**
-
----
-
-## Player Stats Systems
-
-There are two separate player stats systems in this codebase. They serve different purposes.
-
-### System 1: `api/playerstats.js` (live, on-demand)
-
-Fetches data from ESPN match summaries on every API call. Returns top 10 leaders per category (goals, assists, yellow cards, red cards, clean sheets). Used for the "Top Scorers" leaderboard tab.
-
-- **Reads from**: ESPN `summary?event={id}` endpoints live on each request
-- **Writes to**: nothing (pure proxy aggregator)
-- **Cap**: `matches.slice(0, 120)` — covers up to 120 completed matches
-- **Stat name variants**: handles `goals`/`totalGoals`/`goalsScored`, `goalAssists`/`assists`, etc.
-- **Cache**: `s-maxage=300, stale-while-revalidate=600` (5 min CDN cache)
-
-### System 2: `scripts/generate-player-stats.ts` + `data/player-stats.json` (aggregated, static)
-
-Runs manually via `player-stats-sync.yml`. Fetches all match summaries for the entire tournament and aggregates full stats per player by ESPN athlete ID. Used for the player profile modal.
-
-- **Reads from**: ESPN scoreboard (to get match IDs) + ESPN summary (to get roster + stats)
-- **Writes to**: `data/player-stats.json` — keyed by ESPN athlete ID
-- **Data per player**: `appearances`, `goals`, `assists`, `shots`, `shotsOnTarget`, `saves`, `yellowCards`, `redCards`, `minutesPlayed`, `headshot`
-- **Run frequency**: manually as needed (not automated daily)
-- **Stat name used**: `totalGoals`, `goalAssists`, `totalShots`, `shotsOnTarget`, `saves`, `yellowCards`, `redCards`, `minutesPlayed`
-
-**INCONSISTENCY WARNING**: `generate-player-stats.ts` uses `totalGoals` as the stat name but doesn't handle multiple variants the way `api/playerstats.js` does. If ESPN changes stat names mid-tournament, `player-stats.json` could silently accumulate 0s. Consider adding multi-variant `getStat()` to this script too.
-
----
-
-## Wikidata Integration (Player Clubs)
-
-`scripts/generate-player-clubs.ts` fetches players' current club teams from Wikidata, since ESPN rosters don't include club affiliation.
-
-### Flow
-
-1. Fetch all 48 WC2026 teams from ESPN `teams?limit=100`
-2. For each team, fetch its roster from ESPN `teams/{id}/roster`
-3. Collect all player names that don't have a club yet
-4. **Pass 1 — Batch SPARQL**: query Wikidata in batches of 80 names using SPARQL
-5. **Pass 2 — Fallback search**: for any player SPARQL missed, search Wikidata entity API individually
-6. Write results to `data/player-clubs.json` keyed by ESPN athlete ID
-
-### Wikidata SPARQL query
-
-```sparql
-SELECT DISTINCT ?searchName ?clubLabel WHERE {
-  VALUES ?searchName { "Kylian Mbappé"@en ... }
-  ?player rdfs:label ?playerLabel .
-  FILTER(LCASE(STR(?playerLabel)) = LCASE(STR(?searchName)) && LANG(?playerLabel) = "en")
-  ?player wdt:P106 wd:Q937857 .   ← occupation = football player
-  ?player p:P54 ?stmt .            ← member of sports team
-  ?stmt ps:P54 ?club .
-  FILTER NOT EXISTS { ?stmt pq:P582 [] }   ← no end date (still current)
-  FILTER NOT EXISTS { ?club wdt:P31 wd:Q17156793 }  ← not a national team
-  ?club rdfs:label ?clubLabel FILTER(LANG(?clubLabel) = "en")
-}
-```
-
-### Rate limits
-- Wikidata requests `>= 1 second` between SPARQL requests (enforced with `sleep(1500)` between batches)
-- `sleep(300)` between individual fallback lookups
-- SPARQL endpoint: `https://query.wikidata.org/sparql`
-
-### data/player-clubs.json format
-```json
-{
-  "12345": { "name": "Kylian Mbappé", "club": "Real Madrid", "teamName": "France", "teamAbbr": "FRA", "position": "F", "jersey": "10" }
-}
-```
-
-### PL rebuild note
-Wikidata SPARQL will work equally well for Premier League players. The key Wikidata properties (`P54` = member of sports team, `P582` = end time, `P31`/`Q17156793` = national team type) apply globally.
-
----
-
-## Mini-game: Keepy-Uppy
-
-`keepy-uppy.js` is a standalone browser game served as a static file. It posts high scores to `/api/game-scores` which stores them in a Redis sorted set.
-
-- Global leaderboard: top 500 scores, only improves (ZADD GT)
-- Leaderboard data per entry: `name`, `score`, `combo`, `perfects`, `date` (stored as JSON member in sorted set)
-- Frontend fetches top 10 via `GET /api/game-scores`
-- No authentication on score submission — scores are unverified
 
 ---
 
@@ -713,35 +507,7 @@ schedule:
   - cron: '0 7 * * *'
 ```
 
-Runs `npm run notify:digest` which fetches today's ESPN fixtures and sends to all Redis subscribers. Kick-off times are formatted in **BST (Europe/London)** for the UK audience, even though the pipeline uses PT for date attribution.
-
-### `player-stats-sync.yml`
-
-Manual only (`workflow_dispatch`). No schedule. Run when player stats need refreshing.
-
-Steps: checkout → npm ci → `npm run pipeline:stats` → `git add data/player-stats.json` → commit + push.
-
-### `player-clubs-sync.yml`
-
-Manual only (`workflow_dispatch`). Run when player club data needs refreshing (e.g. mid-tournament transfers, new roster additions).
-
-Steps: checkout → npm ci → `npm run pipeline:clubs` → `git add data/player-clubs.json` → commit + push.
-
-### `backfill-recaps.yml`
-
-Manual only (`workflow_dispatch`). Runs the pipeline sequentially for a hard-coded list of historical dates. Critical design: all dates run in **one job**, not parallel jobs — prevents merge conflicts on `data/stakes.json`.
-
-```bash
-for DATE in 2026-06-12 2026-06-13 ... 2026-06-22; do
-  npm run pipeline:generate -- --date=$DATE --force
-done
-```
-
-Then a single `git add data/recaps.json data/stakes.json && git commit` at the end. Uses `git pull --rebase origin main` before push to absorb any concurrent changes.
-
-### `send-recap-notification.yml`
-
-Manual only (`workflow_dispatch`). Sends the "recap ready" push notification without re-running the full pipeline. Use this when the nightly pipeline ran correctly but the notification step was missed (e.g. due to a `--force` flag issue or the pipeline being triggered at an unusual time).
+Runs `npm run notify:digest` which fetches today's ESPN fixtures and sends to all Redis subscribers.
 
 ---
 
@@ -755,11 +521,8 @@ Manual only (`workflow_dispatch`). Sends the "recap ready" push notification wit
 | `KV_REST_API_URL` | GitHub secret + Vercel env | Upstash Redis URL |
 | `KV_REST_API_TOKEN` | GitHub secret + Vercel env | Upstash Redis auth token |
 | `APP_URL` | GitHub secret + Vercel env | Production URL (e.g. `https://game-buddy.co.uk`) |
-| `YOUTUBE_API_KEY` | Vercel env only | YouTube Data API v3 key (for `api/highlights.js`) |
 
 **CRITICAL**: GitHub secrets and Vercel environment variables are completely separate. Setting one does NOT set the other. Both must be configured independently.
-
-**`YOUTUBE_API_KEY` notes**: YouTube Data API v3 has a daily quota of 10,000 units. `playlistItems.list` costs 1 unit; `search.list` costs 100 units. Cache the highlights response for 1+ hours to stay within quota (already done: `s-maxage=3600`). The API key must be created in Google Cloud Console and restricted to the `youtube.data.googleapis.com` API.
 
 ---
 
@@ -917,24 +680,6 @@ const localDate = `${d.getFullYear()}-${...}`;
 - **File**: `.refresh-label` CSS + `setRefreshLabel()` in `index.html`
 - **Note**: Attempted `white-space:nowrap` + `flex-shrink:0` first — this caused horizontal overflow and pushed the entire page right on mobile. The correct fix is never changing the text width.
 
-### Original pipeline used hardcoded Mac paths — broke on GitHub Actions
-- **Cause**: `generate-ai-content.ts` and `generate-retrospective-days.ts` were written locally on Mac with absolute paths like `/Users/rajarjan/Documents/game buddy/public/assets/ai/ai_master.json`. GitHub Actions runner (Ubuntu) doesn't have these paths.
-- **Symptom**: Pipeline crash on first GitHub Actions run with `ENOENT: no such file or directory`.
-- **Fix**: Replaced all absolute paths with `path.resolve(__dirname, '..', ...)` using the ESM-compatible `__dirname = path.dirname(fileURLToPath(import.meta.url))` pattern.
-- **Also fixed same session**: `gemini-3.5-flash` (doesn't exist) → `gemini-2.0-flash`, then later `gemini-2.5-flash`. The original model name was a typo from development.
-
-### Old pipeline architecture: ai_master.json + CSV → data/recaps.json
-- **Original design**: The AI pipeline wrote to `public/assets/ai/ai_master.json` (master database) and `public/assets/ai/csv/days_ai.csv`. The frontend read from there.
-- **Problem**: The recap card UI fetches from `/api/recaps` (backed by `data/recaps.json`), which was never updated by the pipeline. AI output never reached the UI.
-- **Fix**: Added code to `generate-ai-content.ts` to also write to `data/recaps.json` after every successful AI call. This is now the canonical output format.
-- **Current state**: The legacy CSV and master JSON files still exist (`data/days_ai.csv`, `data/matches_ai.csv`, `data/teams_ai.csv`) but are no longer the primary data source. The pipeline writes exclusively to `data/recaps.json` and `data/stakes.json`.
-- **PL rebuild**: Start fresh with just `recaps.json` + `stakes.json`. Don't carry over the old CSV format.
-
-### `send-notifications.ts` uses `@upstash/redis` package but `api/subscribe.js` uses direct fetch
-- **Cause**: Two different Redis access patterns in the same codebase. `scripts/send-notifications.ts` imports `@upstash/redis` package. `api/subscribe.js` uses direct `fetch()` to the Upstash REST API (to avoid the CommonJS ESM import issue).
-- **Both work** — Upstash Redis supports both patterns. The inconsistency is cosmetic but worth noting.
-- **PL rebuild**: Pick one pattern and stick with it. Direct `fetch()` is safer in `api/` (avoids CommonJS/ESM issues). `@upstash/redis` is cleaner in TypeScript scripts.
-
 ### GitHub Actions cron window too narrow — pipeline missing entirely
 - **Cause**: Original schedule only ran 4-8am UTC. GitHub Actions cron can be 2-3+ hours late. On days with heavy GitHub load the 4-8 UTC window was completely missed — zero runs.
 - **Symptom**: `data/recaps.json` not updated by 9am BST even though last night's games finished by 22:00 UTC. Users see "no recap today."
@@ -1050,11 +795,7 @@ If you deploy a new VAPID key pair (as you will for a new app), all World Cup su
 - [ ] Generate new VAPID key pair: `npx web-push generate-vapid-keys`
 - [ ] New Upstash Redis database (free tier is fine)
 - [ ] GitHub secrets: `GEMINI_API_KEY`, `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `KV_REST_API_URL`, `KV_REST_API_TOKEN`, `APP_URL`
-- [ ] Vercel env vars: `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `KV_REST_API_URL`, `KV_REST_API_TOKEN`, `APP_URL`, `YOUTUBE_API_KEY`
+- [ ] Vercel env vars: `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `KV_REST_API_URL`, `KV_REST_API_TOKEN`, `APP_URL`
 - [ ] `sw.js` at domain root
-- [ ] `vercel.json` lists `sw.js` as static build, `data/**` as static, and `api/recaps.js` with `includeFiles: ["data/**"]`
+- [ ] `vercel.json` lists `sw.js` as static build
 - [ ] `api/package.json` with `{"type": "commonjs"}`
-- [ ] Root `package.json` with `"type": "module"` (ESM for scripts)
-- [ ] All scripts use `fileURLToPath(import.meta.url)` for `__dirname` — no absolute Mac paths
-- [ ] Delete `api/test-push.js` before going live — it's a publicly accessible debug endpoint
-- [ ] `data/player-clubs.json` needs to be generated before launch: run `npm run pipeline:clubs` locally

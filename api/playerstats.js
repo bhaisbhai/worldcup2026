@@ -40,7 +40,7 @@ module.exports = async function (req, res) {
       } catch (e) {}
     }));
 
-    // ── 2. Fetch all summaries in parallel (cap at 50) ──
+    // ── 2. Fetch all summaries in parallel (cap at 120) ──
     const playerMap = {};
 
     function player(name, teamName, teamAbbr, athleteId = '') {
