@@ -47,6 +47,8 @@ window.initKeepyUppy = function() {
   let lbLoading = false;
   let lbError = false;
   let lbFetchedAt = 0;
+  let lbScrollY = 0;
+  let lbDragStart = null;
   let _pendingScore = null;
   let lastSubmittedScore = null;
 
@@ -1300,7 +1302,7 @@ window.initKeepyUppy = function() {
       pixelText(`BEST: ${data.best}`, W/2-textWidth(`BEST: ${data.best}`,12)/2, 267, 12, '#ffd43b');
     addButton('PLAY', W/2-80, 290, 160, 48, () => { state = 'charselect'; });
     addButton('HOW TO PLAY', W/2-80, 350, 160, 48, () => { state = 'instructions'; });
-    addButton('LEADERBOARD', W/2-80, 410, 160, 40, () => { state = 'leaderboard'; fetchLeaderboard(); });
+    addButton('LEADERBOARD', W/2-80, 410, 160, 40, () => { state = 'leaderboard'; lbScrollY = 0; fetchLeaderboard(); });
     pixelText(`COINS: ${data.coins}`, W/2-textWidth(`COINS: ${data.coins}`,10)/2, 468, 10, '#41f8ff');
   }
 
@@ -1330,7 +1332,7 @@ window.initKeepyUppy = function() {
     div.style.cssText = 'position:fixed;inset:0;z-index:600;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.65)';
     div.innerHTML = `
       <div style="background:#050716;border:2px solid #ffd43b;border-radius:12px;padding:28px 24px;text-align:center;max-width:300px;width:90%;font-family:ui-monospace,Menlo,Consolas,monospace">
-        <div style="color:#ffd43b;font-size:20px;font-weight:900;margin-bottom:4px">&#127942; TOP 10!</div>
+        <div style="color:#ffd43b;font-size:20px;font-weight:900;margin-bottom:4px">&#127942; TOP 100!</div>
         <div style="color:#41f8ff;font-size:12px;font-weight:700;margin-bottom:4px">SCORE: ${sc}</div>
         <div style="color:#94a3b8;font-size:11px;margin-bottom:18px">Enter your name for the leaderboard</div>
         <input id="_gameNameInput" type="text" maxlength="12" placeholder="YOUR NAME" autocomplete="off" autocorrect="off" spellcheck="false"
@@ -1393,7 +1395,7 @@ window.initKeepyUppy = function() {
       .then(d => {
         if (!_pendingScore) return; // user already navigated away, handled by _flushPendingScore
         const scores = d.scores || [];
-        const qualifies = scores.length < 10 || sc > (scores[9]?.score ?? 0);
+        const qualifies = scores.length < 100 || sc > (scores[99]?.score ?? 0);
         if (qualifies && state === 'gameover') {
           setTimeout(() => {
             if (state === 'gameover' && _pendingScore) {
@@ -1423,8 +1425,33 @@ window.initKeepyUppy = function() {
         if (!r.ok) throw new Error(`HTTP Error ${r.status}`);
         return r.json();
       })
-      .then(d => { lbData = d.scores || []; lbFetchedAt = Date.now(); lbLoading = false; })
+      .then(d => {
+        lbData = d.scores || [];
+        lbFetchedAt = Date.now();
+        lbLoading = false;
+        // Auto-scroll to show the user's just-submitted entry
+        if (lastSubmittedScore && lbData.length) {
+          const idx = lbData.findIndex(e =>
+            e.name === lastSubmittedScore.name &&
+            e.score === lastSubmittedScore.score &&
+            e.combo === lastSubmittedScore.combo
+          );
+          if (idx > 0) {
+            const maxScroll = Math.max(0, lbData.length * 34 - 336);
+            lbScrollY = clamp(idx * 34 - 100, 0, maxScroll);
+          }
+        }
+      })
       .catch(() => { lbError = true; lbLoading = false; });
+  }
+
+  const LB_ROWS_TOP    = 132;
+  const LB_ROWS_BOTTOM = 468;
+  const LB_ROW_H       = 34;
+  const LB_ROWS_VIS    = LB_ROWS_BOTTOM - LB_ROWS_TOP; // 336px → ~9 rows visible
+
+  function lbScrollMax() {
+    return lbData ? Math.max(0, lbData.length * LB_ROW_H - LB_ROWS_VIS) : 0;
   }
 
   function drawLeaderboard() {
@@ -1449,13 +1476,21 @@ window.initKeepyUppy = function() {
       ctx.strokeStyle = '#1e3a5f'; ctx.lineWidth = 1;
       ctx.beginPath(); ctx.moveTo(18, 127); ctx.lineTo(W - 18, 127); ctx.stroke();
 
-      lbData.forEach((entry, i) => {
-        const y = 148 + i * 34;
+      lbScrollY = clamp(lbScrollY, 0, lbScrollMax());
 
-        // Highlight matching row
-        const isLastSubmitted = lastSubmittedScore && 
-          entry.name === lastSubmittedScore.name && 
-          entry.score === lastSubmittedScore.score && 
+      // Clip to scrollable rows area
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(13, LB_ROWS_TOP, W - 26, LB_ROWS_VIS);
+      ctx.clip();
+
+      lbData.forEach((entry, i) => {
+        const y = 148 + i * LB_ROW_H - lbScrollY;
+        if (y < LB_ROWS_TOP - LB_ROW_H || y > LB_ROWS_BOTTOM + LB_ROW_H) return;
+
+        const isLastSubmitted = lastSubmittedScore &&
+          entry.name === lastSubmittedScore.name &&
+          entry.score === lastSubmittedScore.score &&
           entry.combo === lastSubmittedScore.combo;
 
         if (isLastSubmitted) {
@@ -1474,6 +1509,46 @@ window.initKeepyUppy = function() {
         pixelText(`x${entry.combo}`, 210, y, 10, isLastSubmitted ? '#41f8ff' : '#ff4fd8');
         pixelText(entry.date || '', 265, y, 9, isLastSubmitted ? '#a5f3fc' : '#94a3b8');
       });
+
+      ctx.restore();
+
+      const maxScroll = lbScrollMax();
+      if (maxScroll > 0) {
+        // Bottom fade — signals more content below
+        if (lbScrollY < maxScroll) {
+          const fadeGrad = ctx.createLinearGradient(0, LB_ROWS_BOTTOM - 40, 0, LB_ROWS_BOTTOM);
+          fadeGrad.addColorStop(0, 'rgba(5,7,22,0)');
+          fadeGrad.addColorStop(1, 'rgba(5,7,22,0.85)');
+          ctx.fillStyle = fadeGrad;
+          ctx.fillRect(13, LB_ROWS_BOTTOM - 40, W - 26, 40);
+          // ↓ arrow hint
+          pixelText('▼ MORE', W/2 - textWidth('▼ MORE', 8)/2, LB_ROWS_BOTTOM - 4, 8, '#41f8ff');
+        }
+        // Top fade when scrolled down
+        if (lbScrollY > 0) {
+          const topGrad = ctx.createLinearGradient(0, LB_ROWS_TOP, 0, LB_ROWS_TOP + 30);
+          topGrad.addColorStop(0, 'rgba(5,7,22,0.75)');
+          topGrad.addColorStop(1, 'rgba(5,7,22,0)');
+          ctx.fillStyle = topGrad;
+          ctx.fillRect(13, LB_ROWS_TOP, W - 26, 30);
+        }
+
+        // Scrollbar track + thumb — wider and more visible
+        const sbX = W - 22;
+        const sbW = 7;
+        const thumbH = Math.max(32, LB_ROWS_VIS * (LB_ROWS_VIS / (lbData.length * LB_ROW_H)));
+        const thumbY = LB_ROWS_TOP + (lbScrollY / maxScroll) * (LB_ROWS_VIS - thumbH);
+        // Track
+        ctx.fillStyle = 'rgba(255,255,255,0.1)';
+        ctx.beginPath();
+        ctx.roundRect(sbX, LB_ROWS_TOP, sbW, LB_ROWS_VIS, 3);
+        ctx.fill();
+        // Thumb
+        ctx.fillStyle = lbDragStart ? 'rgba(65,248,255,0.9)' : 'rgba(65,248,255,0.6)';
+        ctx.beginPath();
+        ctx.roundRect(sbX, thumbY, sbW, thumbH, 3);
+        ctx.fill();
+      }
     }
 
     const canShare = (lastSubmittedScore && lastSubmittedScore.score > 0) || (data.best > 0);
@@ -1557,7 +1632,7 @@ window.initKeepyUppy = function() {
 
     addButton('RETRY',  24,  357, 148, 40, () => resetGame());
     addButton('SHARE',  186, 357, 148, 40, shareScore);
-    addButton('SCORES', 24,  407, 148, 40, () => { dismissNamePrompt(); state = 'leaderboard'; fetchLeaderboard(true); });
+    addButton('SCORES', 24,  407, 148, 40, () => { dismissNamePrompt(); state = 'leaderboard'; lbScrollY = 0; fetchLeaderboard(true); });
     addButton('MENU',   186, 407, 148, 40, () => { dismissNamePrompt(); state = 'menu'; });
   }
 
@@ -1677,10 +1752,27 @@ window.initKeepyUppy = function() {
     for (const z of clicks) {
       if (p.x>=z.x&&p.x<=z.x+z.w&&p.y>=z.y&&p.y<=z.y+z.h) { z.action(); return; }
     }
+    if (state==='leaderboard' && p.y >= LB_ROWS_TOP && p.y <= LB_ROWS_BOTTOM) {
+      try { canvas.setPointerCapture(e.pointerId); } catch(_) {}
+      lbDragStart = { y: p.y, scrollY: lbScrollY };
+      return;
+    }
     if (state==='playing') tryKick();
   }
 
   canvas.addEventListener('pointerdown', handlePointer, {passive:false});
+  canvas.addEventListener('pointermove', (e) => {
+    if (lbDragStart === null) return;
+    const p = pointerToGame(e);
+    lbScrollY = clamp(lbDragStart.scrollY - (p.y - lbDragStart.y), 0, lbScrollMax());
+  }, {passive:true});
+  canvas.addEventListener('pointerup',     (e) => { if (lbDragStart !== null) { try { canvas.releasePointerCapture(e.pointerId); } catch(_) {} } lbDragStart = null; }, {passive:true});
+  canvas.addEventListener('pointercancel', (e) => { if (lbDragStart !== null) { try { canvas.releasePointerCapture(e.pointerId); } catch(_) {} } lbDragStart = null; }, {passive:true});
+  canvas.addEventListener('wheel', (e) => {
+    if (state !== 'leaderboard') return;
+    e.preventDefault();
+    lbScrollY = clamp(lbScrollY + e.deltaY * 0.6, 0, lbScrollMax());
+  }, {passive:false});
   window.addEventListener('keydown', e => {
     if (document.activeElement && document.activeElement.tagName === 'INPUT') return;
     if (e.repeat) return; // Prevent keydown auto-repeat from triggering multiple taps
@@ -1689,6 +1781,8 @@ window.initKeepyUppy = function() {
     if (e.code==='ArrowRight'||e.code==='KeyD')  keys.right=true;
     if (e.code==='Enter'&&state==='menu')         state='charselect';
     if (e.code==='Escape')                        { dismissNamePrompt(); state='menu'; }
+    if (e.code==='ArrowUp'  &&state==='leaderboard') { e.preventDefault(); lbScrollY=clamp(lbScrollY-LB_ROW_H,0,lbScrollMax()); }
+    if (e.code==='ArrowDown'&&state==='leaderboard') { e.preventDefault(); lbScrollY=clamp(lbScrollY+LB_ROW_H,0,lbScrollMax()); }
   });
   window.addEventListener('keyup', e => {
     if (document.activeElement && document.activeElement.tagName === 'INPUT') return;
