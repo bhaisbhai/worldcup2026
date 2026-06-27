@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-26T08:38:41.566Z",
+  "generatedAt": "2026-06-27T06:22:32.379Z",
   "byDate": {
     "2026-06-24": {
       "BIH-QAT": {
@@ -284,6 +284,32 @@
       },
       "COL-COD": {
         "summary": "Colombia is qualified, playing for group winner. Congo DR must win for a strong best third-place chance.",
+        "status": "Elimination Risk"
+      }
+    },
+    "2026-06-27": {
+      "CRO-GHA": {
+        "summary": "Ghana needs a win or draw to guarantee top-two. Croatia needs a win for top-two, or a draw for best-third chance.",
+        "status": "Qualification Battle"
+      },
+      "PAN-ENG": {
+        "summary": "England needs a win or draw to guarantee top-two. Panama must win to have any chance at best-third.",
+        "status": "Elimination Risk"
+      },
+      "COL-POR": {
+        "summary": "Both teams are already qualified for the knockout stage. They are competing for first place in the group.",
+        "status": "Knockout Seeding"
+      },
+      "COD-UZB": {
+        "summary": "Congo DR needs a win for a strong best-third chance. Uzbekistan must win to have any best-third chance.",
+        "status": "Elimination Risk"
+      },
+      "ALG-AUT": {
+        "summary": "Both teams need a win for a strong top-two chance, or a draw for a solid best-third position.",
+        "status": "Qualification Battle"
+      },
+      "JOR-ARG": {
+        "summary": "Argentina is already qualified and playing for first place. Jordan must win to have any best-third chance.",
         "status": "Elimination Risk"
       }
     }
