@@ -1512,16 +1512,42 @@ window.initKeepyUppy = function() {
 
       ctx.restore();
 
-      // Scrollbar
       const maxScroll = lbScrollMax();
       if (maxScroll > 0) {
-        const sbX = W - 19;
-        const thumbH = Math.max(28, LB_ROWS_VIS * (LB_ROWS_VIS / (lbData.length * LB_ROW_H)));
+        // Bottom fade — signals more content below
+        if (lbScrollY < maxScroll) {
+          const fadeGrad = ctx.createLinearGradient(0, LB_ROWS_BOTTOM - 40, 0, LB_ROWS_BOTTOM);
+          fadeGrad.addColorStop(0, 'rgba(5,7,22,0)');
+          fadeGrad.addColorStop(1, 'rgba(5,7,22,0.85)');
+          ctx.fillStyle = fadeGrad;
+          ctx.fillRect(13, LB_ROWS_BOTTOM - 40, W - 26, 40);
+          // ↓ arrow hint
+          pixelText('▼ MORE', W/2 - textWidth('▼ MORE', 8)/2, LB_ROWS_BOTTOM - 4, 8, '#41f8ff');
+        }
+        // Top fade when scrolled down
+        if (lbScrollY > 0) {
+          const topGrad = ctx.createLinearGradient(0, LB_ROWS_TOP, 0, LB_ROWS_TOP + 30);
+          topGrad.addColorStop(0, 'rgba(5,7,22,0.75)');
+          topGrad.addColorStop(1, 'rgba(5,7,22,0)');
+          ctx.fillStyle = topGrad;
+          ctx.fillRect(13, LB_ROWS_TOP, W - 26, 30);
+        }
+
+        // Scrollbar track + thumb — wider and more visible
+        const sbX = W - 22;
+        const sbW = 7;
+        const thumbH = Math.max(32, LB_ROWS_VIS * (LB_ROWS_VIS / (lbData.length * LB_ROW_H)));
         const thumbY = LB_ROWS_TOP + (lbScrollY / maxScroll) * (LB_ROWS_VIS - thumbH);
-        ctx.fillStyle = 'rgba(255,255,255,0.07)';
-        ctx.fillRect(sbX, LB_ROWS_TOP, 4, LB_ROWS_VIS);
-        ctx.fillStyle = lbDragStart ? 'rgba(65,248,255,0.75)' : 'rgba(65,248,255,0.4)';
-        ctx.fillRect(sbX, thumbY, 4, thumbH);
+        // Track
+        ctx.fillStyle = 'rgba(255,255,255,0.1)';
+        ctx.beginPath();
+        ctx.roundRect(sbX, LB_ROWS_TOP, sbW, LB_ROWS_VIS, 3);
+        ctx.fill();
+        // Thumb
+        ctx.fillStyle = lbDragStart ? 'rgba(65,248,255,0.9)' : 'rgba(65,248,255,0.6)';
+        ctx.beginPath();
+        ctx.roundRect(sbX, thumbY, sbW, thumbH, 3);
+        ctx.fill();
       }
     }
 
