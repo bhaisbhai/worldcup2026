@@ -1753,6 +1753,7 @@ window.initKeepyUppy = function() {
       if (p.x>=z.x&&p.x<=z.x+z.w&&p.y>=z.y&&p.y<=z.y+z.h) { z.action(); return; }
     }
     if (state==='leaderboard' && p.y >= LB_ROWS_TOP && p.y <= LB_ROWS_BOTTOM) {
+      try { canvas.setPointerCapture(e.pointerId); } catch(_) {}
       lbDragStart = { y: p.y, scrollY: lbScrollY };
       return;
     }
@@ -1765,8 +1766,8 @@ window.initKeepyUppy = function() {
     const p = pointerToGame(e);
     lbScrollY = clamp(lbDragStart.scrollY - (p.y - lbDragStart.y), 0, lbScrollMax());
   }, {passive:true});
-  canvas.addEventListener('pointerup',     () => { lbDragStart = null; }, {passive:true});
-  canvas.addEventListener('pointercancel', () => { lbDragStart = null; }, {passive:true});
+  canvas.addEventListener('pointerup',     (e) => { if (lbDragStart !== null) { try { canvas.releasePointerCapture(e.pointerId); } catch(_) {} } lbDragStart = null; }, {passive:true});
+  canvas.addEventListener('pointercancel', (e) => { if (lbDragStart !== null) { try { canvas.releasePointerCapture(e.pointerId); } catch(_) {} } lbDragStart = null; }, {passive:true});
   canvas.addEventListener('wheel', (e) => {
     if (state !== 'leaderboard') return;
     e.preventDefault();
