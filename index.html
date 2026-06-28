@@ -283,12 +283,6 @@ body{
 .mc-cd-sm{font-family:var(--mono);font-size:10px;color:var(--t2);font-weight:500}
 
 /* ── STAKES STRIP ───────────────────────────── */
-.mc-stakes{display:flex;align-items:flex-start;gap:7px;padding:7px 0;margin-top:8px;border-top:1px solid rgba(255,255,255,.07)}
-.mc-stakes-pill{flex-shrink:0;font-size:8px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;border-radius:3px;padding:2px 6px;margin-top:1px;line-height:1.6}
-.mc-stakes-pill.elim{color:#ff8c42;background:rgba(255,140,66,.12);border:1px solid rgba(255,140,66,.25)}
-.mc-stakes-pill.qual{color:#ffd43b;background:rgba(255,212,59,.12);border:1px solid rgba(255,212,59,.25)}
-.mc-stakes-pill.seed{color:var(--accent);background:rgba(0,255,135,.1);border:1px solid rgba(0,255,135,.2)}
-.mc-stakes-txt{font-size:11px;color:rgba(255,255,255,.6);line-height:1.5}
 
 /* ── UPCOMING CARD COMPACT LAYOUT ───────────── */
 .mc.up{padding:12px 15px}
@@ -1848,7 +1842,6 @@ function buildCard(ev){
           <span class="mc-up-flag">${flag(ev.away.abbr)}</span>
         </div>
       </div>
-      ${buildStakesHtml(ev)}
       <div class="mc-up-foot">
         <div>
           <span class="mc-up-time">${localTime(ev.date)}</span>
@@ -2478,43 +2471,6 @@ async function fetchRecapResults(date, card){
 }
 
 // ═══════════════════════════════════════════════════
-//  STAKES DATA  (/data/stakes.json — AI-generated nightly)
-// ═══════════════════════════════════════════════════
-let stakesCache = {}; // key: "YYYY-MM-DD|HOME-AWAY" → {summary, status}
-
-async function fetchStakesData(){
-  try {
-    const r = await fetch('/data/stakes.json', { signal: AbortSignal.timeout(8000) });
-    if(!r.ok) return;
-    const data = await r.json();
-    const cache = {};
-    for(const [date, matches] of Object.entries(data.byDate || {})){
-      for(const [matchKey, val] of Object.entries(matches)){
-        cache[`${date}|${matchKey}`] = val;
-      }
-    }
-    stakesCache = cache;
-    // inject into already-rendered upcoming cards
-    document.querySelectorAll('.mc:not(.live):not(.ft)').forEach(card => {
-      if(card.querySelector('.mc-stakes')) return;
-      const ev = lastEvents.find(e => e.id === card.dataset.evId);
-      if(!ev) return;
-      const html = buildStakesHtml(ev);
-      if(!html) return;
-      const foot = card.querySelector('.mc-up-foot') || card.querySelector('.mc-foot');
-      if(foot){ const d=document.createElement('div'); d.innerHTML=html; foot.before(d.firstElementChild); }
-    });
-  } catch(e){}
-}
-
-function buildStakesHtml(ev){
-  const d = ev.date instanceof Date ? ev.date : new Date(ev.date);
-  const dateStr = d.toLocaleDateString('en-CA', { timeZone: 'America/Los_Angeles' });
-  const matchKey = `${ev.home.abbr}-${ev.away.abbr}`;
-  const s = stakesCache[`${dateStr}|${matchKey}`];
-  if(!s || !s.summary) return '';
-  return `<div class="mc-stakes"><span class="mc-stakes-txt">${esc(s.summary)}</span></div>`;
-}
 
 async function renderYesterdayScores(){
   // Only show before 11pm local time
@@ -5186,7 +5142,6 @@ renderGroups();
 refreshKnockoutBracket();
 fetchPlayerClubs();
 fetchPlayerStats();
-fetchStakesData();
 fetchDailyRecaps();
 fetchMatches();
 fetchGroupStandings();
