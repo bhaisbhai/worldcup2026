@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-28T10:28:20.801Z",
+  "generatedAt": "2026-06-28T10:31:16.425Z",
   "byDate": {
     "2026-06-24": {
       "BIH-QAT": {
@@ -315,8 +315,8 @@
     },
     "2026-06-28": {
       "RSA-CAN": {
-        "summary": "South Africa finished 3rd with 4 points, awaiting best third-place results. Canada's qualification needs are unknown without their group standings.",
-        "status": "Qualification Battle"
+        "summary": "South Africa has already qualified from Group A. Canada's qualification status and needs for advancement are unknown without their group standings.",
+        "status": "Elimination Risk"
       }
     }
   }
