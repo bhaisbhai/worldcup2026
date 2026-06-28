@@ -83,6 +83,14 @@ async function main() {
   );
   const events: any[] = scoreboard.events || [];
 
+  // Detect knockout stage by event name (Round of 32, QF, SF, Final)
+  const isKnockoutStage = events.some(e => {
+    const n = (e.name || '').toLowerCase();
+    return n.includes('round of') || n.includes('quarter-final') ||
+           n.includes('semi-final') || (n.includes('final') && !n.includes('group'));
+  });
+  if (isKnockoutStage) console.log('🏆  Knockout stage detected.');
+
   // ── 2. Self-gating ─────────────────────────────────────────────────────────
   // Skip only when BOTH recap and tomorrow's stakes are already generated.
   // If stakes are missing (e.g. games finished after a previous partial run),
@@ -110,17 +118,21 @@ async function main() {
 
     if (recapDone) console.log(`ℹ️  Recap exists but stakes for ${tomorrowStr} missing — regenerating stakes.`);
 
-    const incomplete = events.filter(e => !e.status?.type?.completed);
+    // Only count games that have already kicked off as "incomplete" — future placeholder
+    // slots on ESPN's scoreboard would otherwise falsely block the pipeline.
+    const nowMs = Date.now();
+    const incomplete = events.filter(e => new Date(e.date).getTime() < nowMs && !e.status?.type?.completed);
     if (incomplete.length > 0) {
       console.log(`⏳  ${incomplete.length} game(s) still in progress.`);
       process.exit(0);
     }
     if (events.length > 0) {
       const latestKickoff = Math.max(...events.map(e => new Date(e.date).getTime()));
-      const eligibleAt = latestKickoff + (115 + 60) * 60 * 1000;
+      // 150 min covers knockout extra time + penalty shootout; group games finish well within this.
+      const eligibleAt = latestKickoff + (150 + 60) * 60 * 1000;
       if (Date.now() < eligibleAt) {
         const mins = Math.ceil((eligibleAt - Date.now()) / 60000);
-        console.log(`⏳  Within 1h post-game buffer. ${mins}m remaining.`);
+        console.log(`⏳  Within post-game buffer. ${mins}m remaining.`);
         process.exit(0);
       }
     }
@@ -215,7 +227,9 @@ async function main() {
   }
 
   // ── 6. AI Call 1 — Recap ─────────────────────────────────────────────────
-  const qualRules = `World Cup 2026 format: 48 teams, 12 groups of 4.
+  const qualRules = isKnockoutStage
+    ? `FIFA World Cup 2026 knockout stage. Win = advance to next round. Lose = eliminated. If level after 90 minutes: 30 minutes extra time, then penalty shootout if still level. No draws possible.`
+    : `World Cup 2026 format: 48 teams, 12 groups of 4.
 Qualification rules:
 - Top 2 from each group qualify automatically (guaranteed).
 - Best 8 third-place teams across all 12 groups also advance.
@@ -273,12 +287,16 @@ Current group standings (after today's games):
 ${allStandingsText}
 ${alreadyAnnouncedText}
 
-CRITICAL RULE FOR PROGRESSION: Only report teams that appear in today's match results above. If a team did not play today, their status cannot have changed today — do not mention them regardless of their standings position.
+${isKnockoutStage
+  ? `CRITICAL RULE FOR PROGRESSION: These are knockout matches. ALWAYS report which teams advanced to the next round and which were eliminated. Write 1-2 clear sentences. If there was extra time or penalties, mention that.`
+  : `CRITICAL RULE FOR PROGRESSION: Only report teams that appear in today's match results above. If a team did not play today, their status cannot have changed today — do not mention them regardless of their standings position.`}
 
 Return JSON with exactly these two fields:
 {
   "summary": "Results only: 40-50 words on key scores and goal scorers. No qualification info here.",
-  "progression": "Among the teams that played TODAY (and only those teams), which ones newly secured qualification or were newly eliminated as a direct result of today's specific result? Write 1-2 sentences of news narrative. If none of today's teams changed status, return empty string."
+  "progression": "${isKnockoutStage
+    ? 'Which teams advanced to the next round, and which were eliminated? Write 1-2 sentences.'
+    : 'Among the teams that played TODAY (and only those teams), which ones newly secured qualification or were newly eliminated as a direct result of today\'s specific result? Write 1-2 sentences of news narrative. If none of today\'s teams changed status, return empty string.'}"
 }`;
 
     try {
@@ -302,7 +320,7 @@ Return JSON with exactly these two fields:
 
     const stakesPrompt = `You are a football analyst providing pre-match context to fans.
 
-For each upcoming World Cup match below, write a 15-20 word factual stakes summary explaining what each team needs to advance. Use ONLY the current standings provided. Do not invent facts or results.
+For each upcoming World Cup match below, write a 15-20 word factual stakes summary.${isKnockoutStage ? ' These are knockout matches — winner advances, loser is eliminated. No group standings are needed.' : ' Explain what each team needs to advance. Use ONLY the current standings provided. Do not invent facts or results.'}
 
 ${qualRules}
 
@@ -314,15 +332,18 @@ Return JSON with this exact structure:
     {
       "matchKey": "HOME-AWAY abbreviation exactly as given",
       "summary": "15-20 word factual stakes description",
-      "status": "Elimination Risk" or "Qualification Battle" or "Knockout Seeding"
+      "status": ${isKnockoutStage ? '"Must Win"' : '"Elimination Risk" or "Qualification Battle" or "Knockout Seeding"'}
     }
   ]
 }
 
-Status definitions:
+${isKnockoutStage
+  ? `Status definitions:
+- "Must Win": knockout match — winner advances to next round, loser eliminated`
+  : `Status definitions:
 - "Elimination Risk": at least one team faces elimination with a bad result
 - "Qualification Battle": both teams are fighting for a qualification spot
-- "Knockout Seeding": both teams already qualified, competing only for group position/seeding`;
+- "Knockout Seeding": both teams already qualified, competing only for group position/seeding`}`;
 
     try {
       const res = await callGemini(stakesPrompt);
@@ -330,7 +351,7 @@ Status definitions:
         if (s.matchKey && s.summary) {
           stakesOut[s.matchKey] = {
             summary: s.summary,
-            status:  s.status || 'Qualification Battle',
+            status:  s.status || (isKnockoutStage ? 'Must Win' : 'Qualification Battle'),
           };
         }
       }
