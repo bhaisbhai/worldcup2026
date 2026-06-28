@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-27T06:22:32.379Z",
+  "generatedAt": "2026-06-28T07:50:32.110Z",
   "byDate": {
     "2026-06-24": {
       "BIH-QAT": {
@@ -310,6 +310,12 @@
       },
       "JOR-ARG": {
         "summary": "Argentina is already qualified and playing for first place. Jordan must win to have any best-third chance.",
+        "status": "Elimination Risk"
+      }
+    },
+    "2026-06-28": {
+      "RSA-CAN": {
+        "summary": "South Africa is already qualified from Group A. Canada's qualification status and needs are unknown.",
         "status": "Elimination Risk"
       }
     }
