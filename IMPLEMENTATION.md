@@ -164,22 +164,43 @@ Runs nightly via GitHub Actions. Uses Gemini 2.5 Flash.
 
 The script is triggered hourly (4–12am UTC) but skips cheaply if:
 - All of yesterday's games are not yet complete (`status.type.completed === false`)
-- Less than 1h 55m has passed since the last game kicked off (buffer for extra time + post-game data propagation)
+- Less than 2h 30m has passed since the last game kicked off (covers ET + penalties in knockout stage)
 - Both recap AND stakes are already generated for the target dates
 
 ```typescript
 // Check: both outputs already exist
 if (recapDone && stakesDone) process.exit(0);
 
-// Check: games still in progress
-const incomplete = events.filter(e => !e.status?.type?.completed);
+// CRITICAL: only count games that have already kicked off as "incomplete".
+// ESPN's scoreboard can include future placeholder slots (e.g. KO bracket TBD games)
+// that are not "completed" — naively counting these would exit early every morning.
+const nowMs = Date.now();
+const incomplete = events.filter(e => new Date(e.date).getTime() < nowMs && !e.status?.type?.completed);
 if (incomplete.length > 0) process.exit(0);
 
-// Check: within buffer window
+// Check: within buffer window. 150 min covers knockout ET + penalty shootout.
+// Group games (90min + stoppage) comfortably fit within this too.
 const latestKickoff = Math.max(...events.map(e => new Date(e.date).getTime()));
-const eligibleAt = latestKickoff + (115 + 60) * 60 * 1000; // 115min game + 60min buffer
+const eligibleAt = latestKickoff + (150 + 60) * 60 * 1000;
 if (Date.now() < eligibleAt) process.exit(0);
 ```
+
+### Knockout stage detection
+
+The pipeline detects whether it's processing group-stage or knockout matches by inspecting event names. This branches the AI prompts to use correct context:
+
+```typescript
+const isKnockoutStage = events.some(e => {
+  const n = (e.name || '').toLowerCase();
+  return n.includes('round of') || n.includes('quarter-final') ||
+         n.includes('semi-final') || (n.includes('final') && !n.includes('group'));
+});
+```
+
+When `isKnockoutStage` is true:
+- `qualRules` switches to "win advances, lose is eliminated, ET + penalties if level"
+- Stakes `status` becomes `"Must Win"` instead of `"Elimination Risk"` / `"Qualification Battle"` / `"Knockout Seeding"`
+- PROGRESSION instruction in recap prompt says "always report who advanced / who was eliminated" instead of the conservative group-stage rule
 
 ### Date attribution (CRITICAL — Pacific Time)
 
@@ -697,6 +718,64 @@ const localDate = `${d.getFullYear()}-${...}`;
 - **Root cause**: Group J standings tiebreaker (URU 2pts vs KSA 2pts on GD -1 vs -4) required arithmetic the AI sometimes skips. Also CPV qualifying via a draw while only getting 3 total points is counterintuitive when other groups needed 4pts for second place.
 - **Fix**: Manually updated June 26's `progression` field in `recaps.json` and pushed to `main`.
 - **Lesson**: Always manually verify the pipeline's `progression` output on final matchday of any group. Head-to-head tiebreakers and best-third calculations are the highest-risk cases.
+
+### Knockout bracket: `advancedOfficial` flag never set during knockout stage
+
+- **Cause**: `updateKnockoutFromGroups()` only populated bracket slots when `team.advancedOfficial === true`. ESPN sets this flag to `1` only after it internally validates all group results. During the transition day (last group games finished but ESPN hasn't propagated `advancedOfficial` yet), all slots stay empty. In the knockout stage this flag is never set at all because there are no more groups.
+- **Symptom**: Knockout bracket shows placeholder labels even after all 48 group games have been played and results are final.
+- **Fix**: Added a `p >= 3` fallback — if all teams in the group have played 3 games, treat the group as complete and fill the bracket regardless of `advancedOfficial`:
+  ```javascript
+  const groupComplete = teams.length >= 2 && teams.every(t => (t.p ?? 0) >= 3);
+  if (teams[0]?.advancedOfficial || groupComplete) fillKOSlot('1' + g.id, teams[0]);
+  if (teams[1]?.advancedOfficial || groupComplete) fillKOSlot('2' + g.id, teams[1]);
+  ```
+- **File**: `updateKnockoutFromGroups()` in `index.html`
+
+### AI pipeline: incomplete filter counted unstarted future ESPN events (KO stage bug)
+
+- **Cause**: Self-gating logic did `events.filter(e => !e.status?.type?.completed)` — any event that isn't completed, including future placeholder slots in ESPN's scoreboard, counted as "game in progress." During the knockout stage ESPN may return unscheduled TBD future rounds alongside completed matches.
+- **Symptom**: Pipeline exits early every morning with "N game(s) still in progress" even though all actual games have finished. No recap or stakes generated.
+- **Fix**: Added kickoff time guard — only games that have already started are considered incomplete:
+  ```typescript
+  const nowMs = Date.now();
+  const incomplete = events.filter(e => new Date(e.date).getTime() < nowMs && !e.status?.type?.completed);
+  ```
+- **File**: `scripts/generate-ai-content.ts`
+
+### AI pipeline: 115-min game duration too short for knockout extra time + penalties
+
+- **Cause**: The post-game buffer was `latestKickoff + (115 + 60) * 60 * 1000`. Group stage games (90min + stoppage) fit within 115min. Knockout games can go 90 + 30 ET + ~15 penalty shootout = 135min+. Pipeline could run mid-penalty-shootout and generate incomplete data.
+- **Symptom**: In rare cases, pipeline generates recap before final penalty is taken — final score and scorer data missing from ESPN response.
+- **Fix**: Extended to 150 min: `latestKickoff + (150 + 60) * 60 * 1000`
+- **File**: `scripts/generate-ai-content.ts`
+
+### AI pipeline: group-stage prompt logic sent to Gemini for knockout matches
+
+- **Cause**: `qualRules`, stakes `status` options, and the PROGRESSION instruction were all written for group-stage qualification logic (Top 2 qualify, best-3rd route, mathematical elimination rules). None of this applies to knockout rounds.
+- **Symptom**: Gemini generates incorrect stakes like "needs a win to advance to second place in the group" for a Round of 32 match. Progression section omits advancement news because PROGRESSION rule says "only report teams if no other team could mathematically overtake them" — a meaningless condition in knockout.
+- **Fix**: Added `isKnockoutStage` detection flag; `qualRules`, stakes prompt, status labels, and PROGRESSION instruction all branch on this flag. Knockout path says "win = advance, lose = eliminated, ET + penalties if level."
+- **File**: `scripts/generate-ai-content.ts`
+
+### Leaderboard scroll not working on live site
+
+- **Cause**: Scroll changes were committed to `claude/app-overview-l70sz7` but never pushed to `main`. Vercel deploys from `main` only.
+- **Symptom**: Game buddy on game-buddy.co.uk shows non-scrolling leaderboard; feature branch had scroll working.
+- **Fix**: Pushed `keepy-uppy.js` and `api/game-scores.js` directly to `main` via `mcp__github__push_files`.
+- **Lesson**: Always check which branch Vercel is deploying from. In this repo, Vercel watches `main`. Feature branches are invisible to users until merged.
+
+### Leaderboard scroll: pointer events not captured on mobile
+
+- **Cause**: Mobile drag used `pointermove` on `canvas` but without `setPointerCapture` the browser claims the gesture for page scroll after a few pixels, and no further `pointermove` events arrive on the canvas.
+- **Symptom**: Leaderboard drag scrolled the page instead of the list, or scroll snapped back on release.
+- **Fix**: Called `canvas.setPointerCapture(e.pointerId)` on `pointerdown` over the rows area. Events are now guaranteed to arrive on the canvas for the lifetime of that touch.
+- **File**: `handlePointer` in `keepy-uppy.js`
+
+### Leaderboard limited to top 10 instead of top 100
+
+- **Cause**: `api/game-scores.js` called `ZREVRANGE KEY 0 9` (indices 0–9 = top 10).
+- **Symptom**: Users who scored in positions 11–100 could not see their name on the leaderboard. Name prompt logic also only triggered for top 10.
+- **Fix**: Changed to `ZREVRANGE KEY 0 99` and updated `_checkAndPromptName` to check `scores.length < 100 || sc > scores[99]?.score`.
+- **File**: `api/game-scores.js` + `keepy-uppy.js`
 
 ### ESPN player stats match cap too low (50 → 120)
 - **Cause**: `api/playerstats.js` had `matches.slice(0, 50)` but WC2026 has 96 matches in the group stage alone. Only the first 50 completed games were scored, so mid-tournament stats were incomplete.
