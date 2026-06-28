@@ -214,41 +214,30 @@ async function main() {
     console.warn('⚠️  Could not fetch standings:', e);
   }
 
+  // Determine if the group stage is complete by checking whether every team in every
+  // group has played 3 games. ESPN doesn't put round info in knockout event names, so
+  // we infer stage from standings instead of parsing event metadata.
+  const isGroupStageComplete = standingsGroups.length > 0 && standingsGroups.every(g => {
+    const entries: any[] = g.standings?.entries || [];
+    return entries.length > 0 && entries.every((e: any) => {
+      const mp = Number((e.stats || []).find((s: any) => s.name === 'gamesPlayed')?.value || 0);
+      return mp >= 3;
+    });
+  });
+  if (isGroupStageComplete) console.log('🏆  Group stage complete — knockout detected via standings.');
+
   // ── 5. Fetch upcoming games (tomorrow) ─────────────────────────────────────
   const upcomingMatches: any[] = [];
-  let tomorrowIsKnockout = false;
+  // tomorrowIsKnockout uses standings-based detection so it works even when ESPN
+  // gives no round info in event names (which is the case for the 2026 tournament).
+  const tomorrowIsKnockout = isGroupStageComplete;
 
   try {
     const tds = tomorrowStr.replace(/-/g, '');
     const tSb  = await fetchJSON(
       `https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?dates=${tds}`
     );
-
-    // Detect tomorrow's stage independently — yesterday may have been the last group stage
-    // day while tomorrow is already the first knockout day.
-    // ESPN may put round info in name, shortName, notes, or season.type — check all.
-    for (const e of (tSb.events || [])) {
-      const n       = (e.name || '').toLowerCase();
-      const sn      = (e.shortName || '').toLowerCase();
-      const seasTypeName = (e.season?.type?.name || '').toLowerCase();
-      const seasTypeId   = String(e.season?.type?.id || '');
-      const notes   = ((e.competitions?.[0]?.notes || []) as any[])
-                        .map((note: any) => (note.text || note.headline || note.type?.text || '').toLowerCase())
-                        .join(' ');
-      console.log(`🔍  Tomorrow event: name="${e.name}" seasonType=${seasTypeId}/${seasTypeName} notes="${notes}"`);
-    }
-    tomorrowIsKnockout = (tSb.events || []).some((e: any) => {
-      const fields = [
-        e.name || '', e.shortName || '',
-        e.season?.type?.name || '', String(e.season?.type?.id || ''),
-        ...((e.competitions?.[0]?.notes || []) as any[]).map((n: any) => n.text || n.headline || n.type?.text || ''),
-      ].map(s => s.toLowerCase());
-      return fields.some(f =>
-        f.includes('round of') || f.includes('quarter-final') || f.includes('semi-final') ||
-        (f.includes('final') && !f.includes('group')) || f === '3' || f.includes('knockout') || f.includes('postseason')
-      );
-    });
-    if (tomorrowIsKnockout) console.log('🏆  Tomorrow is knockout stage.'); else console.log('ℹ️  Tomorrow detected as group stage.');
+    if (tomorrowIsKnockout) console.log('🏆  Staking tomorrow as knockout stage.'); else console.log('ℹ️  Staking tomorrow as group stage.');
 
     for (const ev of tSb.events || []) {
       const comp = ev.competitions?.[0] || {};
@@ -431,6 +420,67 @@ IMPORTANT: For knockout matches, your summary must reference each team's group s
       console.log(`✅  Stakes generated for ${Object.keys(stakesOut).length} match(es)`);
     } catch (e) {
       console.error('❌  Stakes generation failed:', e);
+    }
+  }
+
+  // ── 7b. AI Call 3 — Quality gate: verify stakes summaries ─────────────────
+  // A second Gemini call reviews each summary and auto-corrects ones that use
+  // wrong language (e.g. group-stage qualifying terms in a knockout match, or
+  // generic filler instead of citing actual team performance).
+  if (Object.keys(stakesOut).length > 0) {
+    console.log('🔍  Running stakes quality check…');
+    const badPhrases = tomorrowIsKnockout
+      ? ['needs to', 'needs a', 'needs points', 'needs a win to qualify', 'needs a draw to qualify',
+         'best third', 'third-place', 'automatic qualification', 'advance from group', 'group stage',
+         'crucial clash', 'crucial knockout', 'crucial match']
+      : [];
+
+    const qualityItems = Object.entries(stakesOut).map(([k, v]) => `${k}: "${v.summary}"`).join('\n');
+    const qualityPrompt = `You are a quality-checker for a football fan app.
+
+Each line below is a pre-match summary for an UPCOMING ${tomorrowIsKnockout ? 'KNOCKOUT' : 'GROUP STAGE'} World Cup match.
+
+Quality criteria for ${tomorrowIsKnockout ? 'KNOCKOUT' : 'GROUP STAGE'} summaries:
+${tomorrowIsKnockout
+  ? `- Must describe the match as knockout (winner advances, loser out)
+- Must reference each team's actual group stage performance (finishing position, points, goals) — no invented stats
+- Must NOT use group-stage qualification language: "needs X points", "best third-place", "automatic qualification", "advance from group", "group stage"
+- Must NOT be generic filler like "crucial knockout clash" with no actual team data
+- Should be 20-25 words`
+  : `- Must explain what each team needs to advance in the group
+- Must reference current standings (points, position)
+- Should be 20-25 words`}
+
+Summaries to review:
+${qualityItems}
+
+For each summary, decide: does it pass the criteria above?
+If it FAILS, write a corrected 20-25 word summary that fixes the issue.
+If it PASSES, repeat the original summary unchanged.
+
+Return JSON:
+{
+  "results": [
+    { "matchKey": "...", "passes": true, "summary": "original or corrected summary" }
+  ]
+}`;
+
+    try {
+      const qr = await callGemini(qualityPrompt);
+      let fixed = 0, passed = 0;
+      for (const r of (qr?.results || [])) {
+        if (!r.matchKey || !r.summary) continue;
+        if (r.passes) {
+          passed++;
+        } else {
+          fixed++;
+          console.log(`🔧  Fixed summary for ${r.matchKey}`);
+          stakesOut[r.matchKey] = { ...stakesOut[r.matchKey], summary: r.summary };
+        }
+      }
+      console.log(`✅  Quality check: ${passed} passed, ${fixed} corrected`);
+    } catch (e) {
+      console.warn('⚠️  Quality check failed (keeping original stakes):', e);
     }
   }
 
