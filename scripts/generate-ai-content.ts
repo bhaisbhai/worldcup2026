@@ -226,12 +226,29 @@ async function main() {
 
     // Detect tomorrow's stage independently — yesterday may have been the last group stage
     // day while tomorrow is already the first knockout day.
+    // ESPN may put round info in name, shortName, notes, or season.type — check all.
+    for (const e of (tSb.events || [])) {
+      const n       = (e.name || '').toLowerCase();
+      const sn      = (e.shortName || '').toLowerCase();
+      const seasTypeName = (e.season?.type?.name || '').toLowerCase();
+      const seasTypeId   = String(e.season?.type?.id || '');
+      const notes   = ((e.competitions?.[0]?.notes || []) as any[])
+                        .map((note: any) => (note.text || note.headline || note.type?.text || '').toLowerCase())
+                        .join(' ');
+      console.log(`🔍  Tomorrow event: name="${e.name}" seasonType=${seasTypeId}/${seasTypeName} notes="${notes}"`);
+    }
     tomorrowIsKnockout = (tSb.events || []).some((e: any) => {
-      const n = (e.name || '').toLowerCase();
-      return n.includes('round of') || n.includes('quarter-final') ||
-             n.includes('semi-final') || (n.includes('final') && !n.includes('group'));
+      const fields = [
+        e.name || '', e.shortName || '',
+        e.season?.type?.name || '', String(e.season?.type?.id || ''),
+        ...((e.competitions?.[0]?.notes || []) as any[]).map((n: any) => n.text || n.headline || n.type?.text || ''),
+      ].map(s => s.toLowerCase());
+      return fields.some(f =>
+        f.includes('round of') || f.includes('quarter-final') || f.includes('semi-final') ||
+        (f.includes('final') && !f.includes('group')) || f === '3' || f.includes('knockout') || f.includes('postseason')
+      );
     });
-    if (tomorrowIsKnockout) console.log('🏆  Tomorrow is knockout stage.');
+    if (tomorrowIsKnockout) console.log('🏆  Tomorrow is knockout stage.'); else console.log('ℹ️  Tomorrow detected as group stage.');
 
     for (const ev of tSb.events || []) {
       const comp = ev.competitions?.[0] || {};
