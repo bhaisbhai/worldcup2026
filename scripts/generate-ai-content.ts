@@ -216,12 +216,23 @@ async function main() {
 
   // ── 5. Fetch upcoming games (tomorrow) ─────────────────────────────────────
   const upcomingMatches: any[] = [];
+  let tomorrowIsKnockout = false;
 
   try {
     const tds = tomorrowStr.replace(/-/g, '');
     const tSb  = await fetchJSON(
       `https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?dates=${tds}`
     );
+
+    // Detect tomorrow's stage independently — yesterday may have been the last group stage
+    // day while tomorrow is already the first knockout day.
+    tomorrowIsKnockout = (tSb.events || []).some((e: any) => {
+      const n = (e.name || '').toLowerCase();
+      return n.includes('round of') || n.includes('quarter-final') ||
+             n.includes('semi-final') || (n.includes('final') && !n.includes('group'));
+    });
+    if (tomorrowIsKnockout) console.log('🏆  Tomorrow is knockout stage.');
+
     for (const ev of tSb.events || []) {
       const comp = ev.competitions?.[0] || {};
       const home = comp.competitors?.find((c: any) => c.homeAway === 'home');
@@ -232,7 +243,7 @@ async function main() {
       const awayAbbr = away.team?.abbreviation || '';
 
       let matchCtx = '';
-      if (isKnockoutStage) {
+      if (tomorrowIsKnockout) {
         const roundName = ev.name || ev.shortName || '';
         const homeRecord = teamTournamentRecord(homeAbbr, standingsGroups);
         const awayRecord = teamTournamentRecord(awayAbbr, standingsGroups);
@@ -359,11 +370,13 @@ Return JSON with exactly these two fields:
 
     const stakesPrompt = `You are a football analyst providing pre-match context to fans.
 
-For each upcoming World Cup match below, write a 20-25 word factual stakes summary.${isKnockoutStage
+For each upcoming World Cup match below, write a 20-25 word factual stakes summary.${tomorrowIsKnockout
   ? ' These are knockout matches. Reference how each team performed during the group stage (use the data provided). Mention their group stage record or how they progressed. Winner advances, loser is eliminated.'
   : ' Explain what each team needs to advance. Use ONLY the current standings provided. Do not invent facts or results.'}
 
-${qualRules}
+${tomorrowIsKnockout
+  ? `FIFA World Cup 2026 knockout stage. Win = advance to next round. Lose = eliminated. If level after 90 minutes: 30 minutes extra time, then penalty shootout if still level. No draws possible.`
+  : qualRules}
 
 ${matchBlock}
 
@@ -373,12 +386,12 @@ Return JSON with this exact structure:
     {
       "matchKey": "HOME-AWAY abbreviation exactly as given",
       "summary": "20-25 word factual stakes description",
-      "status": ${isKnockoutStage ? '"Must Win"' : '"Elimination Risk" or "Qualification Battle" or "Knockout Seeding"'}
+      "status": ${tomorrowIsKnockout ? '"Must Win"' : '"Elimination Risk" or "Qualification Battle" or "Knockout Seeding"'}
     }
   ]
 }
 
-${isKnockoutStage
+${tomorrowIsKnockout
   ? `Status definitions:
 - "Must Win": knockout match — winner advances to next round, loser eliminated
 
@@ -394,7 +407,7 @@ IMPORTANT: For knockout matches, your summary must reference each team's group s
         if (s.matchKey && s.summary) {
           stakesOut[s.matchKey] = {
             summary: s.summary,
-            status:  s.status || (isKnockoutStage ? 'Must Win' : 'Qualification Battle'),
+            status:  s.status || (tomorrowIsKnockout ? 'Must Win' : 'Qualification Battle'),
           };
         }
       }
