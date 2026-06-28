@@ -1424,14 +1424,14 @@ GROUPS_DATA.forEach(g => {
 const KO_DATA = {
   left:{
     r32:[
-      {num:73, h:'Runner-up A', a:'Runner-up B',    stad:'SoFi Stadium',          city:'Los Angeles',     date:'Jun 28'},
-      {num:75, h:'Winner F',    a:'Runner-up C',    stad:'Estadio BBVA',           city:'Monterrey',       date:'Jun 29'},
-      {num:74, h:'Winner E',    a:'3rd A/B/C/D/F',  stad:'Gillette Stadium',       city:'Foxborough',      date:'Jun 29'},
-      {num:77, h:'Winner I',    a:'3rd C/D/F/G/H',  stad:'MetLife Stadium',        city:'East Rutherford', date:'Jun 30'},
-      {num:76, h:'Winner C',    a:'Runner-up F',    stad:'NRG Stadium',            city:'Houston',         date:'Jun 29'},
-      {num:78, h:'Runner-up E', a:'Runner-up I',    stad:'AT&T Stadium',           city:'Arlington',       date:'Jun 30'},
-      {num:79, h:'Winner A',    a:'3rd C/E/F/H/I',  stad:'Estadio Azteca',         city:'Mexico City',     date:'Jun 30'},
-      {num:80, h:'Winner L',    a:'3rd E/H/I/J/K',  stad:'Mercedes-Benz Stadium',  city:'Atlanta',         date:'Jul 1'},
+      {num:73, h:'South Africa',  a:'Canada',              stad:'SoFi Stadium',          city:'Los Angeles',     date:'Jun 28'},
+      {num:75, h:'Netherlands',   a:'Morocco',             stad:'Estadio BBVA',           city:'Monterrey',       date:'Jun 30'},
+      {num:74, h:'Germany',       a:'Paraguay',            stad:'Gillette Stadium',       city:'Foxborough',      date:'Jun 29'},
+      {num:77, h:'France',        a:'Sweden',              stad:'MetLife Stadium',        city:'East Rutherford', date:'Jun 30'},
+      {num:76, h:'Brazil',        a:'Japan',               stad:'NRG Stadium',            city:'Houston',         date:'Jun 29'},
+      {num:78, h:'Ivory Coast',   a:'Norway',              stad:'AT&T Stadium',           city:'Arlington',       date:'Jun 30'},
+      {num:79, h:'Mexico',        a:'Ecuador',             stad:'Estadio Azteca',         city:'Mexico City',     date:'Jul 1'},
+      {num:80, h:'England',       a:'Congo DR',            stad:'Mercedes-Benz Stadium',  city:'Atlanta',         date:'Jul 1'},
     ],
     r16:[
       {num:90, h:'W M73', a:'W M75', stad:'NRG Stadium',             city:'Houston',         date:'Jul 5'},
@@ -1449,14 +1449,14 @@ const KO_DATA = {
   },
   right:{
     r32:[
-      {num:81, h:'Winner D',    a:'3rd B/E/F/I/J',  stad:"Levi's Stadium",        city:'Santa Clara',  date:'Jul 1'},
-      {num:82, h:'Winner G',    a:'3rd A/E/H/I/J',  stad:'Lumen Field',           city:'Seattle',      date:'Jul 1'},
-      {num:83, h:'Runner-up K', a:'Runner-up L',    stad:'BMO Field',             city:'Toronto',      date:'Jul 2'},
-      {num:84, h:'Winner H',    a:'Runner-up J',    stad:'SoFi Stadium',          city:'Los Angeles',  date:'Jul 2'},
-      {num:85, h:'Winner B',    a:'3rd E/F/G/I/J',  stad:'BC Place',              city:'Vancouver',    date:'Jul 2'},
-      {num:87, h:'Winner K',    a:'3rd D/E/I/J/L',  stad:'Arrowhead Stadium',     city:'Kansas City',  date:'Jul 3'},
-      {num:86, h:'Winner J',    a:'Runner-up H',    stad:'Hard Rock Stadium',     city:'Miami',        date:'Jul 3'},
-      {num:88, h:'Runner-up D', a:'Runner-up G',    stad:'AT&T Stadium',          city:'Arlington',    date:'Jul 3'},
+      {num:81, h:'USA',           a:'Bosnia-Herzegovina',  stad:"Levi's Stadium",        city:'Santa Clara',  date:'Jul 2'},
+      {num:82, h:'Belgium',       a:'Senegal',             stad:'Lumen Field',           city:'Seattle',      date:'Jul 1'},
+      {num:83, h:'Portugal',      a:'Croatia',             stad:'BMO Field',             city:'Toronto',      date:'Jul 3'},
+      {num:84, h:'Spain',         a:'Austria',             stad:'SoFi Stadium',          city:'Los Angeles',  date:'Jul 2'},
+      {num:85, h:'Switzerland',   a:'Algeria',             stad:'BC Place',              city:'Vancouver',    date:'Jul 3'},
+      {num:87, h:'Colombia',      a:'Ghana',               stad:'Arrowhead Stadium',     city:'Kansas City',  date:'Jul 4'},
+      {num:86, h:'Argentina',     a:'Cape Verde',          stad:'Hard Rock Stadium',     city:'Miami',        date:'Jul 3'},
+      {num:88, h:'Australia',     a:'Egypt',               stad:'AT&T Stadium',          city:'Arlington',    date:'Jul 3'},
     ],
     r16:[
       {num:94, h:'W M81', a:'W M82', stad:'Lumen Field',            city:'Seattle',    date:'Jul 7'},
@@ -1472,6 +1472,18 @@ const KO_DATA = {
       {num:102, h:'W M99', a:'W M100', stad:'Mercedes-Benz Stadium', city:'Atlanta', date:'Jul 15'},
     ],
   },
+};
+
+// Flag lookup for hardcoded R32 team names
+const KO_TEAM_FLAGS = {
+  'South Africa':'🇿🇦','Canada':'🇨🇦','Netherlands':'🇳🇱','Morocco':'🇲🇦',
+  'Germany':'🇩🇪','Paraguay':'🇵🇾','France':'🇫🇷','Sweden':'🇸🇪',
+  'Brazil':'🇧🇷','Japan':'🇯🇵','Ivory Coast':'🇨🇮','Norway':'🇳🇴',
+  'Mexico':'🇲🇽','Ecuador':'🇪🇨','England':'🏴󠁧󠁢󠁥󠁮󠁧󠁿','Congo DR':'🇨🇩',
+  'USA':'🇺🇸','Bosnia-Herzegovina':'🇧🇦','Belgium':'🇧🇪','Senegal':'🇸🇳',
+  'Portugal':'🇵🇹','Croatia':'🇭🇷','Spain':'🇪🇸','Austria':'🇦🇹',
+  'Switzerland':'🇨🇭','Algeria':'🇩🇿','Colombia':'🇨🇴','Ghana':'🇬🇭',
+  'Argentina':'🇦🇷','Cape Verde':'🇨🇻','Australia':'🇦🇺','Egypt':'🇪🇬',
 };
 
 // ═══════════════════════════════════════════════════
@@ -2729,7 +2741,10 @@ function renderKnockout(){
     const key = koSlotKey(label);
     const bt = el('div','bt lbl');
     if(key) bt.dataset.slot = key;
-    bt.innerHTML = `<span class="bn">${label}</span>`;
+    const flag = KO_TEAM_FLAGS[label];
+    bt.innerHTML = flag
+      ? `<span class="bf">${flag}</span><span class="bn">${label}</span>`
+      : `<span class="bn" style="color:#555">${label}</span>`;
     return bt;
   }
 
