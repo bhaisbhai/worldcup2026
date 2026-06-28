@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-28T10:34:05.030Z",
+  "generatedAt": "2026-06-28T10:37:58.954Z",
   "byDate": {
     "2026-06-24": {
       "BIH-QAT": {
@@ -315,8 +315,8 @@
     },
     "2026-06-28": {
       "RSA-CAN": {
-        "summary": "South Africa has already qualified from Group A. Canada's qualification status and needs for advancement are unknown without their group standings.",
-        "status": "Elimination Risk"
+        "summary": "South Africa (2nd in Group A, 4pts) meets Group B winners Canada (4pts, 8 GF). Winner advances, loser is eliminated in this knockout match.",
+        "status": "Must Win"
       }
     }
   }
