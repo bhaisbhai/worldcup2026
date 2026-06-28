@@ -54,6 +54,34 @@ function groupStandingsText(entries: any[]): string {
   }).join('\n');
 }
 
+// Look up a single team's group stage record from any group in the standings.
+// Used in knockout stage to show how each team performed to get here.
+function teamTournamentRecord(abbr: string, standingsGroups: any[]): string {
+  for (const g of standingsGroups) {
+    const entries: any[] = g.standings?.entries || [];
+    const idx   = entries.findIndex((e: any) => e.team?.abbreviation === abbr);
+    if (idx === -1) continue;
+    const entry = entries[idx];
+    const stats = entry.stats || [];
+    const getStat = (...names: string[]) => {
+      for (const n of names) {
+        const v = Number(stats.find((s: any) => s.name === n)?.value || 0);
+        if (v) return v;
+      }
+      return 0;
+    };
+    const pts = getStat('points');
+    const mp  = getStat('gamesPlayed');
+    const gf  = getStat('pointsFor', 'goalsFor');
+    const ga  = getStat('pointsAgainst', 'goalsAgainst');
+    const gd  = gf - ga;
+    const pos = ['1st', '2nd', '3rd', '4th'][idx] || `${idx + 1}th`;
+    const name = entry.team?.displayName || abbr;
+    return `${name}: finished ${pos} in ${g.name || 'group'} — ${mp} games, ${pts}pts, GF${gf} GA${ga} GD${gd >= 0 ? '+' : ''}${gd}`;
+  }
+  return '';
+}
+
 async function main() {
   const args = process.argv.slice(2);
   const dateArg = args.find(a => a.startsWith('--date='))?.split('=')[1];
@@ -203,14 +231,25 @@ async function main() {
       const homeAbbr = home.team?.abbreviation || '';
       const awayAbbr = away.team?.abbreviation || '';
 
-      // Find their group and attach standings
-      let groupCtx = '';
-      for (const g of standingsGroups) {
-        const entries: any[] = g.standings?.entries || [];
-        const abbrs = entries.map((e: any) => e.team?.abbreviation);
-        if (abbrs.includes(homeAbbr) || abbrs.includes(awayAbbr)) {
-          groupCtx = `${g.name || 'Group'}:\n${groupStandingsText(entries)}`;
-          break;
+      let matchCtx = '';
+      if (isKnockoutStage) {
+        const roundName = ev.name || ev.shortName || '';
+        const homeRecord = teamTournamentRecord(homeAbbr, standingsGroups);
+        const awayRecord = teamTournamentRecord(awayAbbr, standingsGroups);
+        const parts: string[] = [];
+        if (roundName) parts.push(`Round: ${roundName}`);
+        if (homeRecord) parts.push(`Group stage performance: ${homeRecord}`);
+        if (awayRecord) parts.push(`Group stage performance: ${awayRecord}`);
+        matchCtx = parts.join('\n');
+      } else {
+        // Group stage: find their shared group and attach standings
+        for (const g of standingsGroups) {
+          const entries: any[] = g.standings?.entries || [];
+          const abbrs = entries.map((e: any) => e.team?.abbreviation);
+          if (abbrs.includes(homeAbbr) || abbrs.includes(awayAbbr)) {
+            matchCtx = `${g.name || 'Group'}:\n${groupStandingsText(entries)}`;
+            break;
+          }
         }
       }
 
@@ -218,7 +257,7 @@ async function main() {
         matchKey: `${homeAbbr}-${awayAbbr}`,
         homeTeam: home.team?.displayName || homeAbbr,
         awayTeam: away.team?.displayName || awayAbbr,
-        groupCtx,
+        groupCtx: matchCtx,
       });
     }
     console.log(`📋  ${upcomingMatches.length} upcoming match(es) found for ${tomorrowStr}`);
@@ -320,7 +359,9 @@ Return JSON with exactly these two fields:
 
     const stakesPrompt = `You are a football analyst providing pre-match context to fans.
 
-For each upcoming World Cup match below, write a 15-20 word factual stakes summary.${isKnockoutStage ? ' These are knockout matches — winner advances, loser is eliminated. No group standings are needed.' : ' Explain what each team needs to advance. Use ONLY the current standings provided. Do not invent facts or results.'}
+For each upcoming World Cup match below, write a 20-25 word factual stakes summary.${isKnockoutStage
+  ? ' These are knockout matches. Reference how each team performed during the group stage (use the data provided). Mention their group stage record or how they progressed. Winner advances, loser is eliminated.'
+  : ' Explain what each team needs to advance. Use ONLY the current standings provided. Do not invent facts or results.'}
 
 ${qualRules}
 
@@ -331,7 +372,7 @@ Return JSON with this exact structure:
   "stakes": [
     {
       "matchKey": "HOME-AWAY abbreviation exactly as given",
-      "summary": "15-20 word factual stakes description",
+      "summary": "20-25 word factual stakes description",
       "status": ${isKnockoutStage ? '"Must Win"' : '"Elimination Risk" or "Qualification Battle" or "Knockout Seeding"'}
     }
   ]
@@ -339,7 +380,9 @@ Return JSON with this exact structure:
 
 ${isKnockoutStage
   ? `Status definitions:
-- "Must Win": knockout match — winner advances to next round, loser eliminated`
+- "Must Win": knockout match — winner advances to next round, loser eliminated
+
+IMPORTANT: For knockout matches, your summary must reference each team's group stage journey (e.g. finishing position, record). Do NOT use generic phrases like "crucial knockout clash" — cite actual stats from the group stage data provided.`
   : `Status definitions:
 - "Elimination Risk": at least one team faces elimination with a bad result
 - "Qualification Battle": both teams are fighting for a qualification spot
