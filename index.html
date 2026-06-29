@@ -3204,9 +3204,11 @@ function renderCircularBracket(){
         const md = matchesMap[m.num];
         const { home: ha, away: aa } = teamAngles(side, n, mi);
         const r = ringR[ring];
+        const resolveFlag = (name, mdFlag) =>
+          (mdFlag && mdFlag !== '🏳️') ? mdFlag : (KO_TEAM_FLAGS[name] || null);
         [
-          { angle: ha, name: md?.hName||m.h, fl: md?.hFlag||'🏳️', win: md?.winnerName && md.winnerName===md.hName },
-          { angle: aa, name: md?.aName||m.a, fl: md?.aFlag||'🏳️', win: md?.winnerName && md.winnerName===md.aName },
+          { angle: ha, name: md?.hName||m.h, fl: resolveFlag(md?.hName||m.h, md?.hFlag), win: md?.winnerName && md.winnerName===md.hName },
+          { angle: aa, name: md?.aName||m.a, fl: resolveFlag(md?.aName||m.a, md?.aFlag), win: md?.winnerName && md.winnerName===md.aName },
         ].forEach(t => {
           const p = pt(t.angle, r);
           allSlots.push({ ...p, angle: t.angle, name: t.name, fl: t.fl, win: t.win, matchNum: m.num, ring });
@@ -3227,17 +3229,17 @@ function renderCircularBracket(){
 
   // Draw team circles + flags
   allSlots.forEach(s => {
-    const isTBD = !s.name || /Winner|Runner-up|TBD|W M\d/.test(s.name);
+    const isTBD = !s.fl || !s.name || /Winner|Runner-up|TBD|W M\d/.test(s.name);
     const bgFill  = s.win ? 'rgba(0,255,135,0.18)' : isTBD ? 'rgba(35,35,35,0.85)' : 'rgba(22,22,22,0.93)';
     const stroke  = s.win ? 'rgba(0,255,135,0.75)' : isTBD ? 'rgba(255,255,255,0.07)' : 'rgba(255,255,255,0.2)';
     const sw      = s.win ? 2 : 1;
 
-    svgFlags.push(`<g class="kc-team" onclick="handleKOMatchClick(${s.matchNum})" style="cursor:pointer" data-name="${s.name.replace(/"/g,"'")}">
+    svgFlags.push(`<g class="kc-team" onclick="handleKOMatchClick(${s.matchNum})" style="cursor:pointer" data-name="${(s.name||'').replace(/"/g,"'")}">
       <circle cx="${f2(s.x)}" cy="${f2(s.y)}" r="${TEAM_R}" fill="${bgFill}" stroke="${stroke}" stroke-width="${sw}">
-        <title>${s.name}</title>
+        <title>${s.name||''}</title>
       </circle>
       <text x="${f2(s.x)}" y="${f2(s.y)}" text-anchor="middle" dominant-baseline="central"
-        font-size="${isTBD ? 9 : s.ring==='r32' ? 13 : 13}" style="pointer-events:none;user-select:none"
+        font-size="13" style="pointer-events:none;user-select:none"
         fill="${isTBD ? 'rgba(255,255,255,0.22)' : '#fff'}">${isTBD ? '?' : s.fl}</text>
     </g>`);
 
