@@ -423,60 +423,67 @@ body{
 .tpr-cutoff{height:2px;background:linear-gradient(90deg,rgba(255,200,0,.4),transparent);margin:0}
 
 /* ── KNOCKOUT ───────────────────────────────── */
-.ko-hdr-row{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:5px}
-.ko-hd{font-size:21px;font-weight:700;letter-spacing:-.4px}
+.ko-hd{font-size:21px;font-weight:700;letter-spacing:-.4px;margin-bottom:5px}
 .ko-sub{font-size:13px;color:var(--t2);margin-bottom:24px}
-.bscroll{overflow-x:auto;padding-bottom:20px}
-.bracket{display:flex;align-items:stretch;min-width:1060px}
-.brd{display:flex;flex-direction:column;flex:1}
-.brd-lbl{
-  font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;
-  color:var(--t2);text-align:center;padding:11px 6px;border-bottom:1px solid var(--border);margin-bottom:10px;
-}
-.bmatches{display:flex;flex-direction:column;justify-content:flex-start;flex:1;padding:0 5px 10px;gap:0}
-.bm{display:flex;flex-direction:column;gap:0;margin-bottom:14px;border:1px solid rgba(255,255,255,.22);border-radius:8px;overflow:hidden}
-.bm>.bt{border:none;border-radius:0}
-.bt{
-  display:flex;align-items:center;gap:5px;padding:8px 10px;
-  background:#1a1a1a;border:1px solid rgba(255,255,255,.12);border-radius:6px;
-  font-size:12px;font-weight:500;transition:border-color .18s;white-space:nowrap;overflow:hidden;
-  color:#fff;
-}
-.bt:hover{border-color:#3a3a3a}
-.bt.tbd{color:var(--t2);font-style:italic;font-size:10px}
-.bt.win{border-color:rgba(0,255,135,.45);background:rgba(0,255,135,.07);color:var(--accent)}
+.ko-header-controls{display:flex;flex-direction:column;gap:16px;margin-bottom:24px;align-items:center}
+.ko-view-toggle{display:inline-flex;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:100px;padding:3px;position:relative;z-index:10}
+.ko-side-toggle{display:flex;gap:6px;background:rgba(255,255,255,.015);border:1px solid var(--border);border-radius:100px;padding:3px;position:relative;z-index:10}
+.ko-side-btn{background:none;border:none;color:var(--t2);font-family:var(--font);font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:6px 14px;border-radius:100px;cursor:pointer;transition:all .15s ease}
+.ko-side-btn.active{background:rgba(0,255,135,.1);color:var(--accent);border:1px solid rgba(0,255,135,.15)}
+.ko-toggle-btn{background:none;border:none;color:var(--t2);font-family:var(--font);font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:8px 18px;border-radius:100px;cursor:pointer;transition:all .2s cubic-bezier(0.4,0,0.2,1)}
+.ko-toggle-btn.active{background:rgba(0,255,135,.1);color:var(--accent);border:1px solid rgba(0,255,135,.2)}
+.ko-round-nav{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:2px 14px;justify-content:flex-start;max-width:100%}
+.ko-round-nav::-webkit-scrollbar{display:none}
+.ko-pill{background:var(--card);border:1px solid var(--border);color:var(--t2);font-family:var(--font);font-size:10px;font-weight:700;letter-spacing:.3px;text-transform:uppercase;padding:6px 14px;border-radius:100px;cursor:pointer;white-space:nowrap;transition:all .2s ease}
+.ko-pill:hover{border-color:#333;color:var(--text)}
+.ko-pill.active{background:var(--accent);border-color:var(--accent);color:#000;font-weight:800;box-shadow:0 0 12px rgba(0,255,135,.35)}
+.ko-help-hint{display:none;font-size:10px;color:var(--t3);text-align:center;margin-top:-12px;margin-bottom:16px;letter-spacing:.5px}
+@media(max-width:768px){.ko-help-hint{display:block}.ko-round-nav{justify-content:flex-start}}
+.bscroll{position:relative;overflow-x:auto;padding:15px 0 35px;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.06) transparent}
+.bracket{display:flex;align-items:stretch;position:relative;min-width:720px;padding:10px 5px;margin:0 auto}
+.bracket.side-left,.bracket.side-right{min-width:720px;justify-content:space-between}
+.bracket.side-final{min-width:580px;max-width:720px;justify-content:space-around;align-items:center;padding:24px 10px}
+.bracket-svg{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1}
+.bracket-path{fill:none;stroke:rgba(255,255,255,.08);stroke-width:2px;transition:stroke .25s ease,stroke-width .25s ease,filter .25s ease}
+.bracket-path.highlight-line{stroke:var(--accent);stroke-width:3.5px;filter:drop-shadow(0 0 5px rgba(0,255,135,.6))}
+.brd{display:flex;flex-direction:column;flex:1;z-index:2;position:relative}
+.brd-lbl{font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--t2);text-align:center;padding:11px 6px;border-bottom:1px solid var(--border);margin-bottom:18px}
+.bmatches{display:flex;flex-direction:column;justify-content:space-around;flex:1;padding:0 10px 10px}
+.bm{display:flex;flex-direction:column;background:rgba(17,17,17,.8);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:10px;padding:10px 12px;width:165px;position:relative;z-index:2;cursor:pointer;transition:border-color .22s ease,box-shadow .22s ease,transform .18s cubic-bezier(0.2,0.8,0.2,1);box-shadow:0 4px 16px rgba(0,0,0,.35);user-select:none}
+.bm:hover{border-color:rgba(0,255,135,.45);box-shadow:0 0 16px rgba(0,255,135,.2),0 6px 20px rgba(0,0,0,.45);transform:scale(1.03)}
+.bm.highlight-path{border-color:var(--accent);box-shadow:0 0 18px rgba(0,255,135,.3)}
+.bt{display:flex;align-items:center;gap:7px;padding:4px 0;font-size:11px;font-weight:600;color:var(--t2);white-space:nowrap;overflow:hidden;transition:color .2s ease}
+.bt.tbd{color:var(--t3);font-style:italic;font-size:10px;font-weight:500}
+.bt.win{color:var(--accent);font-weight:700}
+.bsep{height:1px;background:rgba(255,255,255,.05);margin:2px 0}
+.bt-score{margin-left:auto;font-family:var(--mono);font-weight:700;font-size:11px;color:var(--t2);padding-left:6px}
+.bt.win .bt-score{color:var(--accent)}
+.bt-pens{font-size:9px;color:var(--t3);margin-left:4px}
+.bt.win .bt-pens{color:var(--accent);opacity:.8}
 .bf{font-size:14px;flex-shrink:0}
 .bn{overflow:hidden;text-overflow:ellipsis}
-.bsep{height:1px;background:rgba(255,255,255,.25);margin:0}
-.trophy{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px 12px;gap:6px;flex-shrink:0;width:76px}
-.trophy-i{font-size:28px}
-.trophy-l{font-size:9px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--gold);text-align:center}
-.trophy-t{font-size:10px;color:var(--t2);font-style:italic;text-align:center}
-
-/* ── BRACKET SCROLL AFFORDANCE ───────────────── */
-.bscroll-wrap{position:relative}
-.bscroll-hint{
-  flex-shrink:0;align-self:center;
-  display:flex;align-items:center;gap:5px;
-  background:rgba(255,255,255,.08);
-  border:1px solid rgba(255,255,255,.15);
-  border-radius:999px;padding:5px 12px;
-  font-size:11px;font-weight:700;color:var(--t2);letter-spacing:.2px;
-  pointer-events:none;
-  animation:bshint 1.4s ease-in-out infinite;
-  transition:opacity .4s;
-  white-space:nowrap;
-}
-.bscroll-hint.gone{opacity:0}
-.bscroll-hint svg{flex-shrink:0;animation:bsarrow 1.4s ease-in-out infinite}
-@keyframes bshint{
-  0%,100%{transform:translateX(0)}
-  50%{transform:translateX(-5px)}
-}
-@keyframes bsarrow{
-  0%,100%{transform:translateX(0)}
-  50%{transform:translateX(-3px)}
-}
+.bm-info{font-size:8px;color:var(--t3);margin-top:6px;border-top:1px solid rgba(255,255,255,.04);padding-top:5px;display:flex;justify-content:space-between;letter-spacing:.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.trophy{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 10px;gap:8px;flex-shrink:0;width:105px;align-self:center;position:relative;z-index:3;text-align:center;border:1px dashed rgba(255,215,0,.28);background:rgba(255,215,0,.02);border-radius:14px;box-shadow:0 4px 24px rgba(0,0,0,.4);transition:all .25s ease}
+.trophy:hover{border-color:rgba(255,215,0,.55);background:rgba(255,215,0,.05);box-shadow:0 0 20px rgba(255,215,0,.15),0 4px 24px rgba(0,0,0,.5);transform:scale(1.02)}
+.trophy-i{font-size:32px;animation:floatTrophy 3s ease-in-out infinite}
+@keyframes floatTrophy{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.trophy-l{font-size:10px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--gold)}
+.trophy-t{font-size:9px;color:var(--t2);line-height:1.3}
+.ko-list-view{display:none;max-width:600px;margin:0 auto;flex-direction:column;gap:12px;padding:10px 4px 40px}
+.ko-list-view.active{display:flex}
+.ko-list-match{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:10px;cursor:pointer;transition:border-color .2s,box-shadow .2s,transform .15s;box-shadow:0 4px 12px rgba(0,0,0,.2)}
+.ko-list-match:hover{border-color:rgba(255,255,255,.15);box-shadow:0 6px 20px rgba(0,0,0,.35);transform:translateY(-1px)}
+.ko-list-match:active{transform:scale(.99)}
+.ko-lm-header{display:flex;justify-content:space-between;font-size:9px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--t2)}
+.ko-lm-tv{color:#60b8ff}
+.ko-lm-teams{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.ko-lm-team{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;flex:1}
+.ko-lm-team.away{justify-content:flex-end}
+.ko-lm-score-wrap{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:22px;font-weight:700;user-select:none}
+.ko-lm-score{min-width:20px;text-align:center;color:var(--t2)}
+.ko-lm-score.win{color:var(--accent)}
+.ko-lm-score-sep{color:var(--t3);font-weight:300}
+.ko-lm-footer{display:flex;justify-content:space-between;font-size:10px;color:var(--t3);border-top:1px solid rgba(255,255,255,.04);padding-top:8px}
 
 /* ── DAY NAV ────────────────────────────────── */
 .day-nav{width:100%;margin-bottom:16px}
@@ -1611,12 +1618,14 @@ function parseEvent(ev){
       abbr: home.team.abbreviation,
       score: parseInt(home.score)||0,
       winner: home.winner||false,
+      shootoutScore: home.shootoutScore !== undefined && home.shootoutScore !== null ? parseInt(home.shootoutScore) : null
     },
     away: {
       name: away.team.displayName,
       abbr: away.team.abbreviation,
       score: parseInt(away.score)||0,
       winner: away.winner||false,
+      shootoutScore: away.shootoutScore !== undefined && away.shootoutScore !== null ? parseInt(away.shootoutScore) : null
     },
     venue: comp.venue?.fullName || ev.venue?.displayName || '',
     city: comp.venue?.address?.city || '',
@@ -2712,84 +2721,510 @@ function renderThirdPlaceRanking(){
 // ═══════════════════════════════════════════════════
 //  KNOCKOUT
 // ═══════════════════════════════════════════════════
+let koActiveView = 'tree';
+let koActiveRound = 'r32';
+let koActiveSide = 'left';
+let koEvents = [];
+
 function koSlotKey(label){
-  const w = label.match(/^Winner ([A-L])$/);    if(w)  return '1'+w[1];
-  const r = label.match(/^Runner-up ([A-L])$/); if(r)  return '2'+r[1];
+  const w = label?.match(/^Winner ([A-L])$/);    if(w)  return '1'+w[1];
+  const r = label?.match(/^Runner-up ([A-L])$/); if(r)  return '2'+r[1];
   return null;
 }
 
-function initBscrollHint(){
-  const scroller = $('bscroll-el');
-  const hint = $('bscroll-hint');
-  if(!scroller||!hint) return;
-  scroller.addEventListener('scroll', function(){
-    hint.classList.add('gone');
-  }, {passive:true, once:true});
-}
+const KO_ROUNDS = [
+  { id: 'r32', label: 'Round of 32' },
+  { id: 'r16', label: 'Round of 16' },
+  { id: 'qf', label: 'Quarter-Finals' },
+  { id: 'sf', label: 'Semi-Finals' },
+  { id: 'final', label: 'Final' }
+];
+
+const KO_CONNECTIONS = [
+  { from: 73, to: 90 }, { from: 75, to: 90 },
+  { from: 74, to: 89 }, { from: 77, to: 89 },
+  { from: 76, to: 91 }, { from: 78, to: 91 },
+  { from: 79, to: 92 }, { from: 80, to: 92 },
+  { from: 90, to: 97 }, { from: 89, to: 97 },
+  { from: 91, to: 98 }, { from: 92, to: 98 },
+  { from: 97, to: 101 }, { from: 98, to: 101 },
+  { from: 101, to: 104 },
+  { from: 81, to: 94 }, { from: 82, to: 94 },
+  { from: 83, to: 93 }, { from: 84, to: 93 },
+  { from: 85, to: 96 }, { from: 87, to: 96 },
+  { from: 86, to: 95 }, { from: 88, to: 95 },
+  { from: 94, to: 99 }, { from: 93, to: 99 },
+  { from: 96, to: 100 }, { from: 95, to: 100 },
+  { from: 99, to: 102 }, { from: 100, to: 102 },
+  { from: 102, to: 104 }
+];
 
 function renderKnockout(){
   const sec = $('tab-knockout');
+
+  const controlsHtml = koActiveView === 'tree'
+    ? `<div class="ko-side-toggle">
+        <button class="ko-side-btn ${koActiveSide === 'left' ? 'active' : ''}" onclick="setKOSide('left')">Left Side</button>
+        <button class="ko-side-btn ${koActiveSide === 'final' ? 'active' : ''}" onclick="setKOSide('final')">Finals</button>
+        <button class="ko-side-btn ${koActiveSide === 'right' ? 'active' : ''}" onclick="setKOSide('right')">Right Side</button>
+       </div>`
+    : `<div class="ko-round-nav" id="ko-round-nav"></div>`;
+
   sec.innerHTML = `
-    <div class="ko-hdr-row">
-      <div class="ko-hd">Knockout Stage</div>
-      <div class="bscroll-hint" id="bscroll-hint">
-        <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Swipe to explore
+    <div class="ko-hd">Knockout Stage</div>
+    <div class="ko-sub">Round of 32 · Round of 16 · Quarter-Finals · Semi-Finals · Final — MetLife Stadium, Jul 19</div>
+    <div class="ko-header-controls">
+      <div class="ko-view-toggle">
+        <button class="ko-toggle-btn ${koActiveView === 'tree' ? 'active' : ''}" onclick="setKOView('tree')">Bracket Tree</button>
+        <button class="ko-toggle-btn ${koActiveView === 'list' ? 'active' : ''}" onclick="setKOView('list')">Match List</button>
+      </div>
+      ${controlsHtml}
+    </div>
+    <div class="ko-help-hint" style="display:${koActiveView === 'tree' && koActiveSide !== 'final' ? 'block' : 'none'}">← Swipe horizontally to explore the bracket →</div>
+    <div class="bscroll" id="ko-tree-container" style="display:${koActiveView === 'tree' ? 'block' : 'none'}">
+      <div class="bracket side-${koActiveSide}" id="bracket">
+        <svg class="bracket-svg" id="bracket-svg"></svg>
       </div>
     </div>
-    <div class="ko-sub">Round of 32 · Round of 16 · Quarter-Finals · Semi-Finals · Final — MetLife Stadium, Jul 19</div>
-    <div class="bscroll-wrap" id="bscroll-wrap">
-      <div class="bscroll" id="bscroll-el"><div class="bracket" id="bracket"></div></div>
-    </div>`;
-  const b = $('bracket');
+    <div class="ko-list-view ${koActiveView === 'list' ? 'active' : ''}" id="ko-list-container"></div>`;
 
-  function mkKOTeam(label){
-    const key = koSlotKey(label);
-    const flag = KO_TEAM_FLAGS[label];
-    const bt = el('div', flag ? 'bt' : 'bt lbl');
-    if(key) bt.dataset.slot = key;
-    bt.innerHTML = flag
-      ? `<span class="bf">${flag}</span><span class="bn">${label}</span>`
-      : `<span class="bn">${label}</span>`;
-    return bt;
+  if(koActiveView === 'tree'){
+    renderBracketTree();
+  } else {
+    renderKORoundPills();
+    renderBracketList();
   }
-
-  function mkKOMatch(m){
-    const div = el('div','bm');
-    div.append(mkKOTeam(m.h));
-    div.append(el('div','bsep'));
-    div.append(mkKOTeam(m.a));
-    const info = el('div','bm-info');
-    info.textContent = `M${m.num} · ${m.stad}, ${m.city} · ${m.date}`;
-    div.append(info);
-    return div;
-  }
-
-  function mkKORound(label, matches){
-    const r = el('div','brd');
-    r.innerHTML = `<div class="brd-lbl">${label}</div>`;
-    const bm = el('div','bmatches');
-    matches.forEach(m => bm.append(mkKOMatch(m)));
-    r.append(bm);
-    return r;
-  }
-
-  b.append(mkKORound('Round of 32',    KO_DATA.left.r32));
-  b.append(mkKORound('Round of 16',    KO_DATA.left.r16));
-  b.append(mkKORound('Quarter-Finals', KO_DATA.left.qf));
-  b.append(mkKORound('Semi-Finals',    KO_DATA.left.sf));
-
-  const trophy = el('div','trophy');
-  trophy.innerHTML = `<div class="trophy-i">🏆</div><div class="trophy-l">Final<br>Jul 19</div><div class="trophy-t">MetLife Stadium<br>East Rutherford</div>`;
-  b.append(trophy);
-
-  b.append(mkKORound('Semi-Finals',    KO_DATA.right.sf));
-  b.append(mkKORound('Quarter-Finals', KO_DATA.right.qf));
-  b.append(mkKORound('Round of 16',    KO_DATA.right.r16));
-  b.append(mkKORound('Round of 32',    KO_DATA.right.r32));
-
-  initBscrollHint();
 }
+
+function renderKORoundPills(){
+  const container = $('ko-round-nav');
+  if(!container) return;
+  container.innerHTML = KO_ROUNDS.map(r => {
+    const active = koActiveRound === r.id;
+    return `<button class="ko-pill ${active ? 'active' : ''}" onclick="setKORound('${r.id}')">${r.label}</button>`;
+  }).join('');
+}
+
+window.setKOView = function(view){
+  koActiveView = view;
+  renderKnockout();
+  if(view === 'tree') setTimeout(drawConnectorLines, 60);
+};
+
+window.setKORound = function(round){
+  koActiveRound = round;
+  renderKORoundPills();
+  if(koActiveView === 'list') renderBracketList();
+};
+
+window.setKOSide = function(side){
+  koActiveSide = side;
+  renderKnockout();
+};
+
+function findESPNEvent(m){
+  if(!koEvents || koEvents.length === 0) return null;
+  return koEvents.find(ev => {
+    if(m.hResolved && m.aResolved){
+      const evH = ev.home.name.toLowerCase();
+      const evA = ev.away.name.toLowerCase();
+      const mH = m.hName.toLowerCase();
+      const mA = m.aName.toLowerCase();
+      if((evH.includes(mH) || mH.includes(evH)) && (evA.includes(mA) || mA.includes(evA))) return true;
+      if((evH.includes(mA) || mA.includes(evH)) && (evA.includes(mH) || mH.includes(evA))) return true;
+    }
+    const evDateStr = ev.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    if(evDateStr === m.date && ev.city.toLowerCase() === m.city.toLowerCase()) return true;
+    return false;
+  });
+}
+
+function getResolvedMatchesMap(){
+  const matchesMap = {};
+  const resolvedTeams = {};
+
+  GROUPS_DATA.forEach(g => {
+    const teams = [...(g.teams||[])].sort((a,b) =>
+      Number(b.pts??0) - Number(a.pts??0) ||
+      Number(b.gd??0)  - Number(a.gd??0) ||
+      Number(b.gf??0)  - Number(a.gf??0)
+    );
+    if(teams[0]?.advancedOfficial) resolvedTeams['1'+g.id] = teams[0];
+    if(teams[1]?.advancedOfficial) resolvedTeams['2'+g.id] = teams[1];
+  });
+
+  function resolve(label){
+    const slotKey = koSlotKey(label);
+    if(slotKey){
+      const team = resolvedTeams[slotKey];
+      if(team) return { name: team.n, flag: team.f, resolved: true, key: slotKey };
+      return { name: label, flag: '🏳️', resolved: false, key: slotKey };
+    }
+    const wMatch = label?.match(/^W M(\d+)$/);
+    if(wMatch){
+      const parentNum = parseInt(wMatch[1]);
+      const parent = matchesMap[parentNum];
+      if(parent && parent.winnerName){
+        return { name: parent.winnerName, flag: parent.winnerFlag, resolved: true };
+      }
+      return { name: label, flag: '🏳️', resolved: false };
+    }
+    return { name: label, flag: flag(label), resolved: true };
+  }
+
+  function processRound(matchesList, roundKey){
+    matchesList.forEach(m => {
+      const homeInfo = resolve(m.h);
+      const awayInfo = resolve(m.a);
+      const matchObj = {
+        num: m.num,
+        hLabel: m.h,
+        aLabel: m.a,
+        hName: homeInfo.name,
+        hFlag: homeInfo.flag,
+        hResolved: homeInfo.resolved,
+        hSlot: homeInfo.key,
+        aName: awayInfo.name,
+        aFlag: awayInfo.flag,
+        aResolved: awayInfo.resolved,
+        aSlot: awayInfo.key,
+        stad: m.stad,
+        city: m.city,
+        date: m.date,
+        roundKey,
+        hScore: null,
+        aScore: null,
+        winnerName: null,
+        winnerFlag: null,
+        state: 'pre',
+        espnEvent: null
+      };
+      const ev = findESPNEvent(matchObj);
+      if(ev){
+        matchObj.espnEvent = ev;
+        matchObj.state = ev.state;
+        if(ev.home.name && ev.home.name !== 'TBD'){
+          matchObj.hName = ev.home.name;
+          matchObj.hFlag = flag(ev.home.abbr);
+          matchObj.hResolved = true;
+        }
+        if(ev.away.name && ev.away.name !== 'TBD'){
+          matchObj.aName = ev.away.name;
+          matchObj.aFlag = flag(ev.away.abbr);
+          matchObj.aResolved = true;
+        }
+        if(ev.state !== 'pre'){
+          matchObj.hScore = ev.home.score;
+          matchObj.aScore = ev.away.score;
+          if(ev.home.winner){
+            matchObj.winnerName = matchObj.hName;
+            matchObj.winnerFlag = matchObj.hFlag;
+          } else if(ev.away.winner){
+            matchObj.winnerName = matchObj.aName;
+            matchObj.winnerFlag = matchObj.aFlag;
+          }
+        }
+      }
+      matchesMap[m.num] = matchObj;
+    });
+  }
+
+  processRound(KO_DATA.left.r32, 'r32');
+  processRound(KO_DATA.left.r16, 'r16');
+  processRound(KO_DATA.left.qf, 'qf');
+  processRound(KO_DATA.left.sf, 'sf');
+  processRound(KO_DATA.right.r32, 'r32');
+  processRound(KO_DATA.right.r16, 'r16');
+  processRound(KO_DATA.right.qf, 'qf');
+  processRound(KO_DATA.right.sf, 'sf');
+  processRound([{ num: 104, h: 'W M101', a: 'W M102', stad: 'MetLife Stadium', city: 'East Rutherford', date: 'Jul 19' }], 'final');
+
+  return matchesMap;
+}
+
+function renderBracketTree(){
+  const container = $('bracket');
+  if(!container) return;
+  const svg = $('bracket-svg');
+  container.innerHTML = '';
+  container.append(svg);
+  if(svg) svg.innerHTML = '';
+
+  const matchesMap = getResolvedMatchesMap();
+
+  function buildMatchCard(mNum){
+    const m = matchesMap[mNum];
+    if(!m) return '';
+    const hTBD = !m.hResolved;
+    const aTBD = !m.aResolved;
+    const hWin = m.winnerName === m.hName;
+    const aWin = m.winnerName === m.aName;
+    let hScoreHtml = '';
+    let aScoreHtml = '';
+    if(m.state !== 'pre' && m.hScore !== null && m.aScore !== null){
+      hScoreHtml = `<span class="bt-score">${m.hScore}</span>`;
+      aScoreHtml = `<span class="bt-score">${m.aScore}</span>`;
+      const hEv = m.espnEvent?.home;
+      const aEv = m.espnEvent?.away;
+      if(hEv?.shootoutScore !== null && hEv?.shootoutScore !== undefined &&
+         aEv?.shootoutScore !== null && aEv?.shootoutScore !== undefined){
+        hScoreHtml += `<span class="bt-pens">(${hEv.shootoutScore})</span>`;
+        aScoreHtml += `<span class="bt-pens">(${aEv.shootoutScore})</span>`;
+      }
+    }
+    let statusLabel = '';
+    if(m.state === 'in'){
+      const displayClock = m.espnEvent?.displayClock || 'LIVE';
+      statusLabel = `<span class="mc-min" style="font-size:8px;padding:1px 4px;margin-left:auto;background:#f97316;color:#fff">${displayClock}</span>`;
+    }
+    const tvChannel = getUKChannel(m.espnEvent?.home?.abbr || '', m.espnEvent?.away?.abbr || '');
+    const tvLabel = tvChannel ? `<span style="font-size:7px;opacity:0.7;color:#60b8ff">${tvChannel}</span>` : '';
+    return `
+      <div class="bm" data-mid="${m.num}" data-team-h="${m.hName}" data-team-a="${m.aName}" onclick="handleKOMatchClick(${m.num})">
+        <div class="bt ${hTBD ? 'tbd' : ''} ${hWin ? 'win' : ''}" ${m.hSlot ? `data-slot="${m.hSlot}"` : ''}>
+          <span class="bf">${m.hFlag}</span><span class="bn">${m.hName}</span>${hScoreHtml}
+        </div>
+        <div class="bsep"></div>
+        <div class="bt ${aTBD ? 'tbd' : ''} ${aWin ? 'win' : ''}" ${m.aSlot ? `data-slot="${m.aSlot}"` : ''}>
+          <span class="bf">${m.aFlag}</span><span class="bn">${m.aName}</span>${aScoreHtml}
+        </div>
+        <div class="bm-info">
+          <span>M${m.num} · ${m.date}</span>
+          ${statusLabel || tvLabel || `<span>${m.city}</span>`}
+        </div>
+      </div>`;
+  }
+
+  function mkKORoundColumn(label, matchesList, roundKey){
+    const col = el('div', 'brd');
+    col.dataset.round = roundKey;
+    col.innerHTML = `<div class="brd-lbl">${label}</div>`;
+    const bm = el('div', 'bmatches');
+    matchesList.forEach(m => {
+      const w = document.createElement('div');
+      w.className = 'bm-wrap';
+      w.innerHTML = buildMatchCard(m.num);
+      bm.append(w);
+    });
+    col.append(bm);
+    return col;
+  }
+
+  if(koActiveSide === 'left'){
+    container.append(mkKORoundColumn('Round of 32',    KO_DATA.left.r32,  'r32'));
+    container.append(mkKORoundColumn('Round of 16',    KO_DATA.left.r16,  'r16'));
+    container.append(mkKORoundColumn('Quarter-Finals', KO_DATA.left.qf,   'qf'));
+    container.append(mkKORoundColumn('Semi-Finals',    KO_DATA.left.sf,   'sf'));
+  } else if(koActiveSide === 'right'){
+    container.append(mkKORoundColumn('Round of 32',    KO_DATA.right.r32, 'r32'));
+    container.append(mkKORoundColumn('Round of 16',    KO_DATA.right.r16, 'r16'));
+    container.append(mkKORoundColumn('Quarter-Finals', KO_DATA.right.qf,  'qf'));
+    container.append(mkKORoundColumn('Semi-Finals',    KO_DATA.right.sf,  'sf'));
+  } else {
+    container.append(mkKORoundColumn('Semi-Final A', [{num:101}], 'sf'));
+    const finalCol = el('div', 'brd trophy-col');
+    finalCol.style.cssText = 'justify-content:center;align-items:center;padding:0 15px';
+    finalCol.innerHTML = `<div class="brd-lbl">The Final</div>`;
+    const bm = el('div', 'bmatches');
+    bm.style.cssText = 'justify-content:center;gap:16px;flex:1';
+    const w = document.createElement('div');
+    w.className = 'bm-wrap';
+    w.innerHTML = buildMatchCard(104);
+    const trophy = el('div', 'trophy');
+    trophy.innerHTML = `<div class="trophy-i">🏆</div><div class="trophy-l">Champion</div><div class="trophy-t">Jul 19 · MetLife Stadium</div>`;
+    bm.append(w);
+    bm.append(trophy);
+    finalCol.append(bm);
+    container.append(finalCol);
+    container.append(mkKORoundColumn('Semi-Final B', [{num:102}], 'sf'));
+  }
+
+  setupPathHighlightingListeners();
+  setTimeout(drawConnectorLines, 100);
+}
+
+function renderBracketList(){
+  const container = $('ko-list-container');
+  if(!container) return;
+  const matchesMap = getResolvedMatchesMap();
+  const matches = Object.values(matchesMap).filter(m => m.roundKey === koActiveRound);
+  if(matches.length === 0){
+    container.innerHTML = `<div class="empty">No matches scheduled for this round.</div>`;
+    return;
+  }
+  container.innerHTML = matches.map(m => {
+    const hTBD = !m.hResolved;
+    const aTBD = !m.aResolved;
+    const hWin = m.winnerName === m.hName;
+    const aWin = m.winnerName === m.aName;
+    let scoreDisplay = `<span class="ko-lm-score-sep">vs</span>`;
+    if(m.state !== 'pre' && m.hScore !== null && m.aScore !== null){
+      let hPensHtml = '';
+      let aPensHtml = '';
+      const hEv = m.espnEvent?.home;
+      const aEv = m.espnEvent?.away;
+      if(hEv?.shootoutScore !== null && hEv?.shootoutScore !== undefined &&
+         aEv?.shootoutScore !== null && aEv?.shootoutScore !== undefined){
+        hPensHtml = `<span class="bt-pens">(${hEv.shootoutScore})</span>`;
+        aPensHtml = `<span class="bt-pens">(${aEv.shootoutScore})</span>`;
+      }
+      scoreDisplay = `<span class="ko-lm-score ${hWin ? 'win' : ''}">${m.hScore}${hPensHtml}</span><span class="ko-lm-score-sep">–</span><span class="ko-lm-score ${aWin ? 'win' : ''}">${m.aScore}${aPensHtml}</span>`;
+    }
+    let statusBadge = '';
+    if(m.state === 'in'){
+      statusBadge = `<span class="mc-min" style="background:#f97316;color:#fff">${m.espnEvent?.displayClock || 'LIVE'}</span>`;
+    } else if(m.state === 'post'){
+      statusBadge = `<span class="mc-badge ft">FT</span>`;
+    } else {
+      statusBadge = `<span class="mc-badge up">${m.date}</span>`;
+    }
+    const tvChannel = getUKChannel(m.espnEvent?.home?.abbr || '', m.espnEvent?.away?.abbr || '');
+    const tvLabel = tvChannel ? `<span class="ko-lm-tv">${tvChannel}</span>` : '';
+    return `
+      <div class="ko-list-match" onclick="handleKOMatchClick(${m.num})">
+        <div class="ko-lm-header">
+          <span>Match ${m.num} · ${m.stad}</span>
+          ${tvLabel || statusBadge}
+        </div>
+        <div class="ko-lm-teams">
+          <div class="ko-lm-team home ${hWin ? 'win' : ''}">
+            <span class="bf" style="font-size:16px">${m.hFlag}</span>
+            <span class="${hTBD ? 'tbd' : ''}">${m.hName}</span>
+          </div>
+          <div class="ko-lm-score-wrap">${scoreDisplay}</div>
+          <div class="ko-lm-team away ${aWin ? 'win' : ''}">
+            <span class="${aTBD ? 'tbd' : ''}">${m.aName}</span>
+            <span class="bf" style="font-size:16px">${m.aFlag}</span>
+          </div>
+        </div>
+        <div class="ko-lm-footer">
+          <span>${m.city}</span>
+          <span>${m.espnEvent?.detail?.split(' at ')?.[1] || ''}</span>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+window.handleKOMatchClick = function(mNum){
+  const matchesMap = getResolvedMatchesMap();
+  const m = matchesMap[mNum];
+  if(!m) return;
+  if(m.espnEvent){
+    openMatchModal(m.espnEvent);
+  } else {
+    const ev = (lastEvents || []).find(e => {
+      const evH = e.home.name.toLowerCase();
+      const evA = e.away.name.toLowerCase();
+      const mH = m.hName.toLowerCase();
+      const mA = m.aName.toLowerCase();
+      return (evH.includes(mH) && evA.includes(mA)) || (evH.includes(mA) && evA.includes(mH));
+    });
+    if(ev){
+      openMatchModal(ev);
+    } else {
+      openMatchModal({
+        id: 'ko-'+mNum, state: 'pre', isHT: false, displayClock: '',
+        detail: `${m.date} at ${m.stad}`, date: new Date(),
+        home: { name: m.hName, abbr: m.hName.substring(0,3).toUpperCase(), score: 0, winner: false },
+        away: { name: m.aName, abbr: m.aName.substring(0,3).toUpperCase(), score: 0, winner: false },
+        venue: m.stad, city: m.city,
+        group: m.roundKey === 'final' ? 'Final' : m.roundKey.toUpperCase(), bcast: ''
+      });
+    }
+  }
+};
+
+function drawConnectorLines(){
+  const svg = $('bracket-svg');
+  if(!svg) return;
+  svg.innerHTML = '';
+  const bracket = $('bracket');
+  if(!bracket) return;
+  const bRect = bracket.getBoundingClientRect();
+  const matchesMap = getResolvedMatchesMap();
+
+  KO_CONNECTIONS.forEach(({ from, to }) => {
+    const fromEl = document.querySelector(`[data-mid="${from}"]`);
+    const toEl = document.querySelector(`[data-mid="${to}"]`);
+    if(!fromEl || !toEl) return;
+    const rFrom = fromEl.getBoundingClientRect();
+    const rTo = toEl.getBoundingClientRect();
+    const xFromOffset = rFrom.left - bRect.left;
+    const yFromOffset = rFrom.top - bRect.top;
+    const xToOffset = rTo.left - bRect.left;
+    const yToOffset = rTo.top - bRect.top;
+    const isLeftToRight = xFromOffset < xToOffset;
+    let xFrom, yFrom, xTo, yTo;
+    if(isLeftToRight){
+      xFrom = xFromOffset + rFrom.width; yFrom = yFromOffset + rFrom.height / 2;
+      xTo = xToOffset;                   yTo = yToOffset + rTo.height / 2;
+    } else {
+      xFrom = xFromOffset;              yFrom = yFromOffset + rFrom.height / 2;
+      xTo = xToOffset + rTo.width;      yTo = yToOffset + rTo.height / 2;
+    }
+    const dx = Math.abs(xTo - xFrom);
+    const x1 = isLeftToRight ? xFrom + dx * 0.45 : xFrom - dx * 0.45;
+    const x2 = isLeftToRight ? xTo - dx * 0.45   : xTo + dx * 0.45;
+    const d = `M ${xFrom} ${yFrom} C ${x1} ${yFrom}, ${x2} ${yTo}, ${xTo} ${yTo}`;
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', d);
+    path.setAttribute('class', 'bracket-path');
+    path.dataset.from = from;
+    path.dataset.to = to;
+    const fromMatch = matchesMap[from];
+    const toMatch = matchesMap[to];
+    path.dataset.teams = JSON.stringify([fromMatch?.hName, fromMatch?.aName, toMatch?.hName, toMatch?.aName].filter(Boolean));
+    svg.append(path);
+  });
+}
+
+function setupPathHighlightingListeners(){
+  const btNodes = document.querySelectorAll('.bracket .bt:not(.tbd)');
+  btNodes.forEach(node => {
+    const teamName = node.querySelector('.bn')?.textContent;
+    if(!teamName) return;
+    node.addEventListener('mouseenter', () => highlightTeamPath(teamName));
+    node.addEventListener('mouseleave', () => clearTeamPathHighlight());
+    node.addEventListener('click', e => {
+      e.stopPropagation();
+      if(node.classList.contains('highlighted-active')){
+        clearTeamPathHighlight();
+        node.classList.remove('highlighted-active');
+      } else {
+        document.querySelectorAll('.bt').forEach(n => n.classList.remove('highlighted-active'));
+        highlightTeamPath(teamName);
+        node.classList.add('highlighted-active');
+      }
+    });
+  });
+  document.addEventListener('click', () => {
+    clearTeamPathHighlight();
+    document.querySelectorAll('.bt').forEach(n => n.classList.remove('highlighted-active'));
+  });
+}
+
+function highlightTeamPath(teamName){
+  if(!teamName || teamName.includes('Winner ') || teamName.includes('Runner-up ') || teamName.includes('TBD')) return;
+  const cn = teamName.trim().toLowerCase();
+  document.querySelectorAll('.bracket .bm').forEach(card => {
+    const h = card.dataset.teamH?.trim().toLowerCase();
+    const a = card.dataset.teamA?.trim().toLowerCase();
+    if(h === cn || a === cn) card.classList.add('highlight-path');
+  });
+  document.querySelectorAll('.bracket-svg path').forEach(path => {
+    try {
+      const teams = JSON.parse(path.dataset.teams || '[]');
+      if(teams.some(t => t.trim().toLowerCase() === cn)) path.classList.add('highlight-line');
+    } catch(e){}
+  });
+}
+
+function clearTeamPathHighlight(){
+  document.querySelectorAll('.bracket .bm').forEach(c => c.classList.remove('highlight-path'));
+  document.querySelectorAll('.bracket-svg path').forEach(p => p.classList.remove('highlight-line'));
+}
+
+window.addEventListener('resize', drawConnectorLines);
 
 // ═══════════════════════════════════════════════════
 //  TABS
@@ -2811,7 +3246,7 @@ document.querySelectorAll('.tbtn').forEach(btn => {
     if(btn.dataset.tab === 'leaderboard') renderLeaderboard();
     if(btn.dataset.tab === 'myteam') renderMyTeam();
     if(btn.dataset.tab === 'rulebook') renderRulebook();
-    if(btn.dataset.tab === 'knockout') refreshKnockoutBracket();
+    if(btn.dataset.tab === 'knockout') { refreshKnockoutBracket(); fetchKnockoutData(); }
     setTimeout(observeCards, 40);
     gtag('event', 'tab_switch', { tab: btn.dataset.tab });
   });
@@ -4006,7 +4441,6 @@ function fillKOSlot(key, team, options={}){
 
 function refreshKnockoutBracket(){
   renderKnockout();
-  updateKnockoutFromGroups();
 }
 
 function updateKnockoutQualifiers(){ updateKnockoutFromGroups(); }
@@ -4014,80 +4448,22 @@ function updateKnockoutQualifiers(){ updateKnockoutFromGroups(); }
 // ═══════════════════════════════════════════════════
 //  FETCH KNOCKOUT BRACKET
 // ═══════════════════════════════════════════════════
+let koFetching = false;
 async function fetchKnockoutData(){
-  // Static KO_DATA bracket is authoritative during the group stage.
-  // Once knockout rounds begin (Jun 28+), live scores will be overlaid
-  // via ESPN match cards — no need to rebuild the bracket structure here.
-  return;
-}
-
-function renderKnockoutDynamic(rounds){
-  const sec = $('tab-knockout');
-  sec.innerHTML = `
-    <div class="ko-hd">Knockout Stage</div>
-    <div class="ko-sub">Round of 32 · Round of 16 · Quarter-Finals · Semi-Finals · Final — MetLife Stadium, July 19</div>
-    <div class="bscroll-wrap" id="bscroll-wrap">
-      <div class="bscroll" id="bscroll-el"><div class="bracket" id="bracket"></div></div>
-      <div class="bscroll-hint" id="bscroll-hint">
-        <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Swipe to explore
-      </div>
-    </div>`;
-  const b = $('bracket');
-
-  const roundOrder = ['Round of 32','Round of 16','Quarter-Final','Semi-Final','Final'];
-  const leftRounds  = roundOrder.slice(0, Math.ceil((roundOrder.length-1)/2));
-  const rightRounds = [...roundOrder.slice(Math.ceil((roundOrder.length-1)/2), roundOrder.length-1)].reverse();
-
-  function mkDynRound(label, matches){
-    const r = el('div','brd');
-    r.innerHTML = `<div class="brd-lbl">${label}</div>`;
-    const bm = el('div','bmatches');
-    matches.forEach(([t1,t2,state]) => {
-      const m = el('div','bm');
-      [t1,t2].forEach((t,i) => {
-        if(i===1){ m.append(el('div','bsep')); }
-        const isTBD = !t || t.n==='TBD';
-        const isWin = t?.winner;
-        const cls   = 'bt'+(isTBD?' tbd':isWin?' win':'');
-        const bt    = el('div', cls);
-        const scoreHtml = (!isTBD && t.score!==null && state!=='pre')
-          ? `<span style="margin-left:auto;font-family:var(--mono);font-weight:700">${t.score}</span>` : '';
-        bt.innerHTML = isTBD
-          ? `<span class="bn">— TBD —</span>`
-          : `<span class="bf">${t.f}</span><span class="bn">${t.n}</span>${scoreHtml}`;
-        m.append(bt);
-      });
-      bm.append(m);
-    });
-    r.append(bm);
-    return r;
+  if(koFetching) return;
+  koFetching = true;
+  try {
+    const r = await fetch(ESPN_URL + '?dates=20260628-20260719&limit=100', { signal: AbortSignal.timeout(8000) });
+    if(!r.ok) throw new Error(`${r.status}`);
+    const data = await r.json();
+    koEvents = (data.events || []).map(parseEvent);
+    const activeBtn = document.querySelector('.tbtn.active');
+    if(activeBtn && activeBtn.dataset.tab === 'knockout') refreshKnockoutBracket();
+  } catch(e){
+    console.error('[KO] fetchKnockoutData error:', e);
+  } finally {
+    koFetching = false;
   }
-
-  function mkTBDRound(label, count){
-    const r = el('div','brd');
-    r.innerHTML = `<div class="brd-lbl">${label}</div>`;
-    const bm = el('div','bmatches');
-    for(let i=0;i<count;i++){
-      const m = el('div','bm');
-      m.innerHTML = `<div class="bt tbd"><span class="bn">— TBD —</span></div>
-        <div class="bsep"></div><div class="bt tbd"><span class="bn">— TBD —</span></div>`;
-      bm.append(m);
-    }
-    r.append(bm);
-    return r;
-  }
-
-  const countFor = (lbl) => lbl==='Round of 32'?8:lbl==='Round of 16'?4:lbl==='Quarter-Final'?2:1;
-
-  leftRounds.forEach(lbl  => b.append(rounds[lbl] ? mkDynRound(lbl,rounds[lbl]) : mkTBDRound(lbl,countFor(lbl))));
-
-  const trophy = el('div','trophy');
-  trophy.innerHTML = `<div class="trophy-i">🏆</div><div class="trophy-l">Final<br>Jul 19</div><div class="trophy-t">MetLife<br>Stadium</div>`;
-  b.append(trophy);
-
-  rightRounds.forEach(lbl => b.append(rounds[lbl] ? mkDynRound(lbl,rounds[lbl]) : mkTBDRound(lbl,countFor(lbl))));
-  initBscrollHint();
 }
 
 // ═══════════════════════════════════════════════════
