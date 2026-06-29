@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-28T10:37:58.954Z",
+  "generatedAt": "2026-06-29T08:58:18.489Z",
   "byDate": {
     "2026-06-24": {
       "BIH-QAT": {
@@ -316,6 +316,20 @@
     "2026-06-28": {
       "RSA-CAN": {
         "summary": "South Africa (2nd in Group A, 4pts) meets Group B winners Canada (4pts, 8 GF). Winner advances, loser is eliminated in this knockout match.",
+        "status": "Must Win"
+      }
+    },
+    "2026-06-29": {
+      "BRA-JPN": {
+        "summary": "Brazil, topping Group C with 7 points, faces Japan, second in Group F with 5 points. Winner advances, loser is eliminated.",
+        "status": "Must Win"
+      },
+      "GER-PAR": {
+        "summary": "Germany, second in Group E with 6 points, battles Paraguay, Group D winners with 4 points. Victory means advancing; defeat ends their World Cup journey.",
+        "status": "Must Win"
+      },
+      "NED-MAR": {
+        "summary": "Group F winners Netherlands (7 points) meet Morocco, second in Group C with 7 points. Winner progresses, loser is eliminated.",
         "status": "Must Win"
       }
     }
