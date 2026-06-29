@@ -2721,7 +2721,7 @@ function renderThirdPlaceRanking(){
 // ═══════════════════════════════════════════════════
 //  KNOCKOUT
 // ═══════════════════════════════════════════════════
-let koActiveView = 'tree';
+let koActiveView = 'circular';
 let koActiveRound = 'r32';
 let koActiveSide = 'left';
 let koEvents = [];
@@ -2768,19 +2768,23 @@ function renderKnockout(){
         <button class="ko-side-btn ${koActiveSide === 'final' ? 'active' : ''}" onclick="setKOSide('final')">Finals</button>
         <button class="ko-side-btn ${koActiveSide === 'right' ? 'active' : ''}" onclick="setKOSide('right')">Right Side</button>
        </div>`
-    : `<div class="ko-round-nav" id="ko-round-nav"></div>`;
+    : koActiveView === 'list'
+    ? `<div class="ko-round-nav" id="ko-round-nav"></div>`
+    : '';
 
   sec.innerHTML = `
     <div class="ko-hd">Knockout Stage</div>
     <div class="ko-sub">Round of 32 · Round of 16 · Quarter-Finals · Semi-Finals · Final — MetLife Stadium, Jul 19</div>
     <div class="ko-header-controls">
       <div class="ko-view-toggle">
-        <button class="ko-toggle-btn ${koActiveView === 'tree' ? 'active' : ''}" onclick="setKOView('tree')">Bracket Tree</button>
-        <button class="ko-toggle-btn ${koActiveView === 'list' ? 'active' : ''}" onclick="setKOView('list')">Match List</button>
+        <button class="ko-toggle-btn ${koActiveView === 'circular' ? 'active' : ''}" onclick="setKOView('circular')">Circular</button>
+        <button class="ko-toggle-btn ${koActiveView === 'tree' ? 'active' : ''}" onclick="setKOView('tree')">Tree</button>
+        <button class="ko-toggle-btn ${koActiveView === 'list' ? 'active' : ''}" onclick="setKOView('list')">List</button>
       </div>
       ${controlsHtml}
     </div>
     <div class="ko-help-hint" style="display:${koActiveView === 'tree' && koActiveSide !== 'final' ? 'block' : 'none'}">← Swipe horizontally to explore the bracket →</div>
+    <div id="ko-circular-container" style="display:${koActiveView === 'circular' ? 'block' : 'none'}"></div>
     <div class="bscroll" id="ko-tree-container" style="display:${koActiveView === 'tree' ? 'block' : 'none'}">
       <div class="bracket side-${koActiveSide}" id="bracket">
         <svg class="bracket-svg" id="bracket-svg"></svg>
@@ -2790,9 +2794,11 @@ function renderKnockout(){
 
   if(koActiveView === 'tree'){
     renderBracketTree();
-  } else {
+  } else if(koActiveView === 'list'){
     renderKORoundPills();
     renderBracketList();
+  } else {
+    renderCircularBracket();
   }
 }
 
@@ -2809,6 +2815,7 @@ window.setKOView = function(view){
   koActiveView = view;
   renderKnockout();
   if(view === 'tree') setTimeout(drawConnectorLines, 60);
+  if(view === 'circular') renderCircularBracket();
 };
 
 window.setKORound = function(round){
@@ -3103,6 +3110,180 @@ function renderBracketList(){
         </div>
       </div>`;
   }).join('');
+}
+
+function renderCircularBracket(){
+  const container = $('ko-circular-container');
+  if(!container) return;
+
+  const matchesMap = getResolvedMatchesMap();
+  const W = 660, H = 660, cx = W/2, cy = H/2;
+  const ringR = { r32: 252, r16: 192, qf: 138, sf: 88, final: 44 };
+  const TEAM_R = 14;
+
+  function toRad(d){ return d * Math.PI / 180; }
+  function pt(deg, r){ const rad = toRad(deg); return { x: cx + r*Math.cos(rad), y: cy + r*Math.sin(rad) }; }
+  function f2(n){ return n.toFixed(2); }
+
+  // Match center angle: right side -90°→+90°, left side 270°→90° (mirrors right)
+  function matchCenter(side, n, idx){
+    const step = 180 / n;
+    return side === 'right' ? -90 + (idx + 0.5)*step : 270 - (idx + 0.5)*step;
+  }
+
+  // Two team angles within a match sector
+  function teamAngles(side, n, idx){
+    const c = matchCenter(side, n, idx);
+    const spread = Math.min(180/n * 0.38, 18);
+    return { home: c - spread, away: c + spread, center: c };
+  }
+
+  const svgLines = [];
+  const svgFlags = [];
+
+  // Faint ring guides
+  Object.values(ringR).forEach(r => {
+    svgLines.push(`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1" stroke-dasharray="3 5"/>`);
+  });
+
+  const roundDefs = [
+    { ring:'r32', n:8 },
+    { ring:'r16', n:4 },
+    { ring:'qf',  n:2 },
+    { ring:'sf',  n:1 },
+  ];
+
+  // Draw bracket arcs + connection lines
+  ['right','left'].forEach(side => {
+    for(let ri = 0; ri < roundDefs.length; ri++){
+      const { ring, n } = roundDefs[ri];
+      const r = ringR[ring];
+      for(let mi = 0; mi < n; mi++){
+        const { home, away, center } = teamAngles(side, n, mi);
+        const p1 = pt(home, r), p2 = pt(away, r);
+
+        // Short arc between the two teams of this match
+        const sweep = side === 'right' ? 1 : 0;
+        svgLines.push(`<path d="M${f2(p1.x)},${f2(p1.y)} A${r},${r} 0 0,${sweep} ${f2(p2.x)},${f2(p2.y)}" fill="none" stroke="rgba(255,255,255,0.13)" stroke-width="1.5" stroke-linecap="round"/>`);
+
+        // Radial line from arc midpoint inward
+        const arcMid = pt(center, r);
+        if(ri < roundDefs.length - 1){
+          const innerRound = roundDefs[ri + 1];
+          const innerCenter = matchCenter(side, innerRound.n, Math.floor(mi/2));
+          const innerPt = pt(innerCenter, ringR[innerRound.ring]);
+          svgLines.push(`<line x1="${f2(arcMid.x)}" y1="${f2(arcMid.y)}" x2="${f2(innerPt.x)}" y2="${f2(innerPt.y)}" stroke="rgba(255,255,255,0.09)" stroke-width="1.5"/>`);
+        } else {
+          // SF → Final
+          const finalAngle = side === 'right' ? 0 : 180;
+          const finalPt = pt(finalAngle, ringR.final);
+          svgLines.push(`<line x1="${f2(arcMid.x)}" y1="${f2(arcMid.y)}" x2="${f2(finalPt.x)}" y2="${f2(finalPt.y)}" stroke="rgba(255,215,0,0.18)" stroke-width="1.5"/>`);
+        }
+      }
+    }
+  });
+
+  // Final arc (between the two finalists)
+  const rfp = pt(0, ringR.final), lfp = pt(180, ringR.final);
+  svgLines.push(`<path d="M${f2(rfp.x)},${f2(rfp.y)} A${ringR.final},${ringR.final} 0 0,1 ${f2(lfp.x)},${f2(lfp.y)}" fill="none" stroke="rgba(255,215,0,0.28)" stroke-width="1.5"/>`);
+  svgLines.push(`<path d="M${f2(rfp.x)},${f2(rfp.y)} A${ringR.final},${ringR.final} 0 0,0 ${f2(lfp.x)},${f2(lfp.y)}" fill="none" stroke="rgba(255,215,0,0.28)" stroke-width="1.5"/>`);
+
+  // Build team flag data
+  const allSlots = [];
+
+  ['right','left'].forEach(side => {
+    const koSide = KO_DATA[side];
+    const sideDefs = [
+      { ring:'r32', n:8, matches: koSide.r32 },
+      { ring:'r16', n:4, matches: koSide.r16 },
+      { ring:'qf',  n:2, matches: koSide.qf  },
+      { ring:'sf',  n:1, matches: koSide.sf  },
+    ];
+    sideDefs.forEach(({ ring, n, matches }) => {
+      matches.forEach((m, mi) => {
+        const md = matchesMap[m.num];
+        const { home: ha, away: aa } = teamAngles(side, n, mi);
+        const r = ringR[ring];
+        [
+          { angle: ha, name: md?.hName||m.h, fl: md?.hFlag||'🏳️', win: md?.winnerName && md.winnerName===md.hName },
+          { angle: aa, name: md?.aName||m.a, fl: md?.aFlag||'🏳️', win: md?.winnerName && md.winnerName===md.aName },
+        ].forEach(t => {
+          const p = pt(t.angle, r);
+          allSlots.push({ ...p, angle: t.angle, name: t.name, fl: t.fl, win: t.win, matchNum: m.num, ring });
+        });
+      });
+    });
+  });
+
+  // Final teams
+  const fm = matchesMap[104];
+  [
+    { angle:   0, name: fm?.hName||'TBD', fl: fm?.hFlag||'🏳️', win: fm?.winnerName&&fm.winnerName===fm.hName },
+    { angle: 180, name: fm?.aName||'TBD', fl: fm?.aFlag||'🏳️', win: fm?.winnerName&&fm.winnerName===fm.aName },
+  ].forEach(t => {
+    const p = pt(t.angle, ringR.final);
+    allSlots.push({ ...p, angle: t.angle, name: t.name, fl: t.fl, win: t.win, matchNum: 104, ring:'final' });
+  });
+
+  // Draw team circles + flags
+  allSlots.forEach(s => {
+    const isTBD = !s.name || /Winner|Runner-up|TBD|W M\d/.test(s.name);
+    const bgFill  = s.win ? 'rgba(0,255,135,0.18)' : isTBD ? 'rgba(35,35,35,0.85)' : 'rgba(22,22,22,0.93)';
+    const stroke  = s.win ? 'rgba(0,255,135,0.75)' : isTBD ? 'rgba(255,255,255,0.07)' : 'rgba(255,255,255,0.2)';
+    const sw      = s.win ? 2 : 1;
+
+    svgFlags.push(`<g class="kc-team" onclick="handleKOMatchClick(${s.matchNum})" style="cursor:pointer" data-name="${s.name.replace(/"/g,"'")}">
+      <circle cx="${f2(s.x)}" cy="${f2(s.y)}" r="${TEAM_R}" fill="${bgFill}" stroke="${stroke}" stroke-width="${sw}">
+        <title>${s.name}</title>
+      </circle>
+      <text x="${f2(s.x)}" y="${f2(s.y)}" text-anchor="middle" dominant-baseline="central"
+        font-size="${isTBD ? 9 : s.ring==='r32' ? 13 : 13}" style="pointer-events:none;user-select:none"
+        fill="${isTBD ? 'rgba(255,255,255,0.22)' : '#fff'}">${isTBD ? '?' : s.fl}</text>
+    </g>`);
+
+    // Short name label on outer ring
+    if(s.ring === 'r32' && !isTBD){
+      const labelR = ringR.r32 + TEAM_R + 9;
+      const lp = pt(s.angle, labelR);
+      const anchor = s.x > cx + 10 ? 'start' : s.x < cx - 10 ? 'end' : 'middle';
+      const shortName = s.name.length > 10 ? s.name.slice(0,10)+'…' : s.name;
+      svgFlags.push(`<text x="${f2(lp.x)}" y="${f2(lp.y)}" text-anchor="${anchor}" dominant-baseline="central"
+        font-size="6.5" fill="rgba(255,255,255,0.38)" style="pointer-events:none;font-family:system-ui,sans-serif">${shortName}</text>`);
+    }
+  });
+
+  // Trophy + glow at center
+  svgFlags.push(`
+    <circle cx="${cx}" cy="${cy}" r="32" fill="rgba(255,215,0,0.07)" stroke="rgba(255,215,0,0.22)" stroke-width="1.5"/>
+    <text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central" font-size="26" style="pointer-events:none">🏆</text>
+  `);
+
+  // Round labels at each ring (faint, outward)
+  const roundLabels = [
+    { ring:'r32', label:'R32', labelR: ringR.r32 - TEAM_R - 6 },
+    { ring:'r16', label:'R16', labelR: ringR.r16 - TEAM_R - 6 },
+    { ring:'qf',  label:'QF',  labelR: ringR.qf  - TEAM_R - 6 },
+    { ring:'sf',  label:'SF',  labelR: ringR.sf  - TEAM_R - 6 },
+  ];
+  roundLabels.forEach(({ label, labelR }) => {
+    svgFlags.push(`<text x="${f2(cx)}" y="${f2(cy - labelR)}" text-anchor="middle" dominant-baseline="central"
+      font-size="7" fill="rgba(255,255,255,0.15)" style="pointer-events:none;font-family:system-ui;letter-spacing:.5px;text-transform:uppercase">${label}</text>`);
+  });
+
+  const svgEl = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg"
+    style="width:100%;max-width:min(100vw - 8px, 660px);display:block;margin:0 auto;touch-action:pan-y">
+    <defs>
+      <radialGradient id="kc-bg" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="rgba(0,255,135,0.04)"/>
+        <stop offset="65%" stop-color="rgba(0,0,0,0)"/>
+      </radialGradient>
+    </defs>
+    <rect width="${W}" height="${H}" fill="url(#kc-bg)" rx="12"/>
+    ${svgLines.join('\n')}
+    ${svgFlags.join('\n')}
+  </svg>`;
+
+  container.innerHTML = `<div style="padding:8px 0 28px;display:flex;justify-content:center">${svgEl}</div>`;
 }
 
 window.handleKOMatchClick = function(mNum){
