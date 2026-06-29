@@ -1515,8 +1515,14 @@ const UK_TV = {
   'JPN|SWE':'BBC Two','NED|TUN':'BBC One','AUS|PAR':'ITV4','TUR|USA':'ITV1','FRA|NOR':'ITV1','IRQ|SEN':'ITV4',
   'CPV|KSA':'ITV4','ESP|URU':'ITV1','EGY|IRN':'BBC Two','BEL|NZL':'BBC One','ENG|PAN':'ITV1','CRO|GHA':'ITV4',
   'COL|POR':'BBC One','COD|UZB':'BBC Two','ALG|AUT':'BBC Two','ARG|JOR':'BBC One',
+  // Round of 32
+  'BRA|JPN':'ITV1','GER|PAR':'BBC One',
+  'MAR|NED':'ITV1','CIV|NOR':'BBC One','FRA|SWE':'ITV1',
+  'ECU|MEX':'ITV1','COD|ENG':'BBC One','BEL|SEN':'ITV1',
+  'BIH|USA':'BBC One','AUT|ESP':'BBC One','CRO|POR':'BBC One',
+  'ALG|SUI':'BBC One','AUS|EGY':'BBC One','ARG|CPV':'ITV1','COL|GHA':'ITV1',
 };
-function getUKChannel(a1, a2){ return UK_TV[[a1,a2].sort().join('|')] || 'BBC/ITV'; }
+function getUKChannel(a1, a2){ return UK_TV[[a1,a2].sort().join('|')] || ''; }
 const ESPN_SUMMARY  = '/api/summary';
 const ESPN_STATS    = '/api/statistics';
 let liveClocks = {};
@@ -1547,7 +1553,6 @@ function countdown(dateObj){
   const h = Math.floor(diff/3600000);
   const m = Math.floor((diff%3600000)/60000);
   const s = Math.floor((diff%60000)/1000);
-  if(h>23) return 'Tomorrow';
   if(diff===0) return 'Starting…';
   return `${h>0?h+'h ':''}`+String(m).padStart(2,'0')+'m '+String(s).padStart(2,'0')+'s';
 }
@@ -1859,7 +1864,6 @@ function buildCard(ev){
       <div class="mc-up-foot">
         <div>
           <span class="mc-up-time">${localTime(ev.date)}</span>
-          <span class="mc-up-cd" data-cdid="${ev.id}" data-ts="${ev.date.getTime()}">${countdown(ev.date)}</span>
         </div>
         ${venue ? `<span class="mc-up-venue" title="${esc([ev.venue,ev.city].filter(Boolean).join(' · '))}">${esc(venue)}</span>` : ''}
       </div>
