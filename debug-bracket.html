@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>World Cup 2026 — Circular Bracket</title>
+<title>World Cup 2026 — Interactive Bracket</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
@@ -14,218 +14,260 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px 8px 40px;
-  overflow-x: hidden;
+  padding: 16px 8px 32px;
 }
 h1 { font-size: 16px; font-weight: 700; margin-bottom: 4px; text-align: center; }
-.sub { font-size: 11px; color: rgba(255,255,255,0.35); margin-bottom: 16px; letter-spacing: 0.08em; text-transform: uppercase; text-align: center; }
-#bc { width: 100%; max-width: 720px; }
-svg { width: 100%; height: auto; display: block; }
-.legend {
-  display: flex; gap: 14px; flex-wrap: wrap; justify-content: center;
-  margin-top: 16px; font-size: 11px; color: rgba(255,255,255,0.5);
-}
-.li { display: flex; align-items: center; gap: 6px; }
-.ld { width: 10px; height: 10px; border-radius: 50%; }
+.sub { font-size: 11px; color: rgba(255,255,255,0.38); margin-bottom: 10px; text-transform: uppercase; letter-spacing: .08em; text-align: center; }
+#bc { width: 100%; max-width: 700px; }
+svg { width: 100%; height: auto; display: block; touch-action: pinch-zoom; }
+.hint { font-size: 10px; color: rgba(255,255,255,0.28); margin-top: 10px; text-align: center; }
 </style>
 </head>
 <body>
 <h1>🏆 FIFA World Cup 2026</h1>
-<div class="sub">Knockout Stage · Round of 32 → Final</div>
+<div class="sub">Interactive Bracket · Tap a match node to pick the winner</div>
 <div id="bc"></div>
-<div class="legend">
-  <div class="li"><div class="ld" style="background:#0f2340;border:1.5px solid #4080c0"></div> Round of 32</div>
-  <div class="li"><div class="ld" style="background:#0f3520;border:1.5px solid #30c060"></div> Round of 16</div>
-  <div class="li"><div class="ld" style="background:#2a1a05;border:1.5px solid #e0a020"></div> Quarter-final</div>
-  <div class="li"><div class="ld" style="background:#2a0a05;border:1.5px solid #ff7030"></div> Semi-final</div>
-</div>
+<div class="hint">Tap once = Team A wins · Tap again = Team B wins · Tap again = clear</div>
 <script>
-const W = 820, H = 820, cx = W/2, cy = H/2;
-const RAD = Math.PI / 180;
-const STEP = 360 / 32; // 11.25° per slot
-
-const R_TEAM = 355, R_R32 = 282, R_R16 = 212, R_QF = 148, R_SF = 90;
-const BADGE = 22, FINAL_R = 42;
-const NR = { r32: 8.5, r16: 10, qf: 11.5, sf: 14 };
+const SZ = 1000, CX = 500, CY = 500;
+const RL = 400, RR32 = 325, RR16 = 252, RQF = 182, RSF = 115;
+const BADGE = 20;
 
 const TEAMS = [
-  {n:'South Africa', s:'RSA', f:'🇿🇦', p:0},
-  {n:'Canada',       s:'CAN', f:'🇨🇦', p:1},
-  {n:'Netherlands',  s:'NED', f:'🇳🇱', p:2},
-  {n:'Morocco',      s:'MAR', f:'🇲🇦', p:3},
-  {n:'Germany',      s:'GER', f:'🇩🇪', p:4},
-  {n:'Paraguay',     s:'PAR', f:'🇵🇾', p:5},
-  {n:'France',       s:'FRA', f:'🇫🇷', p:6},
-  {n:'Sweden',       s:'SWE', f:'🇸🇪', p:7},
-  {n:'Brazil',       s:'BRA', f:'🇧🇷', p:8},
-  {n:'Japan',        s:'JPN', f:'🇯🇵', p:9},
-  {n:'Ivory Coast',  s:'CIV', f:'🇨🇮', p:10},
-  {n:'Norway',       s:'NOR', f:'🇳🇴', p:11},
-  {n:'Mexico',       s:'MEX', f:'🇲🇽', p:12},
-  {n:'Ecuador',      s:'ECU', f:'🇪🇨', p:13},
-  {n:'England',      s:'ENG', f:'🏴󠁧󠁢󠁥󠁮󠁧󠁿', p:14},
-  {n:'Congo DR',     s:'COD', f:'🇨🇩', p:15},
-  {n:'USA',          s:'USA', f:'🇺🇸', p:16},
-  {n:'Bosnia-Herz.', s:'BIH', f:'🇧🇦', p:17},
-  {n:'Belgium',      s:'BEL', f:'🇧🇪', p:18},
-  {n:'Senegal',      s:'SEN', f:'🇸🇳', p:19},
-  {n:'Portugal',     s:'POR', f:'🇵🇹', p:20},
-  {n:'Croatia',      s:'CRO', f:'🇭🇷', p:21},
-  {n:'Spain',        s:'ESP', f:'🇪🇸', p:22},
-  {n:'Austria',      s:'AUT', f:'🇦🇹', p:23},
-  {n:'Switzerland',  s:'SUI', f:'🇨🇭', p:24},
-  {n:'Algeria',      s:'ALG', f:'🇩🇿', p:25},
-  {n:'Colombia',     s:'COL', f:'🇨🇴', p:26},
-  {n:'Ghana',        s:'GHA', f:'🇬🇭', p:27},
-  {n:'Argentina',    s:'ARG', f:'🇦🇷', p:28},
-  {n:'Cape Verde',   s:'CPV', f:'🇨🇻', p:29},
-  {n:'Australia',    s:'AUS', f:'🇦🇺', p:30},
-  {n:'Egypt',        s:'EGY', f:'🇪🇬', p:31},
+  {n:'South Africa',  s:'RSA', f:'🇿🇦'}, {n:'Canada',        s:'CAN', f:'🇨🇦'},
+  {n:'Netherlands',   s:'NED', f:'🇳🇱'}, {n:'Morocco',       s:'MAR', f:'🇲🇦'},
+  {n:'Germany',       s:'GER', f:'🇩🇪'}, {n:'Paraguay',      s:'PAR', f:'🇵🇾'},
+  {n:'France',        s:'FRA', f:'🇫🇷'}, {n:'Sweden',        s:'SWE', f:'🇸🇪'},
+  {n:'Brazil',        s:'BRA', f:'🇧🇷'}, {n:'Japan',         s:'JPN', f:'🇯🇵'},
+  {n:'Ivory Coast',   s:'CIV', f:'🇨🇮'}, {n:'Norway',        s:'NOR', f:'🇳🇴'},
+  {n:'Mexico',        s:'MEX', f:'🇲🇽'}, {n:'Ecuador',       s:'ECU', f:'🇪🇨'},
+  {n:'England',       s:'ENG', f:'🏴󠁧󠁢󠁥󠁮󠁧󠁿'}, {n:'Congo DR',      s:'COD', f:'🇨🇩'},
+  {n:'USA',           s:'USA', f:'🇺🇸'}, {n:'Bosnia-Herz.',  s:'BIH', f:'🇧🇦'},
+  {n:'Belgium',       s:'BEL', f:'🇧🇪'}, {n:'Senegal',       s:'SEN', f:'🇸🇳'},
+  {n:'Portugal',      s:'POR', f:'🇵🇹'}, {n:'Croatia',       s:'CRO', f:'🇭🇷'},
+  {n:'Spain',         s:'ESP', f:'🇪🇸'}, {n:'Austria',       s:'AUT', f:'🇦🇹'},
+  {n:'Switzerland',   s:'SUI', f:'🇨🇭'}, {n:'Algeria',       s:'ALG', f:'🇩🇿'},
+  {n:'Colombia',      s:'COL', f:'🇨🇴'}, {n:'Ghana',         s:'GHA', f:'🇬🇭'},
+  {n:'Argentina',     s:'ARG', f:'🇦🇷'}, {n:'Cape Verde',    s:'CPV', f:'🇨🇻'},
+  {n:'Australia',     s:'AUS', f:'🇦🇺'}, {n:'Egypt',         s:'EGY', f:'🇪🇬'},
 ];
 
-const R32_M = [73,75,74,77,76,78,79,80,81,82,83,84,85,87,86,88];
-const R16_M = [90,89,91,92,94,93,96,95];
-const QF_M  = [97,98,99,100];
-const SF_M  = [101,102];
+// Real match numbers shown on nodes
+const MN = {
+  1:'M73',2:'M75',3:'M74',4:'M77',5:'M76',6:'M78',7:'M79',8:'M80',
+  9:'M81',10:'M82',11:'M83',12:'M84',13:'M85',14:'M87',15:'M86',16:'M88',
+  17:'M90',18:'M89',19:'M91',20:'M92',21:'M94',22:'M93',23:'M96',24:'M95',
+  25:'M97',26:'M98',27:'M99',28:'M100',29:'M101',30:'M102',31:'M103'
+};
 
-function ang(i) { return -90 + i * STEP; }
-function mid(s, c) { return ang(s) + (c - 1) / 2 * STEP; }
-function pt(r, d) {
-  const a = d * RAD;
-  return [+(cx + r * Math.cos(a)).toFixed(2), +(cy + r * Math.sin(a)).toFixed(2)];
+function rad(d) { return d * Math.PI / 180; }
+function p2c(r, deg) {
+  return { x: +(CX + r * Math.cos(rad(deg))).toFixed(2),
+           y: +(CY + r * Math.sin(rad(deg))).toFixed(2) };
 }
 
-const r32 = Array.from({length:16}, (_, i) => {
-  const [x, y] = pt(R_R32, mid(i*2, 2));
-  return {x, y, m: R32_M[i]};
-});
-const r16 = Array.from({length:8}, (_, i) => {
-  const [x, y] = pt(R_R16, mid(i*4, 4));
-  return {x, y, m: R16_M[i]};
-});
-const qf = Array.from({length:4}, (_, i) => {
-  const [x, y] = pt(R_QF, mid(i*8, 8));
-  return {x, y, m: QF_M[i]};
-});
-const sf = Array.from({length:2}, (_, i) => {
-  const [x, y] = pt(R_SF, mid(i*16, 16));
-  return {x, y, m: SF_M[i]};
-});
-
-function ln(x1, y1, x2, y2, s, w) {
-  return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${s}" stroke-width="${w}" stroke-linecap="round"/>`;
+// Left bracket: angles 260→100 (i=0..15); Right bracket: -80→80 (i=16..31)
+function leafTheta(i) {
+  return i < 16 ? 260 - i * (160/15) : -80 + (i-16) * (160/15);
 }
 
-let lines = '';
-// teams → r32
-TEAMS.forEach(t => {
-  const [tx, ty] = pt(R_TEAM, ang(t.p));
-  const n = r32[Math.floor(t.p / 2)];
-  lines += ln(tx, ty, n.x, n.y, 'rgba(100,150,255,0.18)', 1.5);
-});
-// r32 → r16
-r32.forEach((n, i) => {
-  const p = r16[Math.floor(i / 2)];
-  lines += ln(n.x, n.y, p.x, p.y, 'rgba(130,190,255,0.26)', 2);
-});
-// r16 → qf
-r16.forEach((n, i) => {
-  const p = qf[Math.floor(i / 2)];
-  lines += ln(n.x, n.y, p.x, p.y, 'rgba(255,195,60,0.32)', 2.5);
-});
-// qf → sf
-qf.forEach((n, i) => {
-  const p = sf[Math.floor(i / 2)];
-  lines += ln(n.x, n.y, p.x, p.y, 'rgba(255,170,30,0.48)', 3);
-});
-// sf → center
-sf.forEach(n => {
-  lines += ln(n.x, n.y, cx, cy, 'rgba(255,210,0,0.65)', 3.5);
-});
+function matchRadius(m) {
+  if (m <= 16) return RR32;
+  if (m <= 24) return RR16;
+  if (m <= 28) return RQF;
+  if (m <= 30) return RSF;
+  return 0;
+}
 
-let matchNodes = '';
-r32.forEach(n => {
-  matchNodes += `<circle cx="${n.x}" cy="${n.y}" r="${NR.r32}" fill="#0f2340" stroke="#4080c0" stroke-width="1.5"/>`;
-  matchNodes += `<text x="${n.x}" y="${n.y}" text-anchor="middle" dominant-baseline="middle" font-size="5" fill="rgba(255,255,255,0.8)" font-family="monospace" font-weight="bold">M${n.m}</text>`;
-});
-r16.forEach(n => {
-  matchNodes += `<circle cx="${n.x}" cy="${n.y}" r="${NR.r16}" fill="#0f3520" stroke="#30c060" stroke-width="1.5"/>`;
-  matchNodes += `<text x="${n.x}" y="${n.y}" text-anchor="middle" dominant-baseline="middle" font-size="5.5" fill="rgba(255,255,255,0.85)" font-family="monospace" font-weight="bold">M${n.m}</text>`;
-});
-qf.forEach(n => {
-  matchNodes += `<circle cx="${n.x}" cy="${n.y}" r="${NR.qf}" fill="#2a1a05" stroke="#e0a020" stroke-width="2"/>`;
-  matchNodes += `<text x="${n.x}" y="${n.y}" text-anchor="middle" dominant-baseline="middle" font-size="6" fill="#fff" font-family="monospace" font-weight="bold">M${n.m}</text>`;
-});
-sf.forEach(n => {
-  matchNodes += `<circle cx="${n.x}" cy="${n.y}" r="${NR.sf}" fill="#2a0a05" stroke="#ff7030" stroke-width="2.5"/>`;
-  matchNodes += `<text x="${n.x}" y="${n.y}" text-anchor="middle" dominant-baseline="middle" font-size="6.5" fill="#fff" font-family="monospace" font-weight="bold">M${n.m}</text>`;
-});
+function matchChildren(m) {
+  if (m >= 1  && m <= 16) return { t:'leaves', a:(m-1)*2,    b:(m-1)*2+1 };
+  if (m >= 17 && m <= 24) return { t:'matches',a:(m-17)*2+1, b:(m-17)*2+2 };
+  if (m >= 25 && m <= 28) return { t:'matches',a:(m-25)*2+17,b:(m-25)*2+18 };
+  if (m === 29) return { t:'matches', a:25, b:26 };
+  if (m === 30) return { t:'matches', a:27, b:28 };
+  if (m === 31) return { t:'matches', a:29, b:30 };
+}
 
-let badges = '';
-TEAMS.forEach(t => {
-  const a = ang(t.p);
-  const [tx, ty] = pt(R_TEAM, a);
-  const cosA = Math.cos(a * RAD);
+function matchTheta(m) {
+  if (m === 31) return 0;
+  const ch = matchChildren(m);
+  const tA = ch.t === 'leaves' ? leafTheta(ch.a) : matchTheta(ch.a);
+  const tB = ch.t === 'leaves' ? leafTheta(ch.b) : matchTheta(ch.b);
+  return (tA + tB) / 2;
+}
 
-  badges += `<circle cx="${tx}" cy="${ty}" r="${BADGE}" fill="#0c1828" stroke="rgba(80,130,255,0.45)" stroke-width="1.5"/>`;
-  badges += `<text x="${tx}" y="${ty}" text-anchor="middle" dominant-baseline="middle" font-size="14">${t.f}</text>`;
+// Arc-bracket path: outer point → mid-radius line → arc → inner point
+function halfBracket(rOut, rIn, tOut, tIn) {
+  const rArc = (rOut + rIn) / 2;
+  const pOut   = p2c(rOut, tOut);
+  const pArc   = p2c(rArc, tOut);
+  const pInArc = p2c(rArc, tIn);
+  const pIn    = rIn === 0 ? {x:CX,y:CY} : p2c(rIn, tIn);
 
-  // Short code label, rotated radially outward
-  const labelR = R_TEAM + BADGE + 9;
-  const [lx, ly] = pt(labelR, a);
-  let labelSvg;
-  if (Math.abs(cosA) <= 0.13) {
-    // Near top or bottom: horizontal, centered
-    labelSvg = `<text x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="middle" font-size="7.5" fill="rgba(255,255,255,0.72)" font-weight="600">${t.s}</text>`;
-  } else if (cosA > 0) {
-    // Right half: rotate by angle, anchor start (text extends outward)
-    labelSvg = `<text x="${lx}" y="${ly}" text-anchor="start" dominant-baseline="middle" transform="rotate(${a.toFixed(2)},${lx},${ly})" font-size="7.5" fill="rgba(255,255,255,0.72)" font-weight="600">${t.s}</text>`;
-  } else {
-    // Left half: rotate by angle+180, anchor end (text extends outward, not upside-down)
-    const rot = (a + 180).toFixed(2);
-    labelSvg = `<text x="${lx}" y="${ly}" text-anchor="end" dominant-baseline="middle" transform="rotate(${rot},${lx},${ly})" font-size="7.5" fill="rgba(255,255,255,0.72)" font-weight="600">${t.s}</text>`;
+  if (Math.abs(tIn - tOut) < 0.1)
+    return `M ${pOut.x} ${pOut.y} L ${pIn.x} ${pIn.y}`;
+
+  let sw = tIn > tOut ? 1 : 0;
+  if (Math.abs(tIn - tOut) > 180) sw = 1 - sw;
+
+  return `M ${pOut.x} ${pOut.y} L ${pArc.x} ${pArc.y} A ${rArc} ${rArc} 0 0 ${sw} ${pInArc.x} ${pInArc.y} L ${pIn.x} ${pIn.y}`;
+}
+
+// Get the two teams competing in match m (null if not yet decided upstream)
+function matchTeams(m) {
+  const ch = matchChildren(m);
+  if (ch.t === 'leaves') return [TEAMS[ch.a], TEAMS[ch.b]];
+  const wA = winners[ch.a], wB = winners[ch.b];
+  return [
+    wA != null ? matchTeams(ch.a)[wA] : null,
+    wB != null ? matchTeams(ch.b)[wB] : null,
+  ];
+}
+
+// State: winners[matchId] = 0 (first child wins) | 1 (second child wins) | undefined
+let winners = {};
+
+function clearDownstream(m) {
+  for (let i = m+1; i <= 31; i++) {
+    const ch = matchChildren(i);
+    if (ch.t === 'matches' && (ch.a === m || ch.b === m) && winners[i] != null) {
+      delete winners[i];
+      clearDownstream(i);
+    }
   }
-  badges += labelSvg;
-});
+}
 
-const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}">
-<defs>
-  <radialGradient id="bgG" cx="50%" cy="50%" r="50%">
-    <stop offset="0%" stop-color="#0a1428"/>
-    <stop offset="100%" stop-color="#060810"/>
-  </radialGradient>
-  <radialGradient id="glowG" cx="50%" cy="50%" r="50%">
-    <stop offset="0%" stop-color="#ffd700" stop-opacity="0.65"/>
-    <stop offset="55%" stop-color="#ff8c00" stop-opacity="0.2"/>
-    <stop offset="100%" stop-color="#ff4400" stop-opacity="0"/>
-  </radialGradient>
-</defs>
+function arcColor(m, slot) {
+  const w = winners[m];
+  if (w == null)    return 'rgba(130,165,255,0.22)';
+  if (w === slot)   return 'rgba(255,208,48,0.92)';
+  return 'rgba(80,100,160,0.1)';
+}
 
-<rect width="${W}" height="${H}" fill="url(#bgG)"/>
+function arcWidth(m) {
+  if (m <= 16) return 1.8;
+  if (m <= 24) return 2.2;
+  if (m <= 28) return 2.8;
+  return 3.4;
+}
 
-<!-- Guide circles -->
-<circle cx="${cx}" cy="${cy}" r="${R_R32}" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1" stroke-dasharray="3 5"/>
-<circle cx="${cx}" cy="${cy}" r="${R_R16}" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1" stroke-dasharray="3 5"/>
-<circle cx="${cx}" cy="${cy}" r="${R_QF}"  fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1" stroke-dasharray="3 5"/>
-<circle cx="${cx}" cy="${cy}" r="${R_SF}"  fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1" stroke-dasharray="3 5"/>
+function render() {
+  let arcs = '', mNodes = '', badges = '';
 
-<!-- Lines -->
-${lines}
+  // --- Arcs ---
+  for (let m = 1; m <= 31; m++) {
+    const ch = matchChildren(m);
+    const mt = matchTheta(m);
+    const mr = matchRadius(m);
+    const sw = arcWidth(m);
 
-<!-- Match nodes -->
-${matchNodes}
+    let tA, tB, rA, rB;
+    if (ch.t === 'leaves') {
+      tA = leafTheta(ch.a); tB = leafTheta(ch.b); rA = rB = RL;
+    } else {
+      tA = matchTheta(ch.a); tB = matchTheta(ch.b);
+      rA = matchRadius(ch.a); rB = matchRadius(ch.b);
+    }
 
-<!-- Final -->
-<circle cx="${cx}" cy="${cy}" r="${FINAL_R + 20}" fill="url(#glowG)"/>
-<circle cx="${cx}" cy="${cy}" r="${FINAL_R}" fill="#120e05" stroke="#ffd700" stroke-width="2.5"/>
-<text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="middle" font-size="28">🏆</text>
-<text x="${cx}" y="${+cy + FINAL_R + 14}" text-anchor="middle" dominant-baseline="middle" font-size="7.5" fill="rgba(255,215,0,0.65)" letter-spacing="2" font-weight="700">FINAL</text>
+    const cA = arcColor(m, 0), cB = arcColor(m, 1);
+    arcs += `<path d="${halfBracket(rA,mr,tA,mt)}" fill="none" stroke="${cA}" stroke-width="${sw}" stroke-linecap="round"/>`;
+    arcs += `<path d="${halfBracket(rB,mr,tB,mt)}" fill="none" stroke="${cB}" stroke-width="${sw}" stroke-linecap="round"/>`;
+  }
 
-<!-- Team badges + labels -->
-${badges}
-</svg>`;
+  // --- Match nodes (1-30) ---
+  for (let m = 1; m <= 30; m++) {
+    const mt = matchTheta(m);
+    const mr = matchRadius(m);
+    const {x:px, y:py} = p2c(mr, mt);
+    const [tA, tB] = matchTeams(m);
+    const w = winners[m];
 
-document.getElementById('bc').innerHTML = svg;
+    let fill, stroke, nr;
+    if (m <= 16)      { fill='#0d1e3a'; stroke='#3a70c0'; nr=10; }
+    else if (m <= 24) { fill='#0d2e18'; stroke='#28a855'; nr=11.5; }
+    else if (m <= 28) { fill='#281a05'; stroke='#d09818'; nr=13; }
+    else              { fill='#280a05'; stroke='#e86030'; nr=15; }
+
+    mNodes += `<circle cx="${px}" cy="${py}" r="${nr}" fill="${fill}" stroke="${stroke}" stroke-width="2" data-match="${m}" style="cursor:pointer"/>`;
+
+    if (w != null) {
+      // Show winner's flag on node
+      const wTeam = w === 0 ? tA : tB;
+      if (wTeam) mNodes += `<text x="${px}" y="${py}" text-anchor="middle" dominant-baseline="middle" font-size="${nr*1.1}" style="pointer-events:none">${wTeam.f}</text>`;
+    } else {
+      // Show match label
+      mNodes += `<text x="${px}" y="${py}" text-anchor="middle" dominant-baseline="middle" font-size="5.5" fill="rgba(255,255,255,0.55)" font-family="monospace" style="pointer-events:none">${MN[m]}</text>`;
+    }
+
+    // Flanking team flags when not yet decided (only R32)
+    if (m <= 16 && w == null) {
+      const ch = matchChildren(m);
+      const offA = p2c(mr + nr + 10, leafTheta(ch.a));
+      const offB = p2c(mr + nr + 10, leafTheta(ch.b));
+      // These overlap too much — skip for now, teams are shown at leaf badges
+    }
+  }
+
+  // --- Final / Center ---
+  mNodes += `
+    <circle cx="${CX}" cy="${CY}" r="46" fill="#120e04" stroke="#ffd700" stroke-width="3" data-match="31" style="cursor:pointer"/>
+    <text x="${CX}" y="${CY}" text-anchor="middle" dominant-baseline="middle" font-size="30" style="pointer-events:none">🏆</text>
+  `;
+  const fw = winners[31] != null ? matchTeams(31)[winners[31]] : null;
+  if (fw) {
+    mNodes += `<text x="${CX}" y="${CY+60}" text-anchor="middle" font-size="13" fill="#ffd700" font-weight="700" style="pointer-events:none">${fw.f} ${fw.s} 🏆</text>`;
+  }
+
+  // --- Team badges at leaf positions ---
+  for (let i = 0; i < 32; i++) {
+    const th = leafTheta(i);
+    const {x,y} = p2c(RL, th);
+    const t = TEAMS[i];
+    const cos = Math.cos(rad(th));
+
+    badges += `<circle cx="${x}" cy="${y}" r="${BADGE}" fill="#0c1828" stroke="rgba(80,130,255,0.5)" stroke-width="1.5"/>`;
+    badges += `<text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="middle" font-size="13" style="pointer-events:none">${t.f}</text>`;
+
+    // Short code label outside badge
+    const lp = p2c(RL + BADGE + 9, th);
+    const anc = cos > 0.12 ? 'start' : cos < -0.12 ? 'end' : 'middle';
+    badges += `<text x="${lp.x}" y="${lp.y}" text-anchor="${anc}" dominant-baseline="middle" font-size="8" fill="rgba(255,255,255,0.65)" font-weight="600" style="pointer-events:none">${t.s}</text>`;
+  }
+
+  document.getElementById('bc').innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${SZ} ${SZ}">
+    <defs>
+      <radialGradient id="bg" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#0a1428"/><stop offset="100%" stop-color="#060810"/>
+      </radialGradient>
+      <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#ffd700" stop-opacity="0.6"/>
+        <stop offset="100%" stop-color="#ff8800" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+    <rect width="${SZ}" height="${SZ}" fill="url(#bg)"/>
+    <circle cx="${CX}" cy="${CY}" r="80" fill="url(#glow)"/>
+    ${arcs}${mNodes}${badges}
+  </svg>`;
+
+  document.getElementById('bc').querySelector('svg').addEventListener('click', onClick);
+}
+
+function onClick(e) {
+  const el = e.target.closest('[data-match]');
+  if (!el) return;
+  const m = parseInt(el.dataset.match);
+  const [tA, tB] = matchTeams(m);
+  if (!tA || !tB) return;
+
+  const cur = winners[m];
+  if (cur == null)    winners[m] = 0;
+  else if (cur === 0) winners[m] = 1;
+  else { delete winners[m]; clearDownstream(m); }
+
+  render();
+}
+
+render();
 </script>
 </body>
 </html>
