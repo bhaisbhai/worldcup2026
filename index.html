@@ -2993,14 +2993,22 @@ window.setKOSide = function(side){
 
 function findESPNEvent(m){
   if(!koEvents || koEvents.length === 0) return null;
+  const clean = n => {
+    if (!n) return '';
+    const s = n.toLowerCase().trim();
+    if (s === 'usa' || s === 'united states') return 'usa';
+    if (s === 'congo dr' || s === 'dr congo' || s === 'cod') return 'congo dr';
+    return s;
+  };
   return koEvents.find(ev => {
     if(m.hResolved && m.aResolved){
-      const evH = ev.home.name.toLowerCase();
-      const evA = ev.away.name.toLowerCase();
-      const mH = m.hName.toLowerCase();
-      const mA = m.aName.toLowerCase();
-      if((evH.includes(mH) || mH.includes(evH)) && (evA.includes(mA) || mA.includes(evA))) return true;
-      if((evH.includes(mA) || mA.includes(evH)) && (evA.includes(mH) || mH.includes(evA))) return true;
+      const evH = clean(ev.home.name);
+      const evA = clean(ev.away.name);
+      const mH = clean(m.hName);
+      const mA = clean(m.aName);
+      const normalMatch = (evH.includes(mH) || mH.includes(evH)) && (evA.includes(mA) || mA.includes(evA));
+      const invertedMatch = (evH.includes(mA) || mA.includes(evH)) && (evA.includes(mH) || mH.includes(evA));
+      if (normalMatch || invertedMatch) return true;
     }
     const evDateStr = ev.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
     if(evDateStr === m.date && ev.city.toLowerCase() === m.city.toLowerCase()) return true;
@@ -3010,44 +3018,8 @@ function findESPNEvent(m){
 
 function getResolvedMatchesMap(){
   const matchesMap = {};
-  const resolvedTeams = {};
-  
-  // Calculate thirds standings
-  const thirds = GROUPS_DATA
-    .filter(g => g.teams.length >= 3)
-    .map(g => ({ ...g.teams[2], grp: g.id }))
-    .filter(t => t.n);
-  thirds.sort((a,b) =>
-    Number(b.pts??0)-Number(a.pts??0) ||
-    Number(b.gd??0)-Number(a.gd??0)  ||
-    Number(b.gf??0)-Number(a.gf??0)  ||
-    a.grp.localeCompare(b.grp)
-  );
-
-  const thirdPlaceSlotsMap = {
-    '3rd A/B/C/D/F': thirds[0],
-    '3rd C/D/F/G/H': thirds[1],
-    '3rd C/E/F/H/I': thirds[2],
-    '3rd E/H/I/J/K': thirds[3],
-    '3rd B/E/F/I/J': thirds[4],
-    '3rd A/E/H/I/J': thirds[5],
-    '3rd E/F/G/I/J': thirds[6],
-    '3rd D/E/I/J/L': thirds[7]
-  };
-
-  GROUPS_DATA.forEach(g => {
-    const teams = g.teams || [];
-    resolvedTeams['1'+g.id] = teams[0];
-    resolvedTeams['2'+g.id] = teams[1];
-  });
 
   function resolve(label){
-    const slotKey = koSlotKey(label);
-    if(slotKey){
-      const team = resolvedTeams[slotKey];
-      if(team) return { name: team.n, flag: team.f, resolved: true, key: slotKey };
-      return { name: label, flag: '🏳️', resolved: false, key: slotKey };
-    }
     const wMatch = label?.match(/^W M(\d+)$/);
     if(wMatch){
       const parentNum = parseInt(wMatch[1]);
@@ -3057,11 +3029,8 @@ function getResolvedMatchesMap(){
       }
       return { name: label, flag: '🏳️', resolved: false };
     }
-    if (thirdPlaceSlotsMap[label]) {
-      const team = thirdPlaceSlotsMap[label];
-      return { name: team.n, flag: team.f, resolved: true, key: label };
-    }
-    return { name: label, flag: flag(label), resolved: true };
+    const flagEmoji = flag(label);
+    return { name: label, flag: flagEmoji, resolved: flagEmoji !== '🏳️' };
   }
 
   function processRound(matchesList, roundKey){
@@ -3075,11 +3044,11 @@ function getResolvedMatchesMap(){
         hName: homeInfo.name,
         hFlag: homeInfo.flag,
         hResolved: homeInfo.resolved,
-        hSlot: homeInfo.key,
+        hSlot: null,
         aName: awayInfo.name,
         aFlag: awayInfo.flag,
         aResolved: awayInfo.resolved,
-        aSlot: awayInfo.key,
+        aSlot: null,
         stad: m.stad,
         city: m.city,
         date: m.date,
@@ -3406,8 +3375,8 @@ function renderCircularBracket(){
   // Final teams
   const fm = matchesMap[104];
   [
-    { angle:   0, name: fm?.hName||'TBD', fl: fm?.hFlag||'🏳️', win: fm?.winnerName&&fm.winnerName===fm.hName },
-    { angle: 180, name: fm?.aName||'TBD', fl: fm?.aFlag||'🏳️', win: fm?.winnerName&&fm.winnerName===fm.aName },
+    { angle: 180, name: fm?.hName||'TBD', fl: fm?.hFlag||'🏳️', win: fm?.winnerName&&fm.winnerName===fm.hName },
+    { angle:   0, name: fm?.aName||'TBD', fl: fm?.aFlag||'🏳️', win: fm?.winnerName&&fm.winnerName===fm.aName },
   ].forEach(t => {
     const p = pt(t.angle, ringR.final);
     allSlots.push({ ...p, angle: t.angle, name: t.name, fl: t.fl, win: t.win, matchNum: 104, ring:'final' });
@@ -3416,7 +3385,7 @@ function renderCircularBracket(){
   // Draw team circles + flags
   allSlots.forEach(s => {
     const { tr, fs } = RS[s.ring];
-    const isTBD = !s.fl || !s.name || /Winner|Runner-up|TBD|W M\d/.test(s.name);
+    const isTBD = !s.fl || s.fl === '🏳️' || !s.name || /Winner|Runner-up|TBD|W M\d/.test(s.name);
     const bgFill  = s.win ? 'rgba(0,255,135,0.18)' : isTBD ? 'rgba(35,35,35,0.85)' : 'rgba(22,22,22,0.93)';
     const stroke  = s.win ? 'rgba(0,255,135,0.75)' : isTBD ? 'rgba(255,255,255,0.07)' : 'rgba(255,255,255,0.2)';
     const sw      = s.win ? 2 : 1;
@@ -4811,45 +4780,7 @@ function clearAllKOSlots(){
 }
 
 function updateKnockoutFromGroups(){
-  clearAllKOSlots();
-  
-  // Calculate thirds standings
-  const thirds = GROUPS_DATA
-    .filter(g => g.teams.length >= 3)
-    .map(g => ({ ...g.teams[2], grp: g.id }))
-    .filter(t => t.n);
-  thirds.sort((a,b) =>
-    Number(b.pts??0)-Number(a.pts??0) ||
-    Number(b.gd??0)-Number(a.gd??0)  ||
-    Number(b.gf??0)-Number(a.gf??0)  ||
-    a.grp.localeCompare(b.grp)
-  );
-
-  const thirdPlaceSlotsMap = {
-    '3rd A/B/C/D/F': thirds[0],
-    '3rd C/D/F/G/H': thirds[1],
-    '3rd C/E/F/H/I': thirds[2],
-    '3rd E/H/I/J/K': thirds[3],
-    '3rd B/E/F/I/J': thirds[4],
-    '3rd A/E/H/I/J': thirds[5],
-    '3rd E/F/G/I/J': thirds[6],
-    '3rd D/E/I/J/L': thirds[7]
-  };
-
-  GROUPS_DATA.forEach(g => {
-    const teams = g.teams || [];
-    const t1 = teams[0];
-    const t2 = teams[1];
-    if(t1) fillKOSlot('1'+g.id, t1, { projected: !t1.advancedOfficial });
-    if(t2) fillKOSlot('2'+g.id, t2, { projected: !t2.advancedOfficial });
-  });
-
-  Object.keys(thirdPlaceSlotsMap).forEach(key => {
-    const team = thirdPlaceSlotsMap[key];
-    if(team) {
-      fillKOSlot(key, team, { projected: !team.advancedOfficial });
-    }
-  });
+  // No-op: knockout teams are resolved statically in getResolvedMatchesMap()
 }
 
 function fillKOSlot(key, team, options={}){
