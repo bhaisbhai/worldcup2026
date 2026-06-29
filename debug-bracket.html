@@ -16,8 +16,8 @@ body {
 h1 { font-size: 15px; font-weight: 700; margin-bottom: 3px; text-align: center; }
 .sub { font-size: 10px; color: rgba(255,255,255,0.35); margin-bottom: 8px;
   text-transform: uppercase; letter-spacing: .1em; text-align: center; }
-#bc { width: 100%; max-width: min(100vw, 680px); }
-svg { width: 100%; height: auto; display: block; touch-action: pinch-zoom; }
+#bc { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+svg { display: block; min-width: 620px; width: 100%; max-width: 750px; height: auto; touch-action: pan-x pan-y pinch-zoom; }
 #status { font-size: 10px; color: rgba(255,255,255,0.3); margin-top: 8px; text-align: center; }
 </style>
 </head>
@@ -30,7 +30,7 @@ svg { width: 100%; height: auto; display: block; touch-action: pinch-zoom; }
 const SZ=800, CX=400, CY=400;
 // Concentric rings: outermost = team badges, then R32 results, R16, QF, SF, center=Final
 const R_TEAM=335, R_R32=268, R_R16=203, R_QF=143, R_SF=87;
-const BR=26;       // team badge radius
+const BR=32;       // team badge radius
 const DEG=360/32;  // 11.25° per team slot
 
 // Teams ordered so teams[2j] and teams[2j+1] play R32 match j
@@ -192,7 +192,7 @@ function render(){
     const sc  =won===true?'rgba(195,230,55,0.9)':won===false?'rgba(70,72,95,0.22)':'rgba(75,130,240,0.6)';
     const op  =won===false?0.32:1;
     badges+=`<circle cx="${x}" cy="${y}" r="${BR}" fill="${fill}" stroke="${sc}" stroke-width="2" opacity="${op}"/>`;
-    badges+=`<text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="middle" font-size="17" opacity="${op}">${t.f}</text>`;
+    badges+=`<text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="middle" font-size="22" opacity="${op}">${t.f}</text>`;
     // Short code outside badge
     const cosT=Math.cos(rad(th));
     const lp=pt(R_TEAM+BR+6,th);
@@ -293,6 +293,8 @@ async function fetchESPN(){
 }
 
 render();
+// On narrow screens (phone), centre the scroll so the trophy is visible
+(function(){const bc=document.getElementById('bc');if(bc.scrollWidth>bc.clientWidth)bc.scrollLeft=(bc.scrollWidth-bc.clientWidth)/2;})();
 fetchESPN();
 </script>
 </body>
