@@ -3121,7 +3121,7 @@ function renderCircularBracket(){
   const W = 700, H = 700, cx = W/2, cy = H/2;
   const ringR = { r32: 310, r16: 238, qf: 172, sf: 110, final: 54 };
   // Per-ring flag-circle radius and emoji font-size
-  const RS = { r32:{tr:23,fs:20}, r16:{tr:20,fs:17}, qf:{tr:18,fs:15}, sf:{tr:17,fs:14}, final:{tr:22,fs:20} };
+  const RS = { r32:{tr:28,fs:24}, r16:{tr:24,fs:21}, qf:{tr:21,fs:18}, sf:{tr:19,fs:16}, final:{tr:24,fs:22} };
 
   function toRad(d){ return d * Math.PI / 180; }
   function pt(deg, r){ const rad = toRad(deg); return { x: cx + r*Math.cos(rad), y: cy + r*Math.sin(rad) }; }
