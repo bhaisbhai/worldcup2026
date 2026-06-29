@@ -3120,7 +3120,8 @@ function renderCircularBracket(){
   const matchesMap = getResolvedMatchesMap();
   const W = 700, H = 700, cx = W/2, cy = H/2;
   const ringR = { r32: 310, r16: 238, qf: 172, sf: 110, final: 54 };
-  const TEAM_R = 17;
+  // Per-ring flag-circle radius and emoji font-size
+  const RS = { r32:{tr:23,fs:20}, r16:{tr:20,fs:17}, qf:{tr:18,fs:15}, sf:{tr:17,fs:14}, final:{tr:22,fs:20} };
 
   function toRad(d){ return d * Math.PI / 180; }
   function pt(deg, r){ const rad = toRad(deg); return { x: cx + r*Math.cos(rad), y: cy + r*Math.sin(rad) }; }
@@ -3230,29 +3231,20 @@ function renderCircularBracket(){
 
   // Draw team circles + flags
   allSlots.forEach(s => {
+    const { tr, fs } = RS[s.ring];
     const isTBD = !s.fl || !s.name || /Winner|Runner-up|TBD|W M\d/.test(s.name);
     const bgFill  = s.win ? 'rgba(0,255,135,0.18)' : isTBD ? 'rgba(35,35,35,0.85)' : 'rgba(22,22,22,0.93)';
     const stroke  = s.win ? 'rgba(0,255,135,0.75)' : isTBD ? 'rgba(255,255,255,0.07)' : 'rgba(255,255,255,0.2)';
     const sw      = s.win ? 2 : 1;
 
     svgFlags.push(`<g class="kc-team" onclick="handleKOMatchClick(${s.matchNum})" style="cursor:pointer" data-name="${(s.name||'').replace(/"/g,"'")}">
-      <circle cx="${f2(s.x)}" cy="${f2(s.y)}" r="${TEAM_R}" fill="${bgFill}" stroke="${stroke}" stroke-width="${sw}">
+      <circle cx="${f2(s.x)}" cy="${f2(s.y)}" r="${tr}" fill="${bgFill}" stroke="${stroke}" stroke-width="${sw}">
         <title>${s.name||''}</title>
       </circle>
       <text x="${f2(s.x)}" y="${f2(s.y)}" text-anchor="middle" dominant-baseline="central"
-        font-size="13" style="pointer-events:none;user-select:none"
+        font-size="${isTBD ? Math.round(fs*0.65) : fs}" style="pointer-events:none;user-select:none"
         fill="${isTBD ? 'rgba(255,255,255,0.22)' : '#fff'}">${isTBD ? '?' : s.fl}</text>
     </g>`);
-
-    // Short name label on outer ring
-    if(s.ring === 'r32' && !isTBD){
-      const labelR = ringR.r32 + TEAM_R + 11;
-      const lp = pt(s.angle, labelR);
-      const anchor = s.x > cx + 10 ? 'start' : s.x < cx - 10 ? 'end' : 'middle';
-      const shortName = s.name.length > 11 ? s.name.slice(0,11)+'…' : s.name;
-      svgFlags.push(`<text x="${f2(lp.x)}" y="${f2(lp.y)}" text-anchor="${anchor}" dominant-baseline="central"
-        font-size="8" fill="rgba(255,255,255,0.55)" style="pointer-events:none;font-family:system-ui,sans-serif">${shortName}</text>`);
-    }
   });
 
   // Trophy + glow at center
@@ -3260,18 +3252,6 @@ function renderCircularBracket(){
     <circle cx="${cx}" cy="${cy}" r="38" fill="rgba(255,215,0,0.07)" stroke="rgba(255,215,0,0.22)" stroke-width="1.5"/>
     <text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central" font-size="32" style="pointer-events:none">🏆</text>
   `);
-
-  // Round labels at each ring (faint, outward)
-  const roundLabels = [
-    { ring:'r32', label:'R32', labelR: ringR.r32 - TEAM_R - 6 },
-    { ring:'r16', label:'R16', labelR: ringR.r16 - TEAM_R - 6 },
-    { ring:'qf',  label:'QF',  labelR: ringR.qf  - TEAM_R - 6 },
-    { ring:'sf',  label:'SF',  labelR: ringR.sf  - TEAM_R - 6 },
-  ];
-  roundLabels.forEach(({ label, labelR }) => {
-    svgFlags.push(`<text x="${f2(cx)}" y="${f2(cy - labelR)}" text-anchor="middle" dominant-baseline="central"
-      font-size="9" fill="rgba(255,255,255,0.2)" style="pointer-events:none;font-family:system-ui;letter-spacing:.5px;text-transform:uppercase">${label}</text>`);
-  });
 
   const svgEl = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg"
     style="width:min(100vw, 700px);display:block;margin:0 auto;touch-action:pan-y">
