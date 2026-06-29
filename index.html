@@ -1375,7 +1375,7 @@ const FLAGS = {
   FIJ:'🇫🇯', PNG:'🇵🇬', SOL:'🇸🇧', VAN:'🇻🇺',
   SAM:'🇼🇸', NCL:'🇳🇨', TAH:'🇵🇫',
 };
-function flag(abbr){ return FLAGS[abbr] || '🏳️'; }
+function flag(abbr){ return FLAGS[abbr] || KO_TEAM_FLAGS[abbr] || '🏳️'; }
 
 // ═══════════════════════════════════════════════════
 //  GROUPS (static — real Group I & J from ESPN API)
@@ -3715,15 +3715,25 @@ function openMatchModal(ev){
   $('mcModal').innerHTML = `
     <div id="mcHd"></div>
     <div id="mcTabsBar"></div>
-    <div class="mc-body" id="mcBody"><div class="lineup-loading">Loading…</div></div>`;
+    <div class="mc-body" id="mcBody"></div>`;
   $('modalBg').classList.add('open');
   document.body.style.overflow = 'hidden';
   gtag('event', 'match_opened', { match: `${ev.homeTeam||''} vs ${ev.awayTeam||(ev.name||'')}` });
+  
   renderMCHeader(ev);
+  buildMCTabs(ev);
+  
+  const initialTab = ev.state === 'in' ? 'live' : 'overview';
+  switchMCTab(initialTab);
+  
   fetchMCSummary(ev.id).then(data => {
-    mcState.data = data;
-    buildMCTabs(ev);
-    switchMCTab(ev.state==='in' ? 'live' : 'overview');
+    if (mcState && mcState.ev.id === ev.id) {
+      mcState.data = data;
+      const activeTabBtn = document.querySelector('.mc-tab-btn.active');
+      if(activeTabBtn){
+        switchMCTab(activeTabBtn.dataset.tab);
+      }
+    }
   });
 }
 
@@ -3805,6 +3815,10 @@ function switchMCTab(tabId){
   if(!body) return;
 
   if(tabId==='live'){
+    if(!data){
+      body.innerHTML = `<div class="lineup-loading" style="padding:40px 0">Loading live data…</div>`;
+      return;
+    }
     body.innerHTML = mcLiveTab(ev, data);
     requestAnimationFrame(()=>{ document.querySelectorAll('[data-w]').forEach(el=>{ el.style.width=el.dataset.w+'%'; }); });
     mcLiveInt = setInterval(async ()=>{
@@ -3836,13 +3850,25 @@ function switchMCTab(tabId){
       tick(); mcCdInt=setInterval(tick,1000);
     }
   } else if(tabId==='stats'){
+    if(!data){
+      body.innerHTML = `<div class="lineup-loading" style="padding:40px 0">Loading match stats…</div>`;
+      return;
+    }
     body.innerHTML = mcStats(ev,data);
     requestAnimationFrame(()=>{ document.querySelectorAll('[data-w]').forEach(el=>{ el.style.width=el.dataset.w+'%'; }); });
   } else if(tabId==='lineups'){
+    if(!data){
+      body.innerHTML = `<div class="lineup-loading" style="padding:40px 0">Loading lineups…</div>`;
+      return;
+    }
     body.innerHTML = mcLineups(ev,data);
   } else if(tabId==='highlights'){
     mcHighlightsTab(ev,body);
   } else if(tabId==='news'){
+    if(!data){
+      body.innerHTML = `<div class="lineup-loading" style="padding:40px 0">Loading news…</div>`;
+      return;
+    }
     body.innerHTML = mcNews(ev,data);
   }
 }
