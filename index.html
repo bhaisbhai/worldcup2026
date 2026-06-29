@@ -424,8 +424,9 @@ body{
 
 /* ── KNOCKOUT ───────────────────────────────── */
 .ko-hd{font-size:21px;font-weight:700;letter-spacing:-.4px;margin-bottom:5px}
-.ko-sub{font-size:13px;color:var(--t2);margin-bottom:24px}
-.ko-header-controls{display:flex;flex-direction:column;gap:16px;margin-bottom:24px;align-items:center}
+.ko-sub{font-size:13px;color:var(--t2);margin-bottom:14px}
+.ko-header-controls{display:flex;flex-direction:column;gap:12px;margin-bottom:14px;align-items:center}
+#ko-circular-container{margin:0 -22px;width:calc(100% + 44px);overflow:hidden}
 .ko-view-toggle{display:inline-flex;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:100px;padding:3px;position:relative;z-index:10}
 .ko-side-toggle{display:flex;gap:6px;background:rgba(255,255,255,.015);border:1px solid var(--border);border-radius:100px;padding:3px;position:relative;z-index:10}
 .ko-side-btn{background:none;border:none;color:var(--t2);font-family:var(--font);font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:6px 14px;border-radius:100px;cursor:pointer;transition:all .15s ease}
@@ -3117,9 +3118,9 @@ function renderCircularBracket(){
   if(!container) return;
 
   const matchesMap = getResolvedMatchesMap();
-  const W = 660, H = 660, cx = W/2, cy = H/2;
-  const ringR = { r32: 252, r16: 192, qf: 138, sf: 88, final: 44 };
-  const TEAM_R = 14;
+  const W = 700, H = 700, cx = W/2, cy = H/2;
+  const ringR = { r32: 310, r16: 238, qf: 172, sf: 110, final: 54 };
+  const TEAM_R = 17;
 
   function toRad(d){ return d * Math.PI / 180; }
   function pt(deg, r){ const rad = toRad(deg); return { x: cx + r*Math.cos(rad), y: cy + r*Math.sin(rad) }; }
@@ -3245,19 +3246,19 @@ function renderCircularBracket(){
 
     // Short name label on outer ring
     if(s.ring === 'r32' && !isTBD){
-      const labelR = ringR.r32 + TEAM_R + 9;
+      const labelR = ringR.r32 + TEAM_R + 11;
       const lp = pt(s.angle, labelR);
       const anchor = s.x > cx + 10 ? 'start' : s.x < cx - 10 ? 'end' : 'middle';
-      const shortName = s.name.length > 10 ? s.name.slice(0,10)+'…' : s.name;
+      const shortName = s.name.length > 11 ? s.name.slice(0,11)+'…' : s.name;
       svgFlags.push(`<text x="${f2(lp.x)}" y="${f2(lp.y)}" text-anchor="${anchor}" dominant-baseline="central"
-        font-size="6.5" fill="rgba(255,255,255,0.38)" style="pointer-events:none;font-family:system-ui,sans-serif">${shortName}</text>`);
+        font-size="8" fill="rgba(255,255,255,0.55)" style="pointer-events:none;font-family:system-ui,sans-serif">${shortName}</text>`);
     }
   });
 
   // Trophy + glow at center
   svgFlags.push(`
-    <circle cx="${cx}" cy="${cy}" r="32" fill="rgba(255,215,0,0.07)" stroke="rgba(255,215,0,0.22)" stroke-width="1.5"/>
-    <text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central" font-size="26" style="pointer-events:none">🏆</text>
+    <circle cx="${cx}" cy="${cy}" r="38" fill="rgba(255,215,0,0.07)" stroke="rgba(255,215,0,0.22)" stroke-width="1.5"/>
+    <text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central" font-size="32" style="pointer-events:none">🏆</text>
   `);
 
   // Round labels at each ring (faint, outward)
@@ -3269,11 +3270,11 @@ function renderCircularBracket(){
   ];
   roundLabels.forEach(({ label, labelR }) => {
     svgFlags.push(`<text x="${f2(cx)}" y="${f2(cy - labelR)}" text-anchor="middle" dominant-baseline="central"
-      font-size="7" fill="rgba(255,255,255,0.15)" style="pointer-events:none;font-family:system-ui;letter-spacing:.5px;text-transform:uppercase">${label}</text>`);
+      font-size="9" fill="rgba(255,255,255,0.2)" style="pointer-events:none;font-family:system-ui;letter-spacing:.5px;text-transform:uppercase">${label}</text>`);
   });
 
   const svgEl = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg"
-    style="width:100%;max-width:min(100vw - 8px, 660px);display:block;margin:0 auto;touch-action:pan-y">
+    style="width:min(100vw, 700px);display:block;margin:0 auto;touch-action:pan-y">
     <defs>
       <radialGradient id="kc-bg" cx="50%" cy="50%" r="50%">
         <stop offset="0%" stop-color="rgba(0,255,135,0.04)"/>
@@ -3285,7 +3286,7 @@ function renderCircularBracket(){
     ${svgFlags.join('\n')}
   </svg>`;
 
-  container.innerHTML = `<div style="padding:8px 0 28px;display:flex;justify-content:center">${svgEl}</div>`;
+  container.innerHTML = `<div style="padding:2px 0 8px;display:flex;justify-content:center">${svgEl}</div>`;
 }
 
 window.handleKOMatchClick = function(mNum){
