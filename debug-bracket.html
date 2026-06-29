@@ -6,19 +6,16 @@
 <title>World Cup 2026 — Bracket</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
-html { background: #0a0a0a; }
+html { background: #080810; }
 body {
-  background: #0a0a0a;
-  color: #fff;
+  background: #080810; color: #fff;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 12px 0 24px;
+  min-height: 100vh; display: flex; flex-direction: column;
+  align-items: center; padding: 12px 0 24px;
 }
-h1 { font-size: 15px; font-weight: 700; margin-bottom: 3px; text-align: center; letter-spacing: .02em; }
-.sub { font-size: 10px; color: rgba(255,255,255,0.35); margin-bottom: 8px; text-transform: uppercase; letter-spacing: .1em; text-align: center; }
+h1 { font-size: 15px; font-weight: 700; margin-bottom: 3px; text-align: center; }
+.sub { font-size: 10px; color: rgba(255,255,255,0.35); margin-bottom: 8px;
+  text-transform: uppercase; letter-spacing: .1em; text-align: center; }
 #bc { width: 100%; max-width: min(100vw, 680px); }
 svg { width: 100%; height: auto; display: block; touch-action: pinch-zoom; }
 #status { font-size: 10px; color: rgba(255,255,255,0.3); margin-top: 8px; text-align: center; }
@@ -30,316 +27,267 @@ svg { width: 100%; height: auto; display: block; touch-action: pinch-zoom; }
 <div id="bc"></div>
 <div id="status">Loading live results…</div>
 <script>
-// ── Dimensions ─────────────────────────────────────────────────────────────
-const SZ = 800, CX = 400, CY = 400;
-// Two visual rings per team:
-const RL   = 340;  // outer badge ring (large flag circle)
-const RI   = 278;  // inner dot ring (smaller flag circle)
-const RR32 = 220;  // R32 match junction dots
-const RR16 = 170;  // R16
-const RQF  = 124;  // QF
-const RSF  = 82;   // SF
+const SZ=800, CX=400, CY=400;
+// Concentric rings: outermost = team badges, then R32 results, R16, QF, SF, center=Final
+const R_TEAM=335, R_R32=268, R_R16=203, R_QF=143, R_SF=87;
+const BR=26;       // team badge radius
+const DEG=360/32;  // 11.25° per team slot
 
-const BR_OUTER = 28;  // outer badge radius
-const BR_INNER = 14;  // inner dot radius
-
-// ── Teams (positions 0-31) ──────────────────────────────────────────────────
-// Left bracket  0-15: angles 260°→100°
-// Right bracket 16-31: angles -80°→80°
+// Teams ordered so teams[2j] and teams[2j+1] play R32 match j
 const TEAMS = [
-  {n:'South Africa',  s:'RSA', f:'🇿🇦'}, {n:'Canada',       s:'CAN', f:'🇨🇦'},
-  {n:'Netherlands',   s:'NED', f:'🇳🇱'}, {n:'Morocco',      s:'MAR', f:'🇲🇦'},
-  {n:'Germany',       s:'GER', f:'🇩🇪'}, {n:'Paraguay',     s:'PAR', f:'🇵🇾'},
-  {n:'France',        s:'FRA', f:'🇫🇷'}, {n:'Sweden',       s:'SWE', f:'🇸🇪'},
-  {n:'Brazil',        s:'BRA', f:'🇧🇷'}, {n:'Japan',        s:'JPN', f:'🇯🇵'},
-  {n:'Ivory Coast',   s:'CIV', f:'🇨🇮'}, {n:'Norway',       s:'NOR', f:'🇳🇴'},
-  {n:'Mexico',        s:'MEX', f:'🇲🇽'}, {n:'Ecuador',      s:'ECU', f:'🇪🇨'},
-  {n:'England',       s:'ENG', f:'🏴󠁧󠁢󠁥󠁮󠁧󠁿'}, {n:'Congo DR',     s:'COD', f:'🇨🇩'},
-  {n:'USA',           s:'USA', f:'🇺🇸'}, {n:'Bosnia-Herz.', s:'BIH', f:'🇧🇦'},
-  {n:'Belgium',       s:'BEL', f:'🇧🇪'}, {n:'Senegal',      s:'SEN', f:'🇸🇳'},
-  {n:'Portugal',      s:'POR', f:'🇵🇹'}, {n:'Croatia',      s:'CRO', f:'🇭🇷'},
-  {n:'Spain',         s:'ESP', f:'🇪🇸'}, {n:'Austria',      s:'AUT', f:'🇦🇹'},
-  {n:'Switzerland',   s:'SUI', f:'🇨🇭'}, {n:'Algeria',      s:'ALG', f:'🇩🇿'},
-  {n:'Colombia',      s:'COL', f:'🇨🇴'}, {n:'Ghana',        s:'GHA', f:'🇬🇭'},
-  {n:'Argentina',     s:'ARG', f:'🇦🇷'}, {n:'Cape Verde',   s:'CPV', f:'🇨🇻'},
-  {n:'Australia',     s:'AUS', f:'🇦🇺'}, {n:'Egypt',        s:'EGY', f:'🇪🇬'},
+  {n:'South Africa', s:'RSA',f:'🇿🇦'},{n:'Canada',      s:'CAN',f:'🇨🇦'},
+  {n:'Netherlands',  s:'NED',f:'🇳🇱'},{n:'Morocco',     s:'MAR',f:'🇲🇦'},
+  {n:'Germany',      s:'GER',f:'🇩🇪'},{n:'Paraguay',    s:'PAR',f:'🇵🇾'},
+  {n:'France',       s:'FRA',f:'🇫🇷'},{n:'Sweden',      s:'SWE',f:'🇸🇪'},
+  {n:'Brazil',       s:'BRA',f:'🇧🇷'},{n:'Japan',       s:'JPN',f:'🇯🇵'},
+  {n:'Ivory Coast',  s:'CIV',f:'🇨🇮'},{n:'Norway',      s:'NOR',f:'🇳🇴'},
+  {n:'Mexico',       s:'MEX',f:'🇲🇽'},{n:'Ecuador',     s:'ECU',f:'🇪🇨'},
+  {n:'England',      s:'ENG',f:'🏴󠁧󠁢󠁥󠁮󠁧󠁿'},{n:'Congo DR',    s:'COD',f:'🇨🇩'},
+  {n:'USA',          s:'USA',f:'🇺🇸'},{n:'Bosnia-Herz.',s:'BIH',f:'🇧🇦'},
+  {n:'Belgium',      s:'BEL',f:'🇧🇪'},{n:'Senegal',     s:'SEN',f:'🇸🇳'},
+  {n:'Portugal',     s:'POR',f:'🇵🇹'},{n:'Croatia',     s:'CRO',f:'🇭🇷'},
+  {n:'Spain',        s:'ESP',f:'🇪🇸'},{n:'Austria',     s:'AUT',f:'🇦🇹'},
+  {n:'Switzerland',  s:'SUI',f:'🇨🇭'},{n:'Algeria',     s:'ALG',f:'🇩🇿'},
+  {n:'Colombia',     s:'COL',f:'🇨🇴'},{n:'Ghana',       s:'GHA',f:'🇬🇭'},
+  {n:'Argentina',    s:'ARG',f:'🇦🇷'},{n:'Cape Verde',  s:'CPV',f:'🇨🇻'},
+  {n:'Australia',    s:'AUS',f:'🇦🇺'},{n:'Egypt',       s:'EGY',f:'🇪🇬'},
 ];
 
-// ESPN abbreviation aliases → my abbreviation
-const ESPN_MAP = {
-  'IVC':'CIV', 'CGO':'COD', 'DRC':'COD', 'BOS':'BIH',
-  'CVO':'CPV', 'CTA':'CIV', 'CNG':'COD',
-};
-function normAbbr(a) { return ESPN_MAP[a] || a; }
+const ESPN_MAP={'IVC':'CIV','CGO':'COD','DRC':'COD','BOS':'BIH','CVO':'CPV','CTA':'CIV','CNG':'COD'};
+function normAbbr(a){return ESPN_MAP[a]||a;}
+const NAME_FRAGS={'ivory':'CIV','côte':'CIV','cote':'CIV','congo':'COD','democratic republic':'COD','bosnia':'BIH','herzegovina':'BIH','cape verde':'CPV','england':'ENG'};
+function nameToAbbr(name){const l=name.toLowerCase();for(const[k,v]of Object.entries(NAME_FRAGS))if(l.includes(k))return v;return null;}
 
-// Name fragments for fallback matching
-const NAME_FRAGS = {
-  'ivory':'CIV', "côte":'CIV', 'cote':'CIV',
-  'congo':'COD', 'democratic republic':'COD',
-  'bosnia':'BIH', 'herzegovina':'BIH',
-  'cape verde':'CPV',
-  'england':'ENG',
-};
-function nameToAbbr(name) {
-  const low = name.toLowerCase();
-  for (const [k,v] of Object.entries(NAME_FRAGS)) if (low.includes(k)) return v;
-  return null;
+// ── Geometry ──────────────────────────────────────────────────────────────────
+function rad(d){return d*Math.PI/180;}
+function pt(r,deg){return{x:+(CX+r*Math.cos(rad(deg))).toFixed(2),y:+(CY+r*Math.sin(rad(deg))).toFixed(2)};}
+
+// Angle for each ring (start at top, clockwise)
+function teamAngle(i)  {return i*DEG - 90;}
+function r32Angle(j)   {return (2*j+0.5)*DEG - 90;}   // between teams 2j and 2j+1
+function r16Angle(j)   {return (4*j+1.5)*DEG - 90;}   // between R32 matches 2j and 2j+1
+function qfAngle(j)    {return (8*j+3.5)*DEG - 90;}
+function sfAngle(j)    {return (16*j+7.5)*DEG - 90;}
+
+// Half-bracket arc: outer point → radial line in → arc at midradius → radial line in → inner point
+function bracketPath(rO,rI,tO,tI){
+  if(rI<1){const p=pt(rO,tO);return`M${p.x} ${p.y}L${CX} ${CY}`;}
+  const rm=(rO+rI)/2;
+  const pO=pt(rO,tO),pM1=pt(rm,tO),pM2=pt(rm,tI),pI=pt(rI,tI);
+  if(Math.abs(tI-tO)<0.05)return`M${pO.x} ${pO.y}L${pI.x} ${pI.y}`;
+  let sw=tI>tO?1:0;
+  if(Math.abs(tI-tO)>180)sw=1-sw;
+  return`M${pO.x} ${pO.y}L${pM1.x} ${pM1.y}A${rm} ${rm} 0 0 ${sw} ${pM2.x} ${pM2.y}L${pI.x} ${pI.y}`;
 }
 
-// ── Geometry ────────────────────────────────────────────────────────────────
-function rad(d) { return d * Math.PI / 180; }
-function pc(r, deg) {
-  return { x: +(CX + r*Math.cos(rad(deg))).toFixed(2),
-           y: +(CY + r*Math.sin(rad(deg))).toFixed(2) };
+// ── Match state ───────────────────────────────────────────────────────────────
+let r32W=new Array(16).fill(null); // 0|1 per R32 match
+let r16W=new Array(8).fill(null);
+let qfW =new Array(4).fill(null);
+let sfW =new Array(2).fill(null);
+let finW=null;
+
+// Team getters: return team object or null if not yet determined
+function r32Team(j,s){return TEAMS[2*j+s];}
+function r16Team(j,s){const m=2*j+s,w=r32W[m];return w!=null?TEAMS[2*m+w]:null;}
+function qfTeam(j,s) {const m=2*j+s,w=r16W[m];return w!=null?r16Team(m,w):null;}
+function sfTeam(j,s) {const m=2*j+s,w=qfW[m]; return w!=null?qfTeam(m,w):null;}
+function sfWinner(j) {const w=sfW[j];return w!=null?sfTeam(j,w):null;}
+
+// ── Line colours ──────────────────────────────────────────────────────────────
+function lc(won){ // won = true|false|null
+  if(won==null) return'rgba(140,170,230,0.20)';
+  return won?'rgba(255,208,40,0.92)':'rgba(110,115,145,0.07)';
 }
 
-function leafTheta(i) {
-  return i < 16 ? 260 - i*(160/15) : -80 + (i-16)*(160/15);
-}
+// ── Render ────────────────────────────────────────────────────────────────────
+function render(){
+  let guides='',lines='',nodes='',badges='';
 
-function matchRadius(m) {
-  if (m <= 16) return RR32;
-  if (m <= 24) return RR16;
-  if (m <= 28) return RQF;
-  if (m <= 30) return RSF;
-  return 0;
-}
-
-function matchChildren(m) {
-  if (m >= 1  && m <= 16) return {t:'L', a:(m-1)*2,     b:(m-1)*2+1};
-  if (m >= 17 && m <= 24) return {t:'M', a:(m-17)*2+1,  b:(m-17)*2+2};
-  if (m >= 25 && m <= 28) return {t:'M', a:(m-25)*2+17, b:(m-25)*2+18};
-  if (m === 29) return {t:'M', a:25, b:26};
-  if (m === 30) return {t:'M', a:27, b:28};
-  if (m === 31) return {t:'M', a:29, b:30};
-}
-
-function matchTheta(m) {
-  if (m === 31) return 0;
-  const ch = matchChildren(m);
-  const tA = ch.t==='L' ? leafTheta(ch.a) : matchTheta(ch.a);
-  const tB = ch.t==='L' ? leafTheta(ch.b) : matchTheta(ch.b);
-  return (tA + tB) / 2;
-}
-
-// Arc-bracket path: outer → midpoint (line) → arc → midpoint (line) → inner
-function halfBracket(rOut, rIn, tOut, tIn) {
-  const rArc = (rOut + rIn) / 2;
-  const pOut   = pc(rOut, tOut);
-  const pArc   = pc(rArc, tOut);
-  const pInArc = pc(rArc, tIn);
-  const pIn    = rIn === 0 ? {x:CX,y:CY} : pc(rIn, tIn);
-  if (Math.abs(tIn-tOut) < 0.1) return `M ${pOut.x} ${pOut.y} L ${pIn.x} ${pIn.y}`;
-  let sw = tIn > tOut ? 1 : 0;
-  if (Math.abs(tIn-tOut) > 180) sw = 1-sw;
-  return `M ${pOut.x} ${pOut.y} L ${pArc.x} ${pArc.y} A ${rArc} ${rArc} 0 0 ${sw} ${pInArc.x} ${pInArc.y} L ${pIn.x} ${pIn.y}`;
-}
-
-// ── State ────────────────────────────────────────────────────────────────────
-let winners = {};  // matchId -> 0 (child A) | 1 (child B)
-
-function matchTeams(m) {
-  const ch = matchChildren(m);
-  if (ch.t === 'L') return [TEAMS[ch.a], TEAMS[ch.b]];
-  const wA = winners[ch.a], wB = winners[ch.b];
-  return [
-    wA != null ? matchTeams(ch.a)[wA] : null,
-    wB != null ? matchTeams(ch.b)[wB] : null,
-  ];
-}
-
-// ── Render ───────────────────────────────────────────────────────────────────
-function arcColor(m, slot) {
-  const w = winners[m];
-  if (w == null)   return 'rgba(200,210,230,0.18)';
-  if (w === slot)  return 'rgba(255,210,50,0.95)';
-  return 'rgba(120,130,160,0.07)';
-}
-
-function render() {
-  let arcs = '', innerDots = '', outerBadges = '', nodes = '';
-
-  // ── Bracket arcs: inner dot → match nodes ──
-  for (let m = 1; m <= 31; m++) {
-    const ch = matchChildren(m);
-    const mt = matchTheta(m), mr = matchRadius(m);
-    let tA, tB, rA, rB;
-
-    if (ch.t === 'L') {
-      // From INNER dot ring to R32 match node
-      tA = leafTheta(ch.a); tB = leafTheta(ch.b); rA = rB = RI;
-    } else {
-      tA = matchTheta(ch.a); tB = matchTheta(ch.b);
-      rA = matchRadius(ch.a); rB = matchRadius(ch.b);
-    }
-
-    const sw = m <= 16 ? 1.6 : m <= 24 ? 2 : m <= 28 ? 2.4 : 3;
-    arcs += `<path d="${halfBracket(rA,mr,tA,mt)}" fill="none" stroke="${arcColor(m,0)}" stroke-width="${sw}" stroke-linecap="round"/>`;
-    arcs += `<path d="${halfBracket(rB,mr,tB,mt)}" fill="none" stroke="${arcColor(m,1)}" stroke-width="${sw}" stroke-linecap="round"/>`;
-  }
-
-  // ── Short radial lines: outer badge → inner dot ──
-  for (let i = 0; i < 32; i++) {
-    const th = leafTheta(i);
-    const p1 = pc(RL - BR_OUTER - 1, th);
-    const p2 = pc(RI + BR_INNER + 1, th);
-    arcs += `<line x1="${p1.x}" y1="${p1.y}" x2="${p2.x}" y2="${p2.y}" stroke="rgba(200,210,230,0.22)" stroke-width="1.4"/>`;
-  }
-
-  // ── Match junction nodes (R32-SF) ──
-  for (let m = 1; m <= 30; m++) {
-    const mt = matchTheta(m), mr = matchRadius(m);
-    const {x,y} = pc(mr, mt);
-    const [tA, tB] = matchTeams(m);
-    const w = winners[m];
-    const nr = m<=16 ? 8 : m<=24 ? 9.5 : m<=28 ? 11 : 13.5;
-
-    let fc, sc;
-    if      (m <= 16) { fc='#111e38'; sc='#3a6ab5'; }
-    else if (m <= 24) { fc='#0e2a18'; sc='#2a9048'; }
-    else if (m <= 28) { fc='#251805'; sc='#c08818'; }
-    else              { fc='#220805'; sc='#d05528'; }
-
-    nodes += `<circle cx="${x}" cy="${y}" r="${nr}" fill="${fc}" stroke="${sc}" stroke-width="1.8"/>`;
-    if (w != null) {
-      const wt = w===0 ? tA : tB;
-      if (wt) nodes += `<text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="middle" font-size="${nr*1.2}">${wt.f}</text>`;
-    }
-  }
-
-  // ── Final trophy at center ──
-  nodes += `
-    <circle cx="${CX}" cy="${CY}" r="50" fill="#110d03" stroke="#e8c020" stroke-width="2.5"/>
-    <text x="${CX}" y="${CY}" text-anchor="middle" dominant-baseline="middle" font-size="32">🏆</text>`;
-  const fw = winners[31]!=null ? matchTeams(31)[winners[31]] : null;
-  if (fw) nodes += `<text x="${CX}" y="${CY+64}" text-anchor="middle" font-size="13" fill="#ffd700" font-weight="700">${fw.f} ${fw.s}</text>`;
-
-  // ── Inner dots (second ring) ──
-  for (let i = 0; i < 32; i++) {
-    const th = leafTheta(i);
-    const {x,y} = pc(RI, th);
-    const t = TEAMS[i];
-
-    // Find which R32 match this team is in and whether they won/lost
-    const m = Math.floor(i/2) + 1;
-    const slot = i % 2;
-    const w = winners[m];
-
-    let dotFill = '#0d1a2e';
-    let dotStroke = 'rgba(100,150,220,0.6)';
-    let dotOpacity = 1;
-    if (w != null) {
-      if (w === slot) { dotFill='#1a2a0a'; dotStroke='rgba(200,220,80,0.9)'; }
-      else { dotOpacity = 0.35; }
-    }
-
-    innerDots += `<circle cx="${x}" cy="${y}" r="${BR_INNER}" fill="${dotFill}" stroke="${dotStroke}" stroke-width="1.5" opacity="${dotOpacity}"/>`;
-    innerDots += `<text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="middle" font-size="10" opacity="${dotOpacity}">${t.f}</text>`;
-  }
-
-  // ── Outer badges (first / outermost ring) ──
-  for (let i = 0; i < 32; i++) {
-    const th = leafTheta(i);
-    const {x,y} = pc(RL, th);
-    const t = TEAMS[i];
-    const cosT = Math.cos(rad(th));
-
-    const m = Math.floor(i/2) + 1;
-    const slot = i % 2;
-    const w = winners[m];
-
-    let badgeFill = '#0c1828';
-    let badgeStroke = 'rgba(90,140,230,0.55)';
-    let badgeOpacity = 1;
-    if (w != null) {
-      if (w === slot) { badgeFill='#182814'; badgeStroke='rgba(190,215,70,0.9)'; }
-      else { badgeOpacity = 0.3; }
-    }
-
-    outerBadges += `<circle cx="${x}" cy="${y}" r="${BR_OUTER}" fill="${badgeFill}" stroke="${badgeStroke}" stroke-width="2" opacity="${badgeOpacity}"/>`;
-    outerBadges += `<text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="middle" font-size="18" opacity="${badgeOpacity}">${t.f}</text>`;
-
-    // Short code label
-    const lr = RL + BR_OUTER + 7;
-    const lp = pc(lr, th);
-    const anc = cosT > 0.1 ? 'start' : cosT < -0.1 ? 'end' : 'middle';
-    outerBadges += `<text x="${lp.x}" y="${lp.y}" text-anchor="${anc}" dominant-baseline="middle" font-size="8.5" fill="rgba(255,255,255,${badgeOpacity * 0.7})" font-weight="600">${t.s}</text>`;
-  }
-
-  // ── Guide circles (very subtle) ──
-  let guides = '';
-  [RI, RR32, RR16, RQF, RSF].forEach(r => {
-    guides += `<circle cx="${CX}" cy="${CY}" r="${r}" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1" stroke-dasharray="3 6"/>`;
+  // Guide circles (ring boundaries)
+  [R_TEAM,R_R32,R_R16,R_QF,R_SF].forEach(r=>{
+    guides+=`<circle cx="${CX}" cy="${CY}" r="${r}" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1" stroke-dasharray="2 9"/>`;
   });
 
-  document.getElementById('bc').innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${SZ} ${SZ}">
-    <defs>
-      <radialGradient id="bg" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stop-color="#111520"/>
-        <stop offset="70%" stop-color="#0a0a0f"/>
-        <stop offset="100%" stop-color="#060608"/>
-      </radialGradient>
-      <radialGradient id="glow" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stop-color="#c8a030" stop-opacity="0.5"/>
-        <stop offset="100%" stop-color="#c8a030" stop-opacity="0"/>
-      </radialGradient>
-    </defs>
-    <rect width="${SZ}" height="${SZ}" fill="url(#bg)"/>
-    <circle cx="${CX}" cy="${CY}" r="110" fill="url(#glow)"/>
-    ${guides}${arcs}${nodes}${innerDots}${outerBadges}
-  </svg>`;
+  // ── Lines: teams → R32 ring ──
+  for(let j=0;j<16;j++){
+    const ra=r32Angle(j),w=r32W[j];
+    lines+=`<path d="${bracketPath(R_TEAM,R_R32,teamAngle(2*j),ra)}"   fill="none" stroke="${lc(w==null?null:w===0)}" stroke-width="1.8" stroke-linecap="round"/>`;
+    lines+=`<path d="${bracketPath(R_TEAM,R_R32,teamAngle(2*j+1),ra)}" fill="none" stroke="${lc(w==null?null:w===1)}" stroke-width="1.8" stroke-linecap="round"/>`;
+  }
+
+  // ── Lines: R32 ring → R16 ring ──
+  for(let j=0;j<8;j++){
+    const ra=r16Angle(j),w=r16W[j];
+    lines+=`<path d="${bracketPath(R_R32,R_R16,r32Angle(2*j),ra)}"   fill="none" stroke="${lc(w==null?null:w===0)}" stroke-width="2.1" stroke-linecap="round"/>`;
+    lines+=`<path d="${bracketPath(R_R32,R_R16,r32Angle(2*j+1),ra)}" fill="none" stroke="${lc(w==null?null:w===1)}" stroke-width="2.1" stroke-linecap="round"/>`;
+  }
+
+  // ── Lines: R16 ring → QF ring ──
+  for(let j=0;j<4;j++){
+    const ra=qfAngle(j),w=qfW[j];
+    lines+=`<path d="${bracketPath(R_R16,R_QF,r16Angle(2*j),ra)}"   fill="none" stroke="${lc(w==null?null:w===0)}" stroke-width="2.5" stroke-linecap="round"/>`;
+    lines+=`<path d="${bracketPath(R_R16,R_QF,r16Angle(2*j+1),ra)}" fill="none" stroke="${lc(w==null?null:w===1)}" stroke-width="2.5" stroke-linecap="round"/>`;
+  }
+
+  // ── Lines: QF ring → SF ring ──
+  for(let j=0;j<2;j++){
+    const ra=sfAngle(j),w=sfW[j];
+    lines+=`<path d="${bracketPath(R_QF,R_SF,qfAngle(2*j),ra)}"   fill="none" stroke="${lc(w==null?null:w===0)}" stroke-width="3" stroke-linecap="round"/>`;
+    lines+=`<path d="${bracketPath(R_QF,R_SF,qfAngle(2*j+1),ra)}" fill="none" stroke="${lc(w==null?null:w===1)}" stroke-width="3" stroke-linecap="round"/>`;
+  }
+
+  // ── Lines: SF ring → center ──
+  lines+=`<path d="${bracketPath(R_SF,0,sfAngle(0),0)}" fill="none" stroke="${lc(finW==null?null:finW===0)}" stroke-width="3.5" stroke-linecap="round"/>`;
+  lines+=`<path d="${bracketPath(R_SF,0,sfAngle(1),0)}" fill="none" stroke="${lc(finW==null?null:finW===1)}" stroke-width="3.5" stroke-linecap="round"/>`;
+
+  // ── R32 nodes (show winner flag if known) ──
+  for(let j=0;j<16;j++){
+    const{x,y}=pt(R_R32,r32Angle(j));
+    const w=r32W[j],winner=w!=null?(w===0?r32Team(j,0):r32Team(j,1)):null;
+    const sc=w!=null?'rgba(255,205,45,0.75)':'rgba(50,90,190,0.45)';
+    nodes+=`<circle cx="${x}" cy="${y}" r="14" fill="#0b1422" stroke="${sc}" stroke-width="1.5"/>`;
+    if(winner)nodes+=`<text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="middle" font-size="11">${winner.f}</text>`;
+  }
+
+  // ── R16 nodes ──
+  for(let j=0;j<8;j++){
+    const{x,y}=pt(R_R16,r16Angle(j));
+    const w=r16W[j],winner=w!=null?r16Team(j,w):null;
+    const sc=w!=null?'rgba(255,205,45,0.8)':'rgba(40,140,90,0.45)';
+    nodes+=`<circle cx="${x}" cy="${y}" r="17" fill="#09161a" stroke="${sc}" stroke-width="1.7"/>`;
+    if(winner)nodes+=`<text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="middle" font-size="13">${winner.f}</text>`;
+  }
+
+  // ── QF nodes ──
+  for(let j=0;j<4;j++){
+    const{x,y}=pt(R_QF,qfAngle(j));
+    const w=qfW[j],winner=w!=null?qfTeam(j,w):null;
+    const sc=w!=null?'rgba(255,195,35,0.85)':'rgba(170,110,20,0.5)';
+    nodes+=`<circle cx="${x}" cy="${y}" r="20" fill="#101008" stroke="${sc}" stroke-width="2"/>`;
+    if(winner)nodes+=`<text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="middle" font-size="15">${winner.f}</text>`;
+  }
+
+  // ── SF nodes ──
+  for(let j=0;j<2;j++){
+    const{x,y}=pt(R_SF,sfAngle(j));
+    const w=sfW[j],winner=w!=null?sfTeam(j,w):null;
+    const sc=w!=null?'rgba(255,185,30,0.9)':'rgba(190,80,20,0.5)';
+    nodes+=`<circle cx="${x}" cy="${y}" r="24" fill="#120a06" stroke="${sc}" stroke-width="2.2"/>`;
+    if(winner)nodes+=`<text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="middle" font-size="18">${winner.f}</text>`;
+  }
+
+  // ── Center trophy ──
+  nodes+=`<circle cx="${CX}" cy="${CY}" r="50" fill="#0e0c04" stroke="#d4a010" stroke-width="2.5"/>`;
+  nodes+=`<text x="${CX}" y="${CY}" text-anchor="middle" dominant-baseline="middle" font-size="32">🏆</text>`;
+  const champ=finW!=null?sfWinner(finW):null;
+  if(champ)nodes+=`<text x="${CX}" y="${CY+66}" text-anchor="middle" font-size="13" fill="#ffd700" font-weight="700">${champ.f} ${champ.s}</text>`;
+
+  // ── Outer team badges ──
+  for(let i=0;i<32;i++){
+    const th=teamAngle(i),{x,y}=pt(R_TEAM,th);
+    const t=TEAMS[i],j=Math.floor(i/2),s=i%2,w=r32W[j];
+    const won=w==null?null:w===s;
+    const fill=won===true?'#131e07':won===false?'#101014':'#0c1526';
+    const sc  =won===true?'rgba(195,230,55,0.9)':won===false?'rgba(70,72,95,0.22)':'rgba(75,130,240,0.6)';
+    const op  =won===false?0.32:1;
+    badges+=`<circle cx="${x}" cy="${y}" r="${BR}" fill="${fill}" stroke="${sc}" stroke-width="2" opacity="${op}"/>`;
+    badges+=`<text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="middle" font-size="17" opacity="${op}">${t.f}</text>`;
+    // Short code outside badge
+    const cosT=Math.cos(rad(th));
+    const lp=pt(R_TEAM+BR+6,th);
+    const anc=cosT>0.15?'start':cosT<-0.15?'end':'middle';
+    badges+=`<text x="${lp.x}" y="${lp.y}" text-anchor="${anc}" dominant-baseline="middle" font-size="8" fill="rgba(255,255,255,${op*0.62})" font-weight="600">${t.s}</text>`;
+  }
+
+  document.getElementById('bc').innerHTML=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${SZ} ${SZ}">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#141620"/><stop offset="65%" stop-color="#0a0a12"/><stop offset="100%" stop-color="#060608"/>
+    </radialGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#b08818" stop-opacity="0.5"/><stop offset="100%" stop-color="#b08818" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="${SZ}" height="${SZ}" fill="url(#bg)"/>
+  <circle cx="${CX}" cy="${CY}" r="140" fill="url(#glow)"/>
+  ${guides}${lines}${nodes}${badges}
+</svg>`;
 }
 
-// ── ESPN Live Data ───────────────────────────────────────────────────────────
-const resultMap = {};  // "ABB1-ABB2" (sorted) → winning abbr
+// ── ESPN live data ─────────────────────────────────────────────────────────────
+const resultMap={};
 
-function setWinnersFromResults() {
-  // Propagate in order: R32→R16→QF→SF→Final
-  for (let m = 1; m <= 31; m++) {
-    if (winners[m] != null) continue;
-    const [tA, tB] = matchTeams(m);
-    if (!tA || !tB) continue;
-    const key = [tA.s, tB.s].sort().join('-');
-    const wAbbr = resultMap[key];
-    if (wAbbr) winners[m] = (wAbbr === tA.s) ? 0 : 1;
+function propagate(){
+  // R32 (teams always known)
+  for(let j=0;j<16;j++){
+    if(r32W[j]!=null)continue;
+    const tA=TEAMS[2*j],tB=TEAMS[2*j+1];
+    const k=[tA.s,tB.s].sort().join('-'),w=resultMap[k];
+    if(w)r32W[j]=w===tA.s?0:1;
+  }
+  // R16
+  for(let j=0;j<8;j++){
+    if(r16W[j]!=null)continue;
+    const tA=r16Team(j,0),tB=r16Team(j,1);
+    if(!tA||!tB)continue;
+    const k=[tA.s,tB.s].sort().join('-'),w=resultMap[k];
+    if(w)r16W[j]=w===tA.s?0:1;
+  }
+  // QF
+  for(let j=0;j<4;j++){
+    if(qfW[j]!=null)continue;
+    const tA=qfTeam(j,0),tB=qfTeam(j,1);
+    if(!tA||!tB)continue;
+    const k=[tA.s,tB.s].sort().join('-'),w=resultMap[k];
+    if(w)qfW[j]=w===tA.s?0:1;
+  }
+  // SF
+  for(let j=0;j<2;j++){
+    if(sfW[j]!=null)continue;
+    const tA=sfTeam(j,0),tB=sfTeam(j,1);
+    if(!tA||!tB)continue;
+    const k=[tA.s,tB.s].sort().join('-'),w=resultMap[k];
+    if(w)sfW[j]=w===tA.s?0:1;
+  }
+  // Final
+  if(finW==null){
+    const tA=sfWinner(0),tB=sfWinner(1);
+    if(tA&&tB){
+      const k=[tA.s,tB.s].sort().join('-'),w=resultMap[k];
+      if(w)finW=w===tA.s?0:1;
+    }
   }
 }
 
-async function fetchESPN() {
-  try {
-    const url = 'https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?dates=20260628-20260719';
-    const res = await fetch(url);
-    if (!res.ok) throw new Error(res.status);
-    const data = await res.json();
-
-    let loaded = 0, completed = 0;
-    for (const ev of (data.events || [])) {
-      const comp = ev.competitions?.[0];
-      if (!comp) continue;
-      const [c1, c2] = comp.competitors || [];
-      if (!c1 || !c2) continue;
-
-      const a1 = normAbbr(c1.team.abbreviation || '') || nameToAbbr(c1.team.displayName || '') || '';
-      const a2 = normAbbr(c2.team.abbreviation || '') || nameToAbbr(c2.team.displayName || '') || '';
-      if (!a1 || !a2) continue;
-
+async function fetchESPN(){
+  try{
+    const url='https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?dates=20260628-20260719';
+    const res=await fetch(url);
+    if(!res.ok)throw new Error(res.status);
+    const data=await res.json();
+    let loaded=0,completed=0;
+    for(const ev of(data.events||[])){
+      const comp=ev.competitions?.[0];
+      if(!comp)continue;
+      const[c1,c2]=comp.competitors||[];
+      if(!c1||!c2)continue;
+      const a1=normAbbr(c1.team.abbreviation||'')||nameToAbbr(c1.team.displayName||'')||'';
+      const a2=normAbbr(c2.team.abbreviation||'')||nameToAbbr(c2.team.displayName||'')||'';
+      if(!a1||!a2)continue;
       loaded++;
-      const finished = comp.status?.type?.completed === true
-                    || comp.status?.type?.name === 'STATUS_FINAL';
-      if (!finished) continue;
-
+      const done=comp.status?.type?.completed===true||comp.status?.type?.name==='STATUS_FINAL';
+      if(!done)continue;
       completed++;
-      const key = [a1, a2].sort().join('-');
-      if (c1.winner) resultMap[key] = a1;
-      else if (c2.winner) resultMap[key] = a2;
+      const k=[a1,a2].sort().join('-');
+      if(c1.winner)resultMap[k]=a1;
+      else if(c2.winner)resultMap[k]=a2;
     }
-
-    setWinnersFromResults();
+    propagate();
     render();
-    document.getElementById('status').textContent =
-      `${completed} result${completed!==1?'s':''} loaded · ${new Date().toLocaleTimeString()}`;
-  } catch (err) {
-    document.getElementById('status').textContent = 'Live data unavailable';
+    document.getElementById('status').textContent=`${completed} result${completed!==1?'s':''} loaded · ${new Date().toLocaleTimeString()}`;
+  }catch(e){
+    document.getElementById('status').textContent='Live data unavailable';
     render();
   }
 }
