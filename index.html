@@ -433,19 +433,21 @@ body{
   font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;
   color:var(--t2);text-align:center;padding:11px 6px;border-bottom:1px solid var(--border);margin-bottom:10px;
 }
-.bmatches{display:flex;flex-direction:column;justify-content:space-around;flex:1;padding:0 5px 10px}
-.bm{display:flex;flex-direction:column;gap:1px}
+.bmatches{display:flex;flex-direction:column;justify-content:flex-start;flex:1;padding:0 5px 10px;gap:0}
+.bm{display:flex;flex-direction:column;gap:0;margin-bottom:14px;border:1px solid rgba(255,255,255,.22);border-radius:8px;overflow:hidden}
+.bm>.bt{border:none;border-radius:0}
 .bt{
-  display:flex;align-items:center;gap:5px;padding:7px 8px;
-  background:var(--card);border:1px solid var(--border);border-radius:5px;
-  font-size:11px;font-weight:500;transition:border-color .18s;white-space:nowrap;overflow:hidden;
+  display:flex;align-items:center;gap:5px;padding:8px 10px;
+  background:#1a1a1a;border:1px solid rgba(255,255,255,.12);border-radius:6px;
+  font-size:12px;font-weight:500;transition:border-color .18s;white-space:nowrap;overflow:hidden;
+  color:#fff;
 }
-.bt:hover{border-color:#2a2a2a}
+.bt:hover{border-color:#3a3a3a}
 .bt.tbd{color:var(--t2);font-style:italic;font-size:10px}
-.bt.win{border-color:rgba(0,255,135,.35);background:rgba(0,255,135,.04);color:var(--accent)}
-.bf{font-size:13px;flex-shrink:0}
+.bt.win{border-color:rgba(0,255,135,.45);background:rgba(0,255,135,.07);color:var(--accent)}
+.bf{font-size:14px;flex-shrink:0}
 .bn{overflow:hidden;text-overflow:ellipsis}
-.bsep{height:1px;background:rgba(255,255,255,.05);margin:1px 8px}
+.bsep{height:1px;background:rgba(255,255,255,.25);margin:0}
 .trophy{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px 12px;gap:6px;flex-shrink:0;width:76px}
 .trophy-i{font-size:28px}
 .trophy-l{font-size:9px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--gold);text-align:center}
@@ -805,8 +807,8 @@ body{
 }
 
 /* ── BRACKET MATCH INFO ─────────────────────────── */
-.bm-info{font-size:9px;color:var(--t2);padding:2px 8px 5px;letter-spacing:.2px;line-height:1.6;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.bt.lbl{color:var(--t2);font-size:10px}
+.bm-info{font-size:10px;color:rgba(255,255,255,.55);padding:4px 10px 7px;letter-spacing:.2px;line-height:1.6;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;background:rgba(255,255,255,.03);border-top:1px solid rgba(255,255,255,.1)}
+.bt.lbl{color:rgba(255,255,255,.4);font-size:11px}
 .bt.projected{opacity:.7}
 .ko-proj{font-size:9px;color:var(--t2);margin-left:auto;font-style:italic}
 
@@ -2739,12 +2741,12 @@ function renderKnockout(){
 
   function mkKOTeam(label){
     const key = koSlotKey(label);
-    const bt = el('div','bt lbl');
-    if(key) bt.dataset.slot = key;
     const flag = KO_TEAM_FLAGS[label];
+    const bt = el('div', flag ? 'bt' : 'bt lbl');
+    if(key) bt.dataset.slot = key;
     bt.innerHTML = flag
       ? `<span class="bf">${flag}</span><span class="bn">${label}</span>`
-      : `<span class="bn" style="color:#555">${label}</span>`;
+      : `<span class="bn">${label}</span>`;
     return bt;
   }
 
