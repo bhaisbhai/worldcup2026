@@ -3439,6 +3439,52 @@ function renderCircularBracket(){
   }
 }
 
+function getTeamAbbreviation(name){
+  if(!name) return '';
+  const cleanName = name.trim();
+  const nameToAbbr = {
+    'South Africa': 'RSA',
+    'Canada': 'CAN',
+    'Netherlands': 'NED',
+    'Morocco': 'MAR',
+    'Germany': 'GER',
+    'Paraguay': 'PAR',
+    'France': 'FRA',
+    'Sweden': 'SWE',
+    'Brazil': 'BRA',
+    'Japan': 'JPN',
+    'Ivory Coast': 'CIV',
+    'Norway': 'NOR',
+    'Mexico': 'MEX',
+    'Ecuador': 'ECU',
+    'England': 'ENG',
+    'Congo DR': 'COD',
+    'USA': 'USA',
+    'United States': 'USA',
+    'Bosnia-Herzegovina': 'BIH',
+    'Belgium': 'BEL',
+    'Senegal': 'SEN',
+    'Portugal': 'POR',
+    'Croatia': 'CRO',
+    'Spain': 'ESP',
+    'Austria': 'AUT',
+    'Switzerland': 'SUI',
+    'Algeria': 'ALG',
+    'Colombia': 'COL',
+    'Ghana': 'GHA',
+    'Argentina': 'ARG',
+    'Cape Verde': 'CPV',
+    'Australia': 'AUS',
+    'Egypt': 'EGY'
+  };
+  if(nameToAbbr[cleanName]) return nameToAbbr[cleanName];
+  for(const g of GROUPS_DATA){
+    const found = (g.teams||[]).find(t => t.n.toLowerCase() === name.toLowerCase());
+    if(found && found.abbr) return found.abbr;
+  }
+  return name.substring(0,3).toUpperCase();
+}
+
 window.handleKOMatchClick = function(mNum){
   const matchesMap = getResolvedMatchesMap();
   const m = matchesMap[mNum];
@@ -3459,8 +3505,8 @@ window.handleKOMatchClick = function(mNum){
       openMatchModal({
         id: 'ko-'+mNum, state: 'pre', isHT: false, displayClock: '',
         detail: `${m.date} at ${m.stad}`, date: new Date(),
-        home: { name: m.hName, abbr: m.hName.substring(0,3).toUpperCase(), score: 0, winner: false },
-        away: { name: m.aName, abbr: m.aName.substring(0,3).toUpperCase(), score: 0, winner: false },
+        home: { name: m.hName, abbr: getTeamAbbreviation(m.hName), score: 0, winner: false },
+        away: { name: m.aName, abbr: getTeamAbbreviation(m.aName), score: 0, winner: false },
         venue: m.stad, city: m.city,
         group: m.roundKey === 'final' ? 'Final' : m.roundKey.toUpperCase(), bcast: ''
       });
