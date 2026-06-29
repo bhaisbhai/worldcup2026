@@ -3289,7 +3289,7 @@ function renderCircularBracket(){
   // Two team angles within a match sector
   function teamAngles(side, n, idx){
     const c = matchCenter(side, n, idx);
-    const spread = Math.min(180/n * 0.38, 18);
+    const spread = (180 / n) * 0.18;
     return { home: c - spread, away: c + spread, center: c };
   }
 
