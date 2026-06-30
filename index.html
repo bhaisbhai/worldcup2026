@@ -263,6 +263,8 @@ body{
 .tflag{font-size:28px;line-height:1}
 .tname{font-size:12px;font-weight:600;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 .tname.winner{color:var(--accent)}
+.mc-qualified{text-align:center;font-size:11px;font-weight:600;color:var(--accent);padding:2px 8px 6px;letter-spacing:.03em}
+.mc-pens{color:var(--t2);font-weight:400}
 
 .scwrap{display:flex;align-items:center;gap:4px;flex-shrink:0}
 .sc{font-family:var(--mono);font-size:36px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1;min-width:24px;text-align:center}
@@ -1888,6 +1890,14 @@ function buildCard(ev){
 
   const hlHtml = isFt ? `<div class="mc-thumb-slot" data-hlid="${ev.id}"></div>` : '';
 
+  // Qualified banner for finished knockout matches
+  const isKnockout = isFt && !/^Group /.test(ev.group || '');
+  const qualTeam = isKnockout ? (ev.home.winner ? ev.home : ev.away.winner ? ev.away : null) : null;
+  const wonOnPens = ev.home.shootoutScore !== null || ev.away.shootoutScore !== null;
+  const qualHtml = qualTeam
+    ? `<div class="mc-qualified">${flag(qualTeam.abbr)} ${qualTeam.name} qualified${wonOnPens ? ' <span class="mc-pens">· on penalties</span>' : ''}</div>`
+    : '';
+
   if(isUp){
     const tvCh = getUKChannel(ev.home.abbr, ev.away.abbr);
     const venue = ev.city || ev.venue || '';
@@ -1934,6 +1944,7 @@ function buildCard(ev){
       </div>
     </div>
     ${(isLive||isFt) ? renderScorers(ev.goals) : ''}
+    ${qualHtml}
     <div class="mc-foot">${foot_l}${foot_r}</div>
     ${hlHtml}
   `;
