@@ -293,11 +293,14 @@ function render(){
 
     flagNodes += `
       <g class="radial-node-group" id="node-${node.id}" style="cursor:pointer" data-id="${node.id}" data-name="${(node.name||'').replace(/"/g,"'")}">
+        <clipPath id="clip-${node.id}">
+          <circle cx="${node.cx}" cy="${node.cy}" r="${tr}" />
+        </clipPath>
         <circle cx="${node.cx}" cy="${node.cy}" r="${tr}" fill="${bgFill}" stroke="${stroke}" stroke-width="${sw}" ${filterStyle} style="transition: transform 0.2s, stroke 0.2s; transform-origin: ${node.cx}px ${node.cy}px;">
           <title>${node.name}</title>
         </circle>
         <text x="${node.cx}" y="${node.cy}" text-anchor="middle" dominant-baseline="central"
-          font-size="${isTBD ? Math.round(fs * 0.7) : fs}" style="pointer-events:none;user-select:none"
+          font-size="${isTBD ? Math.round(fs * 0.7) : Math.round(fs * 2.1)}" clip-path="url(#clip-${node.id})" style="pointer-events:none;user-select:none"
           fill="${isTBD ? 'rgba(255,255,255,0.22)' : '#fff'}">${isTBD ? '?' : node.flag}</text>
       </g>
     `;
