@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-29T08:58:18.489Z",
+  "generatedAt": "2026-06-30T07:52:55.421Z",
   "byDate": {
     "2026-06-24": {
       "BIH-QAT": {
@@ -330,6 +330,20 @@
       },
       "NED-MAR": {
         "summary": "Group F winners Netherlands (7 points) meet Morocco, second in Group C with 7 points. Winner progresses, loser is eliminated.",
+        "status": "Must Win"
+      }
+    },
+    "2026-06-30": {
+      "CIV-NOR": {
+        "summary": "Ivory Coast, 3rd in Group E with 6 points, battles Norway, Group I winners also with 6 points. Winner advances, loser is eliminated.",
+        "status": "Must Win"
+      },
+      "FRA-SWE": {
+        "summary": "France, 2nd in Group I with 9 points, faces Sweden, 2nd in Group F with 4 points. Winner advances, loser is eliminated.",
+        "status": "Must Win"
+      },
+      "MEX-ECU": {
+        "summary": "Mexico, Group A winners with 9 points and 0 goals conceded, battles Ecuador, Group E winners with 4 points. Winner advances, loser eliminated.",
         "status": "Must Win"
       }
     }
