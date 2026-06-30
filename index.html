@@ -3284,153 +3284,299 @@ function renderCircularBracket(){
   if(!container) return;
 
   const matchesMap = getResolvedMatchesMap();
-  const W = 700, H = 700, cx = W/2, cy = H/2;
-  const ringR = { r32: 310, r16: 238, qf: 172, sf: 110, final: 54 };
-  // Per-ring flag-circle radius and emoji font-size
-  const RS = { r32:{tr:28,fs:24}, r16:{tr:24,fs:21}, qf:{tr:21,fs:18}, sf:{tr:19,fs:16}, final:{tr:24,fs:22} };
+  const W = 850, H = 850, cx = W/2, cy = H/2;
+  const radialMatrix = {
+    t1_out: 380, t1_in: 330,
+    t2_out: 260, t2_in: 210,
+    t3_out: 150, t3_in: 110,
+    t4_out: 70,  t4_in: 45
+  };
+  const NEON = '#00ff87', NEON2 = '#60efff';
 
-  function toRad(d){ return d * Math.PI / 180; }
-  function pt(deg, r){ const rad = toRad(deg); return { x: cx + r*Math.cos(rad), y: cy + r*Math.sin(rad) }; }
-  function f2(n){ return n.toFixed(2); }
-
-  // Match center angle: right side -90°→+90°, left side 270°→90° (mirrors right)
-  function matchCenter(side, n, idx){
-    const step = 180 / n;
-    return side === 'right' ? -90 + (idx + 0.5)*step : 270 - (idx + 0.5)*step;
-  }
-
-  // Two team angles within a match sector
-  function teamAngles(side, n, idx){
-    const c = matchCenter(side, n, idx);
-    const spread = (180 / n) * 0.18;
-    return { home: c - spread, away: c + spread, center: c };
-  }
-
-  const svgLines = [];
-  const svgFlags = [];
-
-  // Faint ring guides
-  Object.values(ringR).forEach(r => {
-    svgLines.push(`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1" stroke-dasharray="3 5"/>`);
-  });
-
-  const roundDefs = [
-    { ring:'r32', n:8 },
-    { ring:'r16', n:4 },
-    { ring:'qf',  n:2 },
-    { ring:'sf',  n:1 },
+  // poolOuter flags from Cuppy (re-ordered for Right side match alignment)
+  const poolOuterFlags = [
+    "🇨🇦", "🇲🇦", "🇵🇾", "🇫🇷", "🇧🇷", "🇨🇮", "🇲🇽", "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+    "🇺🇸", "🇧🇪", "🇪🇸", "🇵🇹", "🇨🇭", "🇨🇴", "🇦🇷", "🇦🇺"
+  ];
+  const poolOuterNames = [
+    "Canada", "Morocco", "Paraguay", "France", "Brazil", "Ivory Coast", "Mexico", "England",
+    "USA", "Belgium", "Spain", "Portugal", "Switzerland", "Colombia", "Argentina", "Australia"
   ];
 
-  // Draw bracket arcs + connection lines
-  ['right','left'].forEach(side => {
-    for(let ri = 0; ri < roundDefs.length; ri++){
-      const { ring, n } = roundDefs[ri];
-      const r = ringR[ring];
-      for(let mi = 0; mi < n; mi++){
-        const { home, away, center } = teamAngles(side, n, mi);
-        const p1 = pt(home, r), p2 = pt(away, r);
+  const rayR32Matches = [
+    73, 75, 74, 77, 76, 78, 79, 80,
+    81, 82, 84, 83, 85, 87, 86, 88
+  ];
+  const rayR16Matches = [
+    90, 89, 91, 92, 94, 93, 96, 95
+  ];
+  const rayQFMatches = [
+    97, 98, 99, 100
+  ];
+  const raySFMatches = [
+    101, 102
+  ];
 
-        // Short arc between the two teams of this match
-        const sweep = side === 'right' ? 1 : 0;
-        svgLines.push(`<path d="M${f2(p1.x)},${f2(p1.y)} A${r},${r} 0 0,${sweep} ${f2(p2.x)},${f2(p2.y)}" fill="none" stroke="rgba(255,255,255,0.13)" stroke-width="1.5" stroke-linecap="round"/>`);
+  function toRad(d){ return d * Math.PI / 180; }
+  function pt(r, deg){
+    const rad = toRad(deg);
+    return { x: +(cx + r*Math.cos(rad)).toFixed(2), y: +(cy + r*Math.sin(rad)).toFixed(2) };
+  }
 
-        // Radial line from arc midpoint inward
-        const arcMid = pt(center, r);
-        if(ri < roundDefs.length - 1){
-          const innerRound = roundDefs[ri + 1];
-          const innerCenter = matchCenter(side, innerRound.n, Math.floor(mi/2));
-          const innerPt = pt(innerCenter, ringR[innerRound.ring]);
-          svgLines.push(`<line x1="${f2(arcMid.x)}" y1="${f2(arcMid.y)}" x2="${f2(innerPt.x)}" y2="${f2(innerPt.y)}" stroke="rgba(255,255,255,0.09)" stroke-width="1.5"/>`);
-        } else {
-          // SF → Final
-          const finalAngle = side === 'right' ? 0 : 180;
-          const finalPt = pt(finalAngle, ringR.final);
-          svgLines.push(`<line x1="${f2(arcMid.x)}" y1="${f2(arcMid.y)}" x2="${f2(finalPt.x)}" y2="${f2(finalPt.y)}" stroke="rgba(255,215,0,0.18)" stroke-width="1.5"/>`);
-        }
-      }
+  // Radial bracket path from Cuppy
+  function getRadialBracketPath(r1, a1, r2, a2, r_mid) {
+    const p1 = pt(r1, a1);
+    if (Math.abs(a1 - a2) < 0.001) {
+      const p2 = pt(r2, a2);
+      return `M ${p1.x} ${p1.y} L ${p2.x} ${p2.y}`;
     }
-  });
+    const pm1 = pt(r_mid, a1);
+    const pm2 = pt(r_mid, a2);
+    const p2 = pt(r2, a2);
+    let diff = a2 - a1;
+    while (diff < -180) diff += 360;
+    while (diff > 180) diff -= 360;
+    const sweepFlag = diff >= 0 ? 1 : 0;
+    return `M ${p1.x} ${p1.y} L ${pm1.x} ${pm1.y} A ${r_mid} ${r_mid} 0 0 ${sweepFlag} ${pm2.x} ${pm2.y} L ${p2.x} ${p2.y}`;
+  }
 
-  // Final arc (between the two finalists)
-  const rfp = pt(0, ringR.final), lfp = pt(180, ringR.final);
-  svgLines.push(`<path d="M${f2(rfp.x)},${f2(rfp.y)} A${ringR.final},${ringR.final} 0 0,1 ${f2(lfp.x)},${f2(lfp.y)}" fill="none" stroke="rgba(255,215,0,0.28)" stroke-width="1.5"/>`);
-  svgLines.push(`<path d="M${f2(rfp.x)},${f2(rfp.y)} A${ringR.final},${ringR.final} 0 0,0 ${f2(lfp.x)},${f2(lfp.y)}" fill="none" stroke="rgba(255,215,0,0.28)" stroke-width="1.5"/>`);
+  const nodes = [];
+  const nodesMap = {};
 
-  // Build team flag data
-  const allSlots = [];
+  function addNode(id, r, angle, name, flag, won, matchNum, parentId) {
+    const coord = pt(r, angle);
+    const nodeObj = {
+      id,
+      cx: coord.x,
+      cy: coord.y,
+      r,
+      angle,
+      name: name || 'TBD',
+      flag: flag || '🏳️',
+      won: !!won,
+      matchNum,
+      parentId
+    };
+    nodes.push(nodeObj);
+    nodesMap[id] = nodeObj;
+  }
 
-  ['right','left'].forEach(side => {
-    const koSide = KO_DATA[side];
-    const sideDefs = [
-      { ring:'r32', n:8, matches: koSide.r32 },
-      { ring:'r16', n:4, matches: koSide.r16 },
-      { ring:'qf',  n:2, matches: koSide.qf  },
-      { ring:'sf',  n:1, matches: koSide.sf  },
-    ];
-    sideDefs.forEach(({ ring, n, matches }) => {
-      matches.forEach((m, mi) => {
-        const md = matchesMap[m.num];
-        const { home: ha, away: aa } = teamAngles(side, n, mi);
-        const r = ringR[ring];
-        const resolveFlag = (name, mdFlag) =>
-          (mdFlag && mdFlag !== '🏳️') ? mdFlag : (KO_TEAM_FLAGS[name] || null);
-        [
-          { angle: ha, name: md?.hName||m.h, fl: resolveFlag(md?.hName||m.h, md?.hFlag), win: md?.winnerName && md.winnerName===md.hName },
-          { angle: aa, name: md?.aName||m.a, fl: resolveFlag(md?.aName||m.a, md?.aFlag), win: md?.winnerName && md.winnerName===md.aName },
-        ].forEach(t => {
-          const p = pt(t.angle, r);
-          allSlots.push({ ...p, angle: t.angle, name: t.name, fl: t.fl, win: t.win, matchNum: m.num, ring });
-        });
-      });
-    });
-  });
+  // 1. Tier 1 (Round of 32)
+  for (let i = 0; i < 16; i++) {
+    const angle = i * 22.5 - 90;
+    const mNum = rayR32Matches[i];
+    const md = matchesMap[mNum];
+    const isHomeOuter = md && (md.hFlag === poolOuterFlags[i] || md.hName === poolOuterNames[i]);
+    
+    const outName = isHomeOuter ? md?.hName : md?.aName;
+    const outFlag = isHomeOuter ? md?.hFlag : md?.aFlag;
+    const outWon = md?.winnerName && md.winnerName === outName;
 
-  // Final teams
+    const inName = isHomeOuter ? md?.aName : md?.hName;
+    const inFlag = isHomeOuter ? md?.aFlag : md?.hFlag;
+    const inWon = md?.winnerName && md.winnerName === inName;
+
+    const nextTierIndex = Math.floor(i / 2);
+    const routesToOuter = (i % 2 === 0);
+    const targetParentId = `t2-${routesToOuter ? 'out' : 'in'}-${nextTierIndex}`;
+
+    addNode(`t1-out-${i}`, radialMatrix.t1_out, angle, outName, outFlag, outWon, mNum, `t1-in-${i}`);
+    addNode(`t1-in-${i}`, radialMatrix.t1_in, angle, inName, inFlag, inWon, mNum, targetParentId);
+  }
+
+  // 2. Tier 2 (Round of 16)
+  for (let k = 0; k < 8; k++) {
+    const angle = k * 45 - 90 + 11.25;
+    const mNum = rayR16Matches[k];
+    const md = matchesMap[mNum];
+
+    const outName = md?.hName;
+    const outFlag = md?.hFlag;
+    const outWon = md?.winnerName && md.winnerName === outName;
+
+    const inName = md?.aName;
+    const inFlag = md?.aFlag;
+    const inWon = md?.winnerName && md.winnerName === inName;
+
+    const nextTierIndex = Math.floor(k / 2);
+    const routesToOuter = (k % 2 === 0);
+    const targetParentId = `t3-${routesToOuter ? 'out' : 'in'}-${nextTierIndex}`;
+
+    addNode(`t2-out-${k}`, radialMatrix.t2_out, angle, outName, outFlag, outWon, mNum, `t2-in-${k}`);
+    addNode(`t2-in-${k}`, radialMatrix.t2_in, angle, inName, inFlag, inWon, mNum, targetParentId);
+  }
+
+  // 3. Tier 3 (Quarterfinals)
+  for (let m = 0; m < 4; m++) {
+    const angle = m * 90 - 90 + 5.625;
+    const mNum = rayQFMatches[m];
+    const md = matchesMap[mNum];
+
+    const outName = md?.hName;
+    const outFlag = md?.hFlag;
+    const outWon = md?.winnerName && md.winnerName === outName;
+
+    const inName = md?.aName;
+    const inFlag = md?.aFlag;
+    const inWon = md?.winnerName && md.winnerName === inName;
+
+    const nextTierIndex = Math.floor(m / 2);
+    const routesToOuter = (m % 2 === 0);
+    const targetParentId = `t4-${routesToOuter ? 'out' : 'in'}-${nextTierIndex}`;
+
+    addNode(`t3-out-${m}`, radialMatrix.t3_out, angle, outName, outFlag, outWon, mNum, `t3-in-${m}`);
+    addNode(`t3-in-${m}`, radialMatrix.t3_in, angle, inName, inFlag, inWon, mNum, targetParentId);
+  }
+
+  // 4. Tier 4 (Semifinals)
+  for (let s = 0; s < 2; s++) {
+    const angle = s * 180 - 90 + 2.8125;
+    const mNum = raySFMatches[s];
+    const md = matchesMap[mNum];
+
+    const outName = md?.hName;
+    const outFlag = md?.hFlag;
+    const outWon = md?.winnerName && md.winnerName === outName;
+
+    const inName = md?.aName;
+    const inFlag = md?.aFlag;
+    const inWon = md?.winnerName && md.winnerName === inName;
+
+    addNode(`t4-out-${s}`, radialMatrix.t4_out, angle, outName, outFlag, outWon, mNum, `t4-in-${s}`);
+    addNode(`t4-in-${s}`, radialMatrix.t4_in, angle, inName, inFlag, inWon, mNum, 'masterHub');
+  }
+
+  // Champion
   const fm = matchesMap[104];
-  [
-    { angle: 180, name: fm?.hName||'TBD', fl: fm?.hFlag||'🏳️', win: fm?.winnerName&&fm.winnerName===fm.hName },
-    { angle:   0, name: fm?.aName||'TBD', fl: fm?.aFlag||'🏳️', win: fm?.winnerName&&fm.winnerName===fm.aName },
-  ].forEach(t => {
-    const p = pt(t.angle, ringR.final);
-    allSlots.push({ ...p, angle: t.angle, name: t.name, fl: t.fl, win: t.win, matchNum: 104, ring:'final' });
+  const champFlag = fm?.winnerFlag && fm.winnerFlag !== '🏳️' ? fm.winnerFlag : '';
+  const champName = fm?.winnerName || '';
+
+  // Draw concentric guides
+  const svgGuides = [];
+  const rings = [
+    { size: 380 * 2, type: 'solid' },
+    { size: 330 * 2, type: 'dashed' },
+    { size: 260 * 2, type: 'solid' },
+    { size: 210 * 2, type: 'dashed' },
+    { size: 150 * 2, type: 'solid' },
+    { size: 110 * 2, type: 'dashed' },
+    { size: 70 * 2,  type: 'solid' },
+    { size: 45 * 2,  type: 'dashed' }
+  ];
+  rings.forEach(rg => {
+    const strokeDash = rg.type === 'dashed' ? 'stroke-dasharray="3 6"' : '';
+    svgGuides.push(`<circle cx="${cx}" cy="${cy}" r="${rg.size / 2}" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1" ${strokeDash}/>`);
   });
 
-  // Draw team circles + flags
-  allSlots.forEach(s => {
-    const { tr, fs } = RS[s.ring];
-    const isTBD = !s.fl || s.fl === '🏳️' || !s.name || /Winner|Runner-up|TBD|W M\d/.test(s.name);
-    const bgFill  = s.win ? 'rgba(0,255,135,0.18)' : isTBD ? 'rgba(35,35,35,0.85)' : 'rgba(22,22,22,0.93)';
-    const stroke  = s.win ? 'rgba(0,255,135,0.75)' : isTBD ? 'rgba(255,255,255,0.07)' : 'rgba(255,255,255,0.2)';
-    const sw      = s.win ? 2 : 1;
+  // Draw lines
+  const svgLines = [];
+  nodes.forEach(node => {
+    if (!node.parentId) return;
+    let r2 = 0;
+    let a2 = node.angle;
 
-    svgFlags.push(`<g class="kc-team" onclick="handleKOMatchClick(${s.matchNum})" style="cursor:pointer" data-name="${(s.name||'').replace(/"/g,"'")}">
-      <circle cx="${f2(s.x)}" cy="${f2(s.y)}" r="${tr}" fill="${bgFill}" stroke="${stroke}" stroke-width="${sw}">
-        <title>${s.name||''}</title>
-      </circle>
-      <text x="${f2(s.x)}" y="${f2(s.y)}" text-anchor="middle" dominant-baseline="central"
-        font-size="${isTBD ? Math.round(fs*0.65) : fs}" style="pointer-events:none;user-select:none"
-        fill="${isTBD ? 'rgba(255,255,255,0.22)' : '#fff'}">${isTBD ? '?' : s.fl}</text>
-    </g>`);
+    if (node.parentId !== 'masterHub') {
+      const parent = nodesMap[node.parentId];
+      if (!parent) return;
+      r2 = parent.r;
+      a2 = parent.angle;
+    } else {
+      r2 = 0;
+      a2 = node.angle;
+    }
+
+    const isProg = node.won;
+    const r_mid = (node.r + r2) / 2;
+    const pathD = getRadialBracketPath(node.r, node.angle, r2, a2, r_mid);
+
+    let strokeColor = 'rgba(255, 255, 255, 0.15)';
+    let strokeWidth = 1.5;
+    let filterStyle = '';
+
+    if (isProg) {
+      strokeColor = 'rgba(0, 255, 135, 0.65)';
+      strokeWidth = 2.5;
+      filterStyle = 'filter="url(#neonArc)"';
+    }
+
+    svgLines.push(`<path id="pipe-${node.id}" d="${pathD}" fill="none" stroke="${strokeColor}" stroke-width="${strokeWidth}" ${filterStyle} style="transition: stroke 0.3s, stroke-width 0.3s; pointer-events: none;"/>`);
   });
 
-  // Trophy + glow at center
-  svgFlags.push(`
-    <circle cx="${cx}" cy="${cy}" r="38" fill="rgba(255,215,0,0.07)" stroke="rgba(255,215,0,0.22)" stroke-width="1.5"/>
-    <text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central" font-size="32" style="pointer-events:none">🏆</text>
+  // Draw flag circles (nodes)
+  const svgNodes = [];
+  nodes.forEach(node => {
+    const isTBD = !node.flag || node.flag === '🏳️' || !node.name || /Winner|Runner-up|TBD|W M\d/.test(node.name);
+    
+    let tr = 18;
+    let fs = 15;
+    if (node.id.startsWith('t1-')) { tr = 18; fs = 16; }
+    else if (node.id.startsWith('t2-')) { tr = 16; fs = 14; }
+    else if (node.id.startsWith('t3-')) { tr = 14; fs = 12; }
+    else if (node.id.startsWith('t4-')) { tr = 12; fs = 10; }
+
+    const bgFill = node.won ? 'rgba(0, 255, 135, 0.18)' : isTBD ? 'rgba(30, 35, 45, 0.85)' : 'rgba(15, 20, 30, 0.93)';
+    const stroke = node.won ? 'rgba(0, 255, 135, 0.75)' : isTBD ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.22)';
+    const sw = node.won ? 2.2 : 1.2;
+    const filterStyle = node.won ? 'filter="url(#neonNode)"' : '';
+
+    svgNodes.push(`
+      <g class="kc-team radial-node-group" id="node-${node.id}" onclick="handleKOMatchClick(${node.matchNum})" style="cursor:pointer" data-id="${node.id}" data-name="${(node.name||'').replace(/"/g,"'")}">
+        <circle cx="${node.cx}" cy="${node.cy}" r="${tr}" fill="${bgFill}" stroke="${stroke}" stroke-width="${sw}" ${filterStyle} style="transition: transform 0.2s, stroke 0.2s; transform-origin: ${node.cx}px ${node.cy}px;">
+          <title>${node.name}</title>
+        </circle>
+        <text x="${node.cx}" y="${node.cy}" text-anchor="middle" dominant-baseline="central"
+          font-size="${isTBD ? Math.round(fs * 0.7) : fs}" style="pointer-events:none;user-select:none"
+          fill="${isTBD ? 'rgba(255,255,255,0.22)' : '#fff'}">${isTBD ? '?' : node.flag}</text>
+      </g>
+    `);
+  });
+
+  // Trophy in center
+  const centerFill = champName ? 'rgba(0, 255, 135, 0.1)' : 'rgba(255, 215, 0, 0.05)';
+  const centerStroke = champName ? '#00ff87' : 'rgba(255, 215, 0, 0.25)';
+  const centerFilter = champName ? 'filter="url(#neonNode)"' : '';
+
+  svgNodes.push(`
+    <g class="radial-node-group" id="node-masterHub" onclick="handleKOMatchClick(104)" style="cursor:pointer" data-id="masterHub" data-name="${(champName || 'Champion TBD').replace(/"/g,"'")}">
+      <circle cx="${cx}" cy="${cy}" r="38" fill="${centerFill}" stroke="${centerStroke}" stroke-width="2" ${centerFilter}/>
+      <text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central" font-size="28" style="pointer-events:none">🏆</text>
+      ${champFlag ? `<text x="${cx}" y="${cy + 52}" text-anchor="middle" font-size="12" fill="#00ff87" font-weight="700" style="pointer-events:none">${champFlag} ${getTeamAbbreviation(champName)}</text>` : ''}
+    </g>
   `);
 
+  const DEFS = `<defs>
+    <radialGradient id="tGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="${NEON}" stop-opacity="0.32"/>
+      <stop offset="100%" stop-color="${NEON}" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="neonArc" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="2" result="b"/>
+      <feFlood flood-color="${NEON}" flood-opacity="0.8" result="c"/>
+      <feComposite in="c" in2="b" operator="in" result="g"/>
+      <feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="neonNode" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="2.5" result="b"/>
+      <feFlood flood-color="${NEON}" flood-opacity="0.75" result="c"/>
+      <feComposite in="c" in2="b" operator="in" result="g"/>
+      <feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="neonBadge" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="3.5" result="b"/>
+      <feFlood flood-color="${NEON2}" flood-opacity="0.9" result="c"/>
+      <feComposite in="c" in2="b" operator="in" result="g"/>
+      <feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>`;
+
   const svgEl = `<svg id="radial-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg"
-    style="width:min(100vw, 700px);display:block;margin:0 auto;overflow:hidden">
-    <defs>
-      <radialGradient id="kc-bg" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stop-color="rgba(0,255,135,0.04)"/>
-        <stop offset="65%" stop-color="rgba(0,0,0,0)"/>
-      </radialGradient>
-    </defs>
-    <rect width="${W}" height="${H}" fill="url(#kc-bg)" rx="12"/>
+    style="width:min(100vw, 850px);display:block;margin:0 auto;overflow:hidden">
+    ${DEFS}
+    <rect width="${W}" height="${H}" fill="rgba(10,13,20,0.4)" rx="12"/>
     <g id="radial-zoom-group">
+      ${svgGuides.join('\n')}
       ${svgLines.join('\n')}
-      ${svgFlags.join('\n')}
+      ${svgNodes.join('\n')}
     </g>
   </svg>`;
 
@@ -3442,6 +3588,9 @@ function renderCircularBracket(){
         <button onclick="adjustRadialZoom(0.83)" title="Zoom Out">−</button>
         <button onclick="resetRadialZoom()" title="Reset">↺</button>
       </div>
+      <div id="radial-hud" style="position:absolute;bottom:16px;left:50%;transform:translateX(-50%);background:rgba(15,23,42,0.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.06);padding:6px 16px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#94a3b8;pointer-events:none;box-shadow:0 4px 12px rgba(0,0,0,0.5);display:flex;align-items:center;gap:6px;white-space:nowrap;z-index:10;">
+        System HUD: <span id="radial-hud-text" style="color:#60efff;">Awaiting Vector Lock</span>
+      </div>
     </div>
   `;
   applyRadialTransform();
@@ -3450,6 +3599,93 @@ function renderCircularBracket(){
   if (svgDom) {
     setupRadialZoomEvents(svgDom);
   }
+
+  // Hover & path tracing logic
+  const groups = container.querySelectorAll('.radial-node-group');
+  groups.forEach(g => {
+    const nodeId = g.getAttribute('data-id');
+    const teamName = g.getAttribute('data-name');
+
+    g.addEventListener('mouseenter', () => {
+      const activePath = new Set();
+      let currentId = nodeId;
+      while (currentId) {
+        activePath.add(currentId);
+        const node = nodesMap[currentId];
+        currentId = node ? node.parentId : null;
+        if (currentId === 'masterHub') {
+          activePath.add('masterHub');
+          break;
+        }
+      }
+
+      const hudText = document.getElementById('radial-hud-text');
+      if (hudText) {
+        hudText.textContent = teamName || 'TBD';
+      }
+
+      activePath.forEach(id => {
+        const pipe = container.querySelector(`#pipe-${id}`);
+        if (pipe) {
+          pipe.setAttribute('stroke', '#60efff');
+          pipe.setAttribute('stroke-width', '3.5');
+          pipe.setAttribute('filter', 'url(#neonArc)');
+        }
+        const nodeEl = container.querySelector(`#node-${id} circle`);
+        if (nodeEl) {
+          nodeEl.style.transform = 'scale(1.25)';
+          nodeEl.setAttribute('stroke', '#60efff');
+          nodeEl.setAttribute('stroke-width', '2.2');
+          nodeEl.setAttribute('filter', 'url(#neonBadge)');
+        }
+      });
+    });
+
+    g.addEventListener('mouseleave', () => {
+      const hudText = document.getElementById('radial-hud-text');
+      if (hudText) {
+        hudText.textContent = 'Awaiting Vector Lock';
+      }
+
+      nodes.forEach(node => {
+        const pipe = container.querySelector(`#pipe-${node.id}`);
+        if (pipe) {
+          const isProg = node.won;
+          pipe.setAttribute('stroke', isProg ? 'rgba(0, 255, 135, 0.65)' : 'rgba(255, 255, 255, 0.15)');
+          pipe.setAttribute('stroke-width', isProg ? '2.5' : '1.5');
+          if (isProg) {
+            pipe.setAttribute('filter', 'url(#neonArc)');
+          } else {
+            pipe.removeAttribute('filter');
+          }
+        }
+        const nodeEl = container.querySelector(`#node-${node.id} circle`);
+        if (nodeEl) {
+          nodeEl.style.transform = 'scale(1)';
+          const isTBD = !node.flag || node.flag === '🏳️' || !node.name || /Winner|Runner-up|TBD|W M\d/.test(node.name);
+          nodeEl.setAttribute('stroke', node.won ? 'rgba(0, 255, 135, 0.75)' : isTBD ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.22)');
+          nodeEl.setAttribute('stroke-width', node.won ? '2.2' : '1.2');
+          if (node.won) {
+            nodeEl.setAttribute('filter', 'url(#neonNode)');
+          } else {
+            nodeEl.removeAttribute('filter');
+          }
+        }
+      });
+
+      const masterCircle = container.querySelector('#node-masterHub circle');
+      if (masterCircle) {
+        masterCircle.style.transform = 'scale(1)';
+        masterCircle.setAttribute('stroke', champName ? '#00ff87' : 'rgba(255, 215, 0, 0.25)');
+        masterCircle.setAttribute('stroke-width', '2');
+        if (champName) {
+          masterCircle.setAttribute('filter', 'url(#neonNode)');
+        } else {
+          masterCircle.removeAttribute('filter');
+        }
+      }
+    });
+  });
 }
 
 function getTeamAbbreviation(name){

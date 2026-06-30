@@ -48,10 +48,13 @@ svg { display:block; min-width:620px; width:100%; max-width:750px; height:auto; 
 <div id="bc"></div>
 <div class="telemetry">Status: <em id="status">Loading live results…</em></div>
 <script>
-const SZ=800, CX=400, CY=400;
-const R_TEAM=335, R_R32=268, R_R16=203, R_QF=143, R_SF=87;
-const BR=32;
-const DEG=360/32;
+const SZ=850, CX=425, CY=425;
+const radialMatrix = {
+  t1_out: 380, t1_in: 330,
+  t2_out: 260, t2_in: 210,
+  t3_out: 150, t3_in: 110,
+  t4_out: 70,  t4_in: 45
+};
 const NEON='#00ff87', NEON2='#60efff';
 
 const TEAMS=[
@@ -80,20 +83,22 @@ function nameToAbbr(n){const l=n.toLowerCase();for(const[k,v]of Object.entries(N
 
 function rad(d){return d*Math.PI/180;}
 function pt(r,deg){return{x:+(CX+r*Math.cos(rad(deg))).toFixed(2),y:+(CY+r*Math.sin(rad(deg))).toFixed(2)};}
-function teamAngle(i){return i*DEG-90;}
-function r32Angle(j){return(2*j+0.5)*DEG-90;}
-function r16Angle(j){return(4*j+1.5)*DEG-90;}
-function qfAngle(j) {return(8*j+3.5)*DEG-90;}
-function sfAngle(j) {return(16*j+7.5)*DEG-90;}
 
-function bracketPath(rO,rI,tO,tI){
-  if(rI<1){const p=pt(rO,tO);return`M${p.x} ${p.y}L${CX} ${CY}`;}
-  const rm=(rO+rI)/2;
-  const pO=pt(rO,tO),pM1=pt(rm,tO),pM2=pt(rm,tI),pI=pt(rI,tI);
-  if(Math.abs(tI-tO)<0.05)return`M${pO.x} ${pO.y}L${pI.x} ${pI.y}`;
-  let sw=tI>tO?1:0;
-  if(Math.abs(tI-tO)>180)sw=1-sw;
-  return`M${pO.x} ${pO.y}L${pM1.x} ${pM1.y}A${rm} ${rm} 0 0 ${sw} ${pM2.x} ${pM2.y}L${pI.x} ${pI.y}`;
+// Radial bracket path from Cuppy
+function getRadialBracketPath(r1, a1, r2, a2, r_mid) {
+  const p1 = pt(r1, a1);
+  if (Math.abs(a1 - a2) < 0.001) {
+    const p2 = pt(r2, a2);
+    return `M ${p1.x} ${p1.y} L ${p2.x} ${p2.y}`;
+  }
+  const pm1 = pt(r_mid, a1);
+  const pm2 = pt(r_mid, a2);
+  const p2 = pt(r2, a2);
+  let diff = a2 - a1;
+  while (diff < -180) diff += 360;
+  while (diff > 180) diff -= 360;
+  const sweepFlag = diff >= 0 ? 1 : 0;
+  return `M ${p1.x} ${p1.y} L ${pm1.x} ${pm1.y} A ${r_mid} ${r_mid} 0 0 ${sweepFlag} ${pm2.x} ${pm2.y} L ${p2.x} ${p2.y}`;
 }
 
 // ── State ──────────────────────────────────────────────────────────────────────
@@ -103,239 +108,327 @@ let qfW=new Array(4).fill(null);
 let sfW=new Array(2).fill(null);
 let finW=null;
 
-function r32Team(j,s){return TEAMS[2*j+s];}
 function r16Team(j,s){const m=2*j+s,w=r32W[m];return w!=null?TEAMS[2*m+w]:null;}
 function qfTeam(j,s){const m=2*j+s,w=r16W[m];return w!=null?r16Team(m,w):null;}
 function sfTeam(j,s){const m=2*j+s,w=qfW[m];return w!=null?qfTeam(m,w):null;}
 function sfWinner(j){const w=sfW[j];return w!=null?sfTeam(j,w):null;}
 
-// ── Arc style helpers ──────────────────────────────────────────────────────────
-function arcStroke(won){
-  if(won==null)return'rgba(51,65,85,0.38)';
-  return won?`rgba(0,255,135,0.72)`:'rgba(45,55,72,0.16)';
-}
-function arcFilter(won){return won===true?'filter="url(#neonArc)"':'';}
-function nodeStroke(hasResult){return hasResult?NEON:'rgba(45,55,72,0.8)';}
-function nodeFilter(hasResult){return hasResult?'filter="url(#neonNode)"':'';}
-
 // ── Render ─────────────────────────────────────────────────────────────────────
 function render(){
-  let lines='',nodes='',badges='';
+  const nodes = [];
+  const nodesMap = {};
+
+  function addNode(id, r, angle, tObj, won, parentId) {
+    const coord = pt(r, angle);
+    const nodeObj = {
+      id,
+      cx: coord.x,
+      cy: coord.y,
+      r,
+      angle,
+      name: tObj?.n || 'TBD',
+      flag: tObj?.f || '🏳️',
+      won: !!won,
+      parentId
+    };
+    nodes.push(nodeObj);
+    nodesMap[id] = nodeObj;
+  }
+
+  // 1. Tier 1 (Round of 32)
+  for (let i = 0; i < 16; i++) {
+    const angle = i * 22.5 - 90;
+    const tAway = TEAMS[2*i+1];
+    const tHome = TEAMS[2*i];
+    const outWon = r32W[i] === 1;
+    const inWon = r32W[i] === 0;
+
+    const nextTierIndex = Math.floor(i / 2);
+    const routesToOuter = (i % 2 === 0);
+    const targetParentId = `t2-${routesToOuter ? 'out' : 'in'}-${nextTierIndex}`;
+
+    addNode(`t1-out-${i}`, radialMatrix.t1_out, angle, tAway, outWon, `t1-in-${i}`);
+    addNode(`t1-in-${i}`, radialMatrix.t1_in, angle, tHome, inWon, targetParentId);
+  }
+
+  // 2. Tier 2 (Round of 16)
+  for (let k = 0; k < 8; k++) {
+    const angle = k * 45 - 90 + 11.25;
+    const tOut = r16Team(k, 0);
+    const tIn = r16Team(k, 1);
+    const outWon = r16W[k] === 0;
+    const inWon = r16W[k] === 1;
+
+    const nextTierIndex = Math.floor(k / 2);
+    const routesToOuter = (k % 2 === 0);
+    const targetParentId = `t3-${routesToOuter ? 'out' : 'in'}-${nextTierIndex}`;
+
+    addNode(`t2-out-${k}`, radialMatrix.t2_out, angle, tOut, outWon, `t2-in-${k}`);
+    addNode(`t2-in-${k}`, radialMatrix.t2_in, angle, tIn, inWon, targetParentId);
+  }
+
+  // 3. Tier 3 (Quarterfinals)
+  for (let m = 0; m < 4; m++) {
+    const angle = m * 90 - 90 + 5.625;
+    const tOut = qfTeam(m, 0);
+    const tIn = qfTeam(m, 1);
+    const outWon = qfW[m] === 0;
+    const inWon = qfW[m] === 1;
+
+    const nextTierIndex = Math.floor(m / 2);
+    const routesToOuter = (m % 2 === 0);
+    const targetParentId = `t4-${routesToOuter ? 'out' : 'in'}-${nextTierIndex}`;
+
+    addNode(`t3-out-${m}`, radialMatrix.t3_out, angle, tOut, outWon, `t3-in-${m}`);
+    addNode(`t3-in-${m}`, radialMatrix.t3_in, angle, tIn, inWon, targetParentId);
+  }
+
+  // 4. Tier 4 (Semifinals)
+  for (let s = 0; s < 2; s++) {
+    const angle = s * 180 - 90 + 2.8125;
+    const tOut = sfTeam(s, 0);
+    const tIn = sfTeam(s, 1);
+    const outWon = sfW[s] === 0;
+    const inWon = sfW[s] === 1;
+
+    addNode(`t4-out-${s}`, radialMatrix.t4_out, angle, tOut, outWon, `t4-in-${s}`);
+    addNode(`t4-in-${s}`, radialMatrix.t4_in, angle, tIn, inWon, 'masterHub');
+  }
+
+  // Champion
+  const champ = finW != null ? sfWinner(finW) : null;
 
   const DEFS=`<defs>
-    <radialGradient id="bg" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#141820"/>
-      <stop offset="65%" stop-color="#09090e"/>
-      <stop offset="100%" stop-color="#060608"/>
-    </radialGradient>
     <radialGradient id="tGlow" cx="50%" cy="50%" r="50%">
       <stop offset="0%" stop-color="${NEON}" stop-opacity="0.32"/>
       <stop offset="100%" stop-color="${NEON}" stop-opacity="0"/>
     </radialGradient>
     <filter id="neonArc" x="-60%" y="-60%" width="220%" height="220%">
-      <feGaussianBlur stdDeviation="2.5" result="b"/>
-      <feFlood flood-color="${NEON}" flood-opacity="0.85" result="c"/>
+      <feGaussianBlur stdDeviation="2" result="b"/>
+      <feFlood flood-color="${NEON}" flood-opacity="0.8" result="c"/>
       <feComposite in="c" in2="b" operator="in" result="g"/>
       <feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
     <filter id="neonNode" x="-60%" y="-60%" width="220%" height="220%">
-      <feGaussianBlur stdDeviation="3" result="b"/>
-      <feFlood flood-color="${NEON}" flood-opacity="0.7" result="c"/>
+      <feGaussianBlur stdDeviation="2.5" result="b"/>
+      <feFlood flood-color="${NEON}" flood-opacity="0.75" result="c"/>
       <feComposite in="c" in2="b" operator="in" result="g"/>
       <feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
     <filter id="neonBadge" x="-60%" y="-60%" width="220%" height="220%">
-      <feGaussianBlur stdDeviation="4" result="b"/>
-      <feFlood flood-color="${NEON2}" flood-opacity="0.95" result="c"/>
+      <feGaussianBlur stdDeviation="3.5" result="b"/>
+      <feFlood flood-color="${NEON2}" flood-opacity="0.9" result="c"/>
       <feComposite in="c" in2="b" operator="in" result="g"/>
       <feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
   </defs>`;
 
-  // Guide circles
-  let guides='';
-  [R_R32,R_R16,R_QF,R_SF].forEach(r=>{
-    guides+=`<circle cx="${CX}" cy="${CY}" r="${r}" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1" stroke-dasharray="2 9"/>`;
+  // Concentric dashed guide rings
+  let guides = '';
+  const rings = [
+    { size: 380 * 2, type: 'solid' },
+    { size: 330 * 2, type: 'dashed' },
+    { size: 260 * 2, type: 'solid' },
+    { size: 210 * 2, type: 'dashed' },
+    { size: 150 * 2, type: 'solid' },
+    { size: 110 * 2, type: 'dashed' },
+    { size: 70 * 2,  type: 'solid' },
+    { size: 45 * 2,  type: 'dashed' }
+  ];
+  rings.forEach(rg => {
+    const strokeDash = rg.type === 'dashed' ? 'stroke-dasharray="3 6"' : '';
+    guides += `<circle cx="${CX}" cy="${CY}" r="${rg.size / 2}" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1" ${strokeDash}/>`;
   });
 
-  // Team → R32 arcs  (id: arc-team-{i})
-  for(let j=0;j<16;j++){
-    const ra=r32Angle(j),w=r32W[j];
-    for(let s=0;s<2;s++){
-      const i=2*j+s,won=w==null?null:w===s;
-      lines+=`<path id="arc-team-${i}" d="${bracketPath(R_TEAM,R_R32,teamAngle(i),ra)}" fill="none" stroke="${arcStroke(won)}" stroke-width="1.8" stroke-linecap="round" ${arcFilter(won)}/>`;
+  // Draw lines
+  let lines = '';
+  nodes.forEach(node => {
+    if (!node.parentId) return;
+    let r2 = 0;
+    let a2 = node.angle;
+
+    if (node.parentId !== 'masterHub') {
+      const parent = nodesMap[node.parentId];
+      if (!parent) return;
+      r2 = parent.r;
+      a2 = parent.angle;
+    } else {
+      r2 = 0;
+      a2 = node.angle;
     }
-  }
 
-  // R32 → R16 arcs  (id: arc-r32-{j}, j=R32 match 0-15)
-  for(let j=0;j<16;j++){
-    const k=Math.floor(j/2),s=j%2,ra=r16Angle(k),w=r16W[k];
-    const won=w==null?null:w===s;
-    lines+=`<path id="arc-r32-${j}" d="${bracketPath(R_R32,R_R16,r32Angle(j),ra)}" fill="none" stroke="${arcStroke(won)}" stroke-width="2.1" stroke-linecap="round" ${arcFilter(won)}/>`;
-  }
+    const isProg = node.won;
+    const r_mid = (node.r + r2) / 2;
+    const pathD = getRadialBracketPath(node.r, node.angle, r2, a2, r_mid);
 
-  // R16 → QF arcs  (id: arc-r16-{j}, j=R16 match 0-7)
-  for(let j=0;j<8;j++){
-    const k=Math.floor(j/2),s=j%2,ra=qfAngle(k),w=qfW[k];
-    const won=w==null?null:w===s;
-    lines+=`<path id="arc-r16-${j}" d="${bracketPath(R_R16,R_QF,r16Angle(j),ra)}" fill="none" stroke="${arcStroke(won)}" stroke-width="2.5" stroke-linecap="round" ${arcFilter(won)}/>`;
-  }
+    let strokeColor = 'rgba(255, 255, 255, 0.15)';
+    let strokeWidth = 1.5;
+    let filterStyle = '';
 
-  // QF → SF arcs  (id: arc-qf-{j})
-  for(let j=0;j<4;j++){
-    const k=Math.floor(j/2),s=j%2,ra=sfAngle(k),w=sfW[k];
-    const won=w==null?null:w===s;
-    lines+=`<path id="arc-qf-${j}" d="${bracketPath(R_QF,R_SF,qfAngle(j),ra)}" fill="none" stroke="${arcStroke(won)}" stroke-width="3" stroke-linecap="round" ${arcFilter(won)}/>`;
-  }
+    if (isProg) {
+      strokeColor = 'rgba(0, 255, 135, 0.65)';
+      strokeWidth = 2.5;
+      filterStyle = 'filter="url(#neonArc)"';
+    }
 
-  // SF → Final arcs  (id: arc-sf-{j})
-  for(let j=0;j<2;j++){
-    const won=finW==null?null:finW===j;
-    lines+=`<path id="arc-sf-${j}" d="${bracketPath(R_SF,0,sfAngle(j),0)}" fill="none" stroke="${arcStroke(won)}" stroke-width="3.5" stroke-linecap="round" ${arcFilter(won)}/>`;
-  }
+    lines += `<path id="pipe-${node.id}" d="${pathD}" fill="none" stroke="${strokeColor}" stroke-width="${strokeWidth}" ${filterStyle} style="transition: stroke 0.3s, stroke-width 0.3s; pointer-events: none;"/>`;
+  });
 
-  // R32 nodes
-  for(let j=0;j<16;j++){
-    const{x,y}=pt(R_R32,r32Angle(j));
-    const w=r32W[j],winner=w!=null?(w===0?r32Team(j,0):r32Team(j,1)):null;
-    nodes+=`<circle id="node-r32-${j}" cx="${x}" cy="${y}" r="14" fill="#0c1220" stroke="${nodeStroke(!!winner)}" stroke-width="1.5" ${nodeFilter(!!winner)}/>`;
-    if(winner)nodes+=`<text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="middle" font-size="11">${winner.f}</text>`;
-  }
+  // Draw flag circles (nodes)
+  let flagNodes = '';
+  nodes.forEach(node => {
+    const isTBD = !node.flag || node.flag === '🏳️' || !node.name || /Winner|Runner-up|TBD|W M\d/.test(node.name);
+    
+    let tr = 18;
+    let fs = 15;
+    if (node.id.startsWith('t1-')) { tr = 18; fs = 16; }
+    else if (node.id.startsWith('t2-')) { tr = 16; fs = 14; }
+    else if (node.id.startsWith('t3-')) { tr = 14; fs = 12; }
+    else if (node.id.startsWith('t4-')) { tr = 12; fs = 10; }
 
-  // R16 nodes
-  for(let j=0;j<8;j++){
-    const{x,y}=pt(R_R16,r16Angle(j));
-    const w=r16W[j],winner=w!=null?r16Team(j,w):null;
-    nodes+=`<circle id="node-r16-${j}" cx="${x}" cy="${y}" r="17" fill="#09141a" stroke="${nodeStroke(!!winner)}" stroke-width="1.7" ${nodeFilter(!!winner)}/>`;
-    if(winner)nodes+=`<text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="middle" font-size="13">${winner.f}</text>`;
-  }
+    const bgFill = node.won ? 'rgba(0, 255, 135, 0.18)' : isTBD ? 'rgba(30, 35, 45, 0.85)' : 'rgba(15, 20, 30, 0.93)';
+    const stroke = node.won ? 'rgba(0, 255, 135, 0.75)' : isTBD ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.22)';
+    const sw = node.won ? 2.2 : 1.2;
+    const filterStyle = node.won ? 'filter="url(#neonNode)"' : '';
 
-  // QF nodes
-  for(let j=0;j<4;j++){
-    const{x,y}=pt(R_QF,qfAngle(j));
-    const w=qfW[j],winner=w!=null?qfTeam(j,w):null;
-    nodes+=`<circle id="node-qf-${j}" cx="${x}" cy="${y}" r="20" fill="#0f1008" stroke="${nodeStroke(!!winner)}" stroke-width="2" ${nodeFilter(!!winner)}/>`;
-    if(winner)nodes+=`<text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="middle" font-size="15">${winner.f}</text>`;
-  }
+    flagNodes += `
+      <g class="radial-node-group" id="node-${node.id}" style="cursor:pointer" data-id="${node.id}" data-name="${(node.name||'').replace(/"/g,"'")}">
+        <circle cx="${node.cx}" cy="${node.cy}" r="${tr}" fill="${bgFill}" stroke="${stroke}" stroke-width="${sw}" ${filterStyle} style="transition: transform 0.2s, stroke 0.2s; transform-origin: ${node.cx}px ${node.cy}px;">
+          <title>${node.name}</title>
+        </circle>
+        <text x="${node.cx}" y="${node.cy}" text-anchor="middle" dominant-baseline="central"
+          font-size="${isTBD ? Math.round(fs * 0.7) : fs}" style="pointer-events:none;user-select:none"
+          fill="${isTBD ? 'rgba(255,255,255,0.22)' : '#fff'}">${isTBD ? '?' : node.flag}</text>
+      </g>
+    `;
+  });
 
-  // SF nodes
-  for(let j=0;j<2;j++){
-    const{x,y}=pt(R_SF,sfAngle(j));
-    const w=sfW[j],winner=w!=null?sfTeam(j,w):null;
-    nodes+=`<circle id="node-sf-${j}" cx="${x}" cy="${y}" r="24" fill="#120806" stroke="${nodeStroke(!!winner)}" stroke-width="2.2" ${nodeFilter(!!winner)}/>`;
-    if(winner)nodes+=`<text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="middle" font-size="18">${winner.f}</text>`;
-  }
+  // Trophy in center
+  const centerFill = champ ? 'rgba(0, 255, 135, 0.1)' : 'rgba(255, 215, 0, 0.05)';
+  const centerStroke = champ ? '#00ff87' : 'rgba(255, 215, 0, 0.25)';
+  const centerFilter = champ ? 'filter="url(#neonNode)"' : '';
 
-  // Center trophy
-  nodes+=`<circle cx="${CX}" cy="${CY}" r="130" fill="url(#tGlow)"/>`;
-  nodes+=`<circle id="node-final" cx="${CX}" cy="${CY}" r="50" fill="#0d0b04" stroke="${finW!=null?NEON:'rgba(200,165,30,0.45)'}" stroke-width="2.5" ${finW!=null?'filter="url(#neonNode)"':''}/>`;
-  nodes+=`<text x="${CX}" y="${CY}" text-anchor="middle" dominant-baseline="middle" font-size="32">🏆</text>`;
-  const champ=finW!=null?sfWinner(finW):null;
-  if(champ)nodes+=`<text x="${CX}" y="${CY+66}" text-anchor="middle" font-size="13" fill="${NEON}" font-weight="700">${champ.f} ${champ.s}</text>`;
+  flagNodes += `
+    <g class="radial-node-group" id="node-masterHub" style="cursor:pointer" data-id="masterHub" data-name="${(champ?.n || 'Champion TBD').replace(/"/g,"'")}">
+      <circle cx="${CX}" cy="${CY}" r="38" fill="${centerFill}" stroke="${centerStroke}" stroke-width="2" ${centerFilter}/>
+      <text x="${CX}" y="${CY}" text-anchor="middle" dominant-baseline="central" font-size="28" style="pointer-events:none">🏆</text>
+      ${champ ? `<text x="${CX}" y="${CY + 52}" text-anchor="middle" font-size="12" fill="#00ff87" font-weight="700" style="pointer-events:none">${champ.f} ${champ.s}</text>` : ''}
+    </g>
+  `;
 
-  // Outer team badges
-  for(let i=0;i<32;i++){
-    const th=teamAngle(i),{x,y}=pt(R_TEAM,th);
-    const t=TEAMS[i],j=Math.floor(i/2),s=i%2,w=r32W[j];
-    const won=w==null?null:w===s;
-    const fill=won===true?'#0e1d08':won===false?'#0e0e14':'#0c1526';
-    const sc=won===true?`rgba(0,255,135,0.8)`:won===false?'rgba(45,55,72,0.3)':'rgba(75,130,240,0.55)';
-    const op=won===false?0.3:1;
-    const gf=won===true?'filter="url(#neonNode)"':'';
-    const cosT=Math.cos(rad(th));
-    const lp=pt(R_TEAM+BR+6,th);
-    const anc=cosT>0.15?'start':cosT<-0.15?'end':'middle';
-    badges+=`<g id="badge-${i}" style="cursor:pointer">
-      <circle cx="${x}" cy="${y}" r="${BR}" fill="${fill}" stroke="${sc}" stroke-width="2" opacity="${op}" ${gf}/>
-      <text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="middle" font-size="22" opacity="${op}">${t.f}</text>
-      <text x="${lp.x}" y="${lp.y}" text-anchor="${anc}" dominant-baseline="middle" font-size="8" fill="rgba(255,255,255,${op*0.62})" font-weight="600">${t.s}</text>
-    </g>`;
-  }
-
-  document.getElementById('bc').innerHTML=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${SZ} ${SZ}">
-  ${DEFS}
-  <rect width="${SZ}" height="${SZ}" fill="url(#bg)"/>
-  ${guides}${lines}${nodes}${badges}
-</svg>`;
+  document.getElementById('bc').innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${SZ} ${SZ}" style="width:100%;max-width:750px;height:auto;display:block;margin:0 auto;overflow:hidden">
+    ${DEFS}
+    <rect width="${SZ}" height="${SZ}" fill="#0a0d14" rx="12"/>
+    ${guides}${lines}${flagNodes}
+  </svg>`;
 
   // Centre scroll on mobile
   const bc=document.getElementById('bc');
   if(bc.scrollWidth>bc.clientWidth)bc.scrollLeft=(bc.scrollWidth-bc.clientWidth)/2;
 
   // Bind hover/touch interactions
-  for(let i=0;i<32;i++){
-    const g=document.getElementById(`badge-${i}`);
-    if(!g)continue;
-    g.addEventListener('mouseenter',()=>onHover(i));
-    g.addEventListener('mouseleave',onLeave);
-    g.addEventListener('touchstart',e=>{e.stopPropagation();onTap(i);},{passive:true});
-  }
-  bc.addEventListener('touchstart',onLeave,{passive:true});
-}
+  const groups = bc.querySelectorAll('.radial-node-group');
+  groups.forEach(g => {
+    const nodeId = g.getAttribute('data-id');
+    const teamName = g.getAttribute('data-name');
 
-// ── Interactive highlighting ───────────────────────────────────────────────────
-let hoverActive=-1;
+    const handleEnter = () => {
+      const activePath = new Set();
+      let currentId = nodeId;
+      while (currentId) {
+        activePath.add(currentId);
+        const node = nodesMap[currentId];
+        currentId = node ? node.parentId : null;
+        if (currentId === 'masterHub') {
+          activePath.add('masterHub');
+          break;
+        }
+      }
 
-function arcIdsForTeam(i){
-  // Trace this team's confirmed path inward
-  const ids=[`arc-team-${i}`];
-  const j32=Math.floor(i/2),s32=i%2;
-  if(r32W[j32]!==s32)return ids;  // unknown or eliminated
-  ids.push(`arc-r32-${j32}`);
-  const j16=Math.floor(j32/2),s16=j32%2;
-  if(r16W[j16]!==s16)return ids;
-  ids.push(`arc-r16-${j16}`);
-  const jqf=Math.floor(j16/2),sqf=j16%2;
-  if(qfW[jqf]!==sqf)return ids;
-  ids.push(`arc-qf-${jqf}`);
-  const jsf=Math.floor(jqf/2),ssf=jqf%2;
-  if(sfW[jsf]!==ssf)return ids;
-  ids.push(`arc-sf-${jsf}`);
-  return ids;
-}
+      document.getElementById('status').textContent = teamName || 'TBD';
 
-function onHover(i){
-  if(hoverActive===i)return;
-  onLeave();
-  hoverActive=i;
-  document.getElementById('status').textContent=`${TEAMS[i].f} ${TEAMS[i].n}`;
+      activePath.forEach(id => {
+        const pipe = bc.querySelector(`#pipe-${id}`);
+        if (pipe) {
+          pipe.setAttribute('stroke', '#60efff');
+          pipe.setAttribute('stroke-width', '3.5');
+          pipe.setAttribute('filter', 'url(#neonArc)');
+        }
+        const nodeEl = bc.querySelector(`#node-${id} circle`);
+        if (nodeEl) {
+          nodeEl.style.transform = 'scale(1.25)';
+          nodeEl.setAttribute('stroke', '#60efff');
+          nodeEl.setAttribute('stroke-width', '2.2');
+          nodeEl.setAttribute('filter', 'url(#neonBadge)');
+        }
+      });
+    };
 
-  // Highlight arcs
-  arcIdsForTeam(i).forEach(id=>{
-    const el=document.getElementById(id);
-    if(!el)return;
-    el._os=el.getAttribute('stroke');
-    el._ow=el.getAttribute('stroke-width');
-    el._of=el.getAttribute('filter')||null;
-    el.setAttribute('stroke',NEON2);
-    el.setAttribute('stroke-width','2.8');
-    el.setAttribute('filter','url(#neonArc)');
+    const handleLeave = () => {
+      document.getElementById('status').textContent = statusText;
+
+      nodes.forEach(node => {
+        const pipe = bc.querySelector(`#pipe-${node.id}`);
+        if (pipe) {
+          const isProg = node.won;
+          pipe.setAttribute('stroke', isProg ? 'rgba(0, 255, 135, 0.65)' : 'rgba(255, 255, 255, 0.15)');
+          pipe.setAttribute('stroke-width', isProg ? '2.5' : '1.5');
+          if (isProg) {
+            pipe.setAttribute('filter', 'url(#neonArc)');
+          } else {
+            pipe.removeAttribute('filter');
+          }
+        }
+        const nodeEl = bc.querySelector(`#node-${node.id} circle`);
+        if (nodeEl) {
+          nodeEl.style.transform = 'scale(1)';
+          const isTBD = !node.flag || node.flag === '🏳️' || !node.name || /Winner|Runner-up|TBD|W M\d/.test(node.name);
+          nodeEl.setAttribute('stroke', node.won ? 'rgba(0, 255, 135, 0.75)' : isTBD ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.22)');
+          nodeEl.setAttribute('stroke-width', node.won ? '2.2' : '1.2');
+          if (node.won) {
+            nodeEl.setAttribute('filter', 'url(#neonNode)');
+          } else {
+            nodeEl.removeAttribute('filter');
+          }
+        }
+      });
+
+      const masterCircle = bc.querySelector('#node-masterHub circle');
+      if (masterCircle) {
+        masterCircle.style.transform = 'scale(1)';
+        masterCircle.setAttribute('stroke', champ ? '#00ff87' : 'rgba(255, 215, 0, 0.25)');
+        masterCircle.setAttribute('stroke-width', '2');
+        if (champ) {
+          masterCircle.setAttribute('filter', 'url(#neonNode)');
+        } else {
+          masterCircle.removeAttribute('filter');
+        }
+      }
+    };
+
+    g.addEventListener('mouseenter', handleEnter);
+    g.addEventListener('mouseleave', handleLeave);
+    g.addEventListener('touchstart', e => { e.stopPropagation(); handleEnter(); }, {passive:true});
   });
 
-  // Glow the badge circle
-  const g=document.getElementById(`badge-${i}`);
-  if(g){const c=g.querySelector('circle');if(c){c._of=c.getAttribute('filter')||null;c.setAttribute('filter','url(#neonBadge)');}}
+  bc.addEventListener('touchstart', () => {
+    nodes.forEach(node => {
+      const pipe = bc.querySelector(`#pipe-${node.id}`);
+      if (pipe) {
+        const isProg = node.won;
+        pipe.setAttribute('stroke', isProg ? 'rgba(0, 255, 135, 0.65)' : 'rgba(255, 255, 255, 0.15)');
+        pipe.setAttribute('stroke-width', isProg ? '2.5' : '1.5');
+      }
+      const nodeEl = bc.querySelector(`#node-${node.id} circle`);
+      if (nodeEl) {
+        nodeEl.style.transform = 'scale(1)';
+      }
+    });
+    const masterCircle = bc.querySelector('#node-masterHub circle');
+    if (masterCircle) masterCircle.style.transform = 'scale(1)';
+    document.getElementById('status').textContent = statusText;
+  }, {passive:true});
 }
-
-function onLeave(){
-  if(hoverActive<0)return;
-  // Restore arcs
-  arcIdsForTeam(hoverActive).forEach(id=>{
-    const el=document.getElementById(id);
-    if(!el)return;
-    if(el._os!=null)el.setAttribute('stroke',el._os);
-    if(el._ow!=null)el.setAttribute('stroke-width',el._ow);
-    if(el._of!=null)el.setAttribute('filter',el._of);else el.removeAttribute('filter');
-  });
-  // Restore badge
-  const g=document.getElementById(`badge-${hoverActive}`);
-  if(g){const c=g.querySelector('circle');if(c){if(c._of!=null)c.setAttribute('filter',c._of);else c.removeAttribute('filter');}}
-
-  hoverActive=-1;
-  document.getElementById('status').textContent=statusText;
-}
-
-function onTap(i){if(hoverActive===i)onLeave();else onHover(i);}
 
 // ── ESPN live data ─────────────────────────────────────────────────────────────
 const resultMap={};
