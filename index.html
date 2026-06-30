@@ -17,10 +17,12 @@
   async function subscribe() {
     if(!('serviceWorker' in navigator) || !('PushManager' in window)) return;
     try {
-      var reg = await navigator.serviceWorker.register('/sw.js');
-      await navigator.serviceWorker.ready;
+      // Must request permission first, before any other awaits, or Android
+      // loses the user-gesture context and silently drops the prompt.
       var perm = await Notification.requestPermission();
       if(perm !== 'granted') return;
+      var reg = await navigator.serviceWorker.register('/sw.js');
+      await navigator.serviceWorker.ready;
       var sub = await reg.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
