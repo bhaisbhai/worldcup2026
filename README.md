@@ -538,11 +538,18 @@ npm run notify:recap                             # send recap ready push
 
 8. **BBC highlight matching is fuzzy.** `hlScore()` compares video titles from the BBC Sport YouTube playlist against ESPN team names using alias lists. If highlights are missing, check the alias map in `index.html` (search `BBC_ALIASES`).
 
+9. **Android push notifications: permission must be requested before any `await`.** `Notification.requestPermission()` must be called synchronously (as the first `await`) inside a user-gesture handler. If *any* `await` (e.g. `serviceWorker.register()`) precedes it, Android Chrome loses the user-gesture context and silently ignores or blocks the permission prompt. The correct order in `subscribe()` is: request permission → register SW → `serviceWorker.ready` → `pushManager.subscribe()` → POST to `/api/subscribe`.
+
+10. **`KO_DATA` in `index.html` is hardcoded and must be updated manually.** It contains the full knockout bracket structure (match numbers, teams, stadiums, cities, dates) for all 64 knockout matches. Dates are display strings like `'Jul 6'` — they do not auto-update from ESPN. If bracket dates appear wrong, cross-reference against `data/stakes.json` (which contains actual match dates keyed by date string) and the official FIFA schedule. Confirmed 2026 WC knockout schedule: R32 Jun 28–Jul 4, R16 Jul 4–7, QF Jul 9–11, SF Jul 14–15, Final Jul 19.
+
 ---
 
 ## Changelog
 
 ### July 2026
+- **Knockout bracket date corrections** — fixed all R32 dates (NED-MAR: Jun 29, MEX-ECU: Jun 30) and all R16 dates (left side Jul 4/5, right side Jul 6/7) in `KO_DATA` to match the official 2026 schedule
+- **Qualified banner** — finished knockout match cards now show which team qualified and "(on penalties)" if the match went to a shootout (`mc-qualified` / `mc-pens` CSS classes; logic in `buildCard()`)
+- **Android push notification fix** — moved `Notification.requestPermission()` to be the very first `await` in `subscribe()`, before `serviceWorker.register()`, to preserve user-gesture context on Android Chrome
 - **R32 TV channels** — added all 15 Round of 32 UK broadcast channel assignments to `UK_TV`
 - **Removed countdown timer** — `mc-up-cd` span removed from upcoming match cards; `countdown()` no longer returns `'Tomorrow'` under any condition
 - **Channel fallback** — `getUKChannel` fallback changed from `'BBC/ITV'` to `''` so unconfirmed games show nothing
