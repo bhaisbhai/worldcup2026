@@ -279,12 +279,12 @@ function render(){
   nodes.forEach(node => {
     const isTBD = !node.flag || node.flag === '🏳️' || !node.name || /Winner|Runner-up|TBD|W M\d/.test(node.name);
     
-    let tr = 18;
+    let tr = 20;
     let fs = 15;
-    if (node.id.startsWith('t1-')) { tr = 18; fs = 16; }
-    else if (node.id.startsWith('t2-')) { tr = 16; fs = 14; }
-    else if (node.id.startsWith('t3-')) { tr = 14; fs = 12; }
-    else if (node.id.startsWith('t4-')) { tr = 12; fs = 10; }
+    if (node.id.startsWith('t1-')) { tr = 20; fs = 16; }
+    else if (node.id.startsWith('t2-')) { tr = 18; fs = 14; }
+    else if (node.id.startsWith('t3-')) { tr = 16; fs = 12; }
+    else if (node.id.startsWith('t4-')) { tr = 14; fs = 10; }
 
     const bgFill = node.won ? 'rgba(0, 255, 135, 0.18)' : isTBD ? 'rgba(30, 35, 45, 0.85)' : 'rgba(15, 20, 30, 0.93)';
     const stroke = node.won ? 'rgba(0, 255, 135, 0.75)' : isTBD ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.22)';
@@ -300,7 +300,7 @@ function render(){
           <title>${node.name}</title>
         </circle>
         <text x="${node.cx}" y="${node.cy}" text-anchor="middle" dominant-baseline="central"
-          font-size="${isTBD ? Math.round(fs * 0.7) : Math.round(fs * 2.1)}" clip-path="url(#clip-${node.id})" style="pointer-events:none;user-select:none"
+          font-size="${isTBD ? Math.round(fs * 0.7) : Math.round(fs * 2.52)}" clip-path="url(#clip-${node.id})" style="pointer-events:none;user-select:none"
           fill="${isTBD ? 'rgba(255,255,255,0.22)' : '#fff'}">${isTBD ? '?' : node.flag}</text>
       </g>
     `;
@@ -313,9 +313,9 @@ function render(){
 
   flagNodes += `
     <g class="radial-node-group" id="node-masterHub" style="cursor:pointer" data-id="masterHub" data-name="${(champ?.n || 'Champion TBD').replace(/"/g,"'")}">
-      <circle cx="${CX}" cy="${CY}" r="38" fill="${centerFill}" stroke="${centerStroke}" stroke-width="2" ${centerFilter}/>
+      <circle cx="${CX}" cy="${CY}" r="42" fill="${centerFill}" stroke="${centerStroke}" stroke-width="2" ${centerFilter}/>
       <text x="${CX}" y="${CY}" text-anchor="middle" dominant-baseline="central" font-size="28" style="pointer-events:none">🏆</text>
-      ${champ ? `<text x="${CX}" y="${CY + 52}" text-anchor="middle" font-size="12" fill="#00ff87" font-weight="700" style="pointer-events:none">${champ.f} ${champ.s}</text>` : ''}
+      ${champ ? `<text x="${CX}" y="${CY + 56}" text-anchor="middle" font-size="12" fill="#00ff87" font-weight="700" style="pointer-events:none">${champ.f} ${champ.s}</text>` : ''}
     </g>
   `;
 
