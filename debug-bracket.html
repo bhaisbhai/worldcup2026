@@ -38,6 +38,9 @@ svg { display:block; min-width:620px; width:100%; max-width:750px; height:auto; 
   letter-spacing:1.5px; text-transform:uppercase; color:#94a3b8; margin-top:10px;
 }
 .telemetry em { color:var(--neon2); font-style:normal; margin-left:4px; }
+.credit { font-size:9px; color:rgba(255,255,255,0.2); text-align:center; margin-top:8px; letter-spacing:.03em; }
+.credit a { color:rgba(255,255,255,0.3); text-decoration:none; }
+.credit a:hover { color:rgba(255,255,255,0.5); }
 </style>
 </head>
 <body>
@@ -47,6 +50,7 @@ svg { display:block; min-width:620px; width:100%; max-width:750px; height:auto; 
 </div>
 <div id="bc"></div>
 <div class="telemetry">Status: <em id="status">Loading live results…</em></div>
+<div class="credit">Design inspired by <a href="https://emiliosansolini.com" target="_blank" rel="noopener">Emilio Sansolini</a></div>
 <script>
 const SZ=850, CX=425, CY=425;
 const radialMatrix = {
