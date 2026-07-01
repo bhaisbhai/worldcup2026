@@ -745,6 +745,8 @@ body{
 .fp-dot.home .fp-circle{background:var(--accent);color:#000;box-shadow:0 2px 8px rgba(0,255,135,.45)}
 .fp-dot.away .fp-circle{background:#e05252;color:#fff;box-shadow:0 2px 8px rgba(224,82,82,.45)}
 .fp-lbl{font-size:7px;color:#fff;text-align:center;margin-top:1px;max-width:44px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-shadow:0 1px 4px rgba(0,0,0,.95);letter-spacing:.1px;line-height:1.1}
+.fp-club{font-size:6px;color:rgba(255,255,255,.55);text-align:center;max-width:44px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-shadow:0 1px 3px rgba(0,0,0,.9);line-height:1.1}
+.mc-lu-club{font-size:9px;color:var(--t3);font-weight:400;margin-left:3px}
 .fp-rtg{font-size:7px;font-weight:700;padding:1px 3px;border-radius:3px;margin-top:1px;line-height:1.3}
 .fp-rtg.hi{background:var(--accent);color:#000}
 .fp-rtg.mid{background:var(--gold);color:#000}
@@ -4530,10 +4532,12 @@ function mcLineups(ev,data){
         // Short surname: strip "J. " initial prefix ESPN adds in shortName
         const raw=a.shortName||a.displayName||'—';
         const lbl=raw.replace(/^[A-Z]\.\s+/,'').split(' ').slice(-1)[0]||raw;
+        const club=_playerClubs[id]?.club||'';
         out+=`<div class="fp-dot ${isHome?'home':'away'}${id?' fp-click':''}" style="left:${x.toFixed(1)}%;top:${yMap[key]}%"
           ${id?`onclick="openPlayerDetail('${id}')" role="button" tabindex="0"`:''}>
           <div class="fp-circle">${e.jersey||a.jersey||''}</div>
           <div class="fp-lbl">${lbl}</div>
+          ${club?`<div class="fp-club">${club}</div>`:''}
           ${rtgHtml}
         </div>`;
       });
@@ -4551,7 +4555,7 @@ function mcLineups(ev,data){
       <span class="fp-bench-dot ${isHome?'home':'away'}"></span>
       <span class="mc-lu-num">${e.jersey||a.jersey||''}</span>
       <span class="mc-lu-pos">${e.position?.abbreviation||''}</span>
-      <span class="mc-lu-name">${a.displayName||a.fullName||'—'}</span>
+      <span class="mc-lu-name">${a.displayName||a.fullName||'—'}${_playerClubs[id]?.club?`<span class="mc-lu-club">· ${_playerClubs[id].club}</span>`:''}</span>
       ${rtgHtml}${e.captain?'<span style="font-size:9px;color:var(--gold);flex-shrink:0">©</span>':''}
       ${id?'<span class="mc-lu-arrow">›</span>':''}
     </div>`;
