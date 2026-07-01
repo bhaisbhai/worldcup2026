@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-30T07:52:55.421Z",
+  "generatedAt": "2026-07-01T08:11:34.912Z",
   "byDate": {
     "2026-06-24": {
       "BIH-QAT": {
@@ -344,6 +344,20 @@
       },
       "MEX-ECU": {
         "summary": "Mexico, Group A winners with 9 points and 0 goals conceded, battles Ecuador, Group E winners with 4 points. Winner advances, loser eliminated.",
+        "status": "Must Win"
+      }
+    },
+    "2026-07-01": {
+      "ENG-COD": {
+        "summary": "Group L winners England (7pts) meet Congo DR, who placed 4th in Group K (4pts). Winner progresses, loser is eliminated.",
+        "status": "Must Win"
+      },
+      "BEL-SEN": {
+        "summary": "Group G winners Belgium (5pts) face Senegal, who finished 3rd in Group I (3pts). Winner advances, loser is eliminated.",
+        "status": "Must Win"
+      },
+      "USA-BIH": {
+        "summary": "USA, who placed 4th in Group D (6pts), meet Bosnia-Herzegovina, 2nd in Group B (4pts). Winner progresses, loser is eliminated.",
         "status": "Must Win"
       }
     }
