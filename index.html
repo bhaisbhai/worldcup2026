@@ -1612,6 +1612,17 @@ function localTime(dateObj){
 }
 
 // ═══════════════════════════════════════════════════
+//  MANUAL GOAL PATCHES
+//  Key: "HOME_ABBR-AWAY_ABBR-YYYY-MM-DD"
+//  Use when ESPN's comp.details omits a known goal (e.g. ET goals).
+// ═══════════════════════════════════════════════════
+const GOAL_PATCHES = {
+  'BEL-SEN-2026-07-01': [
+    { name: 'Y. Tielemans', min: "97'", isHome: true, og: false, pen: true }
+  ]
+};
+
+// ═══════════════════════════════════════════════════
 //  PARSE ESPN EVENT
 // ═══════════════════════════════════════════════════
 function parseEvent(ev){
@@ -1648,8 +1659,15 @@ function parseEvent(ev){
       const isHome = dt ? (dt.id === homeTeamId || dt.abbreviation === homeTeamAbbr) : false;
       return { name: og ? 'OG' : name, min, isHome, og, pen };
     })
-    // keep all goal events — nameless ET goals still count; rendered as "?" below
     .filter(g => g.name || g.og || g.min);
+
+  // Merge any manual patches, deduplicating by name+min
+  const dateStr = new Date(ev.date).toISOString().slice(0,10);
+  const patchKey = `${home.team.abbreviation}-${away.team.abbreviation}-${dateStr}`;
+  const patches = GOAL_PATCHES[patchKey] || [];
+  patches.forEach(p => {
+    if(!goals.some(g => g.name === p.name && g.min === p.min)) goals.push(p);
+  });
 
   return {
     id: ev.id,
