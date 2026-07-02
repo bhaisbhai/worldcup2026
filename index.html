@@ -1636,10 +1636,11 @@ function parseEvent(ev){
     .map(d => {
       const og  = d.ownGoal || false;
       const pen = d.penaltyKick || false;
-      // ESPN uses athletesInvolved OR participants depending on context
-      const raw = d.athletesInvolved?.[0];
-      const part = d.participants?.find(p => p.type === 'scorer' || p.order === 1)?.athlete;
-      const name = raw?.shortName || raw?.displayName
+      // ESPN uses athletesInvolved OR participants depending on context; ET goals may use any participant
+      const raw  = d.athletesInvolved?.[0];
+      const part = (d.participants?.find(p => p.type === 'scorer' || p.order === 1)
+                 || d.participants?.[0])?.athlete;
+      const name = raw?.shortName  || raw?.displayName
         || part?.shortName || part?.displayName
         || (og ? 'OG' : '');
       const min  = d.clock?.displayValue || '';
@@ -1647,7 +1648,8 @@ function parseEvent(ev){
       const isHome = dt ? (dt.id === homeTeamId || dt.abbreviation === homeTeamAbbr) : false;
       return { name: og ? 'OG' : name, min, isHome, og, pen };
     })
-    .filter(g => g.name || g.og);
+    // keep all goal events — nameless ET goals still count; rendered as "?" below
+    .filter(g => g.name || g.og || g.min);
 
   return {
     id: ev.id,
@@ -1828,7 +1830,7 @@ function renderScorers(goals){
   function group(list){
     const map = new Map();
     list.forEach(g => {
-      const k = g.name || 'OG';
+      const k = g.name || (g.og ? 'OG' : '?');
       if(!map.has(k)) map.set(k, { name: k, mins: [], og: g.og });
       map.get(k).mins.push(g.min + (g.pen ? ' (p)' : ''));
     });
