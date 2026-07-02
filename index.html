@@ -1825,21 +1825,27 @@ async function fetchHighlight(ev){
 
 const YT_ICON = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>`;
 
-function renderScorers(goals){
+function renderScorers(goals, homeScore, awayScore){
   if(!goals || !goals.length) return '';
-  function group(list){
+  function group(list, teamScore){
     const map = new Map();
     list.forEach(g => {
       const k = g.name || (g.og ? 'OG' : '?');
       if(!map.has(k)) map.set(k, { name: k, mins: [], og: g.og });
       map.get(k).mins.push(g.min + (g.pen ? ' (p)' : ''));
     });
-    return [...map.values()].map(e =>
+    const rows = [...map.values()].map(e =>
       `<div${e.og?' class="mc-scorer-og"':''}>${e.name} <span class="mc-scorer-min">${e.mins.join(', ')}</span></div>`
-    ).join('');
+    );
+    // If official score > parsed goals, add placeholder rows for the gap (ET goals etc.)
+    const missing = (teamScore || 0) - list.length;
+    for(let i = 0; i < missing; i++) rows.push(`<div><span style="opacity:.5">? </span><span class="mc-scorer-min">ET</span></div>`);
+    return rows.join('');
   }
-  const h = group(goals.filter(g =>  g.isHome));
-  const a = group(goals.filter(g => !g.isHome));
+  const hList = goals.filter(g =>  g.isHome);
+  const aList = goals.filter(g => !g.isHome);
+  const h = group(hList, homeScore);
+  const a = group(aList, awayScore);
   if(!h && !a) return '';
   return `<div class="mc-scorers">
     <div class="mc-scorers-h">${h}</div>
@@ -1949,7 +1955,7 @@ function buildCard(ev){
         <div class="tname t-link${ev.away.winner?' winner':''}" onclick="event.stopPropagation();openTeamPage('${esc(ev.away.name)}')">${ev.away.name}</div>
       </div>
     </div>
-    ${(isLive||isFt) ? renderScorers(ev.goals) : ''}
+    ${(isLive||isFt) ? renderScorers(ev.goals, ev.home.score, ev.away.score) : ''}
     ${qualHtml}
     <div class="mc-foot">${foot_l}${foot_r}</div>
     ${hlHtml}
@@ -4251,43 +4257,50 @@ function mcMatchOverview(ev,data){
   const aComp=comp?.competitors?.find(c=>c.homeAway==='away');
   const homeId=hComp?.id, awayId=aComp?.id;
 
-  // Goal timeline
+  // Goal timeline — prefer plays (richer), fall back to ev.goals
   const plays=data?.plays||[];
-  const goals=plays.filter(p=>p.scoringPlay===true||(p.type?.text||'').toLowerCase().includes('goal'));
-  if(goals.length>0){
+  const playsGoals=plays.filter(p=>p.scoringPlay===true||(p.type?.text||'').toLowerCase().includes('goal'));
+  const timelineSrc = playsGoals.length > 0
+    ? playsGoals.map(p=>({ min: parseInt(p.clock?.displayValue)||0, isHome: p.team?.id===homeId, name: p.participants?.find(pp=>pp.type==='scorer')?.athlete?.displayName||p.text||'' }))
+    : (ev.goals||[]).map(g=>({ min: parseInt(g.min)||0, isHome: g.isHome, name: g.name||'' }));
+  if(timelineSrc.length>0){
     html+=`<div class="mc-tl">
       <div class="mc-tl-lbl">⚽ Goal timeline</div>
       <div class="mc-tl-track">
-        ${goals.map(p=>{
-          const min=parseInt(p.clock?.displayValue)||0;
-          const pct=Math.min(97,(min/90)*100);
-          const isHome=p.team?.id===homeId;
-          const scorer=p.participants?.find(pp=>pp.type==='scorer')?.athlete?.displayName||p.text||'';
-          return `<div class="mc-tl-dot ${isHome?'home':'away'}" style="left:${pct}%" title="${min}' ${scorer}"></div>`;
+        ${timelineSrc.map(p=>{
+          const pct=Math.min(97,(p.min/120)*100);
+          return `<div class="mc-tl-dot ${p.isHome?'home':'away'}" style="left:${pct}%" title="${p.min}' ${p.name}"></div>`;
         }).join('')}
       </div>
       <div class="mc-tl-mins"><span>0'</span><span>45'</span><span>90'</span></div>
     </div>`;
   }
 
-  // Scorers
-  const hGoals=goals.filter(p=>p.team?.id===homeId);
-  const aGoals=goals.filter(p=>p.team?.id===awayId);
-  const scorerRows=(gs)=> gs.length===0
-    ? '<div class="mc-no-goal">No goals</div>'
-    : gs.map(p=>{
-        const min=parseInt(p.clock?.displayValue)||0;
-        const name=p.participants?.find(pp=>pp.type==='scorer')?.athlete?.displayName||'';
-        const typeTxt=(p.type?.text||'').toLowerCase().includes('pen')?'PEN':(p.type?.text||'').toLowerCase().includes('own')?'OG':'';
-        return `<div class="mc-srow">
-          <div class="mc-smin">${min}'</div>
-          <div class="mc-sname">${name}</div>
-          ${typeTxt?`<div class="mc-stype">${typeTxt}`:''}</div>`;
-      }).join('');
+  // Scorers — use ev.goals (parsed from comp.details) as primary source;
+  // plays may be empty for finished matches so we never rely on it for names.
+  const evGoals = ev.goals || [];
+  const hEvGoals = evGoals.filter(g => g.isHome);
+  const aEvGoals = evGoals.filter(g => !g.isHome);
+  const scorerRows=(gs, teamScore)=>{
+    const rows = gs.map(g=>{
+      const min = g.min;
+      const name = g.name || (g.og ? 'OG' : '?');
+      const typeTxt = g.pen ? 'PEN' : g.og ? 'OG' : '';
+      return `<div class="mc-srow">
+        <div class="mc-smin">${min}</div>
+        <div class="mc-sname">${name}</div>
+        ${typeTxt?`<div class="mc-stype">${typeTxt}</div>`:''}
+      </div>`;
+    });
+    // Pad any goals missing from the feed (e.g. ET winner not yet in comp.details)
+    const missing = (teamScore||0) - gs.length;
+    for(let i=0;i<missing;i++) rows.push(`<div class="mc-srow"><div class="mc-smin">ET</div><div class="mc-sname" style="opacity:.5">?</div></div>`);
+    return rows.length===0 ? '<div class="mc-no-goal">No goals</div>' : rows.join('');
+  };
 
   html+=`<div class="mc-scorers">
-    <div><div class="mc-scol-lbl"><div class="mc-sdot home"></div>${ev.home.name}</div>${scorerRows(hGoals)}</div>
-    <div><div class="mc-scol-lbl"><div class="mc-sdot away"></div>${ev.away.name}</div>${scorerRows(aGoals)}</div>
+    <div><div class="mc-scol-lbl"><div class="mc-sdot home"></div>${ev.home.name}</div>${scorerRows(hEvGoals, ev.home.score)}</div>
+    <div><div class="mc-scol-lbl"><div class="mc-sdot away"></div>${ev.away.name}</div>${scorerRows(aEvGoals, ev.away.score)}</div>
   </div>`;
 
   // Quick stats
