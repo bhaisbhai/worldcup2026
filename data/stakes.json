@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-01T08:11:34.912Z",
+  "generatedAt": "2026-07-02T07:30:52.686Z",
   "byDate": {
     "2026-06-24": {
       "BIH-QAT": {
@@ -358,6 +358,20 @@
       },
       "USA-BIH": {
         "summary": "USA, who placed 4th in Group D (6pts), meet Bosnia-Herzegovina, 2nd in Group B (4pts). Winner progresses, loser is eliminated.",
+        "status": "Must Win"
+      }
+    },
+    "2026-07-02": {
+      "ESP-AUT": {
+        "summary": "Spain, Group H winners (7pts, GF5 GA0), battle Group J runners-up Austria (4pts, GF6 GA6). Winner advances; loser is eliminated from the World Cup.",
+        "status": "Must Win"
+      },
+      "POR-CRO": {
+        "summary": "Portugal (5pts, GF6 GA1), Group K runners-up, meet Group L runners-up Croatia (6pts, GF5 GA5). Winner advances; loser is eliminated.",
+        "status": "Must Win"
+      },
+      "SUI-ALG": {
+        "summary": "Switzerland, with 7 points (GF7 GA3), battle Algeria, who earned 4 points (GF5 GA7), in a knockout match. Winner advances; loser is eliminated.",
         "status": "Must Win"
       }
     }
