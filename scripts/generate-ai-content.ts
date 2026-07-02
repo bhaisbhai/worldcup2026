@@ -205,6 +205,82 @@ async function main() {
     );
   }
 
+  // ── 3b. Patch missing goal scorers ────────────────────────────────────────
+  // If ESPN's comp.details has fewer goals than the actual scoreline (common for ET
+  // goals), ask Gemini to identify the missing scorers and persist them to
+  // data/goal-patches.json so the app can display them immediately.
+  const patchesPath = path.resolve(__dirname, '..', 'data', 'goal-patches.json');
+  const existingPatches: Record<string, any[]> = fs.existsSync(patchesPath)
+    ? JSON.parse(fs.readFileSync(patchesPath, 'utf-8'))
+    : {};
+
+  for (const ev of events) {
+    const comp = ev.competitions?.[0] || {};
+    const home = comp.competitors?.find((c: any) => c.homeAway === 'home');
+    const away = comp.competitors?.find((c: any) => c.homeAway === 'away');
+    if (!home || !away) continue;
+
+    const homeScore = parseInt(home.score ?? '0') || 0;
+    const awayScore = parseInt(away.score ?? '0') || 0;
+    const totalExpected = homeScore + awayScore;
+    if (totalExpected === 0) continue;
+
+    const details = (comp.details || [])
+      .filter((d: any) => {
+        const t = (d.type?.text || d.type?.name || '').toLowerCase();
+        return t.includes('goal') || t === 'score';
+      })
+      .filter((d: any) => {
+        const n = d.athletesInvolved?.[0]?.shortName ||
+          d.participants?.find((p: any) => p.type === 'scorer' || p.order === 1)?.athlete?.shortName;
+        return !!n; // only count goals we actually have a name for
+      });
+
+    const dateStr = new Date(ev.date).toISOString().slice(0, 10);
+    const homeAbbr = home.team?.abbreviation || '';
+    const awayAbbr = away.team?.abbreviation || '';
+    const patchKey = `${homeAbbr}-${awayAbbr}-${dateStr}`;
+    const existingPatch: any[] = existingPatches[patchKey] || [];
+    const knownCount = details.length + existingPatch.length;
+
+    if (knownCount < totalExpected) {
+      const missing = totalExpected - knownCount;
+      console.log(`⚽  ${homeAbbr} ${homeScore}-${awayScore} ${awayAbbr}: ${missing} goal(s) missing from ESPN feed — asking Gemini`);
+      const knownGoals = details.map((d: any) => {
+        const n = d.athletesInvolved?.[0]?.shortName ||
+          d.participants?.find((p: any) => p.type === 'scorer' || p.order === 1)?.athlete?.shortName || '';
+        const min = d.clock?.displayValue || '';
+        const isHome = d.team?.id === home.team?.id;
+        return `${n} ${min} (${isHome ? home.team?.displayName : away.team?.displayName})`;
+      });
+      existingPatch.forEach((p: any) => knownGoals.push(`${p.name} ${p.min} (already patched)`));
+
+      try {
+        const result = await callGemini(`You are a football data assistant. Final score: ${home.team?.displayName} ${homeScore}–${awayScore} ${away.team?.displayName} on ${dateStr} (FIFA World Cup 2026).
+Known goal scorers from official data: ${knownGoals.join(', ') || 'none'}.
+There are ${missing} goal(s) missing. Identify the missing scorer(s) including minute and whether it was a penalty or own goal.
+Reply ONLY with a JSON array of objects: [{"name":"Shortname e.g. J. Smith","min":"97'","isHome":true,"og":false,"pen":true}]
+isHome = true if scored for ${home.team?.displayName}.
+If genuinely unknown, return [].`);
+        if (Array.isArray(result) && result.length > 0) {
+          // Deduplicate against what we already know
+          const fresh = result.filter((p: any) =>
+            !existingPatch.some((e: any) => e.name === p.name && e.min === p.min)
+          );
+          if (fresh.length > 0) {
+            existingPatches[patchKey] = [...existingPatch, ...fresh];
+            console.log(`✅  Patched: ${fresh.map((p: any) => `${p.name} ${p.min}`).join(', ')}`);
+          }
+        }
+      } catch (e) {
+        console.warn(`⚠️  Could not research missing goals for ${patchKey}:`, e);
+      }
+    }
+  }
+
+  fs.writeFileSync(patchesPath, JSON.stringify(existingPatches, null, 2) + '\n');
+  console.log(`✅  goal-patches.json updated`);
+
   // ── 4. Fetch current ESPN standings ────────────────────────────────────────
   let standingsGroups: any[] = [];
   try {

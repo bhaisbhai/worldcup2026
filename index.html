@@ -1612,15 +1612,12 @@ function localTime(dateObj){
 }
 
 // ═══════════════════════════════════════════════════
-//  MANUAL GOAL PATCHES
+//  GOAL PATCHES — loaded from data/goal-patches.json
 //  Key: "HOME_ABBR-AWAY_ABBR-YYYY-MM-DD"
-//  Use when ESPN's comp.details omits a known goal (e.g. ET goals).
+//  Pipeline auto-populates this when ESPN omits goals (e.g. ET goals).
 // ═══════════════════════════════════════════════════
-const GOAL_PATCHES = {
-  'BEL-SEN-2026-07-01': [
-    { name: 'Y. Tielemans', min: "97'", isHome: true, og: false, pen: true }
-  ]
-};
+let GOAL_PATCHES = {};
+fetch('data/goal-patches.json').then(r=>r.json()).then(d=>{ GOAL_PATCHES=d; }).catch(()=>{});
 
 // ═══════════════════════════════════════════════════
 //  PARSE ESPN EVENT
