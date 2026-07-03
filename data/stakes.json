@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-02T07:30:52.686Z",
+  "generatedAt": "2026-07-03T07:19:29.842Z",
   "byDate": {
     "2026-06-24": {
       "BIH-QAT": {
@@ -372,6 +372,20 @@
       },
       "SUI-ALG": {
         "summary": "Switzerland, with 7 points (GF7 GA3), battle Algeria, who earned 4 points (GF5 GA7), in a knockout match. Winner advances; loser is eliminated.",
+        "status": "Must Win"
+      }
+    },
+    "2026-07-03": {
+      "AUS-EGY": {
+        "summary": "Australia (3rd, Group D, 4 points) meets Egypt (3rd, Group G, 5 points) in a knockout. Winner advances, loser is eliminated.",
+        "status": "Must Win"
+      },
+      "ARG-CPV": {
+        "summary": "Argentina (Group J winners, 9 points) face Cape Verde (4th, Group H, 3 points). Winner advances, loser is eliminated.",
+        "status": "Must Win"
+      },
+      "COL-GHA": {
+        "summary": "Colombia (Group K winners, 7 points) battle Ghana (4th, Group L, 4 points). The winner progresses, the loser is eliminated.",
         "status": "Must Win"
       }
     }
