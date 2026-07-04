@@ -1903,6 +1903,8 @@ function buildCard(ev){
     </div>`;
   }
 
+  const wonOnPens = ev.home.shootoutScore !== null || ev.away.shootoutScore !== null;
+
   // score
   let scHtml;
   if(isUp){
@@ -1930,7 +1932,6 @@ function buildCard(ev){
   // Qualified banner for finished knockout matches
   const isKnockout = isFt && !/^Group /.test(ev.group || '');
   const qualTeam = isKnockout ? (ev.home.winner ? ev.home : ev.away.winner ? ev.away : null) : null;
-  const wonOnPens = ev.home.shootoutScore !== null || ev.away.shootoutScore !== null;
   const qualHtml = qualTeam
     ? `<div class="mc-qualified">${flag(qualTeam.abbr)} ${qualTeam.name} qualified${wonOnPens ? ' <span class="mc-pens">· on penalties</span>' : ''}</div>`
     : '';
