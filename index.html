@@ -270,6 +270,8 @@ body{
 .mc-pens{color:var(--t2);font-weight:400}
 
 .scwrap{display:flex;align-items:center;gap:4px;flex-shrink:0}
+.sc-block{display:flex;flex-direction:column;align-items:center;flex-shrink:0}
+.mc-pens-sc{font-size:10px;color:var(--t2);margin-top:1px;white-space:nowrap}
 .sc{font-family:var(--mono);font-size:36px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1;min-width:24px;text-align:center}
 .sc-sep{font-size:18px;color:var(--t3);font-weight:300}
 .sc.vs{font-size:20px;color:var(--t2);font-weight:400}
@@ -1667,6 +1669,10 @@ function parseEvent(ev){
     if(!goals.some(g => g.name === p.name && g.min === p.min)) goals.push(p);
   });
 
+  const hasPens = home.shootoutScore !== undefined && home.shootoutScore !== null;
+  const period  = status.period || 2;
+  const wentToET = period >= 3 || hasPens || goals.some(g => { const m = parseInt(g.min); return !isNaN(m) && m > 90; });
+
   return {
     id: ev.id,
     state,                         // "pre"|"in"|"post"
@@ -1674,12 +1680,13 @@ function parseEvent(ev){
     displayClock: status.displayClock,
     detail: status.type.detail,    // "Tue, June 16th at 3:00 PM EDT"
     date: new Date(ev.date),
+    wentToET,
     home: {
       name: home.team.displayName,
       abbr: home.team.abbreviation,
       score: parseInt(home.score)||0,
       winner: home.winner||false,
-      shootoutScore: home.shootoutScore !== undefined && home.shootoutScore !== null ? parseInt(home.shootoutScore) : null
+      shootoutScore: hasPens ? parseInt(home.shootoutScore) : null
     },
     away: {
       name: away.team.displayName,
@@ -1885,8 +1892,9 @@ function buildCard(ev){
       ? `<div class="mc-min ht">HT</div>`
       : `<div class="mc-min" data-clockid="${ev.id}">${ev.displayClock}</div>`;
   } else if(isFt){
-    badge=`<div class="mc-badge ft">FT</div>`;
-    foot_l=`<div class="mc-ft-time">Full Time</div>`;
+    const aet = ev.wentToET;
+    badge=`<div class="mc-badge ft">${aet ? 'AET' : 'FT'}</div>`;
+    foot_l=`<div class="mc-ft-time">${aet ? 'After Extra Time' : 'Full Time'}</div>`;
   } else {
     badge=``;
     foot_l=`<div class="mc-kickoff">
@@ -1900,11 +1908,17 @@ function buildCard(ev){
   if(isUp){
     scHtml=`<div class="scwrap"><div class="sc vs">vs</div></div>`;
   } else {
-    scHtml=`<div class="scwrap">
+    const pensLine = (isFt && wonOnPens)
+      ? `<div class="mc-pens-sc">(${ev.home.shootoutScore}–${ev.away.shootoutScore} pens)</div>`
+      : '';
+    const scoreRow = `<div class="scwrap">
       <div class="sc">${ev.home.score}</div>
       <div class="sc-sep">:</div>
       <div class="sc">${ev.away.score}</div>
     </div>`;
+    scHtml = pensLine
+      ? `<div class="sc-block">${scoreRow}${pensLine}</div>`
+      : scoreRow;
   }
 
   // venue display
