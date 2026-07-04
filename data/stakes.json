@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-03T07:19:29.842Z",
+  "generatedAt": "2026-07-04T07:51:13.128Z",
   "byDate": {
     "2026-06-24": {
       "BIH-QAT": {
@@ -386,6 +386,16 @@
       },
       "COL-GHA": {
         "summary": "Colombia (Group K winners, 7 points) battle Ghana (4th, Group L, 4 points). The winner progresses, the loser is eliminated.",
+        "status": "Must Win"
+      }
+    },
+    "2026-07-04": {
+      "CAN-MAR": {
+        "summary": "Canada (4pts, GF8), who topped their initial pool, meet Morocco (7pts, GF6), fourth in theirs. Winner advances, loser is eliminated.",
+        "status": "Must Win"
+      },
+      "PAR-FRA": {
+        "summary": "Paraguay (4pts, GF2), who topped their initial pool, challenge France (9pts, GF10), second in theirs. Winner advances, loser is eliminated.",
         "status": "Must Win"
       }
     }
