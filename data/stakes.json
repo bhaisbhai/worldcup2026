@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-04T07:51:13.128Z",
+  "generatedAt": "2026-07-05T07:24:11.118Z",
   "byDate": {
     "2026-06-24": {
       "BIH-QAT": {
@@ -396,6 +396,16 @@
       },
       "PAR-FRA": {
         "summary": "Paraguay (4pts, GF2), who topped their initial pool, challenge France (9pts, GF10), second in theirs. Winner advances, loser is eliminated.",
+        "status": "Must Win"
+      }
+    },
+    "2026-07-05": {
+      "BRA-NOR": {
+        "summary": "Brazil, Group C winners (7 points), face Norway, Group I winners (6 points). The winner advances; the loser is eliminated.",
+        "status": "Must Win"
+      },
+      "MEX-ENG": {
+        "summary": "Mexico, Group A winners (9 points), face England, Group L winners (7 points). The winner advances; the loser is eliminated.",
         "status": "Must Win"
       }
     }
