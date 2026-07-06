@@ -1,13 +1,13 @@
 {
-  "note": "Knockout round TV assignments. Key = sorted 3-letter ESPN abbreviations joined by |. Values: BBC One, BBC Two, ITV1, ITV4.",
+  "note": "Knockout round TV assignments. Key = sorted 3-letter ESPN abbreviations joined by |.",
   "matches": {
-    "BRA|NOR": "BBC One",
-    "ENG|MEX": "ITV1",
-    "ARG|USA": "ITV1",
-    "FRA|MAR": "BBC One",
-    "GER|ESP": "BBC One",
-    "COL|POR": "ITV1",
-    "NED|SEN": "BBC Two",
-    "AUS|CRO": "ITV4"
+    "CAN|MAR": "ITV1",
+    "FRA|PAR": "BBC One",
+    "BRA|NOR": "ITV1",
+    "ENG|MEX": "BBC One",
+    "ESP|POR": "BBC One",
+    "BEL|USA": "BBC One",
+    "ARG|EGY": "ITV1",
+    "COL|SUI": "ITV1"
   }
 }
