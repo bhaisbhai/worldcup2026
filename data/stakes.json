@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-05T07:24:11.118Z",
+  "generatedAt": "2026-07-06T08:18:57.653Z",
   "byDate": {
     "2026-06-24": {
       "BIH-QAT": {
@@ -406,6 +406,16 @@
       },
       "MEX-ENG": {
         "summary": "Mexico, Group A winners (9 points), face England, Group L winners (7 points). The winner advances; the loser is eliminated.",
+        "status": "Must Win"
+      }
+    },
+    "2026-07-06": {
+      "POR-ESP": {
+        "summary": "Portugal (2nd, Group K, 5 pts) meets Spain (Group H winner, 7 pts, unbeaten). Winner advances, loser is eliminated.",
+        "status": "Must Win"
+      },
+      "USA-BEL": {
+        "summary": "USA (4th, Group D, 6 pts) faces Group G winners Belgium (5 pts). Winner advances, loser is eliminated.",
         "status": "Must Win"
       }
     }

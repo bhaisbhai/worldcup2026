@@ -7,5 +7,21 @@
       "og": false,
       "pen": true
     }
+  ],
+  "MEX-ENG-2026-07-06": [
+    {
+      "name": "E. Álvarez",
+      "min": "60'",
+      "isHome": true,
+      "og": false,
+      "pen": false
+    },
+    {
+      "name": "P. Foden",
+      "min": "85'",
+      "isHome": false,
+      "og": false,
+      "pen": false
+    }
   ]
 }
