@@ -1575,7 +1575,11 @@ const UK_TV = {
   'BIH|USA':'BBC One','AUT|ESP':'BBC One','CRO|POR':'BBC One',
   'ALG|SUI':'BBC One','AUS|EGY':'BBC One','ARG|CPV':'ITV1','COL|GHA':'ITV1',
 };
-function getUKChannel(a1, a2){ return UK_TV[[a1,a2].sort().join('|')] || ''; }
+let KO_TV = {};
+function getUKChannel(a1, a2){
+  const key = [a1,a2].sort().join('|');
+  return UK_TV[key] || KO_TV[key] || (a1 && a2 ? 'BBC/ITV' : '');
+}
 const ESPN_SUMMARY  = '/api/summary';
 const ESPN_STATS    = '/api/statistics';
 let liveClocks = {};
@@ -1621,6 +1625,7 @@ function localTime(dateObj){
 // ═══════════════════════════════════════════════════
 let GOAL_PATCHES = {};
 fetch('data/goal-patches.json').then(r=>r.json()).then(d=>{ GOAL_PATCHES=d; }).catch(()=>{});
+fetch('data/ko-tv.json').then(r=>r.json()).then(d=>{ KO_TV=d.matches||{}; }).catch(()=>{});
 
 // ═══════════════════════════════════════════════════
 //  PARSE ESPN EVENT
