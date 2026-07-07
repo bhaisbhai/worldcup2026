@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-06T08:18:57.653Z",
+  "generatedAt": "2026-07-07T07:36:25.002Z",
   "byDate": {
     "2026-06-24": {
       "BIH-QAT": {
@@ -416,6 +416,16 @@
       },
       "USA-BEL": {
         "summary": "USA (4th, Group D, 6 pts) faces Group G winners Belgium (5 pts). Winner advances, loser is eliminated.",
+        "status": "Must Win"
+      }
+    },
+    "2026-07-07": {
+      "ARG-EGY": {
+        "summary": "Argentina (9pts, Group J winners) face Egypt (5pts, third in Group G). The victor advances; the defeated team is eliminated from the World Cup.",
+        "status": "Must Win"
+      },
+      "SUI-COL": {
+        "summary": "Switzerland (7pts, third in Group B) challenge Colombia (7pts, Group K winners). The victor advances; the defeated team is eliminated from the tournament.",
         "status": "Must Win"
       }
     }
