@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-09T12:25:53.430Z",
+  "generatedAt": "2026-07-09T13:50:48.160Z",
   "byDate": {
     "2026-06-24": {
       "BIH-QAT": {
@@ -431,7 +431,7 @@
     },
     "2026-07-09": {
       "FRA-MAR": {
-        "summary": "France, Group D winners with 6 points, meet Morocco, Group F winners with 7 points. Winner advances, loser is eliminated from this knockout tie.",
+        "summary": "France, Group D winners with 7 points, face Morocco, Group F winners also with 7 points. Winner advances, loser is eliminated.",
         "status": "Must Win"
       }
     }
