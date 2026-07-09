@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-07T07:36:25.002Z",
+  "generatedAt": "2026-07-09T08:32:53.116Z",
   "byDate": {
     "2026-06-24": {
       "BIH-QAT": {
@@ -426,6 +426,12 @@
       },
       "SUI-COL": {
         "summary": "Switzerland (7pts, third in Group B) challenge Colombia (7pts, Group K winners). The victor advances; the defeated team is eliminated from the tournament.",
+        "status": "Must Win"
+      }
+    },
+    "2026-07-09": {
+      "FRA-MAR": {
+        "summary": "France, Group D winners (6pts), meet Morocco, Group F winners (7pts). Winner advances; loser is eliminated from this knockout clash.",
         "status": "Must Win"
       }
     }
