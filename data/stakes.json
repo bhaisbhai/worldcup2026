@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-09T14:32:48.500Z",
+  "generatedAt": "2026-07-10T07:33:52.052Z",
   "byDate": {
     "2026-06-24": {
       "BIH-QAT": {
@@ -432,6 +432,12 @@
     "2026-07-09": {
       "FRA-MAR": {
         "summary": "France, Group D winners with 6 points, meet Morocco, Group F winners with 7 points. Winner advances, loser is eliminated from this knockout tie.",
+        "status": "Must Win"
+      }
+    },
+    "2026-07-10": {
+      "ESP-BEL": {
+        "summary": "Spain, Group H winners with 7 points, faces Belgium, Group G winners with 5 points. Winner advances, loser out.",
         "status": "Must Win"
       }
     }
