@@ -14,6 +14,15 @@
     "FRA|MAR": "ITV1",
     "BEL|ESP": "BBC One",
     "ENG|NOR": "ITV1",
-    "ARG|SUI": "ITV1"
+    "ARG|SUI": "ITV1",
+    "_comment_sf": "Semi-finals — BBC picks first (England's half = Jul 15 BBC One, other half = Jul 14 ITV1)",
+    "BEL|FRA": "ITV1",
+    "ESP|FRA": "ITV1",
+    "ARG|ENG": "BBC One",
+    "ENG|SUI": "BBC One",
+    "ARG|NOR": "BBC One",
+    "NOR|SUI": "BBC One",
+    "_comment_final": "Final Jul 19 — simulcast on both channels",
+    "_note_final": "Both BBC One and ITV1 show the final simultaneously"
   }
 }
