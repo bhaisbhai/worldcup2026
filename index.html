@@ -1578,7 +1578,7 @@ const UK_TV = {
 let KO_TV = {};
 function getUKChannel(a1, a2){
   const key = [a1,a2].sort().join('|');
-  return UK_TV[key] || KO_TV[key] || (a1 && a2 ? 'BBC/ITV' : '');
+  return UK_TV[key] || KO_TV[key] || '';
 }
 const ESPN_SUMMARY  = '/api/summary';
 const ESPN_STATS    = '/api/statistics';

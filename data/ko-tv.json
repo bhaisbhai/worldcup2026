@@ -1,6 +1,7 @@
 {
   "note": "Knockout round TV assignments. Key = sorted 3-letter ESPN abbreviations joined by |.",
   "matches": {
+    "_comment_r16": "Round of 16 — confirmed",
     "CAN|MAR": "ITV1",
     "FRA|PAR": "BBC One",
     "BRA|NOR": "ITV1",
@@ -8,6 +9,11 @@
     "ESP|POR": "BBC One",
     "BEL|USA": "BBC One",
     "ARG|EGY": "ITV1",
-    "COL|SUI": "ITV1"
+    "COL|SUI": "ITV1",
+    "_comment_qf": "Quarter-finals — confirmed",
+    "FRA|MAR": "ITV1",
+    "BEL|ESP": "BBC One",
+    "ENG|NOR": "ITV1",
+    "ARG|SUI": "ITV1"
   }
 }
