@@ -3334,22 +3334,22 @@ function renderCircularBracket(){
   };
   const NEON = '#00ff87', NEON2 = '#60efff';
 
-  // poolOuter flags from Cuppy (re-ordered for Right side match alignment)
+  // Top half = SF M101 half (France/Spain/Belgium/Portugal); Bottom half = SF M102 half (England/Norway/Argentina/Switzerland)
   const poolOuterFlags = [
-    "🇨🇦", "🇲🇦", "🇵🇾", "🇫🇷", "🇧🇷", "🇨🇮", "🇲🇽", "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
-    "🇺🇸", "🇧🇪", "🇪🇸", "🇵🇹", "🇨🇭", "🇨🇴", "🇦🇷", "🇦🇺"
+    "🇨🇦", "🇲🇦", "🇵🇾", "🇫🇷", "🇺🇸", "🇧🇪", "🇵🇹", "🇪🇸",
+    "🇧🇷", "🇨🇮", "🇲🇽", "🏴󠁧󠁢󠁥󠁮󠁧󠁿", "🇨🇭", "🇨🇴", "🇦🇷", "🇦🇺"
   ];
   const poolOuterNames = [
-    "Canada", "Morocco", "Paraguay", "France", "Brazil", "Ivory Coast", "Mexico", "England",
-    "USA", "Belgium", "Spain", "Portugal", "Switzerland", "Colombia", "Argentina", "Australia"
+    "Canada", "Morocco", "Paraguay", "France", "USA", "Belgium", "Portugal", "Spain",
+    "Brazil", "Ivory Coast", "Mexico", "England", "Switzerland", "Colombia", "Argentina", "Australia"
   ];
 
   const rayR32Matches = [
-    73, 75, 74, 77, 76, 78, 79, 80,
-    81, 82, 84, 83, 85, 87, 86, 88
+    73, 75, 74, 77, 81, 82, 83, 84,
+    76, 78, 79, 80, 85, 87, 86, 88
   ];
   const rayR16Matches = [
-    90, 89, 91, 92, 94, 93, 96, 95
+    90, 89, 94, 93, 91, 92, 96, 95
   ];
   const rayQFMatches = [
     97, 98, 99, 100
