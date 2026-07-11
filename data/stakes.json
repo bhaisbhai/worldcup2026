@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-10T07:33:52.052Z",
+  "generatedAt": "2026-07-11T07:15:27.300Z",
   "byDate": {
     "2026-06-24": {
       "BIH-QAT": {
@@ -438,6 +438,16 @@
     "2026-07-10": {
       "ESP-BEL": {
         "summary": "Spain, Group H winners with 7 points, faces Belgium, Group G winners with 5 points. Winner advances, loser out.",
+        "status": "Must Win"
+      }
+    },
+    "2026-07-11": {
+      "NOR-ENG": {
+        "summary": "Norway (Group I winners, 6 points) meets England (Group L winners, 7 points). Winner advances, loser is eliminated.",
+        "status": "Must Win"
+      },
+      "ARG-SUI": {
+        "summary": "Group J winners Argentina (9 points) face Switzerland (7 points from Group B). Winner advances, loser is eliminated.",
         "status": "Must Win"
       }
     }
