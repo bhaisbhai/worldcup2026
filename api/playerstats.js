@@ -18,7 +18,7 @@ module.exports = async function (req, res) {
   try {
     // ── 1. Collect all completed match IDs from the past 25 days ──
     const now = new Date();
-    const dates = Array.from({ length: 25 }, (_, i) => {
+    const dates = Array.from({ length: 35 }, (_, i) => {
       const d = new Date(now);
       d.setDate(d.getDate() - i);
       return dateStr(d);
@@ -140,6 +140,33 @@ module.exports = async function (req, res) {
                 playerMap[k].redCards++;
               }
             });
+          }
+        }
+
+        // Attempt 4: header.competitions[0].details — same shape as scoreboard comp.details
+        if (!gotStats) {
+          const details = data.header?.competitions?.[0]?.details || [];
+          const homeId = competitors[0]?.team?.id;
+          const homeAbbr = competitors[0]?.team?.abbreviation || '';
+          for (const d of details) {
+            const t = (d.type?.text || d.type?.name || '').toLowerCase();
+            if (!t.includes('goal') && t !== 'score') continue;
+            if (d.ownGoal) continue;
+            const scorer = d.athletesInvolved?.[0];
+            const assist = d.athletesInvolved?.[1];
+            const scoringTeam = d.team;
+            const tAbbr = scoringTeam?.abbreviation || homeAbbr;
+            const tName = scoringTeam?.displayName || '';
+            if (scorer?.displayName) {
+              const k = player(scorer.displayName, tName, tAbbr, String(scorer.id || ''));
+              playerMap[k].goals++;
+              gotStats = true;
+            }
+            if (assist?.displayName) {
+              const aTAbbr = scoringTeam?.abbreviation || tAbbr;
+              const k = player(assist.displayName, tName, aTAbbr, String(assist.id || ''));
+              playerMap[k].assists++;
+            }
           }
         }
 

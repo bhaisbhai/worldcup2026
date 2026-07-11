@@ -5190,7 +5190,7 @@ async function fetchLeaderboardData(){
     let totalGoals = 0, matchCount = 0;
     const now = new Date();
     const dateStrs = [];
-    for(let i = 0; i <= 14; i++){
+    for(let i = 0; i <= 35; i++){
       const dt = new Date(now); dt.setDate(dt.getDate()-i);
       dateStrs.push(toDateStr(dt));
     }
