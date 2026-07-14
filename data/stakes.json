@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-11T07:15:27.300Z",
+  "generatedAt": "2026-07-14T07:13:16.737Z",
   "byDate": {
     "2026-06-24": {
       "BIH-QAT": {
@@ -448,6 +448,12 @@
       },
       "ARG-SUI": {
         "summary": "Group J winners Argentina (9 points) face Switzerland (7 points from Group B). Winner advances, loser is eliminated.",
+        "status": "Must Win"
+      }
+    },
+    "2026-07-14": {
+      "FRA-ESP": {
+        "summary": "Group I runners-up France (9pts) meet Group H winners Spain (7pts, GF5 GA0). Winner advances, loser exits the World Cup.",
         "status": "Must Win"
       }
     }
