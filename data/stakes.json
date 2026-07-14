@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-14T11:17:10.897Z",
+  "generatedAt": "2026-07-14T12:14:25.800Z",
   "byDate": {
     "2026-06-24": {
       "BIH-QAT": {
@@ -453,7 +453,7 @@
     },
     "2026-07-14": {
       "FRA-ESP": {
-        "summary": "France (2nd, 9pts) faces Spain (1st, 7pts, unbeaten) in this knockout match. The winner advances, while the loser is eliminated.",
+        "summary": "France (Group I 2nd, 9pts) faces Spain (Group H 1st, 7pts, unbeaten). Winner advances; loser is eliminated.",
         "status": "Must Win"
       }
     }
