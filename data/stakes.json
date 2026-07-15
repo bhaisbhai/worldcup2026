@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-15T06:12:42.346Z",
+  "generatedAt": "2026-07-15T07:19:12.931Z",
   "byDate": {
     "2026-06-24": {
       "BIH-QAT": {
@@ -454,6 +454,12 @@
     "2026-07-14": {
       "FRA-ESP": {
         "summary": "France (2nd, 9pts) faces Spain (1st, 7pts, unbeaten) in this knockout match. The winner advances, while the loser is eliminated.",
+        "status": "Must Win"
+      }
+    },
+    "2026-07-15": {
+      "ENG-ARG": {
+        "summary": "England, 1st in Group L (7pts), meets Argentina, 1st in Group J (9pts). Winner advances; loser is eliminated from the World Cup.",
         "status": "Must Win"
       }
     }
