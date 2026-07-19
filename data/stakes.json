@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-19T06:28:43.514Z",
+  "generatedAt": "2026-07-19T07:30:26.677Z",
   "byDate": {
     "2026-06-24": {
       "BIH-QAT": {
@@ -466,6 +466,12 @@
     "2026-07-18": {
       "FRA-ENG": {
         "summary": "France, 2nd with 9pts, battles England, who finished first with 7pts. The victor progresses; the defeated team is out.",
+        "status": "Must Win"
+      }
+    },
+    "2026-07-19": {
+      "ESP-ARG": {
+        "summary": "Spain (Group H winner, 7 points, unbeaten) meets Argentina (Group J winner, 9 points). Winner advances, loser is eliminated.",
         "status": "Must Win"
       }
     }
