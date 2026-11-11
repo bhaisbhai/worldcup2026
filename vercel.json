@@ -12,7 +12,16 @@
     { "src": "public/assets/**", "use": "@vercel/static" },
     { "src": "data/**", "use": "@vercel/static" },
     { "src": "api/recaps.js", "use": "@vercel/node", "config": { "includeFiles": ["data/**"] } },
-    { "src": "api/**/*.js", "use": "@vercel/node" }
+    { "src": "api/game-scores.js", "use": "@vercel/node" },
+    { "src": "api/health.js", "use": "@vercel/node" },
+    { "src": "api/highlights.js", "use": "@vercel/node" },
+    { "src": "api/leaders.js", "use": "@vercel/node" },
+    { "src": "api/playerstats.js", "use": "@vercel/node" },
+    { "src": "api/scoreboard.js", "use": "@vercel/node" },
+    { "src": "api/standings.js", "use": "@vercel/node" },
+    { "src": "api/statistics.js", "use": "@vercel/node" },
+    { "src": "api/subscribe.js", "use": "@vercel/node" },
+    { "src": "api/summary.js", "use": "@vercel/node" }
   ],
   "routes": [
     { "src": "/api/(.*)", "dest": "/api/$1.js" },
