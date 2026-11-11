@@ -20,6 +20,7 @@
     { "src": "/group-debug", "dest": "/group-debug.html" },
     { "src": "/debug-live", "dest": "/debug-live.html" },
     { "src": "/debug-bracket", "dest": "/debug-bracket.html" },
+    { "src": "/wheelie-fun/?", "dest": "https://game-buddy-pl.vercel.app/games/wheelie-fun-turbo/" },
     { "handle": "filesystem" },
     { "src": "/(.*)", "dest": "/index.html" }
   ]
