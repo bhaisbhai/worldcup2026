@@ -98,6 +98,8 @@ module.exports = async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   } catch (err) {
     console.error('wft-scores error:', err);
-    return res.status(500).json({ error: 'Server error' });
+    // Temporary: surface the real failure in the response body so it's visible
+    // from the client console without needing Vercel's own function logs.
+    return res.status(500).json({ error: 'Server error', detail: err && err.message });
   }
 };
