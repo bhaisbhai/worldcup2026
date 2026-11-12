@@ -6,6 +6,9 @@
 //     player keeps exactly one entry: their personal best for that track.
 //   - cup: one set (wft_cup_total), member = player name, score = career total cup points.
 //     ZINCRBY so every completed cup adds to the player's running total.
+// A third POST action, board=rename, moves an existing player's entries from their old
+// display name onto their new one (see below) rather than leaving the old name's scores
+// stranded whenever someone edits their name.
 // The replacement database's integration was connected with a "MY_PREFIX" prefix, so
 // Vercel injected it as MY_PREFIX_KV_REST_API_* rather than the bare KV_REST_API_* names
 // -- those bare names (and UPSTASH_REDIS_REST_*) are still set on the project but stale,
@@ -24,6 +27,22 @@ async function redis(command, ...args) {
   });
   if (!res.ok) throw new Error(`Redis ${res.status}: ${await res.text()}`);
   return (await res.json()).result;
+}
+
+// A batch of independent commands in one round trip -- each result lines up by index with
+// the command that produced it. Used by the rename flow below so renaming a player who has
+// times on many tracks doesn't take one network round trip per track.
+async function redisPipeline(commands) {
+  const res = await fetch(`${REDIS_URL}/pipeline`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${REDIS_TOKEN}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(commands),
+  });
+  if (!res.ok) throw new Error(`Redis pipeline ${res.status}: ${await res.text()}`);
+  return await res.json();
 }
 
 const TRACK_RE = /^[a-zA-Z0-9_-]{1,40}$/;
@@ -95,6 +114,38 @@ module.exports = async function handler(req, res) {
         }
         await redis('ZINCRBY', 'wft_cup_total', points, name);
         return res.json({ ok: true });
+      }
+      if (board === 'rename') {
+        // Changing a player's display name only affects new submissions -- old entries stay
+        // under the old name forever since a sorted-set member IS the name, there's no
+        // separate player id. This moves everything the renaming player already has (their
+        // cup-points total, plus a best lap time on any track they list) onto the new name,
+        // then drops the old-name entry so it doesn't linger as an orphan.
+        const oldName = sanitizeName(body.oldName);
+        if (!oldName || oldName === name) return res.json({ ok: true });
+        const tracks = Array.isArray(body.tracks) ? body.tracks.filter((t) => TRACK_RE.test(t)).slice(0, 200) : [];
+
+        const reads = await redisPipeline([
+          ['ZSCORE', 'wft_cup_total', oldName],
+          ...tracks.map((t) => ['ZSCORE', `wft_lap_${t}`, oldName]),
+        ]);
+
+        const writes = [];
+        const cupScore = reads[0] && reads[0].result;
+        if (cupScore != null) {
+          writes.push(['ZINCRBY', 'wft_cup_total', Number(cupScore), name]);
+          writes.push(['ZREM', 'wft_cup_total', oldName]);
+        }
+        tracks.forEach((t, i) => {
+          const score = reads[i + 1] && reads[i + 1].result;
+          if (score != null) {
+            // LT: only lowers the new name's time if the old one was actually better.
+            writes.push(['ZADD', `wft_lap_${t}`, 'LT', Number(score), name]);
+            writes.push(['ZREM', `wft_lap_${t}`, oldName]);
+          }
+        });
+        if (writes.length) await redisPipeline(writes);
+        return res.json({ ok: true, moved: writes.length / 2 });
       }
       return res.status(400).json({ error: 'Unknown board' });
     }
