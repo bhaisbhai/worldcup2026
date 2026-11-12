@@ -6,8 +6,11 @@
 //     player keeps exactly one entry: their personal best for that track.
 //   - cup: one set (wft_cup_total), member = player name, score = career total cup points.
 //     ZINCRBY so every completed cup adds to the player's running total.
-const REDIS_URL = process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL;
-const REDIS_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN;
+// KV_REST_API_* checked first: it's the pair from the database created to replace the
+// old one (fine-katydid-...) once that stopped resolving (ENOTFOUND) -- UPSTASH_REDIS_REST_*
+// is still set on the project but now stale, so it's kept only as a last-resort fallback.
+const REDIS_URL = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
+const REDIS_TOKEN = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
 
 async function redis(command, ...args) {
   const res = await fetch(REDIS_URL, {

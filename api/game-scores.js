@@ -1,7 +1,10 @@
 const KEY = 'kuking_leaderboard';
 
-const REDIS_URL = process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL;
-const REDIS_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN;
+// KV_REST_API_* checked first: it's the pair from the database created to replace the
+// old one once that stopped resolving (ENOTFOUND) -- UPSTASH_REDIS_REST_* is still set
+// on the project but now stale, so it's kept only as a last-resort fallback.
+const REDIS_URL = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
+const REDIS_TOKEN = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
 
 async function redis(command, ...args) {
   const res = await fetch(REDIS_URL, {
