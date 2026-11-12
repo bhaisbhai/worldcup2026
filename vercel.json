@@ -21,7 +21,8 @@
     { "src": "api/standings.js", "use": "@vercel/node" },
     { "src": "api/statistics.js", "use": "@vercel/node" },
     { "src": "api/subscribe.js", "use": "@vercel/node" },
-    { "src": "api/summary.js", "use": "@vercel/node" }
+    { "src": "api/summary.js", "use": "@vercel/node" },
+    { "src": "api/wft-scores.js", "use": "@vercel/node" }
   ],
   "routes": [
     { "src": "/api/(.*)", "dest": "/api/$1.js" },
