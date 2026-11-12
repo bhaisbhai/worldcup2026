@@ -1,10 +1,11 @@
 const KEY = 'kuking_leaderboard';
 
-// KV_REST_API_* checked first: it's the pair from the database created to replace the
-// old one once that stopped resolving (ENOTFOUND) -- UPSTASH_REDIS_REST_* is still set
-// on the project but now stale, so it's kept only as a last-resort fallback.
-const REDIS_URL = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
-const REDIS_TOKEN = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
+// The replacement database's integration was connected with a "MY_PREFIX" prefix, so
+// Vercel injected it as MY_PREFIX_KV_REST_API_* rather than the bare KV_REST_API_* names
+// -- those bare names (and UPSTASH_REDIS_REST_*) are still set on the project but stale,
+// kept only as a last-resort fallback.
+const REDIS_URL = process.env.MY_PREFIX_KV_REST_API_URL || process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
+const REDIS_TOKEN = process.env.MY_PREFIX_KV_REST_API_TOKEN || process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
 
 async function redis(command, ...args) {
   const res = await fetch(REDIS_URL, {
