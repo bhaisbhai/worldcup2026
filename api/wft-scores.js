@@ -102,17 +102,6 @@ module.exports = async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   } catch (err) {
     console.error('wft-scores error:', err);
-    // Temporary: surface the real failure (plus Node's underlying cause, e.g. a
-    // DNS/TLS/connection-refused code) in the response body, since this sandbox
-    // has no way to read Vercel's own function logs.
-    let redisHost = null;
-    try { redisHost = new URL(REDIS_URL).hostname; } catch (e) {}
-    return res.status(500).json({
-      error: 'Server error',
-      detail: err && err.message,
-      cause: err && err.cause && (err.cause.code || err.cause.message || String(err.cause)),
-      redisHost,
-      hasToken: !!REDIS_TOKEN,
-    });
+    return res.status(500).json({ error: 'Server error' });
   }
 };
